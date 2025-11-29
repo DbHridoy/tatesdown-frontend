@@ -6,9 +6,9 @@ import CardData from "../../Components/Dashboard/CardData";
 const Dashboard = () => {
   return (
     <div>
-      <CardData />
-      <PipelineOverview />
-      <PendingApprovals />
+      <CardData/>
+      <PipelineOverview/>
+      <PendingApprovals/>
     </div>
   );
 };

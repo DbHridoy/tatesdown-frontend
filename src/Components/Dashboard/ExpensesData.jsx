@@ -1,75 +1,21 @@
-import React, { useMemo, useState } from "react";
-import ReportsData from "../../Components/Dashboard/ReportsData";
-import PerRepReporting from "../../Components/Dashboard/PerRepReporting";
+import React, { useState } from 'react'
 
-const ReportsDeductions = () => {
-  const [filters, setFilters] = useState({
-    salesRep: "All Sales Reps",
-    status: "All Statuses",
-    timeRange: "All Time Ranges",
-    cluster: "All Clusters",
-  });
+const ExpensesData = () => {
 
-  // Example data (you can replace this with real data from an API or prop)
-  const data = [
-    {
-      salesRep: "Rep A",
-      status: "New",
-      startDate: "2025/01/01",
-      cluster: "North Shore",
-    },
-    {
-      salesRep: "Rep B",
-      status: "In progress",
-      startDate: "2025/02/01",
-      cluster: "Inner West",
-    },
-    {
-      salesRep: "Rep A",
-      status: "Completed",
-      startDate: "2025/03/01",
-      cluster: "Eastern Suburbs",
-    },
-    // Add more data as needed
-  ];
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-
-  // Filter logic
-  const filteredData = useMemo(() => {
-    return data.filter((item) => {
-      return (
-        (filters.salesRep === "All Sales Reps" ||
-          item.salesRep === filters.salesRep) &&
-        (filters.status === "All Statuses" || item.status === filters.status) &&
-        (filters.timeRange === "All Time Ranges" ||
-          item.startDate >= "2025/01/01") &&
-        (filters.cluster === "All Clusters" || item.cluster === filters.cluster)
-      );
-    });
-  }, [filters, data]);
-
-  // Pagination calculation
-  const indexOfLastItem = currentPage * pageSize;
-  const indexOfFirstItem = indexOfLastItem - pageSize;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Handle filter change
-  const handleFilterChange = (e, filterName) => {
-    setFilters({ ...filters, [filterName]: e.target.value });
-    setCurrentPage(1); // Reset to first page on filter change
-  };
-
+     const [activeFilter, setActiveFilter] = useState('Week');
+    
+      const filters = ['Week', 'Month', 'Year', 'All Clusters'];
+    
+      const data = [
+        { title: 'Total Leads', value: '$145,230', change: '+12%', color: 'text-green-500' },
+        { title: 'Total Quotes', value: '120', change: '+8%', color: 'text-green-500' },
+        { title: 'Booked Jobs', value: '100', change: '-3%', color: 'text-red-500' },
+        { title: 'DC Pending', value: '34', change: 'Pending', color: 'text-yellow-500' },
+      
+      ];
   return (
     <div>
-      <div className="p-6 mb-2 border rounded-lg shadow-sm">
+        <div className="p-6 mb-2 border rounded-lg shadow-sm">
         <div className="flex justify-between mb-4 ">
           <div>
             <h3 className="mb-4 font-semibold">Filters</h3>
@@ -140,12 +86,9 @@ const ReportsDeductions = () => {
           </div>
         </div>
       </div>
-
-      {/* Your ReportsData Component */}
-      <ReportsData />
-      <PerRepReporting/>
+      
     </div>
-  );
-};
+  )
+}
 
-export default ReportsDeductions;
+export default ExpensesData

@@ -1,9 +1,15 @@
 import React from 'react'
+import ExpensesData from '../../Components/Dashboard/ExpensesData'
+import ReportsData from '../../Components/Dashboard/ReportsData'
+import ExpenseBreakdown from '../../Components/Dashboard/ExpenseBreakdown'
 
 const Expenses = () => {
   return (
     <div>
-      lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.
+     
+      <ExpensesData/>
+       <ReportsData/>
+       <ExpenseBreakdown/>
     </div>
   )
 }

@@ -40,8 +40,8 @@ export const router = createBrowserRouter([
             element: <Management />,
           },
           {
-            path: "/approvals-center ",
-            element: <Approvals />,
+            path: "/approvals-center",
+            element: <Approvals />
           },
           {
             path: "/reports-deductions",
