@@ -1,7 +1,7 @@
-import React from 'react'
-import PipelineOverview from '../../Components/Dashboard/PipelineOverview'
-import PendingApprovals from '../../Components/Dashboard/PendingApprovals'
-import CardData from '../../Components/Dashboard/CardData'
+import React from "react";
+import PipelineOverview from "../../Components/Dashboard/PipelineOverview";
+import PendingApprovals from "../../Components/Dashboard/PendingApprovals";
+import CardData from "../../Components/Dashboard/CardData";
 
 const Dashboard = () => {
   return (
@@ -10,7 +10,7 @@ const Dashboard = () => {
       <PipelineOverview/>
       <PendingApprovals/>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
