@@ -13,7 +13,7 @@ import Clients from "../UserPages/ClientsLeads/Clients";
 import Quotes from "../UserPages/Quotes/Quote";
 import Jobs from "../UserPages/Jobs/Jobs";
 import UserLayout from "../UserLayout/UserLayout";
-import DesignConsultation from "../UserPages/DesignConsultation/DesignConsultation";
+import DesignConsultation from "../UserPages/DesignConsultation/AddDesignConsultation";
 import StatsReports from "../UserPages/StatsReports/StatsReports";
 import UserExpenses from "../UserPages/ExpensesMileage/Expenses";
 import ClientDetails from "../UserPages/ClientsLeads/ClientDetails";
