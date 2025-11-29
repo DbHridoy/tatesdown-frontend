@@ -6,7 +6,7 @@ import CardData from '../../Components/Dashboard/CardData'
 const Dashboard = () => {
   return (
     <div>
-        <CardData/>
+      <CardData/>
       <PipelineOverview/>
       <PendingApprovals/>
     </div>

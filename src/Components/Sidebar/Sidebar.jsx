@@ -9,7 +9,6 @@ import brandlogo from "../../assets/image/logo.png";
 import { PiUsers } from "react-icons/pi";
 import { IoNewspaper } from "react-icons/io5";
 
-
 const Sidebar = ({ closeDrawer }) => {
   const [active, setActive] = useState("Dashboard");
   const [openDropdown, setOpenDropdown] = useState("");
@@ -31,19 +30,28 @@ const Sidebar = ({ closeDrawer }) => {
     {
       icon: <IoNewspaper className="w-5 h-5" />,
       label: "Approvals center ",
-      Link: "/approvals-center ",
+      Link: "/approvals-center",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Reports Deductions",
+      Link: "/reports-deductions",
+    },
+       {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Expenses",
+      Link: "/expenses",
     },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "User Management",
       Link: "/user-management",
     },
-       {
+    {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Settings",
       Link: "/settings",
     },
-   
   ];
 
   // Filter the menu items based on the search term
@@ -133,7 +141,7 @@ const Sidebar = ({ closeDrawer }) => {
 
       <button
         onClick={handleLogout}
-        className=" bg-primarycolor text-white w-full py-3 flex justify-center items-center cursor-pointer rounded-lg mt-4"
+        className="flex items-center justify-center w-full py-3 mt-4 text-white rounded-lg cursor-pointer bg-primarycolor"
       >
         <FiLogOut className="text-xl" />
         <p className="ml-2">Log out</p>

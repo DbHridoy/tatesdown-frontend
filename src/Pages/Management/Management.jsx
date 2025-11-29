@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { FaRegEdit } from "react-icons/fa";
-import { IoPersonSharp } from "react-icons/io5";
-import { LuEye } from "react-icons/lu";
+import { FaRegEdit, FaUser } from "react-icons/fa";
+import { IoClose, IoPersonSharp } from "react-icons/io5";
+import { LuEye, LuPhone } from "react-icons/lu";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const Management = () => {
@@ -92,6 +92,9 @@ const Management = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  ("");
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -261,13 +264,25 @@ const Management = () => {
                 >
                   <LuEye size={20} />
                 </div>
-                <div className="text-gray-500 hover:text-blue-500">
+                <div
+                  className="text-gray-500 hover:text-blue-500"
+                  onClick={() => {
+                    setSelectedLead(job);
+                    setIsEditModalOpen(true);
+                  }}
+                >
                   <FaRegEdit size={20} />
                 </div>
                 <div className="text-gray-500 hover:text-red-500">
                   <IoPersonSharp size={20} />
                 </div>
-                <div className="text-gray-500 hover:text-red-500">
+                <div
+                  className="text-gray-500 hover:text-red-500"
+                  onClick={() => {
+                    setSelectedLead(job);
+                    setIsDeleteModalOpen(true);
+                  }}
+                >
                   <RiDeleteBinLine size={20} />
                 </div>
               </td>
@@ -313,18 +328,23 @@ const Management = () => {
         </div>
       </div>
 
-      {/* Lead Details Modal */}
+      {/* ====================Lead Details Modal ====================*/}
       {isModalOpen && selectedLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white w-[550px] rounded-xl shadow-lg p-6">
+          <div className="bg-white w-[600px] rounded-xl shadow-lg p-6">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b">
-              <h2 className="text-xl font-semibold">Lead Details</h2>
-              <button onClick={() => setIsModalOpen(false)}>✖</button>
+              <div>
+                <h2 className="text-xl font-semibold">Lead Details</h2>
+                <p className="mt-1 text-gray-500">ID: {selectedLead.id}</p>
+              </div>
+              <button onClick={() => setIsModalOpen(false)}>
+                {" "}
+                <IoClose size={20} />{" "}
+              </button>
             </div>
 
             {/* Lead ID */}
-            <p className="mt-1 text-gray-500">ID: {selectedLead.id}</p>
 
             {/* Client Information */}
             <div className="p-4 mt-5 border rounded-lg">
@@ -340,22 +360,142 @@ const Management = () => {
                 </div>
               </div>
 
-              <div className="mb-3">
-                <p className="font-medium">Phone *</p>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border rounded-md"
-                  defaultValue="12325-54856"
-                />
+              <div className="flex items-center justify-between">
+                <div className="mb-3">
+                  <p className="font-medium">Phone *</p>
+                  <input
+                    type="text"
+                    disabled
+                    className="w-full px-3 py-2 border rounded-md"
+                    defaultValue="12325-54856"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <p className="font-medium">Email *</p>
+                  <input
+                    disabled
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-md"
+                    defaultValue="sample@gmail.com"
+                  />
+                </div>
               </div>
 
-              <div className="mb-3">
-                <p className="font-medium">Email *</p>
+              <div>
+                <p className="font-medium">Address *</p>
                 <input
                   type="text"
+                  disabled
                   className="w-full px-3 py-2 border rounded-md"
-                  defaultValue="sample@gmail.com"
+                  defaultValue="1234 Main St, City, State, ZIP"
                 />
+              </div>
+            </div>
+
+            {/* Call History */}
+            <div className="mt-5">
+              <h3 className="mb-2 font-semibold">Call History</h3>
+              <div className="flex justify-between p-3 mb-3 border rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className="bg-[#D9EBF8] w-12 h-12 rounded-full flex items-center justify-center">
+                    <LuPhone />
+                  </div>
+                  <div>
+                    <p className="font-medium">Outbound Call</p>
+                    <p className="text-sm text-gray-500">
+                      Discussed project details. Client interested.
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-400">2 days ago</p>
+              </div>
+
+              <div className="flex justify-between p-3 mb-3 border rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className="bg-[#D9EBF8] w-12 h-12 rounded-full flex items-center justify-center">
+                    <LuPhone />
+                  </div>
+                  <div>
+                    <p className="font-medium">Outbound Call</p>
+                    <p className="text-sm text-gray-500">
+                      Discussed project details. Client interested.
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-400">2 days ago</p>
+              </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex justify-between mt-6">
+              <button
+                className="px-5 flex gap-x-2 items-center py-2 border border-[#000000CC] rounded-md"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <IoClose />
+                <span>Cancel</span>
+              </button>
+
+              <button className="px-5 py-2 flex items-center gap-x-4 text-white bg-[#007CCD] rounded-md">
+                <FaUser />
+                <span>Impersonate View</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/*=========================== edit Modal =========================== */}
+      {isEditModalOpen && selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white w-[600px] rounded-xl shadow-lg p-6">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b">
+              <div>
+                <h2 className="text-xl font-semibold">Lead Details</h2>
+                <p className="mt-1 text-gray-500">ID: {selectedLead.id}</p>
+              </div>
+              <button onClick={() => setIsEditModalOpen(false)}>
+                {" "}
+                <IoClose size={20} />{" "}
+              </button>
+            </div>
+
+            {/* Lead ID */}
+
+            {/* Client Information */}
+            <div className="p-4 mt-5 border rounded-lg">
+              <h3 className="mb-2 font-semibold">Client Information</h3>
+
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-[60px] h-[60px] bg-gray-300 rounded-full"></div>
+                <div>
+                  <p className="text-lg font-semibold">
+                    {selectedLead.clientName}
+                  </p>
+                  <p className="text-gray-500">Client since Jan 2025</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="mb-3">
+                  <p className="font-medium">Phone *</p>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-md"
+                    defaultValue="12325-54856"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <p className="font-medium">Email *</p>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border rounded-md"
+                    defaultValue="sample@gmail.com"
+                  />
+                </div>
               </div>
 
               <div>
@@ -371,40 +511,97 @@ const Management = () => {
             {/* Call History */}
             <div className="mt-5">
               <h3 className="mb-2 font-semibold">Call History</h3>
-
               <div className="flex justify-between p-3 mb-3 border rounded-lg">
-                <div>
-                  <p className="font-medium">📞 Outbound Call</p>
-                  <p className="text-sm text-gray-500">
-                    Discussed project details. Client interested.
-                  </p>
+                <div className="flex items-center gap-4">
+                  <div className="bg-[#D9EBF8] w-12 h-12 rounded-full flex items-center justify-center">
+                    <LuPhone />
+                  </div>
+                  <div>
+                    <p className="font-medium">Outbound Call</p>
+                    <p className="text-sm text-gray-500">
+                      Discussed project details. Client interested.
+                    </p>
+                  </div>
                 </div>
                 <p className="text-sm text-gray-400">2 days ago</p>
               </div>
 
-              <div className="flex justify-between p-3 border rounded-lg">
-                <div>
-                  <p className="font-medium">📞 Inbound Call</p>
-                  <p className="text-sm text-gray-500">
-                    Initial inquiry. Provided basic information.
-                  </p>
+              <div className="flex justify-between p-3 mb-3 border rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className="bg-[#D9EBF8] w-12 h-12 rounded-full flex items-center justify-center">
+                    <LuPhone />
+                  </div>
+                  <div>
+                    <p className="font-medium">Outbound Call</p>
+                    <p className="text-sm text-gray-500">
+                      Discussed project details. Client interested.
+                    </p>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-400">1 week ago</p>
+                <p className="text-sm text-gray-400">2 days ago</p>
               </div>
             </div>
 
             {/* Footer Buttons */}
             <div className="flex justify-between mt-6">
               <button
-                className="px-5 py-2 border rounded-md"
-                onClick={() => setIsModalOpen(false)}
+                className="px-5 flex gap-x-2 items-center py-2 border border-[#000000CC] rounded-md"
+                onClick={() => setIsEditModalOpen(false)}
+              >
+                <IoClose />
+                <span>Cancel</span>
+              </button>
+
+              <button className="px-5 py-2 flex items-center gap-x-4 text-white bg-[#007CCD] rounded-md">
+                <FaUser />
+                <span>Impersonate View</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ====================Delete Modal ====================*/}
+      {isDeleteModalOpen && selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="p-6 bg-white rounded-lg w-96">
+            <div className="flex items-center justify-between">
+              <div className="text-xl font-semibold text-red-500">Delete User</div>
+               <button  onClick={() => setIsModalOpen(false)}>
+                {" "}
+                <IoClose size={20} />{" "}
+              </button>
+            </div>
+            <div className="mt-4 text-sm text-gray-600">
+              Are you sure you want to delete this user? This action cannot be undone.
+            </div>
+            <div className="mt-4">
+              <input
+                type="text"
+                value="Sarah Mitchell"
+                readOnly
+                className="w-full p-2 mb-2 border border-gray-300 rounded-md"
+              />
+              <input
+                type="email"
+                value="john@example.com"
+                readOnly
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+               onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 text-gray-500 border rounded-md hover:bg-gray-200"
               >
                 Cancel
               </button>
-
-              <button className="px-5 py-2 text-white bg-blue-600 rounded-md">
-                Impersonate View
+              <button
+               onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
+              >
+                Yes, Delete
               </button>
+           
             </div>
           </div>
         </div>

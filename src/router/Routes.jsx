@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
             element: <Management />,
           },
           {
-            path: "/approvals-center ",
+            path: "/approvals-center",
             element: <Approvals />
           },
              {
