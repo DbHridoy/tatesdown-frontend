@@ -19,6 +19,10 @@ import UserExpenses from "../UserPages/ExpensesMileage/Expenses";
 import ClientDetails from "../UserPages/ClientsLeads/ClientDetails";
 import AddCallLog from "../UserPages/ClientsLeads/AddCallLog";
 import AddClient from "../UserPages/ClientsLeads/AddClient";
+import AddNewQuote from "../UserPages/Quotes/AddNewQuote";
+import QuoteDetails from "../UserPages/Quotes/QuoteDetails";
+import AddNewJob from "../UserPages/Jobs/AddNewJob";
+import JobsDetailsView from "../UserPages/Jobs/JobDetailsPage";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -86,8 +90,24 @@ export const router = createBrowserRouter([
             element: <Quotes />,
           },
           {
+            path: "add-new-quote",
+            element: <AddNewQuote />,
+          },
+          {
+            path: "quote-details",
+            element: <QuoteDetails />,
+          },
+          {
             path: "jobs",
             element: <Jobs />,
+          },
+          {
+            path: "add-new-job",
+            element: <AddNewJob />,
+          },
+          {
+            path: "jobs-details",
+            element: <JobsDetailsView />,
           },
           {
             path: "design-consultation",
