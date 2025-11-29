@@ -17,6 +17,8 @@ import DesignConsultation from "../UserPages/DesignConsultation/DesignConsultati
 import StatsReports from "../UserPages/StatsReports/StatsReports";
 import UserExpenses from "../UserPages/ExpensesMileage/Expenses";
 import ClientDetails from "../UserPages/ClientsLeads/ClientDetails";
+import AddCallLog from "../UserPages/ClientsLeads/AddCallLog";
+import AddClient from "../UserPages/ClientsLeads/AddClient";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -70,6 +72,14 @@ export const router = createBrowserRouter([
           {
             path: "client-details",
             element: <ClientDetails />,
+          },
+          {
+            path: "add-call-log",
+            element: <AddCallLog />,
+          },
+          {
+            path: "add-client",
+            element: <AddClient />,
           },
           {
             path: "quotes",

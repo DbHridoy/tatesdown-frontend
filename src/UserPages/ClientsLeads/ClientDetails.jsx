@@ -1,4 +1,4 @@
-import React from "react";
+
 import StarRating from "../../UserComponents/Common/StarRating";
 
 const ClientDetails = () => {
@@ -201,7 +201,7 @@ const ClientDetails = () => {
               Load Follow-Up
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              What would you like to do with this load after "No Pickup"?
+              What would you like to do with this load after No Pickup?
             </p>
             <div className="space-y-3">
               <label className="flex items-center">
