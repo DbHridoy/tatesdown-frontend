@@ -8,7 +8,7 @@ import Expenses from "../Pages/Expenses/Expenses";
 import UserManagement from "../Pages/UserManagement/UserManagement";
 import Settings from "../Pages/Settings/Settings";
 import Dashboard from "../Pages/Dashboard/Dashboard";
-import Home from "../UserPages/Home/Home";;
+import Home from "../UserPages/Home/Home";
 import Clients from "../UserPages/ClientsLeads/Clients";
 import Quotes from "../UserPages/Quotes/Quote";
 import Jobs from "../UserPages/Jobs/Jobs";
@@ -16,6 +16,7 @@ import UserLayout from "../UserLayout/UserLayout";
 import DesignConsultation from "../UserPages/DesignConsultation/DesignConsultation";
 import StatsReports from "../UserPages/StatsReports/StatsReports";
 import UserExpenses from "../UserPages/ExpensesMileage/Expenses";
+import ClientDetails from "../UserPages/ClientsLeads/ClientDetails";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
           {
             path: "clients",
             element: <Clients />,
+          },
+          {
+            path: "client-details",
+            element: <ClientDetails />,
           },
           {
             path: "quotes",
