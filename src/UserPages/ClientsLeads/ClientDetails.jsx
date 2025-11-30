@@ -1,7 +1,13 @@
-
+import React, { useState } from "react";
 import StarRating from "../../UserComponents/Common/StarRating";
+import AddCallLog from "./AddCallLog"; // Import the AddCallLog modal
 
 const ClientDetails = () => {
+  const [showModal, setShowModal] = useState(false); // State to show/hide the modal
+
+  const openModal = () => setShowModal(true); // Open the modal
+  const closeModal = () => setShowModal(false); // Close the modal
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
@@ -9,7 +15,7 @@ const ClientDetails = () => {
         <h1 className="text-2xl font-bold text-gray-800">Client Details</h1>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2">
           <h2 className="text-lg font-semibold text-gray-700">
-            Search Mitchell
+            Sarah Mitchell
           </h2>
           <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
             Client office (Jan 2025)
@@ -30,7 +36,7 @@ const ClientDetails = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue="Sposado"
+                  defaultValue="Sarah Mitchell"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -42,7 +48,7 @@ const ClientDetails = () => {
                 </label>
                 <input
                   type="email"
-                  defaultValue="us@mintchell@gmail.com"
+                  defaultValue="us@mitchell@gmail.com"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -58,17 +64,7 @@ const ClientDetails = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone *
-                </label>
-                <input
-                  type="tel"
-                  defaultValue="12325-94836"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+
               {/* Address */}
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -117,8 +113,9 @@ const ClientDetails = () => {
                   <option value="outbound">Outbound</option>
                 </select>
               </div>
-            </div>{" "}
+            </div>
           </div>
+
           <div className="bg-white rounded-lg shadow-sm p-6">
             <span className="block text-gray-600 mb-2 font-medium">
               Lead Rating
@@ -149,26 +146,12 @@ const ClientDetails = () => {
                 </div>
               </div>
 
-              {/* Call Item 2 */}
-              <div className="flex gap-4 pb-4 border-b border-gray-200 last:border-b-0">
-                <div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-800">
-                      Inbound Call
-                    </span>
-                    <span className="text-sm text-gray-500">1 week ago</span>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Test library check services. Protected back information and
-                    scheduled follow-up.
-                  </p>
-                </div>
-              </div>
-
               {/* Add Call Button */}
-              <button className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors">
-                Add call key
+              <button
+                onClick={openModal}
+                className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors"
+              >
+                Add Call Log
               </button>
             </div>
           </div>
@@ -182,7 +165,7 @@ const ClientDetails = () => {
               Notes & Attachments
             </h3>
             <textarea
-              placeholder="Add online about this client..."
+              placeholder="Add notes about this client..."
               className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             />
             <div className="flex gap-3 mt-4">
@@ -238,6 +221,9 @@ const ClientDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* AddCallLog Modal */}
+      {showModal && <AddCallLog closeModal={closeModal} />}
     </div>
   );
 };
