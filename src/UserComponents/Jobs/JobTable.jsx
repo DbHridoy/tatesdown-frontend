@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const JobTable = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 5;
 
@@ -102,7 +104,7 @@ const JobTable = () => {
                 <td className="py-3 px-6 text-sm text-gray-600">
                   {job.startDate}
                 </td>
-                <td className="py-3 px-6 text-sm text-blue-600 cursor-pointer">
+                <td onClick={()=>navigate("/client-details")} className="py-3 px-6 text-sm text-blue-600 cursor-pointer">
                   👁️
                 </td>
               </tr>
