@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-// import { DownloadIcon } from '@heroicons/react/outline'; // Assuming you want to use Heroicons
+import { useState } from "react";
 
-const SubmittedMileageLogs = () => {
+const ExpenseFilter = () => {
   const [status, setStatus] = useState('All Statuses');
   const [month, setMonth] = useState('All Months');
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
-      <div className="max-w-7xl mx-auto mb-6">
+    <div className="">
+      <div className="mx-auto mb-6">
         {/* Title and Filters */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-gray-900">Submitted Mileage Logs</h1>
@@ -91,4 +90,4 @@ const SubmittedMileageLogs = () => {
   );
 };
 
-export default SubmittedMileageLogs;
+export default ExpenseFilter;

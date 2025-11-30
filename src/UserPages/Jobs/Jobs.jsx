@@ -1,16 +1,26 @@
 import Filters from "../../UserComponents/Clients/Filters";
-import ClientsTable from "../../UserComponents/Clients/ClientsTable";
+import JobTable from "../../UserComponents/Jobs/JobTable";
+import { useNavigate } from "react-router-dom";
 function Jobs() {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="flex justify-between flex-row">
-        <h1>Jobs</h1>
-        <button className="bg-primarycolor text-white px-4 py-2 rounded">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Jobs</h1>
+          <p className="text-gray-600">Manage your jobs and track progress</p>
+        </div>
+        <button
+          className="bg-primarycolor text-white px-4 py-2 rounded"
+          onClick={() => navigate("/add-new-job")}
+        >
           Add Job
         </button>
       </div>
-      <Filters />
-      <ClientsTable />
+      <div className="space-y-4">
+        <Filters />
+        <JobTable />
+      </div>
     </div>
   );
 }
