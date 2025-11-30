@@ -23,6 +23,7 @@ import AddNewQuote from "../UserPages/Quotes/AddNewQuote";
 import QuoteDetails from "../UserPages/Quotes/QuoteDetails";
 import AddNewJob from "../UserPages/Jobs/AddNewJob";
 import JobsDetailsView from "../UserPages/Jobs/JobDetailsPage";
+import RepDetails from "../Pages/RepDetails/RepDetails";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
           {
             path: "/reports-deductions",
             element: <ReportsDeductions />,
+          },
+                {
+            path: "/reports-details",
+            element: <RepDetails/>,
           },
           {
             path: "/expenses",

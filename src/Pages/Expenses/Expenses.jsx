@@ -1,17 +1,15 @@
-import React from 'react'
-import ExpensesData from '../../Components/Dashboard/ExpensesData'
-import ReportsData from '../../Components/Dashboard/ReportsData'
-import ExpenseBreakdown from '../../Components/Dashboard/ExpenseBreakdown'
+import ExpensesData from "../../Components/Dashboard/ExpensesData";
+import ReportsData from "../../Components/Dashboard/ReportsData";
+import ExpenseBreakdown from "../../Components/Dashboard/ExpenseBreakdown";
 
 const Expenses = () => {
   return (
     <div>
-     
-      <ExpensesData/>
-       <ReportsData/>
-       <ExpenseBreakdown/>
+      <ExpensesData />
+      <ReportsData />
+      <ExpenseBreakdown />
     </div>
-  )
-}
+  );
+};
 
-export default Expenses
+export default Expenses;
