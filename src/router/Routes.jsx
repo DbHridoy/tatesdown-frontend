@@ -23,6 +23,11 @@ import AddNewQuote from "../UserPages/Quotes/AddNewQuote";
 import QuoteDetails from "../UserPages/Quotes/QuoteDetails";
 import AddNewJob from "../UserPages/Jobs/AddNewJob";
 import JobsDetailsView from "../UserPages/Jobs/JobDetailsPage";
+import Login from "../UserPages/Auth/Login";
+import ForgetPassword from "../UserPages/Auth/ForgotPassword";
+import VerifyOtp from "../UserPages/Auth/VerifyOTP";
+import SetNewPassword from "../UserPages/Auth/SetNewPassword";
+import Successful from "../UserPages/Auth/Successful";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -120,6 +125,31 @@ export const router = createBrowserRouter([
           {
             path: "expense",
             element: <UserExpenses />,
+          },
+        ],
+      },
+      {
+        path: "/",
+        children: [
+          {
+            path: "login",
+            element: <Login />,
+          },
+          {
+            path: "forgot-password",
+            element: <ForgetPassword />,
+          },
+          {
+            path: "verify-otp",
+            element: <VerifyOtp />,
+          },
+          {
+            path: "set-password",
+            element: <SetNewPassword />,
+          },
+          {
+            path: "successful",
+            element: <Successful />,
           },
         ],
       },

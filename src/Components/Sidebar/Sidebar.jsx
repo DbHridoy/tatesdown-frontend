@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdDashboard, MdPrivacyTip } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { RiMoneyDollarCircleLine, RiTerminalWindowLine } from "react-icons/ri";
-import brandlogo from "../../assets/image/logo.png";
+import brandlogo from "../../assets/image/Logo.svg";
 import { PiUsers } from "react-icons/pi";
 import { IoNewspaper } from "react-icons/io5";
 
@@ -37,7 +37,7 @@ const Sidebar = ({ closeDrawer }) => {
       label: "Reports Deductions",
       Link: "/reports-deductions",
     },
-       {
+    {
       icon: <IoNewspaper className="w-5 h-5" />,
       label: "Expenses",
       Link: "/expenses",

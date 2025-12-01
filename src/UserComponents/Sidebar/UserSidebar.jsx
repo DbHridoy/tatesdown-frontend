@@ -3,11 +3,10 @@ import { FiLogOut } from "react-icons/fi";
 import { BiChevronDown } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
-import brandlogo from "../../assets/image/logo.png";
+import brandlogo from "../../assets/image/Logo.svg";
 import { PiUsers } from "react-icons/pi";
 import { IoNewspaper } from "react-icons/io5";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-
 
 const UserSidebar = ({ closeDrawer }) => {
   const [active, setActive] = useState("Home");
@@ -37,22 +36,21 @@ const UserSidebar = ({ closeDrawer }) => {
       label: "Jobs",
       Link: "/jobs",
     },
-       {
+    {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Design Consultation",
       Link: "/design-consultation",
     },
-       {
+    {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Stats / Reports",
       Link: "/stats-reports",
     },
-       {
+    {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Expenses",
       Link: "/expense",
     },
-   
   ];
 
   // Filter the menu items based on the search term
