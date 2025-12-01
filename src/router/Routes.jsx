@@ -28,6 +28,13 @@ import ForgetPassword from "../UserPages/Auth/ForgotPassword";
 import VerifyOtp from "../UserPages/Auth/VerifyOTP";
 import SetNewPassword from "../UserPages/Auth/SetNewPassword";
 import Successful from "../UserPages/Auth/Successful";
+import RepDetails from "../Pages/RepDetails/RepDetails";
+import ProducationLayout from "../ProducationLayout/ProducationLayout";
+import ProductionHome from "../ProductionPages/ProductionHome/ProductionHome";
+import JobScheduling from "../ProductionPages/JobScheduling/JobScheduling";
+import JobOverview from "../ProductionPages/JobOverview/JobOverview";
+import ProfileSettings from "../ProductionPages/ProductionSettings/ProductionSettings";
+import ProductionReport from "../ProductionPages/ProductionReport/ProductionReport";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -51,6 +58,14 @@ export const router = createBrowserRouter([
           {
             path: "/reports-deductions",
             element: <ReportsDeductions />,
+          },
+                {
+            path: "/reports-details",
+            element: <RepDetails/>,
+          },
+                {
+            path: "/reports-details",
+            element: <RepDetails/>,
           },
           {
             path: "/expenses",
@@ -151,6 +166,33 @@ export const router = createBrowserRouter([
             path: "successful",
             element: <Successful />,
           },
+        ],
+      },
+       {
+        path: "/",
+        element: <ProducationLayout/>,
+        children: [
+          {
+            path: "production-home",
+            element: <ProductionHome/>,
+          },
+             {
+            path: "job-scheduling",
+            element: <JobScheduling/>,
+          },
+          {
+            path: "job-scheduling/:id",
+            element: <JobOverview/>,
+          },
+          {
+            path: "production-settings",
+            element: <ProfileSettings/>,
+          },
+          {
+            path: "production-report",
+            element: <ProductionReport/>,
+          }
+         
         ],
       },
     ],

@@ -3,6 +3,7 @@ import { FaRegEdit, FaUser } from "react-icons/fa";
 import { IoClose, IoPersonSharp } from "react-icons/io5";
 import { LuEye, LuPhone } from "react-icons/lu";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const PerRepReporting = () => {
   const getStatusColor = (status) => {
@@ -90,15 +91,11 @@ const PerRepReporting = () => {
     // Add more dummy data as needed
   ];
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedLead, setSelectedLead] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  ("");
-
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5; // Number of items per page
+  const navigate = useNavigate();
+
 
   // Filter logic
   const filteredData = useMemo(() => {
@@ -132,10 +129,10 @@ const PerRepReporting = () => {
 
   return (
     <div className="p-6">
-   
-
+      <h1 className="mb-1 text-2xl">Per-Rep Reporting</h1>
+      <p className="text-xs">Detailed breakdown by sales representative</p>
       {/* Table */}
-      <table className="min-w-full border-collapse table-auto">
+      <table className="min-w-full mt-6 border-collapse table-auto">
         <thead>
           <tr className="bg-[#D9EBF8] ">
             <th className="px-6 py-3 text-left">ID</th>
@@ -169,15 +166,18 @@ const PerRepReporting = () => {
                 </span>
               </td>
               <td className="px-6 py-3">{job.startDate}</td>
-              <td className="text-[#007CCD]">
-                <span>View Details  </span>
+              <td
+                onClick={() => navigate(`/reports-details`)}
+                className="text-[#007CCD] underline cursor-pointer"
+              >
+                View Details
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Pagination */}
+      {/*======================= Pagination =======================*/}
       <div className="flex items-center justify-between mt-4">
         <span>
           Showing {indexOfFirstItem + 1}-{indexOfLastItem} of{" "}
@@ -213,12 +213,8 @@ const PerRepReporting = () => {
           </button>
         </div>
       </div>
-
- 
-
     </div>
   );
 };
 
 export default PerRepReporting;
-

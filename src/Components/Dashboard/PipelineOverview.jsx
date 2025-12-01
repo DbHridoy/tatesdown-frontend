@@ -1,60 +1,60 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
 
-const PipelineOverview = ()  =>{
+export default function PipelineOverview() {
   const data = [
-    { name: "New Leads", value: 150, color: "#007bdb" },
-    { name: "Quotes", value: 115, color: "#b7dbff" },
-    { name: "Dc Pending", value: 35, color: "#f1a10a" },
-    { name: "Ready", value: 28, color: "#caa20d" },
-    { name: "Scheduled", value: 50, color: "#7066ff" },
-    { name: "Closed", value: 42, color: "#626672" },
+    { name: 'New Leads', value: 150, color: '#0EA5E9' },
+    { name: 'Quotes', value: 115, color: '#7DD3FC' },
+    { name: 'Dc Pending', value: 35, color: '#F59E0B' },
+    { name: 'Ready', value: 28, color: '#FCD34D' },
+    { name: 'Scheduled', value: 48, color: '#8B5CF6' },
+    { name: 'Closed', value: 45, color: '#6B7280' }
   ];
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow border w-full">
-      {/* Title */}
-      <h2 className="text-xl font-semibold text-gray-800">
-        Pipeline Overview
-      </h2>
-      <p className="text-sm text-gray-500 mb-5">Job status progression</p>
-
-      {/* Chart */}
-      <div className="w-full h-72">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} barCategoryGap={25}>
-            <CartesianGrid stroke="#e5e7eb" horizontal={true} vertical={false} />
-            <XAxis
-              dataKey="name"
-              tick={{ fontSize: 12 }}
-              axisLine={{ stroke: "#000" }}
+    <div className="w-full p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+      <div >
+        <h1 className="mb-1 text-2xl font-semibold text-gray-900">
+          Pipeline Overview
+        </h1>
+        <p className="mb-2 text-sm text-gray-600">
+          Job status progression
+        </p>
+        
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart 
+            data={data} 
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid 
+              strokeDasharray="0" 
+              stroke="#E5E7EB" 
+              vertical={false}
             />
-            <YAxis
-              tick={{ fontSize: 12 }}
-              axisLine={{ stroke: "#000" }}
+            <XAxis 
+              dataKey="name" 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: '#6B7280', fontSize: 12 }}
             />
-            <Tooltip />
-            {data.map((entry, index) => (
-              <Bar
-                key={index}
-                dataKey="value"
-                fill={entry.color}
-                name={entry.name}
-                stackId={entry.name}
-              />
-            ))}
+            <YAxis 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: '#6B7280', fontSize: 12 }}
+              ticks={[0, 50, 100, 150]}
+            />
+            <Bar 
+              dataKey="value" 
+              radius={[4, 4, 0, 0]}
+              maxBarSize={80}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
 }
-
-export default PipelineOverview;

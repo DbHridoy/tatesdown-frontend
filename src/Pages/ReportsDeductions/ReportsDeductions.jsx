@@ -56,7 +56,6 @@ const ReportsDeductions = () => {
   const indexOfFirstItem = indexOfLastItem - pageSize;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -64,12 +63,12 @@ const ReportsDeductions = () => {
   // Handle filter change
   const handleFilterChange = (e, filterName) => {
     setFilters({ ...filters, [filterName]: e.target.value });
-    setCurrentPage(1); // Reset to first page on filter change
+    setCurrentPage(1); 
   };
 
   return (
     <div>
-      <div className="p-6 mb-2 border rounded-lg shadow-sm">
+      <div className="p-6 mt-5 mb-2 border rounded-lg shadow-sm">
         <div className="flex justify-between mb-4 ">
           <div>
             <h3 className="mb-4 font-semibold">Filters</h3>
@@ -140,8 +139,6 @@ const ReportsDeductions = () => {
           </div>
         </div>
       </div>
-
-      {/* Your ReportsData Component */}
       <ReportsData />
       <PerRepReporting/>
     </div>
