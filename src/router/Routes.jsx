@@ -24,6 +24,12 @@ import QuoteDetails from "../UserPages/Quotes/QuoteDetails";
 import AddNewJob from "../UserPages/Jobs/AddNewJob";
 import JobsDetailsView from "../UserPages/Jobs/JobDetailsPage";
 import RepDetails from "../Pages/RepDetails/RepDetails";
+import ProducationLayout from "../ProducationLayout/ProducationLayout";
+import ProductionHome from "../ProductionPages/ProductionHome/ProductionHome";
+import JobScheduling from "../ProductionPages/JobScheduling/JobScheduling";
+import JobOverview from "../ProductionPages/JobOverview/JobOverview";
+import ProfileSettings from "../ProductionPages/ProductionSettings/ProductionSettings";
+import ProductionReport from "../ProductionPages/ProductionReport/ProductionReport";
 export const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
@@ -126,6 +132,33 @@ export const router = createBrowserRouter([
             path: "expense",
             element: <UserExpenses />,
           },
+        ],
+      },
+       {
+        path: "/",
+        element: <ProducationLayout/>,
+        children: [
+          {
+            path: "production-home",
+            element: <ProductionHome/>,
+          },
+             {
+            path: "job-scheduling",
+            element: <JobScheduling/>,
+          },
+          {
+            path: "job-scheduling/:id",
+            element: <JobOverview/>,
+          },
+          {
+            path: "production-settings",
+            element: <ProfileSettings/>,
+          },
+          {
+            path: "production-report",
+            element: <ProductionReport/>,
+          }
+         
         ],
       },
     ],
