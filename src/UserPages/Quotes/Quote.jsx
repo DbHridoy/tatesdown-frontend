@@ -1,19 +1,32 @@
 import Filters from "../../UserComponents/Clients/Filters";
-import ClientsTable from "../../UserComponents/Clients/ClientsTable";
+import QuoteTable from "../../UserComponents/Quote/QuoteTable";
+import { useNavigate } from "react-router-dom";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserAdd01Icon } from "@hugeicons/core-free-icons";
 function Quotes() {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="flex justify-between flex-row ">
-        <h1>Quotes</h1>
-        <button className="bg-primarycolor text-white px-4 py-2 rounded">
-          Add Quote
-        </button>
+        <div>
+          <h1 className="text-2xl font-bold">Quotes</h1>
+          <p>Manage your quotes here</p>
+        </div>
+        <div className="flex flex-row gap-2 bg-primarycolor text-white p-4 rounded">
+          <HugeiconsIcon icon={UserAdd01Icon} />
+          <button
+            className=" "
+            onClick={() => navigate("/add-new-quote")}
+          >
+            Add Quote
+          </button>
+        </div>
       </div>
       <div className="py-4">
         <Filters />
       </div>
       <div className="py-4">
-        <ClientsTable />
+        <QuoteTable />
       </div>
     </div>
   );

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-
+import { useState } from "react";
 const AddClient = () => {
   const [rating, setRating] = useState(4);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
+    <div className="  py-8 px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto">
         {/* HEADER */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Add Client</h1>

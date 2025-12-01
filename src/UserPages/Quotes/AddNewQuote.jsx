@@ -4,8 +4,8 @@ const AddNewQuote = () => {
   const [bookedOnSpot, setBookedOnSpot] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen">
+      <div className="">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Add New Quote</h1>
