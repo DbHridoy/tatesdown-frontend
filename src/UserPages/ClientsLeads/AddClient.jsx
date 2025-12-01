@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import { useState } from "react";
 const AddClient = () => {
   const [rating, setRating] = useState(4);
 

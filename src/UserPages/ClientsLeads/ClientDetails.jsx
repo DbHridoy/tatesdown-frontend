@@ -9,7 +9,7 @@ const ClientDetails = () => {
   const closeModal = () => setShowModal(false); // Close the modal
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Client Details</h1>

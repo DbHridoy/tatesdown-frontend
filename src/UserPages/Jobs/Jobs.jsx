@@ -1,6 +1,8 @@
 import Filters from "../../UserComponents/Clients/Filters";
 import JobTable from "../../UserComponents/Jobs/JobTable";
 import { useNavigate } from "react-router-dom";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserAdd01Icon } from "@hugeicons/core-free-icons";
 function Jobs() {
   const navigate = useNavigate();
   return (
@@ -11,9 +13,10 @@ function Jobs() {
           <p className="text-gray-600">Manage your jobs and track progress</p>
         </div>
         <button
-          className="bg-primarycolor text-white px-4 py-2 rounded"
+          className="bg-primarycolor text-white flex flex-row items-center p-4 rounded"
           onClick={() => navigate("/add-new-job")}
         >
+          <HugeiconsIcon icon={UserAdd01Icon} />
           Add Job
         </button>
       </div>

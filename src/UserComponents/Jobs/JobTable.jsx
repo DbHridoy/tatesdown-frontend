@@ -104,7 +104,7 @@ const JobTable = () => {
                 <td className="py-3 px-6 text-sm text-gray-600">
                   {job.startDate}
                 </td>
-                <td onClick={()=>navigate("/client-details")} className="py-3 px-6 text-sm text-blue-600 cursor-pointer">
+                <td onClick={()=>navigate("/jobs-details")} className="py-3 px-6 text-sm text-blue-600 cursor-pointer">
                   👁️
                 </td>
               </tr>
