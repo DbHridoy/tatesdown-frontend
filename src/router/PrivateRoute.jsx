@@ -1,11 +1,21 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate} from "react-router-dom";
 
 const PrivateRoute = () => {
-    // const user = localStorage.getItem("user");
-    // console.log("user from PrivateRoute", user);
-    // if (!user) return <Navigate to="/sign-in" />
+  const role = localStorage.getItem("role");
 
-    return <Outlet />
+  if (!role) return <Navigate to="/login" replace />;
+
+  // Redirect to role-specific homepage
+  switch (role) {
+    case "admin":
+      return <Navigate to="/s/admin/dashboard" replace />;
+    case "sales-rep":
+      return <Navigate to="/s/sales-rep/home" replace />;
+    case "production-manager":
+      return <Navigate to="/s/production-manager/production-home" replace />;
+    default:
+      return <Navigate to="/login" replace />;
+  }
 };
 
 export default PrivateRoute;
