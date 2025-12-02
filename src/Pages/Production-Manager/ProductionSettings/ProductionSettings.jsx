@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Edit, Briefcase, Camera, Check } from 'lucide-react';
+import { useState } from "react";
+import { Edit, Briefcase, Camera, Check } from "lucide-react";
 
 const ProductionSettings = () => {
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
-  
+
   const [profileData, setProfileData] = useState({
-    fullName: 'TateDowns',
-    email: 'tatedowns@gmail.com',
-    phone: '+123 256 5241',
-    address: 'House 21, Road 5, Ohio, usa',
-    role: 'PM',
-    avatar: null
+    fullName: "TateDowns",
+    email: "tatedowns@gmail.com",
+    phone: "+123 256 5241",
+    address: "House 21, Road 5, Ohio, usa",
+    role: "PM",
+    avatar: null,
   });
 
   const [formData, setFormData] = useState({ ...profileData });
@@ -18,7 +18,7 @@ const ProductionSettings = () => {
   const handleSaveChanges = () => {
     setProfileData({ ...formData });
     setShowSaveSuccess(true);
-    
+
     // Hide success message after 3 seconds
     setTimeout(() => {
       setShowSaveSuccess(false);
@@ -26,9 +26,9 @@ const ProductionSettings = () => {
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -37,9 +37,9 @@ const ProductionSettings = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          avatar: reader.result
+          avatar: reader.result,
         }));
       };
       reader.readAsDataURL(file);
@@ -47,21 +47,27 @@ const ProductionSettings = () => {
   };
 
   return (
-    <div >
-      <div >
+    <div>
+      <div>
         {/* Success Message */}
         {showSaveSuccess && (
           <div className="flex items-center gap-2 p-4 mb-4 border border-green-200 rounded-lg bg-green-50">
             <Check className="w-5 h-5 text-green-600" />
-            <span className="text-sm font-medium text-green-800">Profile updated successfully!</span>
+            <span className="text-sm font-medium text-green-800">
+              Profile updated successfully!
+            </span>
           </div>
         )}
 
         <div className="p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="mb-1 text-xl font-semibold text-gray-900">Profile & Settings</h1>
-            <p className="text-sm text-gray-500">Manage your account settings and preferences</p>
+            <h1 className="mb-1 text-xl font-semibold text-gray-900">
+              Profile & Settings
+            </h1>
+            <p className="text-sm text-gray-500">
+              Manage your account settings and preferences
+            </p>
           </div>
 
           {/* Profile Section */}
@@ -69,32 +75,38 @@ const ProductionSettings = () => {
             <div className="relative mb-3 group">
               <div className="w-20 h-20 overflow-hidden bg-gray-300 rounded-full">
                 {formData.avatar ? (
-                  <img src={formData.avatar} alt="Profile" className="object-cover w-full h-full" />
+                  <img
+                    src={formData.avatar}
+                    alt="Profile"
+                    className="object-cover w-full h-full"
+                  />
                 ) : (
                   <div className="flex items-center justify-center w-full h-full text-2xl font-semibold text-white bg-gradient-to-br from-blue-400 to-blue-600">
                     {formData.fullName.charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
-              
+
               <label className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 rounded-full opacity-0 cursor-pointer group-hover:opacity-100">
                 <Camera className="w-6 h-6 text-white" />
-                <input 
-                  type="file" 
-                  accept="image/*" 
+                <input
+                  type="file"
+                  accept="image/*"
                   onChange={handleAvatarChange}
                   className="hidden"
                 />
               </label>
-              
+
               <div className="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6 bg-white border-2 border-gray-200 rounded-full">
                 <Briefcase className="w-3 h-3 text-gray-600" />
               </div>
             </div>
-            
-            <h2 className="text-lg font-semibold text-gray-900 mb-0.5">{formData.fullName}</h2>
+
+            <h2 className="text-lg font-semibold text-gray-900 mb-0.5">
+              {formData.fullName}
+            </h2>
             <p className="mb-3 text-sm text-gray-500">{formData.role}</p>
-            
+
             <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors border border-gray-300 rounded hover:bg-gray-50">
               <Edit className="w-4 h-4" />
               Edit Profile
@@ -111,7 +123,9 @@ const ProductionSettings = () => {
                 <input
                   type="text"
                   value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("fullName", e.target.value)
+                  }
                   className="w-full px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -123,7 +137,7 @@ const ProductionSettings = () => {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -137,7 +151,7 @@ const ProductionSettings = () => {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
                   className="w-full px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -149,7 +163,7 @@ const ProductionSettings = () => {
                 <input
                   type="text"
                   value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
+                  onChange={(e) => handleInputChange("address", e.target.value)}
                   className="w-full px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -158,7 +172,7 @@ const ProductionSettings = () => {
 
           {/* Save Button - Always visible */}
           <div className="flex justify-center mt-8">
-            <button 
+            <button
               onClick={handleSaveChanges}
               className="px-8 py-2.5 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 transition-colors"
             >
@@ -169,5 +183,5 @@ const ProductionSettings = () => {
       </div>
     </div>
   );
-}
+};
 export default ProductionSettings;

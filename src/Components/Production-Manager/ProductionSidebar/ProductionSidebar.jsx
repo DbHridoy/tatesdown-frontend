@@ -7,10 +7,8 @@ import brandlogo from "../../../assets/Logo.svg";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { CiHome, CiSettings } from "react-icons/ci";
 
-const ProductionSidebar = ({ closeDrawer }) => {
+const ProductionSidebar = () => {
   const [active, setActive] = useState("Home");
-  const [openDropdown, setOpenDropdown] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -18,104 +16,96 @@ const ProductionSidebar = ({ closeDrawer }) => {
     {
       icon: <CiHome className="w-5 h-5" />,
       label: "Home",
-      Link: "/production-home",
+      Link: "/s/production-manager/production-home",
     },
     {
       icon: <IoBagHandleOutline className="w-5 h-5" />,
       label: "Job Scheduling",
-      Link: "/job-scheduling",
+      Link: "/s/production-manager/job-scheduling",
     },
     {
       icon: <MdAutoGraph className="w-5 h-5" />,
       label: "Reports",
-      Link: "/production-report",
+      Link: "/s/production-manager/production-report",
     },
     {
       icon: <CiSettings className="w-5 h-5" />,
       label: "Settings",
-      Link: "/production-settings",
+      Link: "/s/production-manager/production-settings",
     },
   ];
 
-  // Filter the menu items based on the search term
-  const filterMenuItems = (items) => {
-    return items.filter((item) => {
-      // If the item has subItems, filter them as well
-      if (item.isDropdown && item.subItems) {
-        const filteredSubItems = item.subItems.filter((subItem) =>
-          subItem.label.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        // If a subItem matches the search term, we include the parent dropdown
-        if (filteredSubItems.length > 0) {
-          item.subItems = filteredSubItems;
-          return true;
-        }
-      }
-
-      // Filter the label of the item
-      return item.label.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-  };
-
-  const filteredItems = filterMenuItems(menuItems);
-
   const handleLogout = () => {
-    navigate("/sign-in");
+    navigate("/login");
   };
 
-return (
+
+  return (
     <div className="flex flex-col px-2">
-      {/* Logo Section */}
-      <div className="flex justify-center items-center">
+      {/* Logo */}
+      <div className="flex justify-center items-center my-4">
         <img src={brandlogo} alt="logo" className="w-20 h-20 object-contain" />
       </div>
 
-      {/* Menu items */}
+      {/* Menu */}
       <div className="flex-1 overflow-y-auto max-h-[calc(100vh-150px)]">
-        {filteredItems.map((item) => (
-          <div key={item.label}>
-            <div
-              className={`flex justify-between items-center px-5 py-2 my-5 cursor-pointer transition-all  ${
-                active === item.label
-                  ? "bg-[#007CCD] text-white font-semibold"
-                  : "text-black"
-              }`}
-              onClick={() =>
-                item.isDropdown
-                  ? setOpenDropdown(
-                      openDropdown === item.label ? "" : item.label
-                    )
-                  : setActive(item.label)
-              }
-            >
-              <Link to={item.Link} className="flex items-center w-full gap-3">
+        {menuItems.map((item) => (
+          <div key={item.label} className="mb-1">
+            {item.isDropdown ? (
+              // Dropdown parent
+              <div
+                className={`flex justify-between items-center px-5 py-2 cursor-pointer transition-all ${
+                  active === item.label
+                    ? "bg-[#007CCD] text-white font-semibold"
+                    : "text-black"
+                }`}
+                onClick={() =>
+                  setActive(active === item.label ? "" : item.label)
+                }
+              >
+                <div className="flex items-center gap-3">
+                  {item.icon}
+                  <p>{item.label}</p>
+                </div>
+                <BiChevronDown
+                  className={`${
+                    active === item.label ? "rotate-180" : ""
+                  }`}
+                />
+              </div>
+            ) : (
+              // Normal link
+              <Link
+                to={item.Link}
+                className={`flex items-center gap-3 px-5 py-2 cursor-pointer transition-all ${
+                  active === item.label
+                    ? "bg-[#007CCD] text-white font-semibold"
+                    : "text-black"
+                }`}
+                onClick={() => setActive(item.label)}
+              >
                 {item.icon}
                 <p>{item.label}</p>
-                {item.isDropdown && (
-                  <BiChevronDown
-                    className={`${
-                      openDropdown === item.label ? "rotate-180" : ""
-                    }`}
-                  />
-                )}
               </Link>
-            </div>
-            {item.isDropdown && openDropdown === item.label && (
+            )}
+
+            {/* Subitems */}
+            {item.isDropdown && active === item.label && (
               <div className="flex flex-col pl-8">
-                {item.subItems.map((subItem) => (
-                  <Link to={subItem.Link} key={subItem.label}>
-                    <div
-                      className={`py-2 px-5 cursor-pointer my-5 bg-[#007CCD] transition-all rounded-lg ${
-                        active === subItem.label
-                          ? "bg-[#007CCD] text-black font-semibold"
-                          : "text-white"
-                      }`}
-                      onClick={() => setActive(subItem.label)}
-                    >
-                      <p className="flex items-center gap-2">
-                        {subItem.icon} {subItem.label}
-                      </p>
-                    </div>
+                {item.subItems?.map((subItem) => (
+                  <Link
+                    to={subItem.Link}
+                    key={subItem.label}
+                    className={`py-2 px-5 cursor-pointer my-1 rounded-lg transition-all ${
+                      active === subItem.label
+                        ? "bg-[#007CCD] text-black font-semibold"
+                        : "text-white"
+                    }`}
+                    onClick={() => setActive(subItem.label)}
+                  >
+                    <p className="flex items-center gap-2">
+                      {subItem.icon} {subItem.label}
+                    </p>
                   </Link>
                 ))}
               </div>
@@ -124,6 +114,7 @@ return (
         ))}
       </div>
 
+      {/* Logout */}
       <button
         onClick={handleLogout}
         className="bg-primarycolor text-white w-full py-3 flex justify-center items-center cursor-pointer rounded-lg mt-4"

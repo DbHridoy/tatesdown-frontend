@@ -1,146 +1,54 @@
-import { useState } from "react";
 import { FiLogOut } from "react-icons/fi";
-import { BiChevronDown } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
-import { MdDashboard, MdPrivacyTip } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
-import { RiMoneyDollarCircleLine, RiTerminalWindowLine } from "react-icons/ri";
-import brandlogo from "../../../assets/Logo.svg";
+import { MdDashboard } from "react-icons/md";
 import { PiUsers } from "react-icons/pi";
 import { IoNewspaper } from "react-icons/io5";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import brandlogo from "../../../assets/Logo.svg";
 
-const AdminSidebar = ({ closeDrawer }) => {
-  const [active, setActive] = useState("Dashboard");
-  const [openDropdown, setOpenDropdown] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
+const AdminSidebar = ({ activeLabel, setActiveLabel }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    {
-      icon: <MdDashboard className="w-5 h-5" />,
-      label: "Dashboard",
-      Link: "/",
-    },
-    {
-      icon: <PiUsers className="w-5 h-5" />,
-      label: "Management",
-      Link: "/management",
-    },
-    {
-      icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Approvals center ",
-      Link: "/approvals-center",
-    },
-    {
-      icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Reports Deductions",
-      Link: "/reports-deductions",
-    },
-    {
-      icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Expenses",
-      Link: "/expenses",
-    },
-    {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "User Management",
-      Link: "/user-management",
-    },
-    {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "Settings",
-      Link: "/settings",
-    },
+    { icon: <MdDashboard className="w-5 h-5" />, label: "Dashboard", Link: "/s/admin/dashboard" },
+    { icon: <PiUsers className="w-5 h-5" />, label: "Management", Link: "/s/admin/management" },
+    { icon: <IoNewspaper className="w-5 h-5" />, label: "Approvals Center", Link: "/s/admin/approvals-center" },
+    { icon: <IoNewspaper className="w-5 h-5" />, label: "Reports Deductions", Link: "/s/admin/reports-deductions" },
+    { icon: <IoNewspaper className="w-5 h-5" />, label: "Expenses", Link: "/s/admin/expenses" },
+    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "User Management", Link: "/s/admin/user-management" },
+    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Settings", Link: "/s/admin/settings" },
   ];
 
-  // Filter the menu items based on the search term
-  const filterMenuItems = (items) => {
-    return items.filter((item) => {
-      // If the item has subItems, filter them as well
-      if (item.isDropdown && item.subItems) {
-        const filteredSubItems = item.subItems.filter((subItem) =>
-          subItem.label.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        // If a subItem matches the search term, we include the parent dropdown
-        if (filteredSubItems.length > 0) {
-          item.subItems = filteredSubItems;
-          return true;
-        }
-      }
-
-      // Filter the label of the item
-      return item.label.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-  };
-
-  const filteredItems = filterMenuItems(menuItems);
-
-  const handleLogout = () => {
-    navigate("/sign-in");
-  };
+  const handleLogout = () => navigate("/login");
 
   return (
     <div className="flex flex-col px-2">
-      {/* Logo Section */}
-      <div className="flex justify-center items-center">
+      {/* Logo */}
+      <div className="flex justify-center items-center my-4">
         <img src={brandlogo} alt="logo" className="w-20 h-20 object-contain" />
       </div>
 
-      {/* Menu items */}
+      {/* Menu */}
       <div className="flex-1 overflow-y-auto max-h-[calc(100vh-150px)]">
-        {filteredItems.map((item) => (
-          <div key={item.label}>
-            <div
-              className={`flex justify-between items-center px-5 py-2 my-5 cursor-pointer transition-all  ${
-                active === item.label
+        {menuItems.map((item) => (
+          <div key={item.label} className="mb-1">
+            <Link
+              to={item.Link}
+              className={`flex items-center gap-3 px-5 py-2 cursor-pointer transition-all ${
+                activeLabel === item.label
                   ? "bg-[#007CCD] text-white font-semibold"
                   : "text-black"
               }`}
-              onClick={() =>
-                item.isDropdown
-                  ? setOpenDropdown(
-                      openDropdown === item.label ? "" : item.label
-                    )
-                  : setActive(item.label)
-              }
+              onClick={() => setActiveLabel(item.label)} // Update topbar label
             >
-              <Link to={item.Link} className="flex items-center w-full gap-3">
-                {item.icon}
-                <p>{item.label}</p>
-                {item.isDropdown && (
-                  <BiChevronDown
-                    className={`${
-                      openDropdown === item.label ? "rotate-180" : ""
-                    }`}
-                  />
-                )}
-              </Link>
-            </div>
-            {item.isDropdown && openDropdown === item.label && (
-              <div className="flex flex-col pl-8">
-                {item.subItems.map((subItem) => (
-                  <Link to={subItem.Link} key={subItem.label}>
-                    <div
-                      className={`py-2 px-5 cursor-pointer my-5 bg-[#007CCD] transition-all rounded-lg ${
-                        active === subItem.label
-                          ? "bg-[#007CCD] text-black font-semibold"
-                          : "text-white"
-                      }`}
-                      onClick={() => setActive(subItem.label)}
-                    >
-                      <p className="flex items-center gap-2">
-                        {subItem.icon} {subItem.label}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
+              {item.icon}
+              <p>{item.label}</p>
+            </Link>
           </div>
         ))}
       </div>
 
+      {/* Logout */}
       <button
         onClick={handleLogout}
         className="bg-primarycolor text-white w-full py-3 flex justify-center items-center cursor-pointer rounded-lg mt-4"

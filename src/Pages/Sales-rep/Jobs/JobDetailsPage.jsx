@@ -5,7 +5,7 @@ import DocumentControl from "../../../Components/Sales-rep/Jobs/DocumentControl"
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
 import { useState } from "react";
 // Main JobDetails Page Component
-const JobDetails = () => {
+const JobDetailsPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   return (
     <>
@@ -47,4 +47,4 @@ const JobDetails = () => {
   );
 };
 
-export default JobDetails;
+export default JobDetailsPage;

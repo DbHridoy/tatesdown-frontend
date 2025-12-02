@@ -1,9 +1,8 @@
-
 import ExpenseBreakdown from "../../../Components/Dashboard/ExpenseBreakdown";
 import ExpensesData from "../../../Components/Dashboard/ExpensesData";
 import ReportsData from "../../../Components/Dashboard/ReportsData";
 
-const Expense = () => {
+const Expenses = () => {
   return (
     <div>
       <ExpensesData />
@@ -13,4 +12,4 @@ const Expense = () => {
   );
 };
 
-export default Expense;
+export default Expenses;
