@@ -121,7 +121,7 @@ function Login() {
               <button
                 onClick={handleSubmit}
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 bg-black text-white hover:bg-gray-800"
+                className="w-full flex justify-center py-2 px-4 bg-[#007CCD] text-white "
               >
                 Sign in
               </button>

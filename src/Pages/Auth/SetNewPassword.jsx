@@ -115,7 +115,7 @@ const SetNewPassword = () => {
 
             <button
               type="submit"
-              className="w-full h-12 bg-black hover:bg-gray-800 text-white px-4 rounded-lg cursor-pointer font-medium transition-colors"
+              className="w-full h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer font-medium transition-colors"
             >
               Set Password
             </button>

@@ -37,7 +37,9 @@ import JobOverview from "../Pages/Production-Manager/JobOverview/JobOverview";
 import ProductionReport from "../Pages/Production-Manager/ProductionReport/ProductionReport";
 import ProductionSettings from "../Pages/Production-Manager/ProductionSettings/ProductionSettings";
 import MainLayout from "../Layout/MainLayout";
-
+import VerifyOtp from "../Pages/Auth/VerifyOTP";
+import SetNewPassword from "../Pages/Auth/SetNewPassword";
+import Successful from "../Pages/Auth/Successful";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -46,6 +48,9 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/login" replace /> },
       { path: "login", element: <Login /> },
       { path: "forgot-password", element: <ForgetPassword /> },
+      { path: "verify-otp", element: <VerifyOtp /> },
+      { path: "set-password", element: <SetNewPassword /> },
+      { path: "successful", element: <Successful /> },
     ],
   },
   {

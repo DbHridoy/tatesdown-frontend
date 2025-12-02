@@ -36,7 +36,7 @@ function Successful() {
 
           <button
             onClick={handleBackToLogin}
-            className="w-full h-12 flex justify-center items-center gap-2 text-white mt-8 px-4 rounded-lg bg-black hover:bg-gray-800 cursor-pointer font-medium transition-colors"
+            className="w-full h-12 flex justify-center items-center gap-2 text-white mt-8 px-4 rounded-lg bg-[#007CCD] cursor-pointer font-medium transition-colors"
           >
             <HugeiconsIcon icon={ArrowLeft02Icon} />
             <span>Back to Login</span>

@@ -47,7 +47,11 @@ const MainLayout = () => {
           open={open}
           closeIcon={<IoMdClose className="text-2xl" />}
         >
-          <Sidebar activeLabel={activeLabel} />
+          <Sidebar
+            activeLabel={activeLabel}
+            setActiveLabel={setActiveLabel}
+            onClose={toggleDrawer}
+          />
         </Drawer>
       </ConfigProvider>
 

@@ -12,34 +12,106 @@ import brandlogo from "../../../assets/Logo.svg";
 
 const menuConfig = {
   admin: [
-    { icon: <MdDashboard className="w-5 h-5" />, label: "Dashboard", Link: "/s/admin/dashboard" },
-    { icon: <PiUsers className="w-5 h-5" />, label: "Management", Link: "/s/admin/management" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Approvals Center", Link: "/s/admin/approvals-center" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Reports Deductions", Link: "/s/admin/reports-deductions" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Expenses", Link: "/s/admin/expenses" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "User Management", Link: "/s/admin/user-management" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Settings", Link: "/s/admin/settings" },
+    {
+      icon: <MdDashboard className="w-5 h-5" />,
+      label: "Dashboard",
+      Link: "/s/admin/dashboard",
+    },
+    {
+      icon: <PiUsers className="w-5 h-5" />,
+      label: "Management",
+      Link: "/s/admin/management",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Approvals Center",
+      Link: "/s/admin/approvals-center",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Reports Deductions",
+      Link: "/s/admin/reports-deductions",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Expenses",
+      Link: "/s/admin/expenses",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "User Management",
+      Link: "/s/admin/user-management",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Settings",
+      Link: "/s/admin/settings",
+    },
   ],
 
   "production-manager": [
-    { icon: <CiHome className="w-5 h-5" />, label: "Home", Link: "/s/production-manager/production-home" },
-    { icon: <IoBagHandleOutline className="w-5 h-5" />, label: "Job Scheduling", Link: "/s/production-manager/job-scheduling" },
-    { icon: <MdAutoGraph className="w-5 h-5" />, label: "Reports", Link: "/s/production-manager/production-report" },
-    { icon: <CiSettings className="w-5 h-5" />, label: "Settings", Link: "/s/production-manager/production-settings" },
+    {
+      icon: <CiHome className="w-5 h-5" />,
+      label: "Home",
+      Link: "/s/production-manager/production-home",
+    },
+    {
+      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      label: "Job Scheduling",
+      Link: "/s/production-manager/job-scheduling",
+    },
+    {
+      icon: <MdAutoGraph className="w-5 h-5" />,
+      label: "Reports",
+      Link: "/s/production-manager/production-report",
+    },
+    {
+      icon: <CiSettings className="w-5 h-5" />,
+      label: "Settings",
+      Link: "/s/production-manager/production-settings",
+    },
   ],
 
   "sales-rep": [
-    { icon: <MdDashboard className="w-5 h-5" />, label: "Home", Link: "/s/sales-rep/home" },
-    { icon: <PiUsers className="w-5 h-5" />, label: "Clients / Leads", Link: "/s/sales-rep/clients" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Quotes", Link: "/s/sales-rep/quotes" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Jobs", Link: "/s/sales-rep/jobs" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Design Consultation", Link: "/s/sales-rep/design-consultation" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Stats / Reports", Link: "/s/sales-rep/stats-reports" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Expenses", Link: "/s/sales-rep/expense" },
+    {
+      icon: <MdDashboard className="w-5 h-5" />,
+      label: "Home",
+      Link: "/s/sales-rep/home",
+    },
+    {
+      icon: <PiUsers className="w-5 h-5" />,
+      label: "Clients / Leads",
+      Link: "/s/sales-rep/clients",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Quotes",
+      Link: "/s/sales-rep/quotes",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Jobs",
+      Link: "/s/sales-rep/jobs",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Design Consultation",
+      Link: "/s/sales-rep/design-consultation",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Stats / Reports",
+      Link: "/s/sales-rep/stats-reports",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Expenses",
+      Link: "/s/sales-rep/expense",
+    },
   ],
 };
 
-const Sidebar = ({ activeLabel, setActiveLabel }) => {
+const Sidebar = ({ activeLabel, setActiveLabel,onClose }) => {
   const role = localStorage.getItem("role");
   const navigate = useNavigate();
 
@@ -65,7 +137,10 @@ const Sidebar = ({ activeLabel, setActiveLabel }) => {
                 ? "bg-[#007CCD] text-white font-semibold"
                 : "text-black hover:bg-gray-100"
             }`}
-            onClick={() => setActiveLabel(item.label)} // now works
+            onClick={() => {
+              setActiveLabel(item.label);
+              if (onClose) onClose(); // closes the drawer
+            }} // now works
           >
             {item.icon}
             <p>{item.label}</p>
