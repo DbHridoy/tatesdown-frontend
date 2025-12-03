@@ -135,6 +135,17 @@ const AddClient = () => {
 
                 <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
               </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">
+                  Notes
+                </label>
+                <textarea
+                  placeholder="Add any additional details about the job..."
+                  rows="4"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                />
+              </div>
             </div>
 
             {/* ------------------------- ACTION BUTTONS ------------------------- */}
