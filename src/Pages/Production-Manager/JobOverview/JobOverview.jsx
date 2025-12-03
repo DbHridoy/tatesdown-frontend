@@ -74,7 +74,7 @@ export default function JobOverview() {
             
             <div className="space-y-4">
               <div>
-                <label className="block mb-2 text-xs text-gray-500">Current Status</label>
+                {/* <label className="block mb-2 text-xs text-gray-500">Current Status</label> */}
                 <div className="relative">
                   <select 
                     value={currentStatus}
@@ -90,7 +90,7 @@ export default function JobOverview() {
                 </div>
               </div>
               
-              <div>
+              {/* <div>
                 <label className="block mb-2 text-xs text-gray-500">Job Status</label>
                 <div className="relative">
                   <select 
@@ -100,7 +100,7 @@ export default function JobOverview() {
                   </select>
                   <ChevronDown className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 pointer-events-none right-2 top-1/2" />
                 </div>
-              </div>
+              </div> */}
               
               <button className="w-full flex justify-center  items-center gap-x-4 bg-yellow-400 hover:bg-yellow-500  font-medium py-2.5 rounded text-sm transition-colors">
                 <FaHourglass/>
