@@ -10,13 +10,41 @@ const AdminSidebar = ({ activeLabel, setActiveLabel }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { icon: <MdDashboard className="w-5 h-5" />, label: "Dashboard", Link: "/s/admin/dashboard" },
-    { icon: <PiUsers className="w-5 h-5" />, label: "Management", Link: "/s/admin/management" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Approvals Center", Link: "/s/admin/approvals-center" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Reports Deductions", Link: "/s/admin/reports-deductions" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Expenses", Link: "/s/admin/expenses" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "User Management", Link: "/s/admin/user-management" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Settings", Link: "/s/admin/settings" },
+    {
+      icon: <MdDashboard className="w-5 h-5" />,
+      label: "Dashboard",
+      Link: "/s/admin/dashboard",
+    },
+    {
+      icon: <PiUsers className="w-5 h-5" />,
+      label: "Clients",
+      Link: "/s/admin/clients",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Approvals Center",
+      Link: "/s/admin/approvals-center",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Reports Deductions",
+      Link: "/s/admin/reports",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Expenses",
+      Link: "/s/admin/expenses",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "User Management",
+      Link: "/s/admin/user-management",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Settings",
+      Link: "/s/admin/settings",
+    },
   ];
 
   const handleLogout = () => navigate("/login");

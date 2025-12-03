@@ -3,8 +3,10 @@ import { FaRegEdit, FaUser } from "react-icons/fa";
 import { IoClose, IoPersonSharp } from "react-icons/io5";
 import { LuEye, LuPhone } from "react-icons/lu";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
-const Management = () => {
+const AdminClients = () => {
+  const navigate = useNavigate();
   const getStatusColor = (status) => {
     switch (status) {
       case "New":
@@ -273,7 +275,7 @@ const Management = () => {
                 >
                   <FaRegEdit size={20} />
                 </div>
-                <div className="text-gray-500 hover:text-red-500">
+                <div onClick={()=>navigate("/s/admin/impersonate-view")} className="text-gray-500 hover:text-red-500">
                   <IoPersonSharp size={20} />
                 </div>
                 <div
@@ -437,7 +439,7 @@ const Management = () => {
                 <span>Cancel</span>
               </button>
 
-              <button className="px-5 py-2 flex items-center gap-x-4 text-white bg-[#007CCD] rounded-md">
+              <button onClick={()=>navigate("/s/admin/impersonate-view")} className="px-5 py-2 flex items-center gap-x-4 text-white bg-[#007CCD] rounded-md">
                 <FaUser />
                 <span>Impersonate View</span>
               </button>
@@ -552,7 +554,7 @@ const Management = () => {
                 <span>Cancel</span>
               </button>
 
-              <button className="px-5 py-2 flex items-center gap-x-4 text-white bg-[#007CCD] rounded-md">
+              <button onClick={()=>navigate("/s/admin/impersonate-view")} className="px-5 py-2 flex items-center gap-x-4 text-white bg-[#007CCD] rounded-md">
                 <FaUser />
                 <span>Impersonate View</span>
               </button>
@@ -610,4 +612,4 @@ const Management = () => {
   );
 };
 
-export default Management;
+export default AdminClients;

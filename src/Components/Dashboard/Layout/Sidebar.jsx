@@ -19,8 +19,8 @@ const menuConfig = {
     },
     {
       icon: <PiUsers className="w-5 h-5" />,
-      label: "Management",
-      Link: "/s/admin/management",
+      label: "Clients",
+      Link: "/s/admin/clients",
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
@@ -29,8 +29,8 @@ const menuConfig = {
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Reports Deductions",
-      Link: "/s/admin/reports-deductions",
+      label: "Reports",
+      Link: "/s/admin/reports",
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
@@ -111,7 +111,7 @@ const menuConfig = {
   ],
 };
 
-const Sidebar = ({ activeLabel, setActiveLabel,onClose }) => {
+const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
   const role = localStorage.getItem("role");
   const navigate = useNavigate();
 

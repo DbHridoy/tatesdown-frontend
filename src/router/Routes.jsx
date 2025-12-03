@@ -12,7 +12,6 @@ import Home from "../Pages/Sales-rep/Home/Home";
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
 import ProductionManagerLayout from "../Layout/ProductionManagerLayout";
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
-import Management from "../Pages/Admin/Management/Management";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
 import ReportsDeductions from "../Pages/Admin/ReportsDeductions/ReportsDeductions";
 import RepDetails from "../Pages/Admin/RepDetails/RepDetails";
@@ -40,6 +39,8 @@ import MainLayout from "../Layout/MainLayout";
 import VerifyOtp from "../Pages/Auth/VerifyOTP";
 import SetNewPassword from "../Pages/Auth/SetNewPassword";
 import Successful from "../Pages/Auth/Successful";
+import AdminClients from "../Pages/Admin/Clients/AdminClients";
+import ImpersonateView from "../Pages/Admin/Clients/ImpersonateView";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -69,15 +70,19 @@ export const router = createBrowserRouter([
             element: <Dashboard />,
           },
           {
-            path: "management",
-            element: <Management />,
+            path: "clients",
+            element: <AdminClients />,
+          },
+          {
+            path: "impersonate-view",
+            element: <ImpersonateView />,
           },
           {
             path: "approvals-center",
             element: <Approvals />,
           },
           {
-            path: "reports-deductions",
+            path: "reports",
             element: <ReportsDeductions />,
           },
           {
