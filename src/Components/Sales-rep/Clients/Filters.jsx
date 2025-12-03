@@ -49,13 +49,11 @@ function Filters() {
         <p className="text-blue-500 cursor-pointer">See all</p>
       </div>
 
-      <div className="flex flex-wrap gap-4 w-full">
+      <div className="flex flex-wrap gap-4">
         {filters.map((filter, index) => (
           <div key={index} className="flex flex-col flex-1 min-w-[150px]">
             <label className="text-gray-600 text-sm mb-1">{filter.label}</label>
-            <select
-              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+            <select className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
               {filter.options.map((option, idx) => (
                 <option key={idx} value={option.value}>
                   {option.label}

@@ -222,7 +222,7 @@ const JobScheduling = () => {
                   <td className="px-6 py-4 text-sm whitespace-nowrap">
                     <div className="flex gap-3">
                       <button
-                        onClick={() => navigate(`/job-scheduling/${job.id}`)}
+                        onClick={() => navigate(`/s/production-manager/job-scheduling/${job.id}`)}
                         className="px-4 py-2 font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
                       >
                         Job Detail

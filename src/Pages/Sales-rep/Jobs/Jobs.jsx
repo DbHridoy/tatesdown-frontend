@@ -16,7 +16,7 @@ function Jobs() {
         </div>
         <button
           className="bg-primarycolor text-white flex flex-row items-center p-4 rounded"
-          onClick={() => navigate("/add-new-job")}
+          onClick={() => navigate("/s/sales-rep/add-new-job")}
         >
           <HugeiconsIcon icon={UserAdd01Icon} />
           Add Job

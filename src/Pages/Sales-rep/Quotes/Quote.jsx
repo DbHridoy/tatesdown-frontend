@@ -18,7 +18,7 @@ function Quotes() {
           <HugeiconsIcon icon={UserAdd01Icon} />
           <button
             className=" "
-            onClick={() => navigate("/add-new-quote")}
+            onClick={() => navigate("/s/sales-rep/add-new-quote")}
           >
             Add Quote
           </button>
