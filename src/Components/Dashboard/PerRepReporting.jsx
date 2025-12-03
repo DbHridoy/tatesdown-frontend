@@ -6,6 +6,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
 const PerRepReporting = () => {
+  const navigate = useNavigate();
   const getStatusColor = (status) => {
     switch (status) {
       case "New":
@@ -94,8 +95,6 @@ const PerRepReporting = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5; // Number of items per page
-  const navigate = useNavigate();
-
 
   // Filter logic
   const filteredData = useMemo(() => {
@@ -167,7 +166,7 @@ const PerRepReporting = () => {
               </td>
               <td className="px-6 py-3">{job.startDate}</td>
               <td
-                onClick={() => navigate(`/reports-details`)}
+                onClick={() => navigate(`/s/admin/reports-details`)}
                 className="text-[#007CCD] underline cursor-pointer"
               >
                 View Details
