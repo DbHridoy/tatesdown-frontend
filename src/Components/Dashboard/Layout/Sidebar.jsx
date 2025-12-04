@@ -32,11 +32,11 @@ const menuConfig = {
       label: "Reports",
       Link: "/s/admin/reports",
     },
-    {
-      icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Expenses",
-      Link: "/s/admin/expenses",
-    },
+    // {
+    //   icon: <IoNewspaper className="w-5 h-5" />,
+    //   label: "Expenses",
+    //   Link: "/s/admin/expenses",
+    // },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "User Management",

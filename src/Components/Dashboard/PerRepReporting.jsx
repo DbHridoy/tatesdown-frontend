@@ -9,15 +9,15 @@ const PerRepReporting = () => {
   const navigate = useNavigate();
   const getStatusColor = (status) => {
     switch (status) {
-      case "New":
-        return "bg-blue-200 text-blue-800";
-      case "In progress":
-        return "bg-yellow-200 text-yellow-800";
-      case "Closed":
-        return "bg-gray-200 text-gray-800";
+      // case "New":
+      //   return "bg-blue-200 text-blue-800";
+      // case "In progress":
+      //   return "bg-yellow-200 text-yellow-800";
+      // case "Closed":
+      //   return "bg-gray-200 text-gray-800";
       case "Pending":
         return "bg-orange-200 text-orange-800";
-      case "Completed":
+      case "Approved":
         return "bg-green-200 text-green-800";
       default:
         return "";
@@ -38,7 +38,7 @@ const PerRepReporting = () => {
       clientName: "John Doe",
       cluster: "North Shore",
       salesRep: "Rep A",
-      status: "New",
+      status: "Approved",
       startDate: "2025/11/25",
     },
     {
@@ -46,7 +46,7 @@ const PerRepReporting = () => {
       clientName: "Jane Smith",
       cluster: "Inner West",
       salesRep: "Rep B",
-      status: "In progress",
+      status: "Pending",
       startDate: "2025/11/24",
     },
     {
@@ -54,7 +54,7 @@ const PerRepReporting = () => {
       clientName: "Mark Johnson",
       cluster: "Eastern Suburbs",
       salesRep: "Rep C",
-      status: "Closed",
+      status: "Approved",
       startDate: "2025/11/20",
     },
     {
@@ -70,7 +70,7 @@ const PerRepReporting = () => {
       clientName: "Robert Brown",
       cluster: "Inner West",
       salesRep: "Rep B",
-      status: "Completed",
+      status: "Approved",
       startDate: "2025/11/10",
     },
     {
@@ -78,7 +78,7 @@ const PerRepReporting = () => {
       clientName: "Emily Davis",
       cluster: "North Shore",
       salesRep: "Rep A",
-      status: "New",
+      status: "Approved",
       startDate: "2025/10/05",
     },
     {
@@ -86,7 +86,7 @@ const PerRepReporting = () => {
       clientName: "Chris Lee",
       cluster: "Inner West",
       salesRep: "Rep B",
-      status: "In progress",
+      status: "Pending",
       startDate: "2025/09/20",
     },
     // Add more dummy data as needed
@@ -138,7 +138,7 @@ const PerRepReporting = () => {
             <th className="px-6 py-3 text-left">Client Name</th>
             <th className="px-6 py-3 text-left">Cluster</th>
             <th className="px-6 py-3 text-left">Sales Rep</th>
-            <th className="px-6 py-3 text-left">Status</th>
+            <th className="px-6 py-3 text-left">Deduction Status</th>
             <th className="px-6 py-3 text-left">Start Date</th>
             <th className="px-6 py-3 text-left">Actions</th>
           </tr>
