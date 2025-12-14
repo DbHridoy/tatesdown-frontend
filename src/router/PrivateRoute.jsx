@@ -1,7 +1,10 @@
 import { Navigate} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUserRole } from "../redux/slice/authSlice";
 
 const PrivateRoute = () => {
-  const role = localStorage.getItem("role");
+  // const role = localStorage.getItem("role");
+  const role=useSelector(selectUserRole)
 
   if (!role) return <Navigate to="/login" replace />;
 

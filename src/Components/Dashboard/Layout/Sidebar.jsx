@@ -9,6 +9,9 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { MdAutoGraph } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
 import brandlogo from "../../../assets/Logo.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUserRole } from "../../../redux/slice/authSlice";
+import { useLogoutMutation } from "../../../redux/api/authApi";
 
 const menuConfig = {
   admin: [
@@ -112,12 +115,22 @@ const menuConfig = {
 };
 
 const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
-  const role = localStorage.getItem("role");
+  const role = useSelector(selectUserRole);
   const navigate = useNavigate();
-
+  const [logoutMutation] = useLogoutMutation();
   const menuItems = menuConfig[role];
+  const dispatch = useDispatch();
 
-  const handleLogout = () => navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await logoutMutation().unwrap(); // backend logout (optional)
+    } catch (err) {
+      // ignore backend error
+    } finally {
+      dispatch(logout()); // ✅ clear Redux
+      navigate("/login", { replace: true });
+    }
+  };
 
   return (
     <div className="flex flex-col px-2 h-full">

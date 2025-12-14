@@ -5,12 +5,9 @@ import RoleGuard from "./RoleGuard";
 
 import Login from "../Pages/Auth/Login";
 import ForgetPassword from "../Pages/Auth/ForgotPassword";
-import AdminLayout from "../Layout/AdminLayout";
 import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
-import SalesRepLayout from "../Layout/SalesRepLayout";
 import Home from "../Pages/Sales-rep/Home/Home";
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
-import ProductionManagerLayout from "../Layout/ProductionManagerLayout";
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
 import ReportsDeductions from "../Pages/Admin/ReportsDeductions/ReportsDeductions";
