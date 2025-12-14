@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const RoleGuard = ({ allowedRole }) => {
-  const role = localStorage.getItem("role");
+  const role = useSelector((state) => state.auth.user?.role);
 
   if (role !== allowedRole) {
     // Redirect to their own homepage

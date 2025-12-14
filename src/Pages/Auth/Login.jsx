@@ -108,6 +108,12 @@ function Login() {
               className="w-full border px-3 py-2 rounded-lg"
             />
 
+            <div>
+              <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
+                Forgot your password?
+              </a>
+            </div>
+
             <button
               type="submit"
               disabled={isLoading}

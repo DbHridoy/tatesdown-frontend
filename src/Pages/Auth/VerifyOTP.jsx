@@ -4,10 +4,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import brandLogo from "../../assets/Logo.svg";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
+import { useVerifyOtpMutation } from "../../redux/api/authApi";
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
+  const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,7 +67,13 @@ const VerifyOtp = () => {
       return;
     }
 
-    navigate("/set-password", { state: { email, resetCode: otpValue } });
+    try {
+      await verifyOtp({ email, otp: otpValue }).unwrap();
+      navigate("/set-password", { state: { email, resetCode: otpValue } });
+    } catch (error) {
+      console.error("Failed to verify OTP:", error);
+      setError("Invalid OTP code. Please try again.");
+    }
   };
 
   return (
@@ -113,10 +121,10 @@ const VerifyOtp = () => {
             {/* Next Button */}
             <button
               type="submit"
-              disabled={false}
+              disabled={isLoading}
               className="w-full h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer font-medium transition-colors disabled:opacity-50"
             >
-              {false ? "Verifying..." : "Verify"}
+              {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
 
             {/* Back Button */}

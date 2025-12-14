@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
 import brandLogo from "../../assets/Logo.svg";
+import { useSetNewPasswordMutation } from "../../redux/api/authApi";
 
 const SetNewPassword = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const SetNewPassword = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [SetNewPassword, { isLoading }] = useSetNewPasswordMutation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,7 +51,17 @@ const SetNewPassword = () => {
       return;
     }
 
-    navigate("/successful");
+    try {
+      await SetNewPassword({
+        email,
+        newPassword: formData.newPassword,
+        confirmPassword: formData.confirmPassword,
+      }).unwrap();
+      navigate("/successful");
+    } catch (error) {
+      console.error("Failed to reset password:", error);
+      setError("Failed to reset password. Please try again.");
+    }
   };
 
   return (
@@ -115,9 +127,10 @@ const SetNewPassword = () => {
 
             <button
               type="submit"
-              className="w-full h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer font-medium transition-colors"
+              disabled={isLoading}
+              className="w-full h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Set Password
+              {isLoading ? "Setting Password..." : "Set Password"}
             </button>
 
             <button

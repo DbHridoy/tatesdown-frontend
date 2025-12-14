@@ -2,7 +2,7 @@ import { createCustomApi } from "./createCustomApi";
 
 export const authApi = createCustomApi({
   reducerPath: "authApi",
-  tagTypes: ["User", "Profile"],
+  tagTypes: ["Auth"],
   endpoints: (builder) => ({
     // Auth endpoints
     login: builder.mutation({
@@ -20,23 +20,23 @@ export const authApi = createCustomApi({
     }),
 
     // Password management
-    forgotPassword: builder.mutation({
+    sendOtp: builder.mutation({
       query: (email) => ({
-        url: "/auth/forgot-password",
+        url: "/auth/send-otp",
         method: "POST",
         body: { email },
       }),
     }),
-    verifyResetCode: builder.mutation({
+    verifyOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/verify-reset-code",
+        url: "/auth/verify-otp",
         method: "POST",
         body: data,
       }),
     }),
-    resetPassword: builder.mutation({
+    setNewPassword: builder.mutation({
       query: (data) => ({
-        url: "/auth/reset-password",
+        url: "/auth/set-new-password",
         method: "POST",
         body: data,
       }),
@@ -132,56 +132,47 @@ export const authApi = createCustomApi({
     //   providesTags: ["User"],
     // }),
 
-    getUserById: builder.query({
-      query: (id) => `/users/${id}`,
-      transformResponse: (response) => {
-        // Handle both wrapped and direct responses
-        if (response.success && response.data) {
-          return response.data;
-        }
-        // If it's already the direct data, return it
-        return response;
-      },
-      providesTags: (result, error, id) => [{ type: "User", id }],
-    }),
-    adminUpdateUser: builder.mutation({
-      query: ({ id, ...data }) => ({
-        url: `/users/${id}`,
-        method: "PUT",
-        body: data,
-      }),
-      transformResponse: (response) => {
-        // Handle both wrapped and direct responses
-        if (response.success && response.data) {
-          return response.data;
-        }
-        return response;
-      },
-      invalidatesTags: (result, error, { id }) => [{ type: "User", id }],
-    }),
-    deleteUser: builder.mutation({
-      query: (id) => ({
-        url: `/users/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (result, error, id) => [{ type: "User", id }],
-    }),
+    // getUserById: builder.query({
+    //   query: (id) => `/users/${id}`,
+    //   transformResponse: (response) => {
+    //     // Handle both wrapped and direct responses
+    //     if (response.success && response.data) {
+    //       return response.data;
+    //     }
+    //     // If it's already the direct data, return it
+    //     return response;
+    //   },
+    //   providesTags: (result, error, id) => [{ type: "User", id }],
+    // }),
+    // adminUpdateUser: builder.mutation({
+    //   query: ({ id, ...data }) => ({
+    //     url: `/users/${id}`,
+    //     method: "PUT",
+    //     body: data,
+    //   }),
+    //   transformResponse: (response) => {
+    //     // Handle both wrapped and direct responses
+    //     if (response.success && response.data) {
+    //       return response.data;
+    //     }
+    //     return response;
+    //   },
+    //   invalidatesTags: (result, error, { id }) => [{ type: "User", id }],
+    // }),
+    // deleteUser: builder.mutation({
+    //   query: (id) => ({
+    //     url: `/users/${id}`,
+    //     method: "DELETE",
+    //   }),
+    //   invalidatesTags: (result, error, id) => [{ type: "User", id }],
+    // }),
   }),
 });
 
 export const {
   useLoginMutation,
   useLogoutMutation,
-  useForgotPasswordMutation,
-  useVerifyResetCodeMutation,
-//   useResetPasswordMutation,
-//   useGetProfileQuery,
-//   useUpdateProfileMutation,
-//   useChangePasswordMutation,
-//   useProfileImageMutation,
-//   useCreateUserMutation,
-//   useGetAllUsersQuery,
-//   useGetUserByIdQuery,
-//   useAdminUpdateUserMutation,
-//   useDeleteUserMutation,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+  useSetNewPasswordMutation,
 } = authApi;

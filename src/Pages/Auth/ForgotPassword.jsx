@@ -3,23 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
 import brandLogo from "../../assets/Logo.svg";
+import { useSendOtpMutation } from "../../redux/api/authApi";
 
 function ForgetPassword() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const [sendOtp,{isloading}] = useSendOtpMutation();
 
   const handleBackToLogin = () => {
     navigate("/login");
   };
 
   const handleNext = async (e) => {
-    console.log(email);
     e.preventDefault();
-    navigate("/verify-otp", { state: { email } });
-
+    
     if (!email.trim()) {
       console.error("Please enter your email address");
       return;
+    }
+
+    try {
+      await sendOtp( email ).unwrap();
+      navigate("/verify-otp", { state: { email } });
+    } catch (error) {
+      console.error("Failed to send reset code:", error);
     }
   };
 
@@ -65,8 +72,9 @@ function ForgetPassword() {
             <button
               type="submit"
               className="w-full h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isloading}
             >
-              Next
+              {isloading ? 'Sending...' : 'Next'}
             </button>
 
             {/* Back to Login */}
