@@ -1,7 +1,10 @@
-import React from "react";
 import { FiBell } from "react-icons/fi";
+import { useGetUserQuery } from "../../../redux/api/userApi";
 
-const Topbar = ({ label, user }) => {
+const Topbar = ({ label }) => {
+  const { data: profileData } = useGetUserQuery();
+  const profile = profileData?.data;
+  console.log('Profile data:', profile);
   return (
     <div className="flex justify-between  items-center ">
       {/* Page Title */}
@@ -20,15 +23,15 @@ const Topbar = ({ label, user }) => {
         {/* User avatar */}
         <div className="flex items-center gap-2 cursor-pointer">
           <img
-            src={user?.avatar || "https://via.placeholder.com/40"}
-            alt={user?.name || "User"}
+            src={profile?.profileImage || ""}
+            alt={profile?.fullName || "User"}
             className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
           />
           <div>
             <p className="hidden md:block font-medium">
-              {user?.name || "Username"}
+              {profile?.fullName || "Username"}
             </p>
-            <p>{user?.role || "User Role"}</p>
+            <p>{profile?.role || "User Role"}</p>
           </div>
         </div>
       </div>

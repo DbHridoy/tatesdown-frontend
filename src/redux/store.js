@@ -3,18 +3,22 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authApi } from "./api/authApi";
 import authReducer from "./slice/authSlice";
+import { userApi } from "./api/userApi";
+import clientApi from "./api/clientApi";
 
 // 🧩 1. Combine reducers
 const rootReducer = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
+  [clientApi.reducerPath]:clientApi.reducer
 });
 
 // 🧩 2. Setup persist config (only persist auth)
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // persist only auth state
+  whitelist: ["auth", "user"], // persist auth and user state
 };
 
 // 🧩 3. Wrap rootReducer with persistReducer
@@ -28,6 +32,8 @@ export const store = configureStore({
       serializableCheck: false, // required for redux-persist
     }).concat(
       authApi.middleware,
+      userApi.middleware,
+      clientApi.middleware
     ),
   devTools: import.meta.env.VITE_NODE_ENV !== "production",
 });

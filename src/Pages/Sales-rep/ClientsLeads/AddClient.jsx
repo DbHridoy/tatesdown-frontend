@@ -1,20 +1,90 @@
 import { useState } from "react";
+import { useCreateClientMutation } from "../../../redux/api/clientApi";
+
 const AddClient = () => {
-  const [rating, setRating] = useState(4);
+  const [formData, setFormData] = useState({
+    clientName: "",
+    partnerName: "",
+    phoneNumber: "",
+    email: "",
+    address: "",
+    source: "", // "Door", "Inbound", "Social"
+    rating: 0, // default rating
+    callStatus: "", // "Not Called", "Picked-Up Yes", etc.
+  });
+
+  const callStatuses = [
+    "Not Called",
+    "Picked-Up Yes",
+    "Picked-Up No",
+    "No Pickup",
+  ];
+  const sources = ["Door", "Inbound", "Social"];
+
+  const [addClient, { isLoading }] = useCreateClientMutation();
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCreateClient = async (e) => {
+    e.preventDefault();
+
+    // Validate required fields
+    const requiredFields = [
+      "clientName",
+      "phoneNumber",
+      "address",
+      "source",
+      "callStatus",
+    ];
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        alert(`Please fill in the required field: ${field}`);
+        return;
+      }
+    }
+
+    try {
+      await addClient(formData).unwrap();
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+
+      // Reset form
+      setFormData({
+        clientName: "",
+        partnerName: "",
+        phoneNumber: "",
+        email: "",
+        address: "",
+        source: "",
+        rating: 0,
+        callStatus: "",
+      });
+    } catch (error) {
+      console.error("Failed to create client:", error);
+      alert("Failed to create client. Please try again.");
+    }
+  };
 
   return (
-    <div className="  py-8 px-4 sm:px-6 lg:px-8">
-      <div className=" mx-auto">
-        {/* HEADER */}
+    <div className="py-8 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Add Client</h1>
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <form className="space-y-6">
-            {/* ------------------------- NAME + SPOUSE ------------------------- */}
+          {showSuccess && (
+            <div className="mb-4 p-4 text-green-800 bg-green-100 rounded border border-green-200">
+              Client added successfully!
+            </div>
+          )}
+
+          <form onSubmit={handleCreateClient} className="space-y-6">
+            {/* Client & Partner Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Client Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Client Name *
@@ -22,26 +92,33 @@ const AddClient = () => {
                 <input
                   type="text"
                   placeholder="Enter client name"
+                  value={formData.clientName}
+                  onChange={(e) =>
+                    handleInputChange("clientName", e.target.value)
+                  }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
                 />
               </div>
 
-              {/* Spouse Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Spouse Name (Optional)
+                  Partner Name (Optional)
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter spouse name"
+                  placeholder="Enter partner name"
+                  value={formData.partnerName}
+                  onChange={(e) =>
+                    handleInputChange("partnerName", e.target.value)
+                  }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
 
-            {/* ------------------------- PHONE + EMAIL ------------------------- */}
+            {/* Phone & Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Phone Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Phone Number *
@@ -49,11 +126,15 @@ const AddClient = () => {
                 <input
                   type="tel"
                   placeholder="Enter phone number"
+                  value={formData.phoneNumber}
+                  onChange={(e) =>
+                    handleInputChange("phoneNumber", e.target.value)
+                  }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
                 />
               </div>
 
-              {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Email Address (Optional)
@@ -61,12 +142,14 @@ const AddClient = () => {
                 <input
                   type="email"
                   placeholder="Enter email address"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
 
-            {/* ------------------------- CLIENT ADDRESS FULL ROW ------------------------- */}
+            {/* Address */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Client Address *
@@ -74,93 +157,108 @@ const AddClient = () => {
               <input
                 type="text"
                 placeholder="Enter client address"
+                value={formData.address}
+                onChange={(e) => handleInputChange("address", e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
 
-            {/* ------------------------- LEAD SOURCE + CALL STATUS ------------------------- */}
+            {/* Lead Source & Call Status */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-6">
-              {/* Lead Source */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Lead Source *
                 </label>
-                <select className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-                  <option>Inbound</option>
-                  <option>Outbound</option>
-                  <option>Referral</option>
-                  <option>Website</option>
-                  <option>Social Media</option>
-                  <option>Other</option>
+                <select
+                  value={formData.source}
+                  onChange={(e) => handleInputChange("source", e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Source</option>
+                  {sources.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Call Status */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Call Status *
                 </label>
-                <select className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-                  <option>Picked Up Yes</option>
-                  <option>Voicemail</option>
-                  <option>No Answer</option>
-                  <option>Busy</option>
-                  <option>Wrong Number</option>
-                  <option>Call Back</option>
+                <select
+                  value={formData.callStatus}
+                  onChange={(e) =>
+                    handleInputChange("callStatus", e.target.value)
+                  }
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Status</option>
+                  {callStatuses.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            {/* ------------------------- RATING ------------------------- */}
+            {/* Rating */}
             <div className="border-t pt-6">
               <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Lead Rating
               </label>
-
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-1 mb-3">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
-                    onClick={() => setRating(star)}
+                    onClick={() => handleInputChange("rating", star)}
                     className="text-2xl focus:outline-none"
                   >
-                    {star <= rating ? (
+                    {star <= formData.rating ? (
                       <span className="text-yellow-400">★</span>
                     ) : (
                       <span className="text-gray-300">☆</span>
                     )}
                   </button>
                 ))}
-
-                <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-800 mb-2">
-                  Notes
-                </label>
-                <textarea
-                  placeholder="Add any additional details about the job..."
-                  rows="4"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                />
+                <span className="ml-2 text-sm text-gray-600">
+                  {formData.rating}/5
+                </span>
               </div>
             </div>
 
-            {/* ------------------------- ACTION BUTTONS ------------------------- */}
+            {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
               <button
                 type="button"
+                onClick={() =>
+                  setFormData({
+                    clientName: "",
+                    partnerName: "",
+                    phoneNumber: "",
+                    email: "",
+                    address: "",
+                    source: "",
+                    rating: 5,
+                    callStatus: "",
+                  })
+                }
                 className="flex-1 py-3 border text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                disabled={isLoading}
+                className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save Client
+                {isLoading ? "Saving..." : "Save Client"}
               </button>
             </div>
           </form>
