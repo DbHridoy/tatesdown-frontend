@@ -19,18 +19,73 @@ const clientApi = createCustomApi({
     }),
     getAllClients: builder.query({
       query: (options = {}) => {
+        const { page = 1, limit = 10, search, sort, filters = {} } = options;
+
         const params = new URLSearchParams();
-        if (options.page) params.append('page', options.page);
-        if (options.limit) params.append('limit', options.limit);
-        if (options.search) params.append('search', options.search);
-        if (options.sort) params.append('sort', options.sort);
-        const queryString = params.toString();
-        return `/client/get-all-clients?${queryString}`;
+
+        params.set("page", page);
+        params.set("limit", limit);
+
+        if (search) params.set("search", search);
+        if (sort) params.set("sort", sort);
+
+        // 🔥 Dynamic filters
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== "") {
+            params.set(key, value);
+          }
+        });
+
+        return `/client/get-all-clients?${params.toString()}`;
       },
       providesTags: ["Client"],
+    }),
+    getClientById: builder.query({
+      query: (id) => `/client/get-single-client/${id}`,
+      providesTags: ["Client"],
+    }),
+    updateClient: builder.mutation({
+      query: ({ id, ...updateData }) => ({
+        url: `/client/update-client/${id}`,
+        method: "PATCH",
+        body: updateData,
+      }),
+      invalidatesTags: ["Client"],
+    }),
+    addCallLog: builder.mutation({
+      query: (callLogData) => ({
+        url: `/client/create-call-log`,
+        method: "POST",
+        body: callLogData,
+      }),
+      invalidatesTags: ["Client"],
+    }),
+    addNote: builder.mutation({
+      query: (noteData) => ({
+        url: `/client/create-client-note`,
+        method: "POST",
+        body: noteData,
+      }),
+      invalidatesTags: ["Client"],
+    }),
+    deleteClient: builder.mutation({
+      query: (id) => ({
+        url: `/client/delete-client/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Client"],
     }),
   }),
 });
 
-export const { useGetClientsQuery, useCreateClientMutation, useGetAllClientsQuery } = clientApi;
+export const {
+  useGetClientsQuery,
+  useCreateClientMutation,
+  useGetAllClientsQuery,
+  useGetClientByIdQuery,
+  useUpdateClientMutation,
+  useAddCallLogMutation,
+  useAddNoteMutation,
+  useDeleteClientMutation,
+} = clientApi;
 export default clientApi;

@@ -1,21 +1,121 @@
-import React, { useState } from "react";
-import AddCallLog from "./AddCallLog"; // Import the AddCallLog modal
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import AddCallLog from "./AddCallLog";
 import StarRating from "../../../Components/Sales-rep/Common/StarRating";
+import {
+  useGetClientByIdQuery,
+  useUpdateClientMutation,
+  useAddCallLogMutation,
+  useAddNoteMutation,
+} from "../../../redux/api/clientApi";
 
 const ClientDetails = () => {
-  const [showModal, setShowModal] = useState(false); // State to show/hide the modal
+  const { clientId } = useParams();
 
-  const openModal = () => setShowModal(true); // Open the modal
-  const closeModal = () => setShowModal(false); // Close the modal
+  const [updateClientMutation] = useUpdateClientMutation();
+  const [addCallLogMutation] = useAddCallLogMutation();
+  const [addNoteMutation] = useAddNoteMutation();
+
+  const [draftClient, setDraftClient] = useState({
+    clientName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+  });
+  const [pendingCallLogs, setPendingCallLogs] = useState([]);
+  const [pendingNotes, setPendingNotes] = useState([]);
+  const [draftNoteText, setDraftNoteText] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [draftNoteFiles, setDraftNoteFiles] = useState(null);
+
+
+  const {
+    data: clientData,
+    isLoading,
+    isError,
+  } = useGetClientByIdQuery(clientId);
+  const client = clientData?.data;
+
+  useEffect(() => {
+    if (client) {
+      setDraftClient({
+        clientName: client.clientName || "",
+        email: client.email || "",
+        phoneNumber: client.phoneNumber || "",
+        address: client.address || "",
+      });
+      setPendingNotes([]);
+      setPendingCallLogs([]);
+      setDraftNoteText("");
+    }
+  }, [client]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading client data</div>;
+
+  const handleClientChange = (field, value) => {
+    setDraftClient((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleAddCallLog = (callLogData) => {
+    setPendingCallLogs([...pendingCallLogs, callLogData]);
+  };
+
+ const handleAddNote = () => {
+  if (draftNoteText.trim()) {
+    setPendingNotes([
+      ...pendingNotes,
+      { clientId, text: draftNoteText, files: draftNoteFiles },
+    ]);
+    setDraftNoteText("");
+    setDraftNoteFiles(null); // clear after adding
+  }
+};
+
+
+  const handleSaveChanges = async () => {
+    try {
+      // Update client info
+      await updateClientMutation({ id: clientId, ...draftClient }).unwrap();
+
+      // Add pending call logs
+      for (const log of pendingCallLogs) {
+        await addCallLogMutation(log).unwrap();
+      }
+
+      // Add pending notes
+      for (const note of pendingNotes) {
+        await addNoteMutation(note).unwrap();
+      }
+
+      setPendingCallLogs([]);
+      setPendingNotes([]);
+      alert("All changes saved successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save changes!");
+    }
+  };
+
+  const hasPendingChanges =
+    pendingCallLogs.length > 0 ||
+    pendingNotes.length > 0 ||
+    draftClient.clientName !== client.clientName ||
+    draftClient.email !== client.email ||
+    draftClient.phoneNumber !== client.phoneNumber ||
+    draftClient.address !== client.address;
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-4 space-y-6">
       {/* Header */}
-      <div className="mb-6">
+      <div>
         <h1 className="text-2xl font-bold text-gray-800">Client Details</h1>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2">
           <h2 className="text-lg font-semibold text-gray-700">
-            Sarah Mitchell
+            Client ID: {client?.clientId}
           </h2>
           <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
             Client office (Jan 2025)
@@ -23,207 +123,188 @@ const ClientDetails = () => {
         </div>
       </div>
 
-      <div>
-        {/* Left Column - Client Information */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Client Info Form */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  defaultValue="Sarah Mitchell"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email: Mitchell
-                </label>
-                <input
-                  type="email"
-                  defaultValue="us@mitchell@gmail.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone *
-                </label>
-                <input
-                  type="tel"
-                  defaultValue="12325-94836"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Address */}
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Address *
-                </label>
-                <input
-                  type="text"
-                  defaultValue="123 Main St. Gallery 3678/2020"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Load Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Load Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Load Source
-                </label>
-                <select
-                  name=""
-                  id=""
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="select">Select</option>
-                  <option value="inbound">Inbound</option>
-                  <option value="outbound">Outbound</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Call Status
-                </label>
-                <select
-                  name=""
-                  id=""
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="select">Select</option>
-                  <option value="inbound">Inbound</option>
-                  <option value="outbound">Outbound</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <span className="block text-gray-600 mb-2 font-medium">
-              Lead Rating
-            </span>
-            <StarRating value={4} />
-          </div>
-
-          {/* Call History */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Call History
-            </h3>
-            <div className="space-y-4">
-              {/* Call Item 1 */}
-              <div className="flex gap-4 pb-4 border-b border-gray-200 last:border-b-0">
-                <div className="flex-shrink-0 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-800">
-                      Outbound Call
-                    </span>
-                    <span className="text-sm text-gray-500">2 days ago</span>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Protected perfect requirements and specific Client
-                    information in client-representers
-                  </p>
-                </div>
-              </div>
-
-              {/* Add Call Button */}
-              <button
-                onClick={openModal}
-                className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors"
-              >
-                Add Call Log
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column - Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Notes & Attachments */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Notes & Attachments
-            </h3>
-            <textarea
-              placeholder="Add notes about this client..."
-              className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-            <div className="flex gap-3 mt-4">
-              <button className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                Add File
-              </button>
-              <button className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                Attach Image
-              </button>
-            </div>
-          </div>
-
-          {/* Load Follow-Up */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Load Follow-Up
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              What would you like to do with this load after No Pickup?
-            </p>
-            <div className="space-y-3">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="followup"
-                  className="mr-3 text-blue-600"
-                />
-                <span className="text-sm text-gray-700">
-                  Simple for future follow-up
-                </span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="followup"
-                  className="mr-3 text-blue-600"
-                />
-                <span className="text-sm text-gray-700">
-                  Strong power (exit status)
-                </span>
-              </label>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3">
-            <button className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              Save Changes
-            </button>
-            <button className="flex-1 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-              Convert to Job
-            </button>
-          </div>
+      {/* Client Info */}
+      <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Client Info</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            value={draftClient.clientName}
+            onChange={(e) => handleClientChange("clientName", e.target.value)}
+            placeholder="Name"
+            className="w-full px-3 py-2 border rounded-lg"
+          />
+          <input
+            type="email"
+            value={draftClient.email}
+            onChange={(e) => handleClientChange("email", e.target.value)}
+            placeholder="Email"
+            className="w-full px-3 py-2 border rounded-lg"
+          />
+          <input
+            type="tel"
+            value={draftClient.phoneNumber}
+            onChange={(e) => handleClientChange("phoneNumber", e.target.value)}
+            placeholder="Phone"
+            className="w-full px-3 py-2 border rounded-lg"
+          />
+          <input
+            type="text"
+            value={draftClient.address}
+            onChange={(e) => handleClientChange("address", e.target.value)}
+            placeholder="Address"
+            className="w-full px-3 py-2 border rounded-lg md:col-span-2"
+          />
         </div>
       </div>
 
-      {/* AddCallLog Modal */}
-      {showModal && <AddCallLog closeModal={closeModal} />}
+      {/* Load Info */}
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Load Information
+        </h3>
+        <p>Load Source: {client.leadSource || "Door"}</p>
+        <p>Call Status: {client.callStatus || "Not Called"}</p>
+      </div>
+
+      {/* Lead Rating */}
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <span className="block text-gray-600 mb-2 font-medium">
+          Lead Rating
+        </span>
+        <StarRating value={client?.rating || 0} />
+      </div>
+
+      {/* Call History */}
+      <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Call History</h3>
+
+        {(client.callLogs || []).concat(pendingCallLogs).length > 0 ? (
+          [...(client.callLogs || []), ...pendingCallLogs].map((log, i) => (
+            <div key={i} className="border-b pb-2">
+              <div className="flex justify-between">
+                <span className="font-medium">{log.type || "Call"}</span>
+                <span className="text-sm text-gray-500">
+                  {log.date
+                    ? new Date(log.date).toLocaleDateString()
+                    : "Pending"}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600">{log.note || "No note"}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-gray-400 italic">No call logs yet</p>
+        )}
+
+        <button
+          onClick={openModal}
+          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-gray-400 hover:text-gray-600 transition-colors"
+        >
+          Add Call Log
+        </button>
+      </div>
+
+      {/* Notes & Attachments */}
+<div className="bg-white rounded-lg shadow-sm p-6 space-y-3">
+  <h3 className="text-lg font-semibold text-gray-800">Notes & Attachments</h3>
+
+  {/* Note Text */}
+  <textarea
+    value={draftNoteText}
+    onChange={(e) => setDraftNoteText(e.target.value)}
+    placeholder="Add note..."
+    className="w-full h-24 px-3 py-2 border rounded-lg resize-none"
+  />
+
+  {/* File/Image Input */}
+  <input
+    type="file"
+    multiple
+    onChange={(e) => setDraftNoteFiles(e.target.files)}
+    className="w-full mt-2"
+  />
+
+  {/* Add Note Button */}
+  <button
+    onClick={handleAddNote}
+    className="w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors mt-2"
+  >
+    Add Note
+  </button>
+
+  {/* Existing Notes */}
+  {client.notes && client.notes.length > 0 && (
+    <div className="mt-2">
+      <h4 className="font-medium text-gray-700">Existing Notes:</h4>
+      {client.notes.map((note, i) => (
+        <div key={i} className="text-sm text-gray-600 mt-1">
+          <p>{note.text}</p>
+          {note.files &&
+            note.files.map((file, idx) => (
+              <a
+                key={idx}
+                href={file.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 underline text-sm block"
+              >
+                {file.name}
+              </a>
+            ))}
+        </div>
+      ))}
+    </div>
+  )}
+
+  {/* Pending Notes */}
+  {pendingNotes.map((note, i) => (
+    <div key={i} className="text-sm text-gray-600 mt-1">
+      <p>{note.text}</p>
+      {note.files &&
+        Array.from(note.files).map((file, idx) => (
+          <span key={idx} className="text-gray-500 text-sm block">
+            {file.name}
+          </span>
+        ))}
+    </div>
+  ))}
+
+  {(!client.notes || client.notes.length === 0) &&
+    pendingNotes.length === 0 && (
+      <div className="text-sm text-gray-400 italic">No notes added yet</div>
+    )}
+</div>
+
+
+      {/* Action Buttons */}
+<div className="flex gap-4 mt-4">
+  {hasPendingChanges && (
+    <button
+      onClick={handleSaveChanges}
+      className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+    >
+      Save Changes
+    </button>
+  )}
+  <button
+    className={`flex-1 bg-green-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-700 transition-colors ${
+      !hasPendingChanges ? "ml-auto" : ""
+    }`}
+  >
+    Convert to Job
+  </button>
+</div>
+
+
+      {/* Add Call Log Modal */}
+      {showModal && (
+        <AddCallLog
+          closeModal={closeModal}
+          clientId={clientId}
+          onSubmit={handleAddCallLog}
+        />
+      )}
     </div>
   );
 };

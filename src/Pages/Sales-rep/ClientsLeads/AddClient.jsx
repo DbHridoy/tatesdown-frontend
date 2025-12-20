@@ -8,7 +8,7 @@ const AddClient = () => {
     phoneNumber: "",
     email: "",
     address: "",
-    source: "", // "Door", "Inbound", "Social"
+    leadSource: "", // "Door", "Inbound", "Social"
     rating: 0, // default rating
     callStatus: "", // "Not Called", "Picked-Up Yes", etc.
   });
@@ -19,7 +19,7 @@ const AddClient = () => {
     "Picked-Up No",
     "No Pickup",
   ];
-  const sources = ["Door", "Inbound", "Social"];
+  const leadSources = ["Door", "Inbound", "Social"];
 
   const [addClient, { isLoading }] = useCreateClientMutation();
   const [showSuccess, setShowSuccess] = useState(false);
@@ -36,7 +36,7 @@ const AddClient = () => {
       "clientName",
       "phoneNumber",
       "address",
-      "source",
+      "leadSource",
       "callStatus",
     ];
     for (let field of requiredFields) {
@@ -58,7 +58,7 @@ const AddClient = () => {
         phoneNumber: "",
         email: "",
         address: "",
-        source: "",
+        leadleadSource: "",
         rating: 0,
         callStatus: "",
       });
@@ -164,20 +164,20 @@ const AddClient = () => {
               />
             </div>
 
-            {/* Lead Source & Call Status */}
+            {/* Lead leadSource & Call Status */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Lead Source *
+                  Lead leadSource *
                 </label>
                 <select
-                  value={formData.source}
-                  onChange={(e) => handleInputChange("source", e.target.value)}
+                  value={formData.leadSource}
+                  onChange={(e) => handleInputChange("leadSource", e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 >
-                  <option value="">Select Source</option>
-                  {sources.map((s) => (
+                  <option value="">Select leadSource</option>
+                  {leadSources.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
@@ -244,7 +244,7 @@ const AddClient = () => {
                     phoneNumber: "",
                     email: "",
                     address: "",
-                    source: "",
+                    leadSource: "",
                     rating: 5,
                     callStatus: "",
                   })

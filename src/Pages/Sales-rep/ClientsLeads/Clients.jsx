@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import Filters from "../../../Components/Sales-rep/Clients/Filters";
 import ClientsTable from "../../../Components/Sales-rep/Clients/ClientsTable";
 import DataTable from "../../../Components/Common/DataTable";
-import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
+import {
+  useDeleteClientMutation,
+  useGetAllClientsQuery,
+} from "../../../redux/api/clientApi";
+import { useState } from "react";
 
 function Clients() {
   const navigate = useNavigate();
@@ -35,21 +39,21 @@ function Clients() {
       accessor: "callStatus",
       options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
     },
-    {
-      label: "Call Status",
-      accessor: "callStatus",
-      options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-    },
-    {
-      label: "Call Status",
-      accessor: "callStatus",
-      options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-    },
-    {
-      label: "Call Status",
-      accessor: "callStatus",
-      options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-    },
+    // {
+    //   label: "Call Status",
+    //   accessor: "callStatus",
+    //   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+    // },
+    // {
+    //   label: "Call Status",
+    //   accessor: "callStatus",
+    //   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+    // },
+    // {
+    //   label: "Call Status",
+    //   accessor: "callStatus",
+    //   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+    // },
   ];
   const actionData = [
     {
@@ -114,9 +118,44 @@ function Clients() {
   //     },
   //   ];
 
-  const clientData = useGetAllClientsQuery();
-  const clients = clientData?.data?.data;
-  console.log(clients);
+  const [params, setParams] = useState({
+  page: 1,
+  limit: 5,
+  search: "",
+  sort: "clientName", // API value
+  sortKey: "clientName", // UI only
+  sortOrder: "asc", // "asc" | "desc"
+  filters: {
+    callStatus: "",
+  },
+});
+
+
+  const { data, isLoading } = useGetAllClientsQuery(params);
+
+  const [deleteClient] = useDeleteClientMutation();
+
+  const clients = data?.data;
+  console.log("Clients data:",clients);
+  const handleSortChange = (key) => {
+  setParams((prev) => {
+    let order = "asc";
+
+    // same column → toggle
+    if (prev.sortKey === key) {
+      order = prev.sortOrder === "asc" ? "desc" : "asc";
+    }
+
+    return {
+      ...prev,
+      page: 1,
+      sortKey: key,
+      sortOrder: order,
+      sort: order === "asc" ? key : `-${key}`,
+    };
+  });
+};
+
 
   return (
     <div className="p-4 md:p-6">
@@ -144,10 +183,42 @@ function Clients() {
       {/* <ClientsTable /> */}
       <DataTable
         title="Clients"
-        data={clients}
+        data={data?.data || []} // 🔴 adjust if backend uses different key
+        totalItems={data?.total || 0}
+        currentPage={params.page}
+        itemsPerPage={params.limit}
         columns={columnData}
         filters={filterData}
-        actions={actionData}
+        actions={[
+          {
+            label: "Delete",
+            modal: true,
+            modalTitle: "Delete Client",
+            modalMessage: (item) =>
+              `Are you sure you want to delete ${item.clientName}?`,
+            onConfirm: (item) => deleteClient(item._id),
+          },
+          {
+            label: "Edit",
+            className: "bg-yellow-500 text-white",
+            onClick: (item) => navigate(`${item._id}`),
+          },
+        ]}
+        onPageChange={(page) => setParams((p) => ({ ...p, page }))}
+        onSearch={(search) => setParams((p) => ({ ...p, search, page: 1 }))}
+        onFilterChange={(key, value) =>
+          setParams((p) => ({
+            ...p,
+            page: 1,
+            filters: {
+              ...p.filters,
+              [key]: value,
+            },
+          }))
+        }
+        onSortChange={handleSortChange}
+        sortKey={params.sortKey}
+  sortOrder={params.sortOrder}
       />
     </div>
   );

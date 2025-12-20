@@ -110,67 +110,37 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
-          {
-            path: "home",
-            element: <Home />,
-          },
+          { path: "home", element: <Home /> },
+
           {
             path: "clients",
-            element: <Clients />,
+            children: [
+              { index: true, element: <Clients /> },
+              { path: ":clientId", element: <ClientDetails /> },
+            ],
           },
-          {
-            path: "client-details",
-            element: <ClientDetails />,
-          },
-          {
-            path: "add-call-log",
-            element: <AddCallLog />,
-          },
-          {
-            path: "add-client",
-            element: <AddClient />,
-          },
-          {
-            path: "quotes",
-            element: <Quotes />,
-          },
-          {
-            path: "add-new-quote",
-            element: <AddNewQuote />,
-          },
-          {
-            path: "quote-details",
-            element: <QuoteDetails />,
-          },
-          {
-            path: "jobs",
-            element: <Jobs />,
-          },
-          {
-            path: "add-new-job",
-            element: <AddNewJob />,
-          },
-          {
-            path: "jobs-details",
-            element: <JobDetailsPage />,
-          },
-          {
-            path: "design-consultation",
-            element: <DesignConsultation />,
-          },
-          {
-            path: "stats-reports",
-            element: <StatsReports />,
-          },
-          {
-            path: "expense",
-            element: <UserExpenses />,
-          },
+
+          { path: "add-call-log", element: <AddCallLog /> },
+          { path: "add-client", element: <AddClient /> },
+
+          { path: "quotes", element: <Quotes /> },
+          { path: "add-new-quote", element: <AddNewQuote /> },
+          { path: "quote-details/:quoteId", element: <QuoteDetails /> },
+
+          { path: "jobs", element: <Jobs /> },
+          { path: "add-new-job", element: <AddNewJob /> },
+          { path: "jobs-details", element: <JobDetailsPage /> },
+
+          { path: "design-consultation", element: <DesignConsultation /> },
+          { path: "stats-reports", element: <StatsReports /> },
+          { path: "expense", element: <UserExpenses /> },
+
           { path: "*", element: <GlobalNoRoute /> },
         ],
       },
     ],
   },
+
   {
     path: "/s/production-manager",
     element: <RoleGuard allowedRole="production-manager" />,
