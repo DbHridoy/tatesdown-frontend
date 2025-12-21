@@ -15,8 +15,15 @@ export const userApi = createCustomApi({
         body: userData
       }),
       invalidatesTags: ['User']
+    }),
+    creatUser:builder.mutation({
+      query:(userData)=>({
+        url:'/user/create-user',
+        method:'POST',
+        body:userData
+      })
     })
   }),
 });
 
-export const { useGetUserQuery, useUpdateUserMutation } = userApi;
+export const { useGetUserQuery, useUpdateUserMutation,useCreatUserMutation } = userApi;

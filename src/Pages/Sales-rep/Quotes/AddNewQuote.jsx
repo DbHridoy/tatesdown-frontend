@@ -1,133 +1,194 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useCreateQuoteMutation } from "../../../redux/api/quoteApi";
+import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
 
 const AddNewQuote = () => {
+  const [selectedClient, setSelectedClient] = useState("");
+  const [estimatedPrice, setEstimatedPrice] = useState(0);
   const [bookedOnSpot, setBookedOnSpot] = useState(null);
+  const [expiryDate, setExpiryDate] = useState("");
+  const [notes, setNotes] = useState("");
+  const [file, setFile] = useState(null);
+
+  const { data, isLoading } = useGetAllClientsQuery();
+  const clients = data?.data || [];
+
+  const [createQuote, { isLoading: isSubmitting, error }] =
+    useCreateQuoteMutation();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selectedClient || !estimatedPrice) {
+      alert("Client and estimated price are required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("clientId", selectedClient);
+    formData.append("estimatedPrice", estimatedPrice);
+    formData.append("bookedOnSpot", bookedOnSpot);
+    formData.append("expiryDate", expiryDate);
+    formData.append("notes", notes);
+    if (file) formData.append("bidSheet", file);
+
+    try {
+      const res = await createQuote(formData).unwrap();
+      console.log("Quote created:", res);
+      alert("Quote created successfully!");
+    } catch (err) {
+      console.error("Failed to create quote:", err);
+    }
+  };
 
   return (
-    <div className="min-h-screen">
-      <div className="">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Add New Quote</h1>
+    <div className="min-h-screen p-6">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+        Add New Quote
+      </h1>
+
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-3xl mx-auto bg-white border rounded-lg shadow-sm p-6 space-y-8"
+      >
+        {/* Client Selection */}
+        <div>
+          <label className="block text-lg font-semibold mb-3">
+            Client Selection *
+          </label>
+          <select
+            value={selectedClient}
+            onChange={(e) => setSelectedClient(e.target.value)}
+            className="w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            disabled={isLoading}
+          >
+            <option value="">Select a client</option>
+            {clients.map((client) => (
+              <option key={client._id} value={client._id}>
+                {client.clientName}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-8">
-          {/* Client Selection */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              Client Selection *
-            </h2>
+        {/* Estimated Price */}
+        <div>
+          <label className="block text-lg font-semibold mb-3">
+            Estimated Price *
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+              $
+            </span>
             <input
-              type="text"
-              placeholder="Search existing client or type to add new..."
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              type="number"
+              min="0"
+              value={estimatedPrice}
+              onChange={(e) =>
+                setEstimatedPrice(Number(e.target.value) || 0)
+              }
+              className="w-full pl-8 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-sm text-gray-500 mt-2">
-              Can't find the client? Type their name to create a new client profile.
+          </div>
+        </div>
+
+        {/* Bid Sheet */}
+        <div>
+          <label className="block text-lg font-semibold mb-3">Bid Sheet</label>
+          <label className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer block hover:border-gray-400">
+            <input
+              type="file"
+              hidden
+              accept="image/*,.pdf"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+            <p className="font-medium text-gray-700">
+              Click to upload or drag and drop
             </p>
-          </div>
+            <p className="text-sm text-gray-500 mt-1">
+              PDF or image files (Max 10MB)
+            </p>
+            {file && (
+              <p className="text-sm text-green-600 mt-2">{file.name}</p>
+            )}
+          </label>
+        </div>
 
-          {/* Estimated Price */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              Estimated Price *
-            </h2>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">
-                $
-              </span>
+        {/* Booked on the Spot */}
+        <div>
+          <label className="block text-lg font-semibold mb-3">
+            Booked on the Spot?
+          </label>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2">
               <input
-                type="number"
-                placeholder="0.00"
-                step="0.01"
-                min="0"
-                className="w-full pl-8 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                type="radio"
+                checked={bookedOnSpot === true}
+                onChange={() => setBookedOnSpot(true)}
               />
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-200"></div>
-
-          {/* Bid Sheet */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Bid Sheet</h2>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer">
-              <div className="text-gray-500 mb-2">
-                <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <p className="text-gray-700 font-medium">Click to upload or drag and drop</p>
-              <p className="text-gray-500 text-sm mt-1">PDF or image files (Max 10MB)</p>
-            </div>
-          </div>
-
-          {/* Booked on the Spot */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Booked on the Spot?</h2>
-            <div className="flex gap-6">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="bookedOnSpot"
-                  checked={bookedOnSpot === true}
-                  onChange={() => setBookedOnSpot(true)}
-                  className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-gray-700">Yes</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="bookedOnSpot"
-                  checked={bookedOnSpot === false}
-                  onChange={() => setBookedOnSpot(false)}
-                  className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-gray-700">No</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Quote Expiry Date */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Quote Expiry Date</h2>
-            <input
-              type="text"
-              placeholder="mm/dd/yyyy"
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          {/* Additional Details */}
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Additional Details</h2>
-            <textarea
-              placeholder="Add any additional details or notes about this quote......"
-              rows="4"
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-            />
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 pt-6">
-            <button
-              type="button"
-              className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Save Quote
-            </button>
+              Yes
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                checked={bookedOnSpot === false}
+                onChange={() => setBookedOnSpot(false)}
+              />
+              No
+            </label>
           </div>
         </div>
-      </div>
+
+        {/* Expiry Date */}
+        <div>
+          <label className="block text-lg font-semibold mb-3">
+            Quote Expiry Date
+          </label>
+          <input
+            type="date"
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+            className="w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Additional Notes */}
+        <div>
+          <label className="block text-lg font-semibold mb-3">
+            Additional Details
+          </label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows="4"
+            className="w-full px-3 py-3 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Add any additional details..."
+          />
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-4 pt-4">
+          <button
+            type="button"
+            className="flex-1 border py-3 rounded-lg hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-60"
+          >
+            {isSubmitting ? "Saving..." : "Save Quote"}
+          </button>
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm text-center">
+            Failed to create quote
+          </p>
+        )}
+      </form>
     </div>
   );
 };

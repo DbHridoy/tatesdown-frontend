@@ -7,6 +7,7 @@ import Filters from "../../../Components/Sales-rep/Clients/Filters";
 import QuoteTable from "../../../Components/Sales-rep/Quote/QuoteTable";
 function Quotes() {
   const navigate = useNavigate();
+  
   return (
     <div>
       <div className="flex justify-between flex-row ">
@@ -24,12 +25,14 @@ function Quotes() {
           </button>
         </div>
       </div>
-      <div className="py-4">
+      {/* <div className="py-4">
         <Filters />
-      </div>
-      <div className="py-4">
+      </div> */}
+      {/* <div className="py-4">
         <QuoteTable />
-      </div>
+      </div> */}
+
+
     </div>
   );
 }
