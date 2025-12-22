@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, RefreshCw, X, Check, AlertCircle } from 'lucide-react';
+import { useUpsertVariableMutation } from '../../../redux/api/expenseApi';
 
 const settings = ()=> {
   const [mileageRate, setMileageRate] = useState('0.50');
@@ -19,6 +20,8 @@ const settings = ()=> {
   const [errorMessage, setErrorMessage] = useState('');
   const [originalValues, setOriginalValues] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
+
+  const [upsertVariable] = useUpsertVariableMutation();
 
   // Store original values on mount
   useEffect(() => {
@@ -65,7 +68,7 @@ const settings = ()=> {
     return null;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Validate mileage rate
     const rateError = validateMileageRate(mileageRate);
     if (rateError) {
@@ -87,11 +90,13 @@ const settings = ()=> {
     // Save settings
     const settings = {
       mileageRate: parseFloat(mileageRate),
-      fiscalStart,
-      fiscalEnd,
-      reportingPeriod,
-      savedAt: new Date().toISOString()
+      // fiscalStart,
+      // fiscalEnd,
+      // reportingPeriod,
+      // savedAt: new Date().toISOString()
     };
+
+    await upsertVariable(settings).unwrap();
 
     // Simulate API call
     setTimeout(() => {
