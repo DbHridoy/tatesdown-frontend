@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, RefreshCw, X, Check, AlertCircle } from 'lucide-react';
-import { useUpsertVariableMutation } from '../../../redux/api/expenseApi';
+import { useUpsertVariableMutation } from '../../../redux/api/common';
 
 const settings = ()=> {
   const [mileageRate, setMileageRate] = useState('0.50');

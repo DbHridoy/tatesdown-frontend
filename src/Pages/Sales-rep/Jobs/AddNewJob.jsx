@@ -1,154 +1,149 @@
 import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useGetQuoteByIdQuery } from "../../../redux/api/quoteApi";
+import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
 
-const AddNewJob = ({ closeModal }) => {
+const AddNewJob = () => {
+  const { quoteId } = useParams();
+  const navigate = useNavigate();
+
+  const { data: quoteData, isLoading } = useGetQuoteByIdQuery(quoteId);
+  const quote = quoteData?.data;
+
+  const [createNewJob, { isLoading: isCreating }] =
+    useCreateNewJobMutation();
+
+  // 🔹 Form State
+  const [title, setTitle] = useState("");
+  const [downPayment, setDownPayment] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [jobStatus, setJobStatus] = useState("Scheduled");
+  const [description, setDescription] = useState("");
+
+  if (isLoading || !quote) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  const handleCreateJob = async () => {
+    try {
+      await createNewJob({
+        quoteId: quote._id,
+        clientId: quote.clientId._id,
+        salesRepId: quote.salesRepId._id,
+        title,
+        description,
+        estimatedPrice: quote.estimatedPrice,
+        downPayment: Number(downPayment),
+        startDate: new Date(startDate),
+        status: jobStatus,
+      }).unwrap();
+
+      navigate("/s/sales-rep/jobs");
+    } catch (error) {
+      console.error("Failed to create job:", error);
+    }
+  };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg w-full  mx-auto overflow-auto p-6">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Add New Job</h1>
+    <div className="bg-white rounded-lg shadow-lg max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Add New Job</h1>
+
+      {/* Client */}
+      <div className="mb-4">
+        <label className="block font-semibold mb-1">Client</label>
+        <input
+          value={quote.clientId.clientName}
+          readOnly
+          className="w-full border px-3 py-2 rounded"
+        />
       </div>
 
-      <div className="space-y-6">
-        {/* Client Selection */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-2">
-            Client Selection *
-          </label>
+      {/* Job Title */}
+      <div className="mb-4">
+        <label className="block font-semibold mb-1">Job Title *</label>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full border px-3 py-2 rounded"
+          placeholder="Kitchen Remodel"
+        />
+      </div>
+
+      {/* Prices */}
+      <div className="flex gap-4 mb-4">
+        <div className="flex-1">
+          <label className="block font-semibold mb-1">Estimated Price</label>
           <input
-            type="text"
-            placeholder="Search or select existing client"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            value={quote.estimatedPrice}
+            readOnly
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
 
-        {/* Job Title */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-2">
-            Job Title *
-          </label>
+        <div className="flex-1">
+          <label className="block font-semibold mb-1">Down Payment *</label>
           <input
-            type="text"
-            placeholder="e.g., Kitchen remodel, Office Painting"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            type="number"
+            value={downPayment}
+            onChange={(e) => setDownPayment(e.target.value)}
+            className="w-full border px-3 py-2 rounded"
           />
         </div>
-        <div className="flex flex-row justify-between">
-          {/* Estimated Price */}
-          <div className="w-1/2 pr-2">
-            <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Estimated Price *
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">
-                $
-              </span>
-              <input
-                type="number"
-                placeholder="0.00"
-                step="0.01"
-                min="0"
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-          <div className="w-1/2 pl-2">
-            <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Estimated Price *
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">
-                $
-              </span>
-              <input
-                type="number"
-                placeholder="0.00"
-                step="0.01"
-                min="0"
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-        </div>
+      </div>
 
-        {/* Start Date */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-2">
-            Start Date *
-          </label>
-          <input
-            type="text"
-            placeholder="mm/dd/yyyy"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
+      {/* Start Date */}
+      <div className="mb-4">
+        <label className="block font-semibold mb-1">Start Date *</label>
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="w-full border px-3 py-2 rounded"
+        />
+      </div>
 
-        {/* Job Status & Assign Sales Rep */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          {/* Job Status */}
-          <div className="flex-1">
-            <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Job Status
-            </label>
-            <select
-              value={jobStatus}
-              onChange={(e) => setJobStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="Scheduled">Scheduled</option>
-              <option value="In Progress">In Progress</option>
-              <option value="On Hold">On Hold</option>
-              <option value="Completed">Completed</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
+      {/* Status */}
+      <div className="mb-4">
+        <label className="block font-semibold mb-1">Job Status</label>
+        <select
+          value={jobStatus}
+          onChange={(e) => setJobStatus(e.target.value)}
+          className="w-full border px-3 py-2 rounded"
+        >
+          <option>Scheduled</option>
+          <option>In Progress</option>
+          <option>On Hold</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
 
-          {/* Assign Sales Rep */}
-          <div className="flex-1">
-            <label className="block text-sm font-semibold text-gray-800 mb-2">
-              Assign Sales Rep
-            </label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option>Mike Thompson</option>
-              <option>Sarah Johnson</option>
-              <option>David Wilson</option>
-              <option>Emily Brown</option>
-            </select>
-          </div>
-        </div>
+      {/* Description */}
+      <div className="mb-6">
+        <label className="block font-semibold mb-1">Description</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={4}
+          className="w-full border px-3 py-2 rounded"
+        />
+      </div>
 
-        {/* Job Description */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-2">
-            Job Description / Notes
-          </label>
-          <textarea
-            placeholder="Add any additional details about the job..."
-            rows="4"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* Downpayment & Action Buttons */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <button
-            type="button"
-            onClick={closeModal}
-            className="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-          >
-            Cancel
-          </button>
-
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <button
-              type="submit"
-              className="py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
-            >
-              Create Job
-            </button>
-          </div>
-        </div>
+      {/* Actions */}
+      <div className="flex justify-end gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="px-6 py-2 border rounded"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleCreateJob}
+          disabled={isCreating}
+          className="px-6 py-2 bg-blue-600 text-white rounded"
+        >
+          {isCreating ? "Creating..." : "Create Job"}
+        </button>
       </div>
     </div>
   );

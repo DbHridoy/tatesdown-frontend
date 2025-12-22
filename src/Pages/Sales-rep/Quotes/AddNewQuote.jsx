@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useCreateQuoteMutation } from "../../../redux/api/quoteApi";
 import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
-
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import { useSelector } from "react-redux";
 const AddNewQuote = () => {
   const [selectedClient, setSelectedClient] = useState("");
   const [estimatedPrice, setEstimatedPrice] = useState(0);
@@ -9,7 +10,7 @@ const AddNewQuote = () => {
   const [expiryDate, setExpiryDate] = useState("");
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState(null);
-
+  const currentUser=useSelector(selectCurrentUser);
   const { data, isLoading } = useGetAllClientsQuery();
   const clients = data?.data || [];
 
@@ -24,8 +25,11 @@ const AddNewQuote = () => {
       return;
     }
 
+    console.log(currentUser)
+
     const formData = new FormData();
     formData.append("clientId", selectedClient);
+    formData.append("salesRepId", currentUser._id);
     formData.append("estimatedPrice", estimatedPrice);
     formData.append("bookedOnSpot", bookedOnSpot);
     formData.append("expiryDate", expiryDate);
@@ -77,17 +81,20 @@ const AddNewQuote = () => {
             Estimated Price *
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
               $
             </span>
+
             <input
               type="number"
-              min="0"
+              inputMode="decimal"
               value={estimatedPrice}
               onChange={(e) =>
-                setEstimatedPrice(Number(e.target.value) || 0)
+                setEstimatedPrice(
+                  e.target.value === "" ? "" : Number(e.target.value)
+                )
               }
-              className="w-full pl-8 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border py-3 pl-8 pr-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
         </div>
@@ -108,9 +115,7 @@ const AddNewQuote = () => {
             <p className="text-sm text-gray-500 mt-1">
               PDF or image files (Max 10MB)
             </p>
-            {file && (
-              <p className="text-sm text-green-600 mt-2">{file.name}</p>
-            )}
+            {file && <p className="text-sm text-green-600 mt-2">{file.name}</p>}
           </label>
         </div>
 

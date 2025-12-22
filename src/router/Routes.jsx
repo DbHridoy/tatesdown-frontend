@@ -125,11 +125,11 @@ export const router = createBrowserRouter([
 
           { path: "quotes", element: <Quotes /> },
           { path: "add-new-quote", element: <AddNewQuote /> },
-          { path: "quote-details/:quoteId", element: <QuoteDetails /> },
+          { path: "quotes/:quoteId", element: <QuoteDetails /> },
 
           { path: "jobs", element: <Jobs /> },
-          { path: "add-new-job", element: <AddNewJob /> },
-          { path: "jobs-details", element: <JobDetailsPage /> },
+          { path: "jobs/create-job/:quoteId", element: <AddNewJob /> },
+          { path: "jobs/:jobId", element: <JobDetailsPage /> },
 
           { path: "design-consultation", element: <DesignConsultation /> },
           { path: "stats-reports", element: <StatsReports /> },

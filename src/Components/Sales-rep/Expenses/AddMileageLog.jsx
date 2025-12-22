@@ -1,135 +1,167 @@
 import { useState } from "react";
+import { useCreateMileageLogMutation } from "../../../redux/api/expenseApi";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 const AddMileageLog = ({ closeModal }) => {
+  const currentUser = useSelector(selectCurrentUser);
+
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  const [milesDriven, setMilesDriven] = useState("");
+  const [totalMilesDriven, setTotalMilesDriven] = useState("");
   const [file, setFile] = useState(null);
-  const [notes, setNotes] = useState("");
+  const [note, setNote] = useState("");
+
+  const [createMileageLog, { isLoading }] =
+    useCreateMileageLogMutation();
+
+  const months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December",
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 10 }, (_, i) =>
+    String(currentYear - i)
+  );
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) setFile(selectedFile);
   };
 
-  const handleSave = () => {
-    // Handle form submission logic here (e.g., API call)
-    console.log({
-      month,
-      year,
-      milesDriven,
-      file,
-      notes,
-    });
+  const handleSave = async () => {
+    if (!currentUser?._id) {
+      alert("User not authenticated");
+      return;
+    }
+
+    if (!month || !year || !totalMilesDriven) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("salesRepId", currentUser._id);
+    formData.append("month", month);
+    formData.append("year", year);
+    formData.append(
+      "totalMilesDriven",
+      String(totalMilesDriven)
+    );
+    if (note) formData.append("note", note);
+    if (file) formData.append("file", file);
+
+    // ✅ Correct way to debug FormData
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    try {
+      await createMileageLog(formData).unwrap();
+      closeModal();
+    } catch (error) {
+      console.error("Failed to create mileage log", error);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Add Mileage Log</h2>
-      <p className="text-gray-600 mb-6">
-        Please enter the details of your mileage for the month
-      </p>
+    <div className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-lg">
+      <h2 className="mb-4 text-2xl font-bold text-gray-800">
+        Add Mileage Log
+      </h2>
 
+      {/* Month */}
       <div className="mb-4">
-        <label
-          className="block text-sm font-medium text-gray-700 mb-1"
-          htmlFor="month"
-        >
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Month *
         </label>
         <select
-          id="month"
           value={month}
           onChange={(e) => setMonth(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          className="w-full rounded-md border p-2"
         >
           <option value="">Select month...</option>
-          <option value="January">January</option>
-          <option value="February">February</option>
-          <option value="March">March</option>
-          {/* Add other months */}
+          {months.map((m) => (
+            <option key={m} value={m}>{m}</option>
+          ))}
         </select>
       </div>
 
+      {/* Year */}
       <div className="mb-4">
-        <label
-          className="block text-sm font-medium text-gray-700 mb-1"
-          htmlFor="year"
-        >
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Year *
         </label>
         <select
-          id="year"
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          className="w-full rounded-md border p-2"
         >
           <option value="">Select year...</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          {/* Add other years */}
+          {years.map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
         </select>
       </div>
 
+      {/* Miles */}
       <div className="mb-4">
-        <label
-          className="block text-sm font-medium text-gray-700 mb-1"
-          htmlFor="milesDriven"
-        >
-          Total Miles Driven
+        <label className="mb-1 block text-sm font-medium text-gray-700">
+          Total Miles Driven *
         </label>
         <input
           type="number"
-          id="milesDriven"
-          value={milesDriven}
-          onChange={(e) => setMilesDriven(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          min="0"
+          inputMode="numeric"
+          value={totalMilesDriven}
+          onChange={(e) => setTotalMilesDriven(e.target.value)}
+          className="w-full rounded-md border p-2"
         />
       </div>
 
+      {/* File */}
       <div className="mb-4">
-        <label
-          className="block text-sm font-medium text-gray-700 mb-1"
-          htmlFor="file"
-        >
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           PDF Receipt Upload
         </label>
         <input
           type="file"
-          id="file"
           accept=".pdf"
           onChange={handleFileChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
+          className="w-full rounded-md border p-2"
         />
-        <p className="text-xs text-gray-500 mt-1">Upload PDF receipts only</p>
       </div>
 
+      {/* Notes */}
       <div className="mb-6">
-        <label
-          className="block text-sm font-medium text-gray-700 mb-1"
-          htmlFor="notes"
-        >
-          Notes / Purpose of Trip
+        <label className="mb-1 block text-sm font-medium text-gray-700">
+          Note / Purpose of Trip
         </label>
         <textarea
-          id="notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Example: Client meeting at 123 main st."
-          className="w-full p-2 border border-gray-300 rounded-md"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          className="w-full rounded-md border p-2"
+          rows={3}
         />
       </div>
-      <div className="flex space-x-4">
+
+      {/* Actions */}
+      <div className="flex gap-4">
         <button
           onClick={closeModal}
-          className="flex-1 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+          disabled={isLoading}
+          className="flex-1 rounded-md bg-gray-300 py-2"
         >
           Cancel
         </button>
         <button
           onClick={handleSave}
-          className="flex-1 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          disabled={isLoading}
+          className="flex-1 rounded-md bg-blue-500 py-2 text-white disabled:opacity-50"
         >
-          Save Mileage Log
+          {isLoading ? "Saving..." : "Save Mileage Log"}
         </button>
       </div>
     </div>

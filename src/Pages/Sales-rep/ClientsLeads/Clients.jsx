@@ -26,9 +26,10 @@ function Clients() {
       label: "Call Status",
       accessor: "callStatus",
       colorMap: {
-        "Not Called": "bg-gray-100 text-gray-700",
-        "Picked-Up Yes": "bg-green-100 text-green-800",
-        "Picked-Up No": "bg-red-100 text-red-700",
+        "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
+        "Picked-Up Yes": "bg-green-100 text-green-800 rounded-2xl text-center p-2",
+        "Picked-Up No": "bg-red-100 text-red-700 rounded-2xl text-center p-2",
+        "No Pickup": "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
       },
     },
   ];
@@ -37,7 +38,7 @@ function Clients() {
     {
       label: "Call Status",
       accessor: "callStatus",
-      options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+      options: ["Not Called", "Picked-Up Yes", "Picked-Up No", "No Pickup"],
     },
     // {
     //   label: "Call Status",
@@ -57,20 +58,20 @@ function Clients() {
   ];
   const actionData = [
     {
+      label: "View",
+      className: "bg-blue-500 text-white p-2 rounded-lg",
+      onClick: (item) => navigate(`${item._id}`),
+    },
+    {
       label: "Delete",
+      className: "bg-red-500 text-white p-2 rounded-lg",
       modal: true,
       modalTitle: "Delete Client",
       modalMessage: (item) =>
         `Are you sure you want to delete ${item.clientName}?`,
-      onConfirm: (item) => console.log("Deleted", item),
-    },
-    {
-      label: "Edit",
-      className: "bg-yellow-500 hover:bg-yellow-600 text-white",
-      onClick: (item) => console.log("Edit", item),
+      onConfirm: (item) => deleteClient(item._id),
     },
   ];
-
   //  const columns = [
   //   {
   //     header: "No",
@@ -119,43 +120,43 @@ function Clients() {
   //   ];
 
   const [params, setParams] = useState({
-  page: 1,
-  limit: 5,
-  search: "",
-  sort: "clientName", // API value
-  sortKey: "clientName", // UI only
-  sortOrder: "asc", // "asc" | "desc"
-  filters: {
-    callStatus: "",
-  },
-});
-
+    page: 1,
+    limit: 5,
+    search: "",
+    sort: "clientName", // API value
+    sortKey: "clientName", // UI only
+    sortOrder: "asc", // "asc" | "desc"
+    filters: {
+      callStatus: "",
+    },
+  });
 
   const { data, isLoading } = useGetAllClientsQuery(params);
 
   const [deleteClient] = useDeleteClientMutation();
 
   const clients = data?.data;
-  console.log("Clients data:",clients);
+
+  const totalItems = clients?.length;
+  console.log("Clients data:", clients);
   const handleSortChange = (key) => {
-  setParams((prev) => {
-    let order = "asc";
+    setParams((prev) => {
+      let order = "asc";
 
-    // same column → toggle
-    if (prev.sortKey === key) {
-      order = prev.sortOrder === "asc" ? "desc" : "asc";
-    }
+      // same column → toggle
+      if (prev.sortKey === key) {
+        order = prev.sortOrder === "asc" ? "desc" : "asc";
+      }
 
-    return {
-      ...prev,
-      page: 1,
-      sortKey: key,
-      sortOrder: order,
-      sort: order === "asc" ? key : `-${key}`,
-    };
-  });
-};
-
+      return {
+        ...prev,
+        page: 1,
+        sortKey: key,
+        sortOrder: order,
+        sort: order === "asc" ? key : `-${key}`,
+      };
+    });
+  };
 
   return (
     <div className="p-4 md:p-6">
@@ -183,27 +184,13 @@ function Clients() {
       {/* <ClientsTable /> */}
       <DataTable
         title="Clients"
-        data={data?.data || []} // 🔴 adjust if backend uses different key
-        totalItems={data?.total || 0}
+        data={clients || []} // 🔴 adjust if backend uses different key
+        totalItems={totalItems}
         currentPage={params.page}
         itemsPerPage={params.limit}
         columns={columnData}
         filters={filterData}
-        actions={[
-          {
-            label: "Delete",
-            modal: true,
-            modalTitle: "Delete Client",
-            modalMessage: (item) =>
-              `Are you sure you want to delete ${item.clientName}?`,
-            onConfirm: (item) => deleteClient(item._id),
-          },
-          {
-            label: "Edit",
-            className: "bg-yellow-500 text-white",
-            onClick: (item) => navigate(`${item._id}`),
-          },
-        ]}
+        actions={actionData}
         onPageChange={(page) => setParams((p) => ({ ...p, page }))}
         onSearch={(search) => setParams((p) => ({ ...p, search, page: 1 }))}
         onFilterChange={(key, value) =>
@@ -218,7 +205,7 @@ function Clients() {
         }
         onSortChange={handleSortChange}
         sortKey={params.sortKey}
-  sortOrder={params.sortOrder}
+        sortOrder={params.sortOrder}
       />
     </div>
   );

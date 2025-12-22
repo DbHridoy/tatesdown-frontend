@@ -1,19 +1,23 @@
 import { createCustomApi } from "./createCustomApi";
 
-const variableApi = createCustomApi({
-  reducerPath: "variableApi",
-  tagTypes: ["Variable"],
+const expenseApi = createCustomApi({
+  reducerPath: "expenseApi",
+  tagTypes: ["Expense"],
   endpoints: (builder) => ({
-    upsertVariable: builder.mutation({
-      query: (newVariable) => ({
-        url: "/variable/upsert-variable",
+    createMileageLog: builder.mutation({
+      query: (data) => ({
+        url: "/expense/create-mileage",
         method: "POST",
-        body: newVariable,
+        body: data,
       }),
-      invalidatesTags: ["Variable"],
+      invalidatesTags: ["Expense"],
+    }),
+    getMyMileageLogs: builder.query({
+      query: () => "/expense/get-my-mileage",
+      providesTags: ["Expense"],
     }),
   }),
 });
 
-export const { useUpsertVariableMutation } = variableApi;
-export default variableApi;
+export const { useCreateMileageLogMutation, useGetMyMileageLogsQuery } = expenseApi;
+export default expenseApi;

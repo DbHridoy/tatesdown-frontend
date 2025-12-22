@@ -6,14 +6,19 @@ import authReducer from "./slice/authSlice";
 import { userApi } from "./api/userApi";
 import clientApi from "./api/clientApi";
 import quoteApi from "./api/quoteApi";
-
+import commonApi from "./api/common";
+import expenseApi from "./api/expenseApi";
+import jobApi from "./api/jobApi";
 // 🧩 1. Combine reducers
 const rootReducer = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [clientApi.reducerPath]:clientApi.reducer,
-  [quoteApi.reducerPath]:quoteApi.reducer
+  [quoteApi.reducerPath]:quoteApi.reducer,
+  [commonApi.reducerPath]: commonApi.reducer,
+  [expenseApi.reducerPath]: expenseApi.reducer,
+  [jobApi.reducerPath]: jobApi.reducer,
 });
 
 // 🧩 2. Setup persist config (only persist auth)
@@ -36,7 +41,10 @@ export const store = configureStore({
       authApi.middleware,
       userApi.middleware,
       clientApi.middleware,
-      quoteApi.middleware
+      quoteApi.middleware,
+      commonApi.middleware,
+      expenseApi.middleware,
+      jobApi.middleware
     ),
   devTools: import.meta.env.VITE_NODE_ENV !== "production",
 });

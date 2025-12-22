@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// Generic Modal Component
 const Modal = ({ show, title, message, onCancel, onConfirm }) => {
   if (!show) return null;
 
@@ -116,18 +115,20 @@ const DataTable = ({
                 <th
                   key={col.accessor}
                   onClick={() => handleSort(col)}
-                  className={`px-4 py-3 text-left text-sm font-semibold ${
+                  className={`px-4 py-3 text-center align-middle text-sm font-semibold ${
                     col.sortable ? "cursor-pointer" : ""
                   }`}
                 >
                   {col.label}
-                  {sortKey === col.accessor &&
+                  {col.sortable &&
+                    sortKey === col.accessor &&
                     (sortOrder === "asc" ? " ▲" : " ▼")}
-
                 </th>
               ))}
               {actions.length > 0 && (
-                <th className="px-4 py-3 text-sm font-semibold">Actions</th>
+                <th className="px-4 py-3 text-center align-middle text-sm font-semibold">
+                  Actions
+                </th>
               )}
             </tr>
           </thead>
@@ -142,14 +143,20 @@ const DataTable = ({
                       : row[col.accessor];
 
                   return (
-                    <td key={col.accessor} className="px-4 py-3 text-sm">
-                      {value}
+                    <td key={col.accessor}>
+                      <div
+                        className={`text-center align-middle text-sm ${
+                          col.colorMap?.[value] || ""
+                        }`}
+                      >
+                        {value}
+                      </div>
                     </td>
                   );
                 })}
 
                 {actions.length > 0 && (
-                  <td className="px-4 py-3 space-x-2">
+                  <td className="px-4 py-3 flex justify-center items-center space-x-2">
                     {actions.map((action, i) => (
                       <button
                         key={i}
