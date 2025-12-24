@@ -219,3 +219,144 @@ const DataTable = ({
 };
 
 export default DataTable;
+
+// const columnData = [
+//     { label: "No", accessor: "No" },
+//     { label: "Client Name", accessor: "clientName", sortable: true },
+//     { label: "Phone", accessor: "phoneNumber" },
+//   {
+//     label: "Call Status",
+//     accessor: "callStatus",
+//     colorMap: {
+//       "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
+//       "Picked-Up Yes": "bg-green-100 text-green-800 rounded-2xl text-center p-2",
+//       "Picked-Up No": "bg-red-100 text-red-700 rounded-2xl text-center p-2",
+//       "No Pickup": "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
+//     },
+//   },
+// ];
+
+// const filterData = [
+//   {
+//     label: "Call Status",
+//     accessor: "callStatus",
+//     options: ["Not Called", "Picked-Up Yes", "Picked-Up No", "No Pickup"],
+//   },
+// {
+//   label: "Call Status",
+//   accessor: "callStatus",
+//   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+// },
+// {
+//   label: "Call Status",
+//   accessor: "callStatus",
+//   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+// },
+// {
+//   label: "Call Status",
+//   accessor: "callStatus",
+//   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
+// },
+// ];
+// const actionData = [
+//   {
+//     label: "View",
+//     className: "bg-blue-500 text-white p-2 rounded-lg",
+//     onClick: (item) => navigate(`${item._id}`),
+//   },
+//   {
+//     label: "Delete",
+//     className: "bg-red-500 text-white p-2 rounded-lg",
+//     modal: true,
+//     modalTitle: "Delete Client",
+//     modalMessage: (item) =>
+//       `Are you sure you want to delete ${item.clientName}?`,
+//     onConfirm: (item) => deleteClient(item._id),
+//   },
+// ];
+//  const columns = [
+//   {
+//     header: "No",
+//     type: "index", // 👈 auto index
+//   },
+//   {
+//     header: "Client Name",
+//     accessor: "clientName",
+//     sortable: true,
+//     filterable: true,
+//   },
+//   {
+//     header: "Source",
+//     accessor: "source",
+//     filterable: true,
+//   },
+//   {
+//     header: "Call Status",
+//     accessor: "callStatus",
+//     type: "badge",
+//     filterable: true,
+//     colorMap: {
+//       "Not Called": "bg-gray-100 text-gray-700",
+//       "Picked-Up Yes": "bg-green-100 text-green-700",
+//       "Picked-Up No": "bg-red-100 text-red-700",
+//       "No Pickup": "bg-yellow-100 text-yellow-700",
+//     },
+//   },
+// ];
+
+//   const actions = [
+//     {
+//       label: "View",
+//       className: "bg-blue-100 text-blue-700",
+//       onClick: (row) => navigate(`/clients/${row._id}`),
+//     },
+//     {
+//       label: "Delete",
+//       className: "bg-red-100 text-red-700",
+//       modal: ({ row }) => ({
+//         title: "Delete Client",
+//         content: `Are you sure you want to delete ${row.clientName}?`,
+//         onConfirm: () => deleteClient(row._id),
+//       }),
+//     },
+//   ];
+
+// const [params, setParams] = useState({
+//   page: 1,
+//   limit: 5,
+//   search: "",
+//   sort: "clientName", // API value
+//   sortKey: "clientName", // UI only
+//   sortOrder: "asc", // "asc" | "desc"
+//   filters: {
+//     callStatus: "",
+//   },
+// });
+
+{
+  /* <DataTable
+        title="Clients"
+        data={clients || []} // 🔴 adjust if backend uses different key
+        totalItems={totalItems}
+        currentPage={params.page}
+        itemsPerPage={params.limit}
+        columns={columnData}
+        filters={filterData}
+        actions={actionData}
+        onPageChange={(page) => setParams((p) => ({ ...p, page }))}
+        onSearch={(search) => setParams((p) => ({ ...p, search, page: 1 }))}
+        onFilterChange={(key, value) =>
+          setParams((p) => ({
+            ...p,
+            page: 1,
+            filters: {
+              ...p.filters,
+              [key]: value,
+            },
+          }))
+        }
+        onSortChange={handleSortChange}
+        sortKey={params.sortKey}
+        sortOrder={params.sortOrder}
+      /> */
+}
