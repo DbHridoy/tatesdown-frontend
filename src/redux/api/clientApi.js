@@ -4,11 +4,6 @@ const clientApi = createCustomApi({
   reducerPath: "clientApi",
   tagTypes: ["Client"],
   endpoints: (builder) => ({
-    // Add your endpoints here
-    getClients: builder.query({
-      query: () => "/client",
-      providesTags: ["Client"],
-    }),
     createClient: builder.mutation({
       query: (newClient) => ({
         url: "/client",
@@ -17,6 +12,7 @@ const clientApi = createCustomApi({
       }),
       invalidatesTags: ["Client"],
     }),
+
     getAllClients: builder.query({
       query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
@@ -40,10 +36,12 @@ const clientApi = createCustomApi({
       },
       providesTags: ["Client"],
     }),
+
     getClientById: builder.query({
       query: (id) => `/client/${id}`,
       providesTags: ["Client"],
     }),
+
     updateClient: builder.mutation({
       query: ({ id, ...updateData }) => ({
         url: `/client/update-client/${id}`,
@@ -52,6 +50,7 @@ const clientApi = createCustomApi({
       }),
       invalidatesTags: ["Client"],
     }),
+
     addCallLog: builder.mutation({
       query: (callLogData) => ({
         url: `/client/call-log`,
@@ -60,14 +59,16 @@ const clientApi = createCustomApi({
       }),
       invalidatesTags: ["Client"],
     }),
+
     addNote: builder.mutation({
       query: (noteData) => ({
-        url: `/client/create-client-note`,
+        url: `/client/client-note`,
         method: "POST",
         body: noteData,
       }),
       invalidatesTags: ["Client"],
     }),
+
     deleteClient: builder.mutation({
       query: (id) => ({
         url: `/client/delete-client/${id}`,
@@ -79,7 +80,6 @@ const clientApi = createCustomApi({
 });
 
 export const {
-  useGetClientsQuery,
   useCreateClientMutation,
   useGetAllClientsQuery,
   useGetClientByIdQuery,

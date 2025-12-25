@@ -110,6 +110,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
       </div>
 
       {/* Table */}
+      {totalPages===0?(<div className="flex justify-center items-center h-64">
+      <p className="text-gray-500">No clients found</p>
+    </div>):(
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y">
           <thead className="bg-gray-50">
@@ -179,6 +182,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
           </tbody>
         </table>
       </div>
+    )}
 
       {/* Pagination */}
       <div className="px-6 py-4 border-t flex justify-between items-center">

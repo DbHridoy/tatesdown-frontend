@@ -20,9 +20,9 @@ function Clients() {
     filters: { role: "" },
   });
 
-  const { data:clientsData, isLoading } = useGetAllClientsQuery(params);
-  
-console.log("clientsData",clientsData)
+  const { data: clientsData, isLoading } = useGetAllClientsQuery(params);
+
+  console.log("clientsData", clientsData);
   const [deleteClient] = useDeleteClientMutation();
 
   const clients = clientsData?.data;
@@ -51,7 +51,12 @@ console.log("clientsData",clientsData)
       {
         label: "Call Status",
         accessor: "callStatus",
-        options: ["Not Called", "Picked-Up Yes", "Picked-Up No", "No Pickup"],
+        options: {
+          "Not Called": "Not Called",
+          "Picked-Up Yes": "Picked-Up Yes",
+          "Picked-Up No": "Picked-Up No",
+          "No Pickup": "No Pickup",
+        },
       },
     ],
     actions: [
@@ -121,13 +126,7 @@ console.log("clientsData",clientsData)
           <span>Add Client</span>
         </button>
       </div>
-      {totalItems === 0 ? (
-        <div className="flex justify-center items-center h-64">
-          <p className="text-gray-500">No clients found</p>
-        </div>
-      ) : (
-        <DataTable title="Clients" data={clients || []} config={tableConfig} />
-      )}
+      <DataTable title="Clients" data={clients || []} config={tableConfig} />
     </div>
   );
 }
