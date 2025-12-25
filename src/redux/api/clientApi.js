@@ -11,7 +11,7 @@ const clientApi = createCustomApi({
     }),
     createClient: builder.mutation({
       query: (newClient) => ({
-        url: "/client/create-client",
+        url: "/client",
         method: "POST",
         body: newClient,
       }),
@@ -36,12 +36,12 @@ const clientApi = createCustomApi({
           }
         });
 
-        return `/client/get-all-clients?${params.toString()}`;
+        return `/client?${params.toString()}`;
       },
       providesTags: ["Client"],
     }),
     getClientById: builder.query({
-      query: (id) => `/client/get-single-client/${id}`,
+      query: (id) => `/client/${id}`,
       providesTags: ["Client"],
     }),
     updateClient: builder.mutation({
@@ -54,7 +54,7 @@ const clientApi = createCustomApi({
     }),
     addCallLog: builder.mutation({
       query: (callLogData) => ({
-        url: `/client/create-call-log`,
+        url: `/client/call-log`,
         method: "POST",
         body: callLogData,
       }),
