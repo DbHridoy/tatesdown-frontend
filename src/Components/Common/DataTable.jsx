@@ -29,24 +29,25 @@ const Modal = ({ show, title, message, onCancel, onConfirm }) => {
   );
 };
 
-const DataTable = ({
-  title,
-  columns,
-  data = [],
-  actions = [],
-  filters = [],
+const DataTable = ({ title, data = [], config = {} }) => {
+  console.log(data);
+  const {
+    columns = [],
+    actions = [],
+    filters = [],
 
-  // server controlled
-  currentPage,
-  totalItems,
-  itemsPerPage,
-  sortKey,
-  sortOrder,
-  onPageChange,
-  onSearch,
-  onFilterChange,
-  onSortChange,
-}) => {
+    // server controlled
+    currentPage,
+    totalItems,
+    itemsPerPage,
+    sortKey,
+    sortOrder,
+    onPageChange,
+    onSearch,
+    onFilterChange,
+    onSortChange,
+  } = config;
+
   const [modalConfig, setModalConfig] = useState({
     show: false,
     item: null,
@@ -54,7 +55,9 @@ const DataTable = ({
   });
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-
+  console.log("totalPages", totalPages);
+  console.log("totalItems", totalItems);
+  console.log("itemsPerPage", itemsPerPage);
   const handleSort = (col) => {
     if (!col.sortable) return;
     onSortChange?.(col.accessor);
@@ -97,9 +100,9 @@ const DataTable = ({
             className="px-3 py-2 border rounded-lg"
           >
             <option value="">{f.label}</option>
-            {f.options.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
+            {Object.entries(f.options).map(([label, value]) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
           </select>
@@ -180,7 +183,7 @@ const DataTable = ({
       {/* Pagination */}
       <div className="px-6 py-4 border-t flex justify-between items-center">
         <span className="text-sm text-gray-600">
-          Page {currentPage} of {totalPages}
+          Page {currentPage} of {totalPages||0}
         </span>
 
         <div className="space-x-2">
@@ -220,143 +223,64 @@ const DataTable = ({
 
 export default DataTable;
 
-// const columnData = [
+// const tableConfig = {
+// const [params, setParams] = useState({
+//   page: 1,
+//   limit: 10,
+//   search: "",
+//   sortKey: "fullName",
+//   sortOrder: "asc",
+//   filters: { role: "" },
+// });
+//   columns: [
 //     { label: "No", accessor: "No" },
-//     { label: "Client Name", accessor: "clientName", sortable: true },
-//     { label: "Phone", accessor: "phoneNumber" },
-//   {
-//     label: "Call Status",
-//     accessor: "callStatus",
-//     colorMap: {
-//       "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
-//       "Picked-Up Yes": "bg-green-100 text-green-800 rounded-2xl text-center p-2",
-//       "Picked-Up No": "bg-red-100 text-red-700 rounded-2xl text-center p-2",
-//       "No Pickup": "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
+//     { label: "User Name", accessor: "fullName", sortable: true },
+//     { label: "Email", accessor: "email" },
+//     { label: "Role", accessor: "role" },
+//   ],
+//   filters: [
+//     {
+//       label: "Role",
+//       accessor: "role",
+//       options: {
+//         "Sales rep": "sales-rep",
+//         "Production manager": "production-manager",
+//       },
 //     },
-//   },
-// ];
-
-// const filterData = [
-//   {
-//     label: "Call Status",
-//     accessor: "callStatus",
-//     options: ["Not Called", "Picked-Up Yes", "Picked-Up No", "No Pickup"],
-//   },
-// {
-//   label: "Call Status",
-//   accessor: "callStatus",
-//   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-// },
-// {
-//   label: "Call Status",
-//   accessor: "callStatus",
-//   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-// },
-// {
-//   label: "Call Status",
-//   accessor: "callStatus",
-//   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-// },
-// ];
-// const actionData = [
-//   {
-//     label: "View",
-//     className: "bg-blue-500 text-white p-2 rounded-lg",
-//     onClick: (item) => navigate(`${item._id}`),
-//   },
-//   {
-//     label: "Delete",
-//     className: "bg-red-500 text-white p-2 rounded-lg",
-//     modal: true,
-//     modalTitle: "Delete Client",
-//     modalMessage: (item) =>
-//       `Are you sure you want to delete ${item.clientName}?`,
-//     onConfirm: (item) => deleteClient(item._id),
-//   },
-// ];
-//  const columns = [
-//   {
-//     header: "No",
-//     type: "index", // 👈 auto index
-//   },
-//   {
-//     header: "Client Name",
-//     accessor: "clientName",
-//     sortable: true,
-//     filterable: true,
-//   },
-//   {
-//     header: "Source",
-//     accessor: "source",
-//     filterable: true,
-//   },
-//   {
-//     header: "Call Status",
-//     accessor: "callStatus",
-//     type: "badge",
-//     filterable: true,
-//     colorMap: {
-//       "Not Called": "bg-gray-100 text-gray-700",
-//       "Picked-Up Yes": "bg-green-100 text-green-700",
-//       "Picked-Up No": "bg-red-100 text-red-700",
-//       "No Pickup": "bg-yellow-100 text-yellow-700",
-//     },
-//   },
-// ];
-
-//   const actions = [
+//   ],
+//   actions: [
 //     {
 //       label: "View",
-//       className: "bg-blue-100 text-blue-700",
-//       onClick: (row) => navigate(`/clients/${row._id}`),
+//       className: "bg-blue-500 text-white p-2 rounded-lg",
+//       onClick: (item) => {
+//         setSelectedUserId(item._id);
+//         setIsViewModal(true);
+//       },
 //     },
 //     {
 //       label: "Delete",
-//       className: "bg-red-100 text-red-700",
-//       modal: ({ row }) => ({
-//         title: "Delete Client",
-//         content: `Are you sure you want to delete ${row.clientName}?`,
-//         onConfirm: () => deleteClient(row._id),
-//       }),
+//       className: "bg-red-500 text-white p-2 rounded-lg",
+//       modal: true,
+//       modalTitle: "Delete User",
+//       modalMessage: (item) =>
+//         `Are you sure you want to delete ${item.fullName}?`,
+//       onConfirm: (item) => deleteUser(item._id),
 //     },
-//   ];
-
-// const [params, setParams] = useState({
-//   page: 1,
-//   limit: 5,
-//   search: "",
-//   sort: "clientName", // API value
-//   sortKey: "clientName", // UI only
-//   sortOrder: "asc", // "asc" | "desc"
-//   filters: {
-//     callStatus: "",
-//   },
-// });
-
-{
-  /* <DataTable
-        title="Clients"
-        data={clients || []} // 🔴 adjust if backend uses different key
-        totalItems={totalItems}
-        currentPage={params.page}
-        itemsPerPage={params.limit}
-        columns={columnData}
-        filters={filterData}
-        actions={actionData}
-        onPageChange={(page) => setParams((p) => ({ ...p, page }))}
-        onSearch={(search) => setParams((p) => ({ ...p, search, page: 1 }))}
-        onFilterChange={(key, value) =>
-          setParams((p) => ({
-            ...p,
-            page: 1,
-            filters: {
-              ...p.filters,
-              [key]: value,
-            },
-          }))
-        }
-        onSortChange={handleSortChange}
-        sortKey={params.sortKey}
-        sortOrder={params.sortOrder}
-      /> */
-}
+//   ],
+//   totalItems: totalItems,
+//   currentPage: params.page,
+//   itemsPerPage: params.limit,
+//   sortKey: params.sortKey,
+//   sortOrder: params.sortOrder,
+//   onPageChange: (page) => setParams((p) => ({ ...p, page })),
+//   onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
+//   onFilterChange: (key, value) =>
+//     setParams((p) => ({
+//       ...p,
+//       page: 1,
+//       filters: { ...p.filters, [key]: value },
+//     })),
+//   onSortChange: (sortKey, sortOrder) =>
+//     setParams((p) => ({ ...p, sortKey, sortOrder })),
+// };
+// <DataTable title="Users" data={users} config={tableConfig} />;
