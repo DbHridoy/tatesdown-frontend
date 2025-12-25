@@ -1,8 +1,6 @@
 import { AddTeamIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router-dom";
-import Filters from "../../../Components/Sales-rep/Clients/Filters";
-import ClientsTable from "../../../Components/Sales-rep/Clients/ClientsTable";
 import DataTable from "../../../Components/Common/DataTable";
 import {
   useDeleteClientMutation,
@@ -12,133 +10,82 @@ import { useState } from "react";
 
 function Clients() {
   const navigate = useNavigate();
-  const CALL_STATUS_COLORS = {
-    "Not Called": "bg-gray-100 text-gray-700",
-    "Picked-Up Yes": "bg-green-100 text-green-700",
-    "Picked-Up No": "bg-red-100 text-red-700",
-    "No Pickup": "bg-yellow-100 text-yellow-700",
-  };
-  const columnData = [
-    { label: "No", accessor: "No" },
-    { label: "Client Name", accessor: "clientName", sortable: true },
-    { label: "Phone", accessor: "phoneNumber" },
-    {
-      label: "Call Status",
-      accessor: "callStatus",
-      colorMap: {
-        "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
-        "Picked-Up Yes": "bg-green-100 text-green-800 rounded-2xl text-center p-2",
-        "Picked-Up No": "bg-red-100 text-red-700 rounded-2xl text-center p-2",
-        "No Pickup": "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
-      },
-    },
-  ];
-
-  const filterData = [
-    {
-      label: "Call Status",
-      accessor: "callStatus",
-      options: ["Not Called", "Picked-Up Yes", "Picked-Up No", "No Pickup"],
-    },
-    // {
-    //   label: "Call Status",
-    //   accessor: "callStatus",
-    //   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-    // },
-    // {
-    //   label: "Call Status",
-    //   accessor: "callStatus",
-    //   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-    // },
-    // {
-    //   label: "Call Status",
-    //   accessor: "callStatus",
-    //   options: ["Not Called", "Picked-Up Yes", "Picked-Up No"],
-    // },
-  ];
-  const actionData = [
-    {
-      label: "View",
-      className: "bg-blue-500 text-white p-2 rounded-lg",
-      onClick: (item) => navigate(`${item._id}`),
-    },
-    {
-      label: "Delete",
-      className: "bg-red-500 text-white p-2 rounded-lg",
-      modal: true,
-      modalTitle: "Delete Client",
-      modalMessage: (item) =>
-        `Are you sure you want to delete ${item.clientName}?`,
-      onConfirm: (item) => deleteClient(item._id),
-    },
-  ];
-  //  const columns = [
-  //   {
-  //     header: "No",
-  //     type: "index", // 👈 auto index
-  //   },
-  //   {
-  //     header: "Client Name",
-  //     accessor: "clientName",
-  //     sortable: true,
-  //     filterable: true,
-  //   },
-  //   {
-  //     header: "Source",
-  //     accessor: "source",
-  //     filterable: true,
-  //   },
-  //   {
-  //     header: "Call Status",
-  //     accessor: "callStatus",
-  //     type: "badge",
-  //     filterable: true,
-  //     colorMap: {
-  //       "Not Called": "bg-gray-100 text-gray-700",
-  //       "Picked-Up Yes": "bg-green-100 text-green-700",
-  //       "Picked-Up No": "bg-red-100 text-red-700",
-  //       "No Pickup": "bg-yellow-100 text-yellow-700",
-  //     },
-  //   },
-  // ];
-
-  //   const actions = [
-  //     {
-  //       label: "View",
-  //       className: "bg-blue-100 text-blue-700",
-  //       onClick: (row) => navigate(`/clients/${row._id}`),
-  //     },
-  //     {
-  //       label: "Delete",
-  //       className: "bg-red-100 text-red-700",
-  //       modal: ({ row }) => ({
-  //         title: "Delete Client",
-  //         content: `Are you sure you want to delete ${row.clientName}?`,
-  //         onConfirm: () => deleteClient(row._id),
-  //       }),
-  //     },
-  //   ];
 
   const [params, setParams] = useState({
     page: 1,
-    limit: 5,
+    limit: 10,
     search: "",
-    sort: "clientName", // API value
-    sortKey: "clientName", // UI only
-    sortOrder: "asc", // "asc" | "desc"
-    filters: {
-      callStatus: "",
-    },
+    sortKey: "fullName",
+    sortOrder: "asc",
+    filters: { role: "" },
   });
 
-  const { data, isLoading } = useGetAllClientsQuery(params);
-
+  const { data:clientsData, isLoading } = useGetAllClientsQuery(params);
+  
+console.log("clientsData",clientsData)
   const [deleteClient] = useDeleteClientMutation();
 
-  const clients = data?.data;
+  const clients = clientsData?.data;
 
-  const totalItems = clients?.length;
-  console.log("Clients data:", clients);
+  const totalItems = clientsData?.total;
+
+  const tableConfig = {
+    columns: [
+      { label: "No", accessor: "No" },
+      { label: "Client Name", accessor: "clientName", sortable: true },
+      { label: "Phone", accessor: "phoneNumber" },
+      {
+        label: "Call Status",
+        accessor: "callStatus",
+        colorMap: {
+          "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
+          "Picked-Up Yes":
+            "bg-green-100 text-green-800 rounded-2xl text-center p-2",
+          "Picked-Up No": "bg-red-100 text-red-700 rounded-2xl text-center p-2",
+          "No Pickup":
+            "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
+        },
+      },
+    ],
+    filters: [
+      {
+        label: "Call Status",
+        accessor: "callStatus",
+        options: ["Not Called", "Picked-Up Yes", "Picked-Up No", "No Pickup"],
+      },
+    ],
+    actions: [
+      {
+        label: "View",
+        className: "bg-blue-500 text-white p-2 rounded-lg",
+        onClick: (item) => navigate(`${item._id}`),
+      },
+      {
+        label: "Delete",
+        className: "bg-red-500 text-white p-2 rounded-lg",
+        modal: true,
+        modalTitle: "Delete Client",
+        modalMessage: (item) =>
+          `Are you sure you want to delete ${item.clientName}?`,
+        onConfirm: (item) => deleteClient(item._id),
+      },
+    ],
+    totalItems: totalItems,
+    currentPage: params.page,
+    itemsPerPage: params.limit,
+    sortKey: params.sortKey,
+    sortOrder: params.sortOrder,
+    onPageChange: (page) => setParams((p) => ({ ...p, page })),
+    onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
+    onFilterChange: (key, value) =>
+      setParams((p) => ({
+        ...p,
+        page: 1,
+        filters: { ...p.filters, [key]: value },
+      })),
+    onSortChange: (sortKey, sortOrder) =>
+      setParams((p) => ({ ...p, sortKey, sortOrder })),
+  };
   const handleSortChange = (key) => {
     setParams((prev) => {
       let order = "asc";
@@ -174,39 +121,13 @@ function Clients() {
           <span>Add Client</span>
         </button>
       </div>
-
-      {/* Filters */}
-      {/* <div className="mb-4 md:mb-6">
-        <Filters />
-      </div> */}
-
-      {/* Clients Table */}
-      {/* <ClientsTable /> */}
-      <DataTable
-        title="Clients"
-        data={clients || []} // 🔴 adjust if backend uses different key
-        totalItems={totalItems}
-        currentPage={params.page}
-        itemsPerPage={params.limit}
-        columns={columnData}
-        filters={filterData}
-        actions={actionData}
-        onPageChange={(page) => setParams((p) => ({ ...p, page }))}
-        onSearch={(search) => setParams((p) => ({ ...p, search, page: 1 }))}
-        onFilterChange={(key, value) =>
-          setParams((p) => ({
-            ...p,
-            page: 1,
-            filters: {
-              ...p.filters,
-              [key]: value,
-            },
-          }))
-        }
-        onSortChange={handleSortChange}
-        sortKey={params.sortKey}
-        sortOrder={params.sortOrder}
-      />
+      {totalItems === 0 ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-gray-500">No clients found</p>
+        </div>
+      ) : (
+        <DataTable title="Clients" data={clients || []} config={tableConfig} />
+      )}
     </div>
   );
 }
