@@ -128,7 +128,7 @@ export const router = createBrowserRouter([
           { path: "quotes/:quoteId", element: <QuoteDetails /> },
 
           { path: "jobs", element: <Jobs /> },
-          { path: "jobs/create-job/:quoteId", element: <AddNewJob /> },
+          // { path: "jobs/create-job", element: <AddNewJob /> },
           { path: "jobs/:jobId", element: <JobDetailsPage /> },
 
           { path: "design-consultation", element: <DesignConsultation /> },

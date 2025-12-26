@@ -1,231 +1,288 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useGetQuoteByIdQuery } from "../../../redux/api/quoteApi";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  useGetQuoteByIdQuery,
+  useUpdateQuoteMutation,
+} from "../../../redux/api/quoteApi";
 
 const QuoteDetails = () => {
   const { quoteId } = useParams();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
+  const { data: quoteData, isLoading } = useGetQuoteByIdQuery(quoteId);
+  const [updateQuote, { isLoading: isUpdating }] = useUpdateQuoteMutation();
+
+  const quote = quoteData?.data;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState(null);
   const [bidSheetFile, setBidSheetFile] = useState(null);
 
- const { data: quoteData } = useGetQuoteByIdQuery(quoteId);
- const quote=quoteData?.data;
+  /* ---------------- Init editable data ---------------- */
+  useEffect(() => {
+    if (quote) {
+      setFormData({
+        estimatedPrice: quote.estimatedPrice,
+        expiryDate: quote.expiryDate?.split("T")[0],
+        notes: quote.notes || "",
+        status: quote.status,
+        bookedOnSpot: quote.bookedOnSpot,
+      });
+      setBidSheetFile(null); // reset file on load
+    }
+  }, [quote]);
 
- console.log("Quotedata from quotedetails",quote);
+  /* ---------------- Handlers ---------------- */
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleBidSheetChange = (e) => {
+    const file = e.target.files[0];
     if (file) setBidSheetFile(file);
   };
 
-  const handleFileRemove = () => setBidSheetFile(null);
+  const handleSave = async () => {
+    try {
+      const payload = new FormData();
 
-  if (!quote) return <div className="p-6">Loading...</div>;
+      // append text fields
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          payload.append(key, value);
+        }
+      });
+
+      // append file ONLY if changed
+      if (bidSheetFile) {
+        payload.append("bidSheet", bidSheetFile);
+      }
+      payload.append("_dummy", "true");
+      // ✅ correct debug
+      for (let [key, value] of payload.entries()) {
+        console.log(key, value);
+      }
+
+      await updateQuote({
+        id: quote._id,
+        body: payload,
+      }).unwrap();
+
+      setIsEditing(false);
+      setBidSheetFile(null);
+    } catch (err) {
+      console.error("Update failed", err);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setBidSheetFile(null);
+    setFormData({
+      estimatedPrice: quote.estimatedPrice,
+      expiryDate: quote.expiryDate?.split("T")[0],
+      notes: quote.notes || "",
+      status: quote.status,
+      bookedOnSpot: quote.bookedOnSpot,
+    });
+  };
+
+  const handleConvertToJob = () => {
+    navigate(`/s/sales-rep/jobs/create-job/${quote._id}`);
+  };
+
+  if (isLoading || !quote) {
+    return <div className="p-6">Loading...</div>;
+  }
 
   const {
     clientId,
     estimatedPrice,
-    bookedOnSpot,
     expiryDate,
     notes,
     status,
+    bookedOnSpot,
     bidSheet,
-    quoteId: qId,
     createdAt,
+    customQuoteId,
   } = quote;
 
-
-  const handleConvertToJob=()=>{
-    navigate(`/s/sales-rep/jobs/create-job/${quote._id}`)
-  }
-
+  /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-6">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Quote Details</h1>
-          <p className="text-lg text-gray-600">
-            <strong>Quote ID:</strong> {qId}
+          <h1 className="text-3xl font-bold mb-2">Quote Details</h1>
+          <p className="text-gray-600">
+            <strong>Quote ID:</strong> {customQuoteId}
           </p>
         </div>
 
-        {/* Main Content */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          {/* Quote Summary Table */}
-          <div className="p-6 border-b border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Client Name</div>
-                <div className="text-lg font-semibold text-gray-800">{clientId.clientName}</div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Estimated Price</div>
-                <div className="text-lg font-semibold text-green-600">${estimatedPrice}</div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Quote Date</div>
-                <div className="text-lg font-semibold text-gray-800">
-                  {new Date(createdAt).toLocaleDateString()}
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Status</div>
-                <div
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    status === "pending"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : status === "approved"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {status}
-                </div>
-              </div>
+        {/* Summary */}
+        <div className="bg-white border rounded-lg p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-500">Client</p>
+              <p className="font-semibold">{clientId.clientName}</p>
             </div>
-          </div>
 
-          {/* Quote Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Quote Information</h2>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="w-32 flex-shrink-0">
-                  <span className="text-sm font-medium text-gray-700">Expiry Date:</span>
-                </div>
-                <div className="text-gray-900">{new Date(expiryDate).toLocaleDateString()}</div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="w-32 flex-shrink-0">
-                  <span className="text-sm font-medium text-gray-700">Booked on Spot:</span>
-                </div>
-                <div
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                    bookedOnSpot === "true"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {bookedOnSpot === "true" ? "Yes" : "No"}
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="w-32 flex-shrink-0">
-                  <span className="text-sm font-medium text-gray-700">Additional Notes:</span>
-                </div>
-                <div className="flex-1">
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <p className="text-gray-800 leading-relaxed">{notes}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bid Sheet Upload / Preview */}
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Bid Sheet</h3>
-            {bidSheetFile ? (
-              <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg bg-gray-50">
-                <div className="flex items-center">
-                  <svg
-                    className="w-8 h-8 text-gray-500 mr-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <div>
-                    <div className="font-medium text-gray-800">{bidSheetFile.name}</div>
-                    <div className="text-sm text-gray-500">
-                      {(bidSheetFile.size / (1024 * 1024)).toFixed(2)} MB
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onClick={handleFileRemove}
-                  className="text-red-600 hover:text-red-800 transition-colors"
-                >
-                  Remove
-                </button>
-              </div>
-            ) : bidSheet ? (
-              <div className="flex items-center justify-between p-4 border border-gray-300 rounded-lg bg-gray-50">
-                <a
-                  href={bidSheet}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View Existing Bid Sheet
-                </a>
-              </div>
-            ) : (
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+            <div>
+              <p className="text-sm text-gray-500">Estimated Price</p>
+              {isEditing ? (
                 <input
-                  type="file"
-                  id="bidSheetUpload"
-                  className="hidden"
-                  accept=".pdf,.jpg,.jpeg,.png"
-                  onChange={handleFileUpload}
+                  type="number"
+                  name="estimatedPrice"
+                  value={formData.estimatedPrice}
+                  onChange={handleChange}
+                  className="border rounded px-3 py-2 w-full"
                 />
-                <label htmlFor="bidSheetUpload" className="cursor-pointer">
-                  <p className="text-gray-700 font-medium">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-gray-500 text-sm mt-1">
-                    PDF or image files (Max 10MB)
-                  </p>
-                </label>
-              </div>
-            )}
-          </div>
+              ) : (
+                <p className="font-semibold text-green-600">
+                  ${estimatedPrice}
+                </p>
+              )}
+            </div>
 
-          {/* Client Contact Information */}
-          <div className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Client Contact Information
-            </h2>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div>
-                  <div className="font-medium text-gray-800">{clientId.clientName}</div>
-                  <div className="text-sm text-gray-600">{clientId.address}</div>
-                </div>
-              </div>
+            <div>
+              <p className="text-sm text-gray-500">Quote Date</p>
+              <p>{new Date(createdAt).toLocaleDateString()}</p>
+            </div>
 
-              <div className="flex items-start">
-                <div className="font-medium text-gray-800">{clientId.phoneNumber}</div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="font-medium text-gray-800">{clientId.email}</div>
-              </div>
+            <div>
+              <p className="text-sm text-gray-500">Status</p>
+              {isEditing ? (
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  className="border rounded px-3 py-2"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              ) : (
+                <span className="font-medium">{status}</span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 mt-6">
-          <button onClick={handleConvertToJob} className="flex-1 py-3 px-6 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
-            Convert to Job
-          </button>
-          <button className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-            Edit Quote
-          </button>
-          <button className="flex-1 py-3 px-6 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-            Delete
-          </button>
+        {/* Info */}
+        <div className="bg-white border rounded-lg p-6 mb-6">
+          <div className="mb-4">
+            <p className="text-sm text-gray-500">Expiry Date</p>
+            {isEditing ? (
+              <input
+                type="date"
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleChange}
+                className="border rounded px-3 py-2"
+              />
+            ) : (
+              <p>{new Date(expiryDate).toLocaleDateString()}</p>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <p className="text-sm text-gray-500">Booked on Spot</p>
+            <p>{bookedOnSpot === "true" ? "Yes" : "No"}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500 mb-1">Notes</p>
+            {isEditing ? (
+              <textarea
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                rows={4}
+                className="border rounded p-3 w-full"
+              />
+            ) : (
+              <p>{notes || "-"}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Bid Sheet */}
+        <div className="bg-white border rounded-lg p-6 mb-6">
+          <h3 className="font-semibold mb-3">Bid Sheet</h3>
+
+          {bidSheet && !isEditing && (
+            <a
+              href={bidSheet}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              View Current Bid Sheet
+            </a>
+          )}
+
+          {isEditing && (
+            <div className="space-y-2">
+              {bidSheet && (
+                <p className="text-sm text-gray-600">
+                  Current file will be replaced if you upload a new one
+                </p>
+              )}
+
+              <input
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={handleBidSheetChange}
+              />
+
+              {bidSheetFile && (
+                <p className="text-sm text-green-600">
+                  Selected: {bidSheetFile.name}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                disabled={isUpdating}
+                className="flex-1 bg-blue-600 text-white py-3 rounded"
+              >
+                {isUpdating ? "Saving..." : "Save"}
+              </button>
+              <button
+                onClick={handleCancel}
+                className="flex-1 border py-3 rounded"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleConvertToJob}
+                className="flex-1 bg-green-600 text-white py-3 rounded"
+              >
+                Convert to Job
+              </button>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="flex-1 border py-3 rounded"
+              >
+                Edit Quote
+              </button>
+              <button className="flex-1 bg-red-600 text-white py-3 rounded">
+                Delete
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

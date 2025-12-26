@@ -96,11 +96,11 @@ const menuConfig = {
       label: "Jobs",
       Link: "/s/sales-rep/jobs",
     },
-    {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "Design Consultation",
-      Link: "/s/sales-rep/design-consultation",
-    },
+    // {
+    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+    //   label: "Design Consultation",
+    //   Link: "/s/sales-rep/design-consultation",
+    // },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Stats / Reports",

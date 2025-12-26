@@ -1,74 +1,89 @@
 import { useNavigate } from "react-router-dom";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserAdd01Icon } from "@hugeicons/core-free-icons";
-import Filters from "../../../Components/Sales-rep/Clients/Filters";
-import QuoteTable from "../../../Components/Sales-rep/Quote/QuoteTable";
 import DataTable from "../../../Components/Common/DataTable";
 import { useState } from "react";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
 
 function Quotes() {
   const navigate = useNavigate();
-  
-  const { data } = useGetAllQuotesQuery();
-  const quotes = data?.data ?? [];
-  console.log(quotes);
-
-  const columnData = [
-    { label: "No", accessor: "No" },
-    { label: "Client Name", accessor: "clientName" },
-    { label: "Estimated Price", accessor: "estimatedPrice" },
-    {
-      label: "Expiry Date",
-      accessor: "expiryDate",
-    },
-  ];
-
-  const filterData = [
-    // {
-    //   label: "Status",
-    //   accessor: "status",
-    //   options: ["Pending", "Accepted", "Rejected"],
-    // },
-  ];
-
-  const actionData = [
-    {
-      label: "Delete",
-      modal: true,
-      modalTitle: "Delete Client",
-      modalMessage: (item) =>
-        `Are you sure you want to delete ${item.clientName}?`,
-      onConfirm: (item) => console.log("Deleted", item),
-    },
-    {
-      label: "View",
-      className: "bg-yellow-500 px-2 py-1 rounded hover:bg-yellow-600 text-white",
-      onClick: (item) => navigate(`/s/sales-rep/quotes/${item.id}`),
-    },
-  ];
-
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
     search: "",
-    sort: "", // API value
-    sortKey: "", // UI only
-    sortOrder: "asc", // "asc" | "desc"
-    filters: {},
+    sortKey: "fullName",
+    sortOrder: "asc",
+    filters: { role: "" },
   });
-  
-  const totalItems = quotes.length;
-  
-  const formattedQuote = quotes?.map((quote) => ({
-    ...quote,
-    clientName: quote.clientId?.clientName || "Unknown",
-  }));
+
+  const { data } = useGetAllQuotesQuery(params);
+  const quotes = data?.data ?? [];
+  console.log(quotes);
+  const totalItems = quotes?.total;
+  const formattedQuote = quotes.map((q) => {
+    return {
+      _id:q._id,
+      clientName: q.clientId.clientName,
+      estimatedPrice: q.estimatedPrice,
+      bidSheet: q.bidSheet,
+      bookedOnSpot: q.bookedOnSpot,
+      expiryDate: new Date(q.expiryDate).toLocaleDateString(),
+      notes: q.notes,
+      status: q.status==='pending'?'Pending':q.status==='approved'?'Approved':'Rejected',
+      createdAt: new Date(q.createdAt).toLocaleDateString(),
+      updatedAt: new Date(q.updatedAt).toLocaleDateString(),
+      customQuoteId: q.customQuoteId,
+    };
+  });
+
+  const tableConfig = {
+    columns: [
+      { label: "No", accessor: "No" },
+      { label: "Client name", accessor: "clientName", sortable: true },
+      { label: "Estimated price", accessor: "estimatedPrice", sortable: true },
+      { label: "Creation date", accessor: "createdAt", sortable: true },
+      { label: "Status", accessor: "status", sortable: true },
+    ],
+    filters: [
+      {
+        label: "Role",
+        accessor: "role",
+        options: {
+          "Sales rep": "sales-rep",
+          "Production manager": "production-manager",
+        },
+      },
+    ],
+    actions: [
+      {
+        label: "View",
+        className: "bg-blue-500 text-white p-2 rounded-lg",
+        onClick: (item) => {
+          console.log(item)
+          navigate(`/s/sales-rep/quotes/${item._id}`)},
+      },
+    ],
+    totalItems: totalItems,
+    currentPage: params.page,
+    itemsPerPage: params.limit,
+    sortKey: params.sortKey,
+    sortOrder: params.sortOrder,
+    onPageChange: (page) => setParams((p) => ({ ...p, page })),
+    onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
+    onFilterChange: (key, value) =>
+      setParams((p) => ({
+        ...p,
+        page: 1,
+        filters: { ...p.filters, [key]: value },
+      })),
+    onSortChange: (sortKey, sortOrder) =>
+      setParams((p) => ({ ...p, sortKey, sortOrder })),
+  };
 
   const handleSearch = (search) => {
     setParams((p) => ({ ...p, search, page: 1 }));
   };
-  
+
   const handleSortChange = (key) => {
     setParams((prev) => {
       let order = "asc";
@@ -120,29 +135,7 @@ function Quotes() {
           </button>
         </div>
       </div>
-
-      <DataTable
-        title="Quote"
-        data={formattedQuote || []} // 🔴 adjust if backend uses different key
-        totalItems={totalItems}
-        columns={columnData}
-        actions={actionData}
-        currentPage={params.page}
-        itemsPerPage={params.limit}
-        sortKey={params.sortKey}
-        sortOrder={params.sortOrder}
-        filters={filterData}
-        onPageChange={handlePageChange}
-        onSearch={handleSearch}
-        onFilterChange={handleFilterChange}
-        onSortChange={handleSortChange}
-      />
-      {/* <div className="py-4">
-        <Filters />
-      </div> */}
-      {/* <div className="py-4">
-        <QuoteTable />
-      </div> */}
+      <DataTable title="Quotes" data={formattedQuote} config={tableConfig} />;
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { FiBell } from "react-icons/fi";
-import { useGetUserQuery } from "../../../redux/api/userApi";
+import { useGetMeQuery } from "../../../redux/api/userApi";
 
 const Topbar = ({ label }) => {
-  const { data: profileData } = useGetUserQuery();
+  const { data: profileData } = useGetMeQuery();
   const profile = profileData?.data;
   console.log('Profile data:', profile);
   return (

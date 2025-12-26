@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useCreateClientMutation } from "../../../redux/api/clientApi";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 const AddClient = () => {
+  const user=useSelector(selectCurrentUser)
+  console.log("User",user)
   const [formData, setFormData] = useState({
+    salesRepId:user._id,
     clientName: "",
     partnerName: "",
     phoneNumber: "",
@@ -45,7 +50,7 @@ const AddClient = () => {
         return;
       }
     }
-
+console.log("Form Data",formData)
     try {
       await addClient(formData).unwrap();
       setShowSuccess(true);
@@ -53,12 +58,13 @@ const AddClient = () => {
 
       // Reset form
       setFormData({
+        salesRepId:user._id,
         clientName: "",
         partnerName: "",
         phoneNumber: "",
         email: "",
         address: "",
-        leadleadSource: "",
+        leadSource: "",
         rating: 0,
         callStatus: "",
       });
