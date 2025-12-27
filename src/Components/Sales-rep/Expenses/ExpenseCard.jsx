@@ -1,4 +1,5 @@
-const ExpenseCard = () => {
+const ExpenseCard = ({ totalMiles, totalDeduction }) => {
+  console.log("from expense card",totalMiles,totalDeduction)
   return (
     <div className="">
       <div className="mx-auto">
@@ -15,7 +16,7 @@ const ExpenseCard = () => {
               <h3 className="text-sm font-medium text-gray-600">
                 Miles Driven
               </h3>
-              <p className="text-2xl font-semibold text-gray-800">150 miles</p>
+              <p className="text-2xl font-semibold text-gray-800">{totalMiles} miles</p>
             </div>
           </div>
 
@@ -30,8 +31,8 @@ const ExpenseCard = () => {
               <h3 className="text-sm font-medium text-gray-600">
                 Total Deduction
               </h3>
-              <p className="text-2xl font-semibold text-gray-800">$87</p>
-              <p className="text-sm text-gray-500">Based on $0.58 per mile</p>
+              <p className="text-2xl font-semibold text-gray-800">${totalDeduction}</p>
+              {/* <p className="text-sm text-gray-500">Based on $0.58 per mile</p> */}
             </div>
           </div>
         </div>

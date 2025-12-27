@@ -4,7 +4,7 @@ const jobApi = createCustomApi({
   reducerPath: "jobApi",
   tagTypes: ["Job"],
   endpoints: (builder) => ({
-   createNewJob: builder.mutation({
+    createNewJob: builder.mutation({
       query: (newJob) => ({
         url: "/job",
         method: "POST",
@@ -12,8 +12,8 @@ const jobApi = createCustomApi({
       }),
       invalidatesTags: ["Job"],
     }),
-    getAllJobs:builder.query({
-        query: (options = {}) => {
+    getAllJobs: builder.query({
+      query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
 
         const params = new URLSearchParams();
@@ -34,12 +34,36 @@ const jobApi = createCustomApi({
         return `/job?${params.toString()}`;
       },
       providesTags: ["Job"],
-    })
-  }),   
+    }),
+    getJobById: builder.query({
+      query: (id) => `/job/${id}`,
+      providesTags: ["Job"],
+    }),
+    createJobNote: builder.mutation({
+      query: (formData) => ({
+        url: "/job/job-note",
+        method: "POST",
+        body: formData, // FormData
+      }),
+      invalidatesTags: ["Job"],
+    }),
+
+    createDesignConsultation: builder.mutation({
+      query: (dc) => ({
+        url: `/job/design-consultation`,
+        body: dc,
+        method: "POST",
+      }),
+      providesTags: ["Job"],
+    }),
+  }),
 });
 
 export const {
   useCreateNewJobMutation,
   useGetAllJobsQuery,
+  useGetJobByIdQuery,
+  useCreateJobNoteMutation,
+  useCreateDesignConsultationMutation,
 } = jobApi;
 export default jobApi;

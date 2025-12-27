@@ -9,18 +9,31 @@ import DataTable from "../../../Components/Common/DataTable";
 function Jobs() {
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
-  const { data, isLoading, isError, error } = useGetAllJobsQuery();
-  const jobs = data?.data;
-  const totalItems = data?.total;
 
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
     search: "",
-    sortKey: "fullName",
+    sortKey: "",
     sortOrder: "asc",
-    filters: { role: "" },
   });
+
+  // ✅ Hook at top level
+  const { data, isLoading } = useGetAllJobsQuery(params);
+
+  const jobs = data?.data || [];
+  const totalItems = data?.total || 0;
+
+  // ✅ Safe formatting
+  const formattedJobs = jobs.map((j) => ({
+    _id:j._id,
+    clientName: j.quoteId?.clientId?.clientName ?? "N/A",
+    jobTitle: j.title,
+    estimatedPrice: j.estimatedPrice,
+    jobStatus: j.status,
+    startDate: new Date(j.startDate).toLocaleDateString(),
+  }));
+
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },
@@ -30,23 +43,13 @@ function Jobs() {
       { label: "Job Status", accessor: "jobStatus" },
       { label: "Start Date", accessor: "startDate" },
     ],
-    filters: [
-      {
-        label: "Role",
-        accessor: "role",
-        options: {
-          "Sales rep": "sales-rep",
-          "Production manager": "production-manager",
-        },
-      },
-    ],
     actions: [
       {
         label: "View",
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
-          setSelectedUserId(item._id);
-          setIsViewModal(true);
+          console.log(item)
+          navigate(`/s/sales-rep/jobs/${item._id}`);
         },
       },
       {
@@ -55,26 +58,21 @@ function Jobs() {
         modal: true,
         modalTitle: "Delete User",
         modalMessage: (item) =>
-          `Are you sure you want to delete ${item.fullName}?`,
+          `Are you sure you want to delete ${item.title}?`,
         onConfirm: (item) => deleteUser(item._id),
       },
     ],
-    totalItems: totalItems,
+    totalItems,
     currentPage: params.page,
     itemsPerPage: params.limit,
     sortKey: params.sortKey,
     sortOrder: params.sortOrder,
     onPageChange: (page) => setParams((p) => ({ ...p, page })),
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
-    onFilterChange: (key, value) =>
-      setParams((p) => ({
-        ...p,
-        page: 1,
-        filters: { ...p.filters, [key]: value },
-      })),
     onSortChange: (sortKey, sortOrder) =>
       setParams((p) => ({ ...p, sortKey, sortOrder })),
   };
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -85,17 +83,24 @@ function Jobs() {
         </div>
         <button
           className="bg-primarycolor text-white flex items-center gap-2 px-4 py-2 rounded"
-          onClick={() => setShowAddModal(true)} // If you want to select a quote first
+          onClick={() => setShowAddModal(true)}
         >
           <HugeiconsIcon icon={UserAdd01Icon} />
           Add Job
         </button>
       </div>
-      <DataTable title="Jobs" data={jobs} config={tableConfig} />;
-      {/* Add Job Modal */}
+
+      <DataTable
+        title="Jobs"
+        data={formattedJobs}
+        config={tableConfig}
+        loading={isLoading}
+      />
+
       {showAddModal && (
         <AddNewJobModal onClose={() => setShowAddModal(false)} />
       )}
+
     </div>
   );
 }

@@ -1,98 +1,139 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import { useCreateJobNoteMutation } from "../../../redux/api/jobApi";
+import { useParams } from "react-router-dom";
+const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 
-const SharedNotes = () => {
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      user: 'Jennifer Martinez',
-      role: 'Sales Representative',
-      timestamp: '03/10/2024 at 2:45 PM',
-      content:
-        'Client requested additional electrical outlets in conference rooms. Need to revise quote and timeline. Estimated additional cost: $8,500',
-      avatar: 'https://i.pravatar.cc/40?img=3', // Sample Avatar
-    },
-    {
-      id: 2,
-      user: 'Michael Torres',
-      role: 'Project Manager',
-      timestamp: '03/11/2024 at 9:15 AM',
-      content:
-        'Reviewed the request. We can accommodate this with minimal timeline impact. I\'ll coordinate with the electrical contractor. Should be ready to schedule by end of week.',
-      avatar: 'https://i.pravatar.cc/40?img=5', // Sample Avatar
-      image: 'https://placeimg.com/50/50/tech', // Sample image
-    },
-  ]);
+const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 
-  const [newNote, setNewNote] = useState('');
+const SharedNotes = ({ notes: initialNotes = [] }) => {
+  const { jobId } = useParams();
+  const [notes, setNotes] = useState(initialNotes);
+  const [newNote, setNewNote] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [createJobNoteMutation] = useCreateJobNoteMutation();
+  const user = useSelector(selectCurrentUser);
+  useEffect(() => {
+    setNotes(initialNotes);
+  }, [initialNotes]);
 
-  const handleNoteChange = (e) => {
-    setNewNote(e.target.value);
-  };
+  const handlePostNote = async () => {
+    if (!newNote.trim() && !selectedFile) return;
 
-  const handlePostNote = () => {
-    const newTimestamp = new Date().toLocaleString();
-    const newNoteObj = {
-      id: notes.length + 1,
-      user: 'You',
-      role: 'Your Role',
-      timestamp: newTimestamp,
-      content: newNote,
-      avatar: 'https://i.pravatar.cc/40?img=7', // Sample Avatar
-    };
+    const formData = new FormData();
+    formData.append("jobId", jobId);
+    formData.append("authorId", user._id);
+    formData.append("note", newNote.trim());
 
-    setNotes([...notes, newNoteObj]);
-    setNewNote('');
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+    }
+
+    try {
+      const res = await createJobNoteMutation(formData).unwrap();
+
+      // ✅ Optimistically update UI with server response
+      setNotes((prev) => [...prev, res.data]);
+
+      setNewNote("");
+      setSelectedFile(null);
+    } catch (err) {
+      console.error("Failed to create note", err);
+    }
   };
 
   return (
     <div className="mb-6 p-6 bg-white shadow-md rounded-md border">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Sales & PM Collaboration</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+        Sales & PM Collaboration
+      </h2>
 
-      {/* Shared Notes */}
-      <div className="mb-4">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Shared Notes</h3>
-        <div className="space-y-4">
-          {notes.map((note) => (
-            <div
-              key={note.id}
-              className="p-4 bg-blue-50 rounded-lg shadow-sm flex space-x-4"
-            >
-              <img
-                src={note.avatar}
-                alt={note.user}
-                className="w-10 h-10 rounded-full"
-              />
-              <div className="flex-1">
-                <div className="flex justify-between items-center">
-                  <p className="font-semibold text-gray-700">{note.user}</p>
-                  <p className="text-xs text-gray-500">{note.timestamp}</p>
-                </div>
-                <p className="text-sm text-gray-700 mt-2">{note.content}</p>
-                {note.image && (
-                  <img
-                    src={note.image}
-                    alt="Note image"
-                    className="w-16 h-16 object-cover mt-2"
-                  />
-                )}
+      {/* Notes */}
+      <div className="space-y-4 mb-6">
+        {notes.length === 0 && (
+          <p className="text-gray-500 text-sm">No notes yet.</p>
+        )}
+
+        {notes.map((note) => (
+          <div
+            key={note._id || note.id}
+            className="p-4 bg-blue-50 rounded-lg shadow-sm flex space-x-4"
+          >
+            <div className="flex-1">
+              {/* Header */}
+              <div className="flex justify-between items-center">
+                <p className="font-semibold text-gray-700">
+                  {note.authorId?.fullName || "Unknown"}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {new Date(note.createdAt).toLocaleString()}
+                </p>
               </div>
+
+              {/* Note text */}
+              <p className="text-sm text-gray-700 mt-2">{note.note}</p>
+
+              {/* File / Image */}
+              {note.file && (
+                <div className="mt-3">
+                  {isImageFile(note.file) ? (
+                    <img
+                      src={note.file}
+                      alt="Note attachment"
+                      className="w-32 h-32 object-cover rounded border"
+                    />
+                  ) : (
+                    <a
+                      href={note.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-blue-600 underline text-sm"
+                    >
+                      📎 {getFileName(note.file)}
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
-      {/* Add New Note */}
-      <div className="mt-4 border-t pt-4">
+      {/* Add Note */}
+      <div className="border-t pt-4 space-y-3">
+        {/* Note Input */}
         <textarea
           value={newNote}
-          onChange={handleNoteChange}
+          onChange={(e) => setNewNote(e.target.value)}
           rows="3"
           placeholder="Add a note for the team..."
           className="w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        ></textarea>
+        />
+
+        {/* File Attachment */}
+        <div className="flex items-center gap-3">
+          <label className="cursor-pointer flex items-center gap-2 text-blue-600 text-sm">
+            📎 Attach file
+            <input
+              type="file"
+              hidden
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+            />
+          </label>
+
+          {selectedFile && (
+            <span className="text-sm text-gray-600 truncate max-w-xs">
+              {selectedFile.name}
+            </span>
+          )}
+        </div>
+
+        {/* Actions */}
         <button
           onClick={handlePostNote}
-          className="mt-2 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          disabled={!newNote.trim() && !selectedFile}
+          className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
         >
           Post Note
         </button>

@@ -1,12 +1,13 @@
 import React from "react";
 
-const JobDetailsHeader = () => {
+const JobDetailsHeader = ({job,isEditing}) => {
+  console.log("job from header",job)
   const jobData = {
-    jobId: "J1234",
-    clientName: "John Doe",
-    jobTitle: "Kitchen Remodel",
-    startDate: "2025-11-25",
-    jobStatus: "In Progress",
+    jobId: job.customJobId,
+    clientName: job.quoteId?.clientId?.clientName,
+    jobTitle: job.title,
+    startDate: job.startDate,
+    jobStatus: job.status,
   };
 
   return (

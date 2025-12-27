@@ -25,7 +25,7 @@ import QuoteDetails from "../Pages/Sales-rep/Quotes/QuoteDetails";
 import Jobs from "../Pages/Sales-rep/Jobs/Jobs";
 import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob";
 import JobDetailsPage from "../Pages/Sales-rep/Jobs/JobDetailsPage";
-import DesignConsultation from "../Pages/Sales-rep/DesignConsultation/DesignConsultation";
+import DesignConsultation from "../Pages/Sales-rep/Jobs/DesignConsultation";
 import StatsReports from "../Pages/Sales-rep/StatsReports/StatsReports";
 import UserExpenses from "../Pages/Sales-rep/ExpensesMileage/Expenses";
 import JobScheduling from "../Pages/Production-Manager/JobScheduling/JobScheduling";
@@ -130,8 +130,8 @@ export const router = createBrowserRouter([
           { path: "jobs", element: <Jobs /> },
           // { path: "jobs/create-job", element: <AddNewJob /> },
           { path: "jobs/:jobId", element: <JobDetailsPage /> },
+          { path: "jobs/:jobId/design-consultation", element: <DesignConsultation /> },
 
-          { path: "design-consultation", element: <DesignConsultation /> },
           { path: "stats-reports", element: <StatsReports /> },
           { path: "expense", element: <UserExpenses /> },
 
