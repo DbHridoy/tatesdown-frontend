@@ -56,6 +56,17 @@ const jobApi = createCustomApi({
       }),
       providesTags: ["Job"],
     }),
+
+    changeStatus:builder.mutation({
+      query:({id,status})=>({
+        url:`/job/${id}`,
+        method:"PATCH",
+        body:{
+          status
+        }
+      }),
+      invalidatesTags:["Job"]
+    })
   }),
 });
 
@@ -65,5 +76,7 @@ export const {
   useGetJobByIdQuery,
   useCreateJobNoteMutation,
   useCreateDesignConsultationMutation,
+  useChangeStatusMutation,
 } = jobApi;
 export default jobApi;
+

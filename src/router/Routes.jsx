@@ -29,7 +29,7 @@ import DesignConsultation from "../Pages/Sales-rep/Jobs/DesignConsultation";
 import StatsReports from "../Pages/Sales-rep/StatsReports/StatsReports";
 import UserExpenses from "../Pages/Sales-rep/ExpensesMileage/Expenses";
 import JobScheduling from "../Pages/Production-Manager/JobScheduling/JobScheduling";
-import JobOverview from "../Pages/Production-Manager/JobOverview/JobOverview";
+import JobOverview from "../Pages/Production-Manager/JobScheduling/JobOverview";
 import ProductionReport from "../Pages/Production-Manager/ProductionReport/ProductionReport";
 import ProductionSettings from "../Pages/Production-Manager/ProductionSettings/ProductionSettings";
 import MainLayout from "../Layout/MainLayout";
@@ -159,6 +159,10 @@ export const router = createBrowserRouter([
           {
             path: "job-scheduling/:id",
             element: <JobOverview />,
+          },
+          {
+            path: "job-scheduling/:id/design-consultation",
+            element: <DesignConsultation />,
           },
           {
             path: "production-settings",

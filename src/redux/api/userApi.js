@@ -43,6 +43,14 @@ export const userApi = createCustomApi({
       }),
       invalidatesTags: ["User"],
     }),
+    updateMe: builder.mutation({
+      query: (payload) => ({
+        url: `/user/me`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["User"],
+    }),
 
     creatUser: builder.mutation({
       query: (userData) => ({
@@ -66,6 +74,7 @@ export const {
   useGetUserQuery,
   useGetAllUsersQuery,
   useUpdateUserMutation,
+  useUpdateMeMutation,
   useCreatUserMutation,
   useDeleteUserMutation,
 } = userApi;

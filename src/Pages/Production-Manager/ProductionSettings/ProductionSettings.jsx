@@ -1,89 +1,93 @@
 import { useState, useEffect } from "react";
 import { Edit, Briefcase, Camera, Check } from "lucide-react";
-import {
-  useGetUserQuery,
-  useUpdateUserMutation,
-} from "../../../redux/api/userApi";
+import { useGetMeQuery, useUpdateMeMutation } from "../../../redux/api/userApi";
 
 const ProductionSettings = () => {
-  const { data: profileData } = useGetUserQuery();
+  const { data: profileData } = useGetMeQuery();
   const profile = profileData?.data;
-  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+  console.log("from setting", profile);
 
+  const [updateUser, { isLoading: isUpdating }] = useUpdateMeMutation();
   const [isEditing, setIsEditing] = useState(false);
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     role: "",
-    avatar: "",
+    avatar: null, // This will hold the File object
+    avatarPreview: "", // This will hold a preview URL
     address: "",
   });
 
-  // Update formData when profile changes
+  // Populate formData when profile changes
   useEffect(() => {
     if (profile) {
       setFormData({
         name: profile.fullName || "",
         email: profile.email || "",
-        phone: profile.phoneNumber || "",
+        phoneNumber: profile.phoneNumber || "",
         role: profile.role || "",
-        avatar: profile.profileImage || "",
+        avatar: null,
+        avatarPreview: profile.profileImage || "",
         address: profile.address || "",
       });
     }
   }, [profile]);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  const handleEditClick = () => setIsEditing(true);
 
   const handleCancel = () => {
-    setFormData({
-      name: profile.fullName || "",
-      email: profile.email || "",
-      phone: profile.phoneNumber || "",
-      role: profile.role || "",
-      avatar: profile.profileImage || "",
-      address: profile.address || "",
-    });
+    if (profile) {
+      setFormData({
+        name: profile.fullName || "",
+        email: profile.email || "",
+        phoneNumber: profile.phoneNumber || "",
+        role: profile.role || "",
+        avatar: null,
+        avatarPreview: profile.profileImage || "",
+        address: profile.address || "",
+      });
+    }
     setIsEditing(false);
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileChange = (file) => {
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        avatar: file,
+        avatarPreview: URL.createObjectURL(file),
+      }));
+    }
   };
 
   const handleSaveChanges = async () => {
     try {
-      setIsEditing(false); // Optionally disable editing while saving
-
-      // Map formData to API expected fields
-      const payload = {
-        fullName: formData.name,
-        phoneNumber: formData.phone,
-        address: formData.address,
-        profileImage: formData.avatar,
-      };
+      const payload = new FormData();
+      payload.append("fullName", formData.name);
+      payload.append("phoneNumber", formData.phoneNumber);
+      payload.append("address", formData.address);
+      if (formData.avatar) payload.append("profileImage", formData.avatar);
 
       await updateUser(payload).unwrap();
 
-      // Show success message
+      setIsEditing(false);
       setShowSaveSuccess(true);
       setTimeout(() => setShowSaveSuccess(false), 3000);
     } catch (error) {
       console.error("Failed to update profile:", error);
-      alert("Failed to update profile. Please try again."); // Simple error handling
-      setIsEditing(true); // Re-enable editing on error
+      alert("Failed to update profile. Please try again.");
     }
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
   return (
-    <div>
+    <div className="p-8 bg-gray-50 min-h-screen">
       {/* Success Message */}
       {showSaveSuccess && (
         <div className="flex items-center gap-2 p-4 mb-4 border border-green-200 rounded-lg bg-green-50">
@@ -105,18 +109,18 @@ const ProductionSettings = () => {
           </p>
         </div>
 
-        {/* Profile Section */}
+        {/* Avatar */}
         <div className="flex flex-col items-center mb-8">
           <div className="relative mb-3 group">
-            <div className="w-20 h-20 overflow-hidden bg-gray-300 rounded-full">
-              {formData.avatar ? (
+            <div className="w-24 h-24 overflow-hidden bg-gray-300 rounded-full">
+              {formData.avatarPreview ? (
                 <img
-                  src={formData.avatar}
+                  src={formData.avatarPreview}
                   alt="Profile"
                   className="object-cover w-full h-full"
                 />
               ) : (
-                <div className="flex items-center justify-center w-full h-full text-2xl font-semibold text-white bg-gradient-to-br from-blue-400 to-blue-600">
+                <div className="flex items-center justify-center w-full h-full text-3xl font-semibold text-white bg-gradient-to-br from-blue-400 to-blue-600">
                   {formData.name?.charAt(0)?.toUpperCase()}
                 </div>
               )}
@@ -128,19 +132,7 @@ const ProductionSettings = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          avatar: reader.result,
-                        }));
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
+                  onChange={(e) => handleFileChange(e.target.files[0])}
                   className="hidden"
                 />
               </label>
@@ -161,8 +153,7 @@ const ProductionSettings = () => {
               onClick={handleEditClick}
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors border border-gray-300 rounded hover:bg-gray-50"
             >
-              <Edit className="w-4 h-4" />
-              Edit Profile
+              <Edit className="w-4 h-4" /> Edit Profile
             </button>
           )}
         </div>
@@ -179,7 +170,7 @@ const ProductionSettings = () => {
                 value={formData.name}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`w-full px-3 py-2 text-sm text-gray-900 border rounded ${
+                className={`w-full px-3 py-2 text-sm border rounded ${
                   isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
@@ -203,14 +194,16 @@ const ProductionSettings = () => {
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-700">
-                Phone
+                Phone Number
               </label>
               <input
                 type="tel"
-                value={formData.phone}
+                value={formData.phoneNumber}
                 readOnly={!isEditing}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                className={`w-full px-3 py-2 text-sm text-gray-900 border rounded ${
+                onChange={(e) =>
+                  handleInputChange("phoneNumber", e.target.value)
+                }
+                className={`w-full px-3 py-2 text-sm border rounded ${
                   isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
@@ -227,7 +220,7 @@ const ProductionSettings = () => {
                 value={formData.address}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("address", e.target.value)}
-                className={`w-full px-3 py-2 text-sm text-gray-900 border rounded ${
+                className={`w-full px-3 py-2 text-sm border rounded ${
                   isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
@@ -237,7 +230,7 @@ const ProductionSettings = () => {
           </div>
         </div>
 
-        {/* Save Button */}
+        {/* Save / Cancel Buttons */}
         {isEditing && (
           <div className="flex justify-center gap-4 mt-8">
             <button
