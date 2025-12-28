@@ -5,12 +5,6 @@ import { useGetMyMileageLogsQuery } from "../../../redux/api/expenseApi";
 import DataTable from "../../../Components/Common/DataTable";
 
 function UserExpenses() {
-  const { data: mileageLogs } = useGetMyMileageLogsQuery();
-
-  const mileageLogsData = mileageLogs?.data ?? [];
-  const totalMiles = mileageLogs?.totalMilesDriven ?? 0;
-  const totalDeduction = mileageLogs?.totalDeduction ?? 0;
-
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -19,6 +13,11 @@ function UserExpenses() {
     sortOrder: "asc",
     filters: { role: "" },
   });
+  const { data: mileageLogs } = useGetMyMileageLogsQuery(params);
+
+  const mileageLogsData = mileageLogs?.data ?? [];
+  const totalMiles = mileageLogs?.totalMilesDriven ?? 0;
+  const totalDeduction = mileageLogs?.totalDeduction ?? 0;
 
   const totalItems = mileageLogs?.total ?? 0;
 
@@ -52,7 +51,11 @@ function UserExpenses() {
     <div className="space-y-8">
       <AddExpense />
       <ExpenseCard totalMiles={totalMiles} totalDeduction={totalDeduction} />
-      <DataTable title="Users" data={mileageLogsData} config={tableConfig} />
+      <DataTable
+        title="Mileage Logs"
+        data={mileageLogsData}
+        config={tableConfig}
+      />
     </div>
   );
 }

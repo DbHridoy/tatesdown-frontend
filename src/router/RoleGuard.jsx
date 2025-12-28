@@ -1,17 +1,24 @@
-import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
 
 const RoleGuard = ({ allowedRole }) => {
-  const role = useSelector((state) => state.auth.user?.role);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  if (role !== allowedRole) {
-    // Redirect to their own homepage
-    if (role === "admin") return <Navigate to="/s/admin/dashboard" replace />;
-    if (role === "sales-rep")
-      return <Navigate to="/s/sales-rep/home" replace />;
-    if (role === "production-manager")
-      return <Navigate to="/s/production-manager/production-home" replace />;
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (user.role !== allowedRole) {
+    switch (user.role) {
+      case "admin":
+        return <Navigate to="/s/admin/dashboard" replace />;
+      case "sales-rep":
+        return <Navigate to="/s/sales-rep/home" replace />;
+      case "production-manager":
+        return <Navigate to="/s/production-manager/production-home" replace />;
+      default:
+        return <Navigate to="/login" replace />;
+    }
   }
 
   return <Outlet />;

@@ -12,8 +12,12 @@ const commonApi = createCustomApi({
       }),
       invalidatesTags: ["Variable"],
     }),
+    getVariables: builder.query({
+      query: () => "/common/get-variable",
+      providesTags: ["Variable"],
+    }),
   }),
 });
 
-export const { useUpsertVariableMutation } = commonApi;
+export const { useUpsertVariableMutation, useGetVariablesQuery } = commonApi;
 export default commonApi;

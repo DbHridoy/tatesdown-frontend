@@ -12,7 +12,7 @@ const Home = () => {
       {/* Cards overview */}
       <Card />
       {/* quick actions */}
-      <QuickActions />
+      {/* <QuickActions /> */}
       {/* bottom */}
       <div className="py-4">
         <div className="flex flex-col lg:flex-row gap-4">

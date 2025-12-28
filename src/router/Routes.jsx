@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import PublicRoute from "./PublicRoute";
-import PrivateRoute from "./PrivateRoute";
 import RoleGuard from "./RoleGuard";
 
 import Login from "../Pages/Auth/Login";
@@ -23,7 +22,6 @@ import Quotes from "../Pages/Sales-rep/Quotes/Quote";
 import AddNewQuote from "../Pages/Sales-rep/Quotes/AddNewQuote";
 import QuoteDetails from "../Pages/Sales-rep/Quotes/QuoteDetails";
 import Jobs from "../Pages/Sales-rep/Jobs/Jobs";
-import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob";
 import JobDetailsPage from "../Pages/Sales-rep/Jobs/JobDetailsPage";
 import DesignConsultation from "../Pages/Sales-rep/Jobs/DesignConsultation";
 import StatsReports from "../Pages/Sales-rep/StatsReports/StatsReports";
@@ -38,6 +36,7 @@ import SetNewPassword from "../Pages/Auth/SetNewPassword";
 import Successful from "../Pages/Auth/Successful";
 import AdminClients from "../Pages/Admin/Clients/AdminClients";
 import ImpersonateView from "../Pages/Admin/Clients/ImpersonateView";
+import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob2";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -53,7 +52,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/s",
-    element: <PrivateRoute />, // Redirect based on role
+    element: <RoleGuard />,
   },
   {
     path: "/s/admin",
@@ -128,9 +127,12 @@ export const router = createBrowserRouter([
           { path: "quotes/:quoteId", element: <QuoteDetails /> },
 
           { path: "jobs", element: <Jobs /> },
-          // { path: "jobs/create-job", element: <AddNewJob /> },
+          { path: "add-job", element: <AddNewJob /> },
           { path: "jobs/:jobId", element: <JobDetailsPage /> },
-          { path: "jobs/:jobId/design-consultation", element: <DesignConsultation /> },
+          {
+            path: "jobs/:jobId/design-consultation",
+            element: <DesignConsultation />,
+          },
 
           { path: "stats-reports", element: <StatsReports /> },
           { path: "expense", element: <UserExpenses /> },

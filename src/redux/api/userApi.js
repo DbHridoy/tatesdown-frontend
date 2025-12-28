@@ -58,6 +58,7 @@ export const userApi = createCustomApi({
         method: "POST",
         body: userData,
       }),
+      invalidatesTags: ["User"],
     }),
     deleteUser: builder.mutation({
       query: (userId) => ({

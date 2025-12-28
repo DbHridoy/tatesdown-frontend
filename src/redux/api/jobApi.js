@@ -57,16 +57,74 @@ const jobApi = createCustomApi({
       providesTags: ["Job"],
     }),
 
-    changeStatus:builder.mutation({
-      query:({id,status})=>({
-        url:`/job/${id}`,
-        method:"PATCH",
-        body:{
-          status
-        }
+    changeStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/job/${id}`,
+        method: "PATCH",
+        body: {
+          status,
+        },
       }),
-      invalidatesTags:["Job"]
-    })
+      invalidatesTags: ["Job"],
+    }),
+
+    getDownpaymentRequest: builder.query({
+      query: (options = {}) => {
+        const { page = 1, limit = 10, search, sort, filters = {} } = options;
+
+        const params = new URLSearchParams();
+
+        params.set("page", page);
+        params.set("limit", limit);
+
+        if (search) params.set("search", search);
+        if (sort) params.set("sort", sort);
+
+        // 🔥 Dynamic filters
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== "") {
+            params.set(key, value);
+          }
+        });
+
+        return `/job/downpayment-request?${params.toString()}`;
+      },
+      providesTags: ["Job"],
+    }),
+    getPendingCloseRequest: builder.query({
+      query: (options = {}) => {
+        const { page = 1, limit = 10, search, sort, filters = {} } = options;
+
+        const params = new URLSearchParams();
+
+        params.set("page", page);
+        params.set("limit", limit);
+
+        if (search) params.set("search", search);
+        if (sort) params.set("sort", sort);
+
+        // 🔥 Dynamic filters
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== "") {
+            params.set(key, value);
+          }
+        });
+
+        return `/job/job-close-approval?${params.toString()}`;
+      },
+      providesTags: ["Job"],
+    }),
+    updateDownPaymentStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: "/job/downpayment-status",
+        method: "PATCH",
+        body: {
+          id,
+          status,
+        },
+      }),
+      invalidatesTags: ["Job"],
+    }),
   }),
 });
 
@@ -77,6 +135,8 @@ export const {
   useCreateJobNoteMutation,
   useCreateDesignConsultationMutation,
   useChangeStatusMutation,
+  useGetDownpaymentRequestQuery,
+  useGetPendingCloseRequestQuery,
+  useUpdateDownPaymentStatusMutation,
 } = jobApi;
 export default jobApi;
-

@@ -7,10 +7,13 @@ import {
   useChangeStatusMutation,
   useCreateJobNoteMutation,
 } from "../../../redux/api/jobApi";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 export default function JobOverview() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const user=useSelector(selectCurrentUser)
 
   const [currentStatus, setCurrentStatus] = useState("");
   const [noteText, setNoteText] = useState("");
@@ -40,6 +43,7 @@ export default function JobOverview() {
     if (!noteText && !file) return alert("Enter a note or select a file");
 
     const formData = new FormData();
+    formData.append("authorId", user._id);
     formData.append("jobId", id);
     formData.append("note", noteText);
     if (file) formData.append("file", file);

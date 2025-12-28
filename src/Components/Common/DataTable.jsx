@@ -111,85 +111,85 @@ const DataTable = ({ title, data = [], config = {} }) => {
 
       {/* Table */}
       {totalPages === 0 ? (
-  <div className="flex justify-center items-center h-64">
-    <p className="text-gray-500">No clients found</p>
-  </div>
-) : (
-  <div className="overflow-x-auto">
-    <table className="min-w-full divide-y">
-      <thead className="bg-gray-50">
-        <tr>
-          {columns.map((col) => (
-            <th
-              key={col.accessor}
-              onClick={() => col.sortable && handleSort(col)}
-              className={`px-4 py-3 text-center align-middle text-sm font-semibold ${
-                col.sortable ? "cursor-pointer" : ""
-              }`}
-            >
-              {col.label}
-              {col.sortable &&
-                sortKey === col.accessor &&
-                (sortOrder === "asc" ? " ▲" : " ▼")}
-            </th>
-          ))}
-          {actions.length > 0 && (
-            <th className="px-4 py-3 text-center align-middle text-sm font-semibold">
-              Actions
-            </th>
-          )}
-        </tr>
-      </thead>
-
-      <tbody className="divide-y">
-        {data.map((row, idx) => (
-          <tr key={idx} className="hover:bg-gray-50">
-            {columns.map((col) => {
-              let value =
-                col.accessor === "No"
-                  ? (currentPage - 1) * itemsPerPage + idx + 1
-                  : row[col.accessor];
-
-              // Format date if accessor is 'date'
-              if (col.label === "Date" && value) {
-                value = new Date(value).toLocaleDateString();
-              }
-
-              return (
-                <td key={col.accessor}>
-                  <div
-                    className={`text-center align-middle text-sm ${
-                      col.colorMap?.[value] || ""
+        <div className="flex justify-center items-center h-64">
+          <p className="text-gray-500">No clients found</p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y">
+            <thead className="bg-gray-50">
+              <tr>
+                {columns.map((col) => (
+                  <th
+                    key={col.accessor}
+                    onClick={() => col.sortable && handleSort(col)}
+                    className={`px-4 py-3 text-center align-middle text-sm font-semibold ${
+                      col.sortable ? "cursor-pointer" : ""
                     }`}
                   >
-                    {value}
-                  </div>
-                </td>
-              );
-            })}
-
-            {actions.length > 0 && (
-              <td className="px-4 py-3 flex justify-center items-center space-x-2">
-                {actions.map((action, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleAction(action, row)}
-                    className={
-                      action.className || "px-2 py-1 bg-blue-500 text-white rounded"
-                    }
-                  >
-                    {action.label}
-                  </button>
+                    {col.label}
+                    {col.sortable &&
+                      sortKey === col.accessor &&
+                      (sortOrder === "asc" ? " ▲" : " ▼")}
+                  </th>
                 ))}
-              </td>
-            )}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+                {actions.length > 0 && (
+                  <th className="px-4 py-3 text-center align-middle text-sm font-semibold">
+                    Actions
+                  </th>
+                )}
+              </tr>
+            </thead>
 
+            <tbody className="divide-y">
+              {data.map((row, idx) => (
+                <tr key={idx} className="hover:bg-gray-50">
+                  {columns.map((col) => {
+                    let value =
+                      col.accessor === "No"
+                        ? (currentPage - 1) * itemsPerPage + idx + 1
+                        : row[col.accessor];
+
+                    // Format date if accessor is 'date'
+                    if (col.label === "Date" && value) {
+                      value = new Date(value).toLocaleDateString();
+                    }
+
+                    return (
+                      <td key={col.accessor}>
+                        <div
+                          className={`text-center align-middle text-sm ${
+                            col.colorMap?.[value] || ""
+                          }`}
+                        >
+                          {value}
+                        </div>
+                      </td>
+                    );
+                  })}
+
+                  {actions.length > 0 && (
+                    <td className="px-4 py-3 flex justify-center items-center space-x-2">
+                      {actions.map((action, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleAction(action, row)}
+                          className={
+                            action.className ||
+                            "px-2 py-1 bg-blue-500 text-white rounded"
+                          }
+                        >
+                          {action.label}
+                        </button>
+                      ))}
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="px-6 py-4 border-t flex justify-between items-center">

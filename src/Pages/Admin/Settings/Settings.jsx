@@ -1,23 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, RefreshCw, X, Check, AlertCircle } from 'lucide-react';
-import { useUpsertVariableMutation } from '../../../redux/api/common';
+import React, { useState, useEffect } from "react";
+import { Calendar, RefreshCw, X, Check, AlertCircle } from "lucide-react";
+import {
+  useUpsertVariableMutation,
+  useGetVariablesQuery,
+} from "../../../redux/api/common";
 
-const settings = ()=> {
-  const [mileageRate, setMileageRate] = useState('0.50');
-  const [fiscalStart, setFiscalStart] = useState('');
-  const [fiscalEnd, setFiscalEnd] = useState('');
-  const [reportingPeriod, setReportingPeriod] = useState('week');
-  const [activeTab, setActiveTab] = useState('mileage');
-  
+const settings = () => {
+  const { data: variable, isLoading } = useGetVariablesQuery();
+  const [mileageRate, setMileageRate] = useState(0);
+
+  useEffect(() => {
+    if (variable?.data?.mileageRate !== undefined) {
+      setMileageRate(variable.data.mileageRate);
+    }
+  }, [variable]); // run whenever variable changes
+
+  console.log(mileageRate);
+
+  const [fiscalStart, setFiscalStart] = useState("");
+  const [fiscalEnd, setFiscalEnd] = useState("");
+  const [reportingPeriod, setReportingPeriod] = useState("week");
+  const [activeTab, setActiveTab] = useState("mileage");
+
   // QuickBooks Integration State
   const [isConnected, setIsConnected] = useState(true);
   const [lastSync, setLastSync] = useState(new Date());
   const [isSyncing, setIsSyncing] = useState(false);
-  
+
   // UI State
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [originalValues, setOriginalValues] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -29,13 +42,13 @@ const settings = ()=> {
       mileageRate,
       fiscalStart,
       fiscalEnd,
-      reportingPeriod
+      reportingPeriod,
     });
   }, []);
 
   // Check for changes
   useEffect(() => {
-    const changed = 
+    const changed =
       mileageRate !== originalValues.mileageRate ||
       fiscalStart !== originalValues.fiscalStart ||
       fiscalEnd !== originalValues.fiscalEnd ||
@@ -46,13 +59,13 @@ const settings = ()=> {
   const validateMileageRate = (rate) => {
     const numRate = parseFloat(rate);
     if (isNaN(numRate)) {
-      return 'Please enter a valid number';
+      return "Please enter a valid number";
     }
     if (numRate < 0) {
-      return 'Mileage rate cannot be negative';
+      return "Mileage rate cannot be negative";
     }
     if (numRate > 10) {
-      return 'Mileage rate seems unusually high';
+      return "Mileage rate seems unusually high";
     }
     return null;
   };
@@ -62,7 +75,7 @@ const settings = ()=> {
       const start = new Date(fiscalStart);
       const end = new Date(fiscalEnd);
       if (end <= start) {
-        return 'End date must be after start date';
+        return "End date must be after start date";
       }
     }
     return null;
@@ -105,13 +118,13 @@ const settings = ()=> {
         mileageRate,
         fiscalStart,
         fiscalEnd,
-        reportingPeriod
+        reportingPeriod,
       });
-      
+
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
-      
-      console.log('Settings saved:', settings);
+
+      console.log("Settings saved:", settings);
     }, 500);
   };
 
@@ -125,9 +138,13 @@ const settings = ()=> {
   };
 
   const handleDisconnect = () => {
-    if (window.confirm('Are you sure you want to disconnect from QuickBooks? This will stop automatic syncing.')) {
+    if (
+      window.confirm(
+        "Are you sure you want to disconnect from QuickBooks? This will stop automatic syncing."
+      )
+    ) {
       setIsConnected(false);
-      console.log('QuickBooks disconnected');
+      console.log("QuickBooks disconnected");
     }
   };
 
@@ -138,35 +155,39 @@ const settings = ()=> {
       setLastSync(new Date());
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
-      console.log('QuickBooks connected');
+      console.log("QuickBooks connected");
     }, 1000);
   };
 
   const handleSyncNow = () => {
     if (!isConnected) return;
-    
+
     setIsSyncing(true);
-    
+
     // Simulate sync operation
     setTimeout(() => {
       setLastSync(new Date());
       setIsSyncing(false);
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
-      console.log('Synced at:', new Date().toISOString());
+      console.log("Synced at:", new Date().toISOString());
     }, 2000);
   };
 
   const formatLastSync = (date) => {
-    return date.toLocaleString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+    return date.toLocaleString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen p-6 bg-gray-50">
@@ -191,16 +212,16 @@ const settings = ()=> {
         <div className="mb-6 bg-white border-b border-gray-200 rounded-t-lg">
           <div className="flex px-6 space-x-8">
             <button
-              onClick={() => setActiveTab('mileage')}
+              onClick={() => setActiveTab("mileage")}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === 'mileage'
-                  ? 'border-blue-500 text-gray-900'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                activeTab === "mileage"
+                  ? "border-blue-500 text-gray-900"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               MILEAGE RATE
             </button>
-            <button
+            {/* <button
               onClick={() => setActiveTab('fiscal')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === 'fiscal'
@@ -219,12 +240,12 @@ const settings = ()=> {
               }`}
             >
               QUICKBOOKS INTEGRATION
-            </button>
+            </button> */}
           </div>
         </div>
 
         {/* Mileage Rate Section */}
-        {activeTab === 'mileage' && (
+        {activeTab === "mileage" && (
           <div className="p-6 mb-6 bg-white rounded-lg shadow-sm">
             <div>
               <h2 className="mb-1 text-lg font-semibold text-gray-900">
@@ -233,13 +254,15 @@ const settings = ()=> {
               <p className="mb-4 text-sm text-gray-600">
                 Set the default mileage reimbursement rate
               </p>
-              
+
               <div className="mb-6">
                 <label className="block mb-2 text-sm font-medium text-gray-700">
                   Mileage Rate
                 </label>
                 <div className="relative">
-                  <span className="absolute text-gray-500 transform -translate-y-1/2 left-3 top-1/2">$</span>
+                  <span className="absolute text-gray-500 transform -translate-y-1/2 left-3 top-1/2">
+                    $
+                  </span>
                   <input
                     type="text"
                     value={mileageRate}
@@ -258,9 +281,9 @@ const settings = ()=> {
                   onClick={handleCancel}
                   disabled={!hasChanges}
                   className={`px-4 py-2 border border-gray-300 rounded-md font-medium transition-colors ${
-                    hasChanges 
-                      ? 'text-gray-700 hover:bg-gray-50' 
-                      : 'text-gray-400 cursor-not-allowed'
+                    hasChanges
+                      ? "text-gray-700 hover:bg-gray-50"
+                      : "text-gray-400 cursor-not-allowed"
                   }`}
                 >
                   Cancel
@@ -270,8 +293,8 @@ const settings = ()=> {
                   disabled={!hasChanges}
                   className={`px-4 py-2 rounded-md font-medium transition-colors ${
                     hasChanges
-                      ? 'bg-blue-500 text-white hover:bg-blue-600'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
                   Save
@@ -282,7 +305,7 @@ const settings = ()=> {
         )}
 
         {/* Fiscal Period Definitions Section */}
-        {activeTab === 'fiscal' && (
+        {activeTab === "fiscal" && (
           <div className="p-6 mb-6 bg-white rounded-lg shadow-sm">
             <div>
               <h2 className="mb-1 text-lg font-semibold text-gray-900">
@@ -291,7 +314,7 @@ const settings = ()=> {
               <p className="mb-4 text-sm text-gray-600">
                 Configure your fiscal year and reporting periods.
               </p>
-              
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -307,7 +330,7 @@ const settings = ()=> {
                     <Calendar className="absolute w-5 h-5 text-gray-400 transform -translate-y-1/2 pointer-events-none right-3 top-1/2" />
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
                     End Date
@@ -334,35 +357,37 @@ const settings = ()=> {
                       type="radio"
                       name="period"
                       value="week"
-                      checked={reportingPeriod === 'week'}
+                      checked={reportingPeriod === "week"}
                       onChange={(e) => setReportingPeriod(e.target.value)}
                       className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-700">Week</span>
                   </label>
-                  
+
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="period"
                       value="month"
-                      checked={reportingPeriod === 'month'}
+                      checked={reportingPeriod === "month"}
                       onChange={(e) => setReportingPeriod(e.target.value)}
                       className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-700">Month</span>
                   </label>
-                  
+
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="period"
                       value="custom"
-                      checked={reportingPeriod === 'custom'}
+                      checked={reportingPeriod === "custom"}
                       onChange={(e) => setReportingPeriod(e.target.value)}
                       className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Custom Range</span>
+                    <span className="ml-2 text-sm text-gray-700">
+                      Custom Range
+                    </span>
                   </label>
                 </div>
               </div>
@@ -372,9 +397,9 @@ const settings = ()=> {
                   onClick={handleCancel}
                   disabled={!hasChanges}
                   className={`px-4 py-2 border border-gray-300 rounded-md font-medium transition-colors ${
-                    hasChanges 
-                      ? 'text-gray-700 hover:bg-gray-50' 
-                      : 'text-gray-400 cursor-not-allowed'
+                    hasChanges
+                      ? "text-gray-700 hover:bg-gray-50"
+                      : "text-gray-400 cursor-not-allowed"
                   }`}
                 >
                   Cancel
@@ -384,8 +409,8 @@ const settings = ()=> {
                   disabled={!hasChanges}
                   className={`px-4 py-2 rounded-md font-medium transition-colors ${
                     hasChanges
-                      ? 'bg-blue-500 text-white hover:bg-blue-600'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 >
                   Save
@@ -396,7 +421,7 @@ const settings = ()=> {
         )}
 
         {/* QuickBooks Integration Section */}
-        {activeTab === 'quickbooks' && (
+        {activeTab === "quickbooks" && (
           <div className="p-6 bg-white rounded-lg shadow-sm">
             <div>
               <h2 className="mb-1 text-lg font-semibold text-gray-900">
@@ -405,7 +430,7 @@ const settings = ()=> {
               <p className="mb-4 text-sm text-gray-600">
                 Manage your QuickBooks Online connection
               </p>
-              
+
               {isConnected ? (
                 <div className="p-4 mb-4 border border-green-200 rounded-lg bg-green-50">
                   <div className="flex items-center justify-between mb-2">
@@ -455,19 +480,23 @@ const settings = ()=> {
                     Connect to QuickBooks
                   </button>
                 )}
-                
+
                 <div className="flex space-x-3">
                   <button
                     onClick={handleSyncNow}
                     disabled={!isConnected || isSyncing}
                     className={`flex items-center px-4 py-2 rounded-md font-medium transition-colors ${
                       isConnected && !isSyncing
-                        ? 'bg-blue-500 text-white hover:bg-blue-600'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? "bg-blue-500 text-white hover:bg-blue-600"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                   >
-                    <RefreshCw className={`w-4 h-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
-                    {isSyncing ? 'Syncing...' : 'Sync Now'}
+                    <RefreshCw
+                      className={`w-4 h-4 mr-2 ${
+                        isSyncing ? "animate-spin" : ""
+                      }`}
+                    />
+                    {isSyncing ? "Syncing..." : "Sync Now"}
                   </button>
                 </div>
               </div>
@@ -493,6 +522,6 @@ const settings = ()=> {
       `}</style>
     </div>
   );
-}
+};
 
 export default settings;

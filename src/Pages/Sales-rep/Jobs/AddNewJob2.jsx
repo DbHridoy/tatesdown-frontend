@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
+import { useNavigate } from "react-router-dom";
 
-const AddNewJobModal = ({ onClose }) => {
+const AddNewJob = () => {
+  const navigate = useNavigate();
   const { data: quoteData } = useGetAllQuotesQuery();
   const quotes = quoteData?.data ?? [];
 
@@ -33,20 +35,20 @@ const AddNewJobModal = ({ onClose }) => {
     }
 
     const selectedQuote = quotes.find((q) => q._id === selectedQuoteId);
-    const payload={
-        quoteId: selectedQuote._id,
-        title,
-        description,
-        estimatedPrice: selectedQuote.estimatedPrice,
-        downPayment: Number(downPayment),
-        startDate: new Date(startDate),
-        status: jobStatus,
-      }
-      console.log("payload",payload)
+    const payload = {
+      quoteId: selectedQuote._id,
+      title,
+      description,
+      estimatedPrice: selectedQuote.estimatedPrice,
+      downPayment: Number(downPayment),
+      startDate: new Date(startDate),
+      status: jobStatus,
+    };
+    console.log("payload", payload);
     try {
       await createNewJob(payload).unwrap();
 
-      onClose(); // close modal after creation
+      navigate("/s/sales-rep/jobs"); // close modal after creation
     } catch (error) {
       console.error("Failed to create job:", error);
     }
@@ -54,20 +56,20 @@ const AddNewJobModal = ({ onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      onClick={onClose}
+      className=" flex items-center justify-center"
+      onClick={handleCreateJob}
     >
       <div
         className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
-        <button
-          onClick={onClose}
+        {/* <button
+          onClick={handleCreateJob}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl font-bold"
         >
           &times;
-        </button>
+        </button> */}
 
         <h1 className="text-3xl font-bold mb-6 text-center">Add New Job</h1>
 
@@ -159,7 +161,7 @@ const AddNewJobModal = ({ onClose }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-4">
+        {/* <div className="flex justify-end gap-4">
           <button onClick={onClose} className="px-6 py-2 border rounded">
             Cancel
           </button>
@@ -170,11 +172,10 @@ const AddNewJobModal = ({ onClose }) => {
           >
             {isCreating ? "Creating..." : "Create Job"}
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
-export default AddNewJobModal;
-
+export default AddNewJob;
