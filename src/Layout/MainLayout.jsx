@@ -4,12 +4,14 @@ import { ConfigProvider, Drawer } from "antd";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdClose } from "react-icons/io";
 
-import Topbar from "../Components/Dashboard/Layout/Topbar";
-import Sidebar from "../Components/Dashboard/Layout/Sidebar";
-import SalesRepTopbar from "../Components/Dashboard/Layout/SalesRepTopbar";
+import Topbar from "./Topbar";
+import Sidebar from "./Sidebar";
+import SalesRepTopbar from "./SalesRepTopbar";
+import { useSelector } from "react-redux";
+import { selectUserRole } from "../redux/slice/authSlice";
 
 const MainLayout = () => {
-  const role = localStorage.getItem("role");
+  const role = useSelector(selectUserRole);
   const [open, setOpen] = useState(false);
 
   const getDefaultLabel = (role) => {

@@ -1,10 +1,10 @@
 import { FiBell } from "react-icons/fi";
-import { useGetMeQuery } from "../../../redux/api/userApi";
+import { useGetMeQuery } from "../redux/api/userApi";
 
 const Topbar = ({ label }) => {
   const { data: profileData } = useGetMeQuery();
   const profile = profileData?.data;
-  console.log('Profile data:', profile);
+  console.log("Profile data:", profile);
   return (
     <div className="flex justify-between  items-center ">
       {/* Page Title */}

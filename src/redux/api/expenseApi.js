@@ -16,8 +16,25 @@ const expenseApi = createCustomApi({
       query: () => "/expense/get-my-mileage",
       providesTags: ["Expense"],
     }),
+    getPendingMileageLogs: builder.query({
+      query: () => "/expense/get-pending-mileage",
+      providesTags: ["Expense"],
+    }),
+    changeMileageLogStatus: builder.mutation({
+      query: (data) => ({
+        url: `/expense/${data._id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Expense"],
+    }),
   }),
 });
 
-export const { useCreateMileageLogMutation, useGetMyMileageLogsQuery } = expenseApi;
+export const {
+  useCreateMileageLogMutation,
+  useGetMyMileageLogsQuery,
+  useGetPendingMileageLogsQuery,
+  useChangeMileageLogStatusMutation,
+} = expenseApi;
 export default expenseApi;

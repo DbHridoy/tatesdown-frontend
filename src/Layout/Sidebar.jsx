@@ -8,10 +8,10 @@ import { CiHome } from "react-icons/ci";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { MdAutoGraph } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
-import brandlogo from "../../../assets/Logo.svg";
+import brandlogo from "../assets/Logo.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectUserRole } from "../../../redux/slice/authSlice";
-import { useLogoutMutation } from "../../../redux/api/authApi";
+import { logout, selectUserRole } from "../redux/slice/authSlice";
+import { useLogoutMutation } from "../redux/api/authApi";
 
 const menuConfig = {
   admin: [
@@ -22,7 +22,7 @@ const menuConfig = {
     },
     {
       icon: <PiUsers className="w-5 h-5" />,
-      label: "Clients",
+      label: "Jobs",
       Link: "/s/admin/clients",
     },
     {

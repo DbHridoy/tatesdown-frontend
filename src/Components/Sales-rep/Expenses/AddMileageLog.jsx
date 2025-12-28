@@ -11,6 +11,7 @@ const AddMileageLog = ({ closeModal }) => {
   const [totalMilesDriven, setTotalMilesDriven] = useState("");
   const [file, setFile] = useState(null);
   const [note, setNote] = useState("");
+  
 
   const [createMileageLog, { isLoading }] =
     useCreateMileageLogMutation();

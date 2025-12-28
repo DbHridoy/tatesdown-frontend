@@ -1,10 +1,10 @@
 import { FiBell } from "react-icons/fi";
-import { useGetUserQuery } from "../../../redux/api/userApi";
+import { useGetUserQuery } from "../redux/api/userApi";
 
 const SalesRepTopbar = () => {
   const { data: profileData } = useGetUserQuery();
   const profile = profileData?.data;
-  console.log(profile)
+  console.log(profile);
   return (
     <div className="flex justify-between items-center w-full">
       {/* Page Title */}
@@ -14,7 +14,7 @@ const SalesRepTopbar = () => {
           placeholder="Search..."
           className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
                      focus:outline-none focus:border-blue-500"
-          />
+        />
       </div>
 
       {/* Right section */}
@@ -35,7 +35,9 @@ const SalesRepTopbar = () => {
 
           <div className="hidden md:block text-right leading-tight">
             <p className="font-medium">{profile?.fullName || "Username"}</p>
-            <p className="text-sm text-gray-500">{profile?.role || "User Role"}</p>
+            <p className="text-sm text-gray-500">
+              {profile?.role || "User Role"}
+            </p>
           </div>
         </div>
       </div>
