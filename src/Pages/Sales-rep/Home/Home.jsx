@@ -1,7 +1,5 @@
 import Card from "../../../Components/Sales-rep/Home/Card";
-import QuickActions from "../../../Components/Sales-rep/Home/QuickActions";
 import Pipeline from "../../../Components/Sales-rep/Home/Pipeline";
-import RecentActivity from "../../../Components/Sales-rep/Home/RecentActivity";
 const Home = () => {
   return (
     <>
@@ -11,14 +9,9 @@ const Home = () => {
       </div>
       {/* Cards overview */}
       <Card />
-      {/* quick actions */}
-      {/* <QuickActions /> */}
-      {/* bottom */}
+
       <div className="py-4">
         <div className="flex flex-col lg:flex-row gap-4">
-          {/* recent activity */}
-          <RecentActivity />
-          {/* pipeline */}
           <Pipeline />
         </div>
       </div>

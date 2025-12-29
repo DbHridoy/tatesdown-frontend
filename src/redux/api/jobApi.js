@@ -12,6 +12,25 @@ const jobApi = createCustomApi({
       }),
       invalidatesTags: ["Job"],
     }),
+
+     createJobNote: builder.mutation({
+      query: (formData) => ({
+        url: "/job/job-note",
+        method: "POST",
+        body: formData, // FormData
+      }),
+      invalidatesTags: ["Job"],
+    }),
+
+      createDesignConsultation: builder.mutation({
+      query: (dc) => ({
+        url: `/job/design-consultation`,
+        body: dc,
+        method: "POST",
+      }),
+      providesTags: ["Job"],
+    }),
+
     getAllJobs: builder.query({
       query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
@@ -39,23 +58,8 @@ const jobApi = createCustomApi({
       query: (id) => `/job/${id}`,
       providesTags: ["Job"],
     }),
-    createJobNote: builder.mutation({
-      query: (formData) => ({
-        url: "/job/job-note",
-        method: "POST",
-        body: formData, // FormData
-      }),
-      invalidatesTags: ["Job"],
-    }),
-
-    createDesignConsultation: builder.mutation({
-      query: (dc) => ({
-        url: `/job/design-consultation`,
-        body: dc,
-        method: "POST",
-      }),
-      providesTags: ["Job"],
-    }),
+   
+  
 
     changeStatus: builder.mutation({
       query: ({ id, status }) => ({
@@ -125,6 +129,31 @@ const jobApi = createCustomApi({
       }),
       invalidatesTags: ["Job"],
     }),
+    getSalesRepJobs: builder.query({
+      query: ({ options = {}, repId }) => {
+        const { page = 1, limit = 10, search, sort, filters = {} } = options;
+
+        const params = new URLSearchParams();
+        params.set("page", page);
+        params.set("limit", limit);
+
+        if (search) params.set("search", search);
+        if (sort) params.set("sort", sort);
+
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== "") {
+            params.set(key, value);
+          }
+        });
+
+        return `/job/${repId}?${params.toString()}`;
+      },
+      providesTags: ["Job"],
+    }),
+    getSalesRepDeduction: builder.query({
+      query: (repId) => `/stats/sales-rep-stats/${repId}`,
+      providesTags: ["Job"],
+    }),
   }),
 });
 
@@ -138,5 +167,7 @@ export const {
   useGetDownpaymentRequestQuery,
   useGetPendingCloseRequestQuery,
   useUpdateDownPaymentStatusMutation,
+  useGetSalesRepJobsQuery,
+  useGetSalesRepDeductionQuery,
 } = jobApi;
 export default jobApi;

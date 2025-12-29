@@ -20,11 +20,13 @@ function DownpaymentRequest() {
     useGetDownpaymentRequestQuery(params);
 
   console.log(downpaymentRequests);
-
+  
   const downpaymentRequestData = downpaymentRequests?.data ?? [];
   const totalItems = downpaymentRequests?.total ?? 0;
+  console.log(downpaymentRequestData);
 
   const formattedData = downpaymentRequestData.map((item, index) => ({
+    id: item._id,
     clientName: item?.quoteId?.clientId?.clientName ?? "N/A",
     amount: item?.downPayment ?? 0,
     status: item?.downPaymentStatus ?? "Pending",
@@ -46,7 +48,8 @@ function DownpaymentRequest() {
         modalMessage: (item) =>
           `Are you sure you want to accept ${item.clientName}?`,
         onConfirm: (item) => {
-          updateDownPaymentStatus({ id: item._id, status: "Accepted" });
+          console.log("item",item)
+          updateDownPaymentStatus({ id: item.id, status: "Approved" });
         },
       },
       {
@@ -57,7 +60,7 @@ function DownpaymentRequest() {
         modalMessage: (item) =>
           `Are you sure you want to reject ${item.clientName}?`,
         onConfirm: (item) => {
-          updateDownPaymentStatus({ id: item._id, status: "Rejected" });
+          updateDownPaymentStatus({ id: item.id, status: "Rejected" });
         },
       },
     ],

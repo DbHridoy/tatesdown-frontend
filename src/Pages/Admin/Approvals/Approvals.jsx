@@ -28,73 +28,14 @@ const Approvals = () => {
     // { id: "leadassignment", label: "Lead Assignment Approvals", count: 0 },
   ];
 
-  const downpaymentData = [
-    {
-      leadId: "L12345",
-      client: "John Doe",
-      amount: "$500",
-      status: "Pending Review",
-    },
-    {
-      leadId: "L12345",
-      client: "Jane Smith",
-      amount: "$300",
-      status: "Pending Review",
-    },
-  ];
+ 
 
-  const jobCloseData = [
-    {
-      jobId: "J12345",
-      client: "John Doe",
-      amount: "$5,0000",
-      status: "Pending Closure",
-    },
-    {
-      jobId: "J12345",
-      client: "Jane Smith",
-      amount: "$2,500",
-      status: "Pending Closure",
-    },
-  ];
 
-  const leadAssignmentData = [
-    {
-      leadId: "L12345",
-      client: "John Doe",
-      rep: "Rep A",
-      status: "Waiting Assignment",
-    },
-    {
-      leadId: "L12345",
-      client: "John Doe",
-      rep: "Rep A",
-      status: "Waiting Assignment",
-    },
-  ];
 
-  const getIcon = (tabId) => {
-    const icons = {
-      downpayment: <DollarSign className="w-4 h-4" />,
-      jobclose: <Briefcase className="w-4 h-4" />,
-      mileage: <Map className="w-4 h-4" />,
-      leadassignment: <Users className="w-4 h-4" />,
-    };
-    return icons[tabId];
-  };
+ 
 
-  const getStatusColor = (status) => {
-    if (
-      status.includes("Pending Review") ||
-      status.includes("Pending Closure")
-    ) {
-      return "bg-orange-400 text-white";
-    }
-    if (status.includes("Waiting Assignment")) {
-      return "bg-yellow-500 text-white";
-    }
-    return "bg-orange-400 text-white";
-  };
+
+ 
 
   return (
     <div className="w-full min-h-screen p-6 mx-auto ">

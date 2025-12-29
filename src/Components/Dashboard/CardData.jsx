@@ -1,26 +1,30 @@
 import { User } from 'lucide-react';
 import React, { useState } from 'react';
+import { useGetAdminStatsQuery } from '../../redux/api/statsApi';
 
 const CardData = () => {
-  const [activeFilter, setActiveFilter] = useState('Week');
+  const { data: adminStatsData, isLoading } = useGetAdminStatsQuery();
+  const adminStats = adminStatsData?.data || {};
 
-  const filters = ['Week', 'Month', 'Year', 'All Clusters'];
+  // const [activeFilter, setActiveFilter] = useState('Week');
+
+  // const filters = ['Week', 'Month', 'Year', 'All Clusters'];
 
   const data = [
-    { title: 'Total Leads', value: '$145,230', change: '+12%', color: 'text-green-500' },
-    { title: 'Total Quotes', value: '120', change: '+8%', color: 'text-green-500' },
-    { title: 'Booked Jobs', value: '100', change: '-3%', color: 'text-red-500' },
-    { title: 'DC Pending', value: '34', change: 'Pending', color: 'text-yellow-500' },
-    { title: 'Ready to Schedule', value: '20', change: '', color: 'text-green-500' },
-    { title: 'Scheduled & Open', value: '50', change: '', color: 'text-gray-500' },
-    { title: 'Closed Jobs', value: '40', change: '', color: 'text-blue-500' },
-    { title: 'Total Produced for Revenue', value: '$248,500', change: '', color: 'text-blue-500' },
+    { title: 'Total Leads', value: adminStats?.totalLeads || '0', change: '+12%', color: 'text-green-500' },
+    { title: 'Total Quotes', value: adminStats?.totalQuotes || '0', change: '+8%', color: 'text-green-500' },
+    { title: 'Booked Jobs', value: adminStats?.bookedJobs || '0', change: '-3%', color: 'text-red-500' },
+    { title: 'DC Pending', value: adminStats?.dcPending || '0', change: 'Pending', color: 'text-yellow-500' },
+    { title: 'Ready to Schedule', value: adminStats?.readyToSchedule || '0', change: '', color: 'text-green-500' },
+    { title: 'Scheduled & Open', value: adminStats?.scheduledOpen || '0', change: '', color: 'text-gray-500' },
+    { title: 'Closed Jobs', value: adminStats?.closedJobs || '0', change: '', color: 'text-blue-500' },
+    { title: 'Total Produced for Revenue', value: adminStats?.totalProducedForRevenue || '$0', change: '', color: 'text-blue-500' },
   ];
 
   return (
     <div className="p-6">
       {/* Filter Bar */}
-      <div className="flex items-center gap-4 mb-6">
+      {/* <div className="flex items-center gap-4 mb-6">
         {filters.map((filter) => (
           <button
             key={filter}
@@ -34,7 +38,7 @@ const CardData = () => {
             {filter}
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* Cards Grid */}
       <div className="grid grid-cols-4 gap-4">

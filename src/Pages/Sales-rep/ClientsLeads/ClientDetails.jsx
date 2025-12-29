@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddCallLog from "./AddCallLog";
 import StarRating from "../../../Components/Sales-rep/Common/StarRating";
 import {
@@ -28,7 +28,11 @@ const ClientDetails = () => {
   const [draftNoteFiles, setDraftNoteFiles] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const { data: clientData, isLoading, isError } = useGetClientByIdQuery(clientId);
+  const {
+    data: clientData,
+    isLoading,
+    isError,
+  } = useGetClientByIdQuery(clientId);
   const client = clientData?.data;
 
   useEffect(() => {
@@ -61,12 +65,17 @@ const ClientDetails = () => {
     if (draftNoteText.trim()) {
       setPendingNotes([
         ...pendingNotes,
-        { clientId, text: draftNoteText, file: draftNoteFiles ? draftNoteFiles[0] : null },
+        {
+          clientId,
+          text: draftNoteText,
+          file: draftNoteFiles ? draftNoteFiles[0] : null,
+        },
       ]);
       setDraftNoteText("");
       setDraftNoteFiles(null);
     }
   };
+  const navigate=useNavigate()
 
   const handleSaveChanges = async () => {
     try {
@@ -97,6 +106,16 @@ const ClientDetails = () => {
       console.error(err);
       alert("Failed to save changes!");
     }
+  };
+
+  const handleCancel = () => {
+    setPendingCallLogs([]);
+    setPendingNotes([]);
+    setDraftClient(client);
+    setDraftNoteText("");
+    setDraftNoteFiles(null);
+    
+    navigate(-1);
   };
 
   const hasPendingChanges =
@@ -162,14 +181,18 @@ const ClientDetails = () => {
 
       {/* Load Info */}
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Load Information</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Load Information
+        </h3>
         <p>Load Source: {client.leadSource || "Door"}</p>
         <p>Call Status: {client.callStatus || "Not Called"}</p>
       </div>
 
       {/* Lead Rating */}
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <span className="block text-gray-600 mb-2 font-medium">Lead Rating</span>
+        <span className="block text-gray-600 mb-2 font-medium">
+          Lead Rating
+        </span>
         <StarRating value={client?.rating || 0} />
       </div>
 
@@ -182,7 +205,9 @@ const ClientDetails = () => {
               <div className="flex justify-between">
                 <span className="font-medium">{log.status || "Call"}</span>
                 <span className="text-sm text-gray-500">
-                  {log.callAt ? new Date(log.callAt).toLocaleDateString() : "Pending"}
+                  {log.callAt
+                    ? new Date(log.callAt).toLocaleDateString()
+                    : "Pending"}
                 </span>
               </div>
               <p className="text-sm text-gray-600">{log.note || "No note"}</p>
@@ -202,7 +227,9 @@ const ClientDetails = () => {
 
       {/* Notes & Attachments */}
       <div className="bg-white rounded-lg shadow-sm p-6 space-y-3">
-        <h3 className="text-lg font-semibold text-gray-800">Notes & Attachments</h3>
+        <h3 className="text-lg font-semibold text-gray-800">
+          Notes & Attachments
+        </h3>
 
         {/* Note Text */}
         <textarea
@@ -235,16 +262,16 @@ const ClientDetails = () => {
               <div key={i} className="text-sm text-gray-600 mt-1">
                 <p>{note.text}</p>
                 {note.file && (
-                    <a
-                      key={i}
-                      href={note.file}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 underline text-sm block"
-                    >
-                      {note.file}
-                    </a>
-                  )}
+                  <a
+                    key={i}
+                    href={note.file}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 underline text-sm block"
+                  >
+                    {note.file}
+                  </a>
+                )}
               </div>
             ))}
           </div>
@@ -258,7 +285,9 @@ const ClientDetails = () => {
               <div key={i} className="text-sm text-gray-600 mt-1">
                 <p>{note.text}</p>
                 {note.file && (
-                  <span className="text-gray-500 text-sm block">{note.file.name}</span>
+                  <span className="text-gray-500 text-sm block">
+                    {note.file.name}
+                  </span>
                 )}
               </div>
             ))}
@@ -266,33 +295,45 @@ const ClientDetails = () => {
         )}
 
         {/* No notes placeholder */}
-        {(!client.notes || client.notes.length === 0) && pendingNotes.length === 0 && (
-          <div className="text-sm text-gray-400 italic">No notes added yet</div>
-        )}
+        {(!client.notes || client.notes.length === 0) &&
+          pendingNotes.length === 0 && (
+            <div className="text-sm text-gray-400 italic">
+              No notes added yet
+            </div>
+          )}
       </div>
 
       {/* Action Buttons */}
       <div className="flex gap-4 mt-4">
         {hasPendingChanges && (
-          <button
-            onClick={handleSaveChanges}
-            className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
-          >
-            Save Changes
-          </button>
+          <>
+            <button
+              onClick={handleSaveChanges}
+              className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+            >
+              Save Changes
+            </button>
+            <button onClick={handleCancel} className="flex-1 bg-gray-500 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-gray-600 transition-colors">
+              Cancel
+            </button>
+          </>
         )}
-        <button
+        {/* <button
           className={`flex-1 bg-green-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-green-700 transition-colors ${
             !hasPendingChanges ? "ml-auto" : ""
           }`}
         >
-          Convert to Job
-        </button>
+          Cancel
+        </button> */}
       </div>
 
       {/* Add Call Log Modal */}
       {showModal && (
-        <AddCallLog closeModal={closeModal} clientId={clientId} onSubmit={handleAddCallLog} />
+        <AddCallLog
+          closeModal={closeModal}
+          clientId={clientId}
+          onSubmit={handleAddCallLog}
+        />
       )}
     </div>
   );

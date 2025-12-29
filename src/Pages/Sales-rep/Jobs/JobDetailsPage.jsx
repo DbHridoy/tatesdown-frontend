@@ -1,11 +1,11 @@
 import JobDetailsHeader from "../../../Components/Sales-rep/Jobs/JobDetailsHeader";
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
-import DocumentControl from "../../../Components/Sales-rep/Jobs/DocumentControl";
 import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
 import { useState } from "react";
 import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import DC from "../../../Components/Sales-rep/Jobs/DC";
 
 const JobDetailsPage = () => {
   const { jobId } = useParams();
@@ -16,6 +16,7 @@ const JobDetailsPage = () => {
   const { data, isLoading, isError } = useGetJobByIdQuery(jobId, {
     skip: !jobId,
   });
+  console.log(data)
 
   const job = data?.data;
   console.log("job", job);
@@ -49,7 +50,7 @@ const JobDetailsPage = () => {
       {/* <JobDetails job={job} isEditing={isEditing} /> */}
 
       <FinancialDetails job={job} isEditing={isEditing} />
-      <DocumentControl job={job} />
+      <DC job={job} />
       <SharedNotes notes={job.notes} />
 
       <div className="flex justify-end mt-6">

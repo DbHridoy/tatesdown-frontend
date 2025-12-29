@@ -9,8 +9,8 @@ import Home from "../Pages/Sales-rep/Home/Home";
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
-import ReportsDeductions from "../Pages/Admin/ReportsDeductions/ReportsDeductions";
-import RepDetails from "../Pages/Admin/RepDetails/RepDetails";
+import ReportsDeductions from "../Pages/Admin/Reports/ReportsDeductions";
+import RepDetails from "../Pages/Admin/Reports/RepDetails";
 import UserManagement from "../Pages/Admin/UserManagement/UserManagement";
 import Settings from "../Pages/Admin/Settings/Settings";
 import Expenses from "../Pages/Admin/Expenses/Expenses";
@@ -70,6 +70,10 @@ export const router = createBrowserRouter([
             element: <AdminClients />,
           },
           {
+            path: "job/:jobId",
+            element: <JobDetailsPage />,
+          },
+          {
             path: "impersonate-view",
             element: <ImpersonateView />,
           },
@@ -82,7 +86,7 @@ export const router = createBrowserRouter([
             element: <ReportsDeductions />,
           },
           {
-            path: "reports-details",
+            path: "reports-details/:id",
             element: <RepDetails />,
           },
           {

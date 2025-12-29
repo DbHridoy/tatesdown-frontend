@@ -67,6 +67,10 @@ export const userApi = createCustomApi({
       }),
       invalidatesTags: ["User"],
     }),
+    getAllSalesRep: builder.query({
+      query: () => `/user/sales-reps`,
+      providesTags: ["User"],
+    }),
   }),
 });
 
@@ -78,4 +82,5 @@ export const {
   useUpdateMeMutation,
   useCreatUserMutation,
   useDeleteUserMutation,
+  useGetAllSalesRepQuery,
 } = userApi;

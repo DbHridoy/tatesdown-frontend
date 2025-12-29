@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useCreateClientMutation } from "../../../redux/api/clientApi";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const AddClient = () => {
-  const user=useSelector(selectCurrentUser)
-  console.log("User",user)
+  const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
+  console.log("User", user);
   const [formData, setFormData] = useState({
-    salesRepId:user._id,
+    salesRepId: user._id,
     clientName: "",
     partnerName: "",
     phoneNumber: "",
@@ -50,7 +52,7 @@ const AddClient = () => {
         return;
       }
     }
-console.log("Form Data",formData)
+    console.log("Form Data", formData);
     try {
       await addClient(formData).unwrap();
       setShowSuccess(true);
@@ -58,7 +60,7 @@ console.log("Form Data",formData)
 
       // Reset form
       setFormData({
-        salesRepId:user._id,
+        salesRepId: user._id,
         clientName: "",
         partnerName: "",
         phoneNumber: "",
@@ -72,6 +74,21 @@ console.log("Form Data",formData)
       console.error("Failed to create client:", error);
       alert("Failed to create client. Please try again.");
     }
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      salesRepId: user._id,
+      clientName: "",
+      partnerName: "",
+      phoneNumber: "",
+      email: "",
+      address: "",
+      leadSource: "",
+      rating: 0,
+      callStatus: "",
+    });
+    navigate("/s/sales-rep/clients");
   };
 
   return (
@@ -178,7 +195,9 @@ console.log("Form Data",formData)
                 </label>
                 <select
                   value={formData.leadSource}
-                  onChange={(e) => handleInputChange("leadSource", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("leadSource", e.target.value)
+                  }
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 >
@@ -243,18 +262,7 @@ console.log("Form Data",formData)
             <div className="flex gap-4 pt-6">
               <button
                 type="button"
-                onClick={() =>
-                  setFormData({
-                    clientName: "",
-                    partnerName: "",
-                    phoneNumber: "",
-                    email: "",
-                    address: "",
-                    leadSource: "",
-                    rating: 5,
-                    callStatus: "",
-                  })
-                }
+                onClick={handleCancel}
                 className="flex-1 py-3 border text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
               >
                 Cancel

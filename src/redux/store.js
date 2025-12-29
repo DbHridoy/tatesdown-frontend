@@ -9,6 +9,7 @@ import quoteApi from "./api/quoteApi";
 import commonApi from "./api/common";
 import expenseApi from "./api/expenseApi";
 import jobApi from "./api/jobApi";
+import statsApi from "./api/statsApi";
 // 🧩 1. Combine reducers
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   [commonApi.reducerPath]: commonApi.reducer,
   [expenseApi.reducerPath]: expenseApi.reducer,
   [jobApi.reducerPath]: jobApi.reducer,
+  [statsApi.reducerPath]: statsApi.reducer,
 });
 
 // 🧩 2. Setup persist config (only persist auth)
@@ -44,7 +46,8 @@ export const store = configureStore({
       quoteApi.middleware,
       commonApi.middleware,
       expenseApi.middleware,
-      jobApi.middleware
+      jobApi.middleware,
+      statsApi.middleware
     ),
   devTools: import.meta.env.VITE_NODE_ENV !== "production",
 });

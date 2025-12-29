@@ -63,11 +63,11 @@ const menuConfig = {
       label: "Job Scheduling",
       Link: "/s/production-manager/job-scheduling",
     },
-    {
-      icon: <MdAutoGraph className="w-5 h-5" />,
-      label: "Reports",
-      Link: "/s/production-manager/production-report",
-    },
+    // {
+    //   icon: <MdAutoGraph className="w-5 h-5" />,
+    //   label: "Reports",
+    //   Link: "/s/production-manager/production-report",
+    // },
     {
       icon: <CiSettings className="w-5 h-5" />,
       label: "Settings",
@@ -101,11 +101,11 @@ const menuConfig = {
     //   label: "Design Consultation",
     //   Link: "/s/sales-rep/design-consultation",
     // },
-    {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "Stats / Reports",
-      Link: "/s/sales-rep/stats-reports",
-    },
+    // {
+    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+    //   label: "Stats / Reports",
+    //   Link: "/s/sales-rep/stats-reports",
+    // },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Expenses",

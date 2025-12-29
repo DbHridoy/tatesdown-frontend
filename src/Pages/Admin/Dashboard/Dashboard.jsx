@@ -1,6 +1,6 @@
 import React from "react";
 import CardData from "../../../Components/Dashboard/CardData";
-import PipelineOverview from "../../../Components/Dashboard/PipelineOverview";
+import PipelineOverview from "../../../Components/Admin/Dashboard/PipelineOverview";
 import PendingApprovals from "../../../Components/Dashboard/PendingApprovals";
 
 
@@ -9,7 +9,7 @@ const Dashboard = () => {
     <div>
       <CardData/>
       <PipelineOverview/>
-      <PendingApprovals/>
+      {/* <PendingApprovals/> */}
     </div>
   );
 };

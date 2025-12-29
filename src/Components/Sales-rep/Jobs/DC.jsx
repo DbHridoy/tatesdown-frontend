@@ -1,7 +1,7 @@
 import React from "react";
 
-const DocumentControl = ({job}) => {
-console.log("from dc",job)
+const DC = ({ job }) => {
+  console.log("from dc", job);
 
   const handleDownload = (fileName) => {
     console.log(`Downloading ${fileName}`);
@@ -35,37 +35,39 @@ console.log("from dc",job)
           </tr>
         </thead>
         <tbody>
-          {job?.designConsultaion.map((doc, index) => (
-            <tr key={index} className="border-t">
-              <td className="px-4 py-2 flex items-center">
-                <span className="mr-2 text-red-500">📄</span>
-                {doc.file}
-              </td>
-              {/* <td className="px-4 py-2">{doc.type}</td> */}
-              <td className="px-4 py-2">{new Date(doc.createdAt).toLocaleDateString()}</td>
-              <td className="px-4 py-2 flex space-x-2">
-                <button
-                  onClick={() => handleDownload(doc.file)}
-                  className="text-blue-500 hover:underline"
-                >
-                  
-                  <a href={doc.file} download>
-                    Download
-                  </a>
-                </button>
-                {/* <button
+          {job?.designConsultaion &&
+            job.designConsultaion.map((doc, index) => (
+              <tr key={index} className="border-t">
+                <td className="px-4 py-2 flex items-center">
+                  <span className="mr-2 text-red-500">📄</span>
+                  {doc.file}
+                </td>
+                {/* <td className="px-4 py-2">{doc.type}</td> */}
+                <td className="px-4 py-2">
+                  {new Date(doc.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-2 flex space-x-2">
+                  <button
+                    onClick={() => handleDownload(doc.file)}
+                    className="text-blue-500 hover:underline"
+                  >
+                    <a href={doc.file} download>
+                      Download
+                    </a>
+                  </button>
+                  {/* <button
                   onClick={() => handleDelete(doc.file)}
                   className="text-red-500 hover:underline"
                 >
                   <span>🗑️</span> Delete
                 </button> */}
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
   );
 };
 
-export default DocumentControl;
+export default DC;

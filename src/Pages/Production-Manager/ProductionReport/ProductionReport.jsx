@@ -1,6 +1,7 @@
 import React from "react";
-import PipelineOverview from "../../../Components/Dashboard/PipelineOverview";
+
 import ReportCard from "../../../Components/Production-Manager/ReportCard/ReportCard";
+import PipelineOverview from "../../../Components/Admin/Dashboard/PipelineOverview";
 
 const ProductionReport = () => {
   return (
