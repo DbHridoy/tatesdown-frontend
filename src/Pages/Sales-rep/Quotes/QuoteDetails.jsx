@@ -266,12 +266,12 @@ const QuoteDetails = () => {
             </>
           ) : (
             <>
-              <button
+              {/* <button
                 onClick={handleConvertToJob}
                 className="flex-1 bg-green-600 text-white py-3 rounded"
               >
                 Convert to Job
-              </button>
+              </button> */}
               <button
                 onClick={() => setIsEditing(true)}
                 className="flex-1 border py-3 rounded"
