@@ -1,23 +1,21 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetMeQuery } from "../redux/api/userApi";
 import { logout } from "../redux/slice/authSlice";
 
 const AuthInitializer = ({ children }) => {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  const { error, isLoading } = useGetMeQuery(undefined, {
-    skip: false,
-  });
+  const { error, isLoading } = useGetMeQuery(undefined, { skip: !isAuthenticated });
 
   useEffect(() => {
     if (error) {
-      console.log("Auth invalid → logging out");
       dispatch(logout());
     }
   }, [error, dispatch]);
 
-  if (isLoading) return null; // or splash screen
+  if (isAuthenticated && isLoading) return <div>Loading...</div>;
 
   return children;
 };

@@ -9,7 +9,7 @@ import Home from "../Pages/Sales-rep/Home/Home";
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
-import ReportsDeductions from "../Pages/Admin/Reports/ReportsDeductions";
+import Reports from "../Pages/Admin/Reports/Reports";
 import RepDetails from "../Pages/Admin/Reports/RepDetails";
 import UserManagement from "../Pages/Admin/UserManagement/UserManagement";
 import Settings from "../Pages/Admin/Settings/Settings";
@@ -83,7 +83,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "reports",
-            element: <ReportsDeductions />,
+            element: <Reports />,
           },
           {
             path: "reports-details/:id",

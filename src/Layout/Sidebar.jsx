@@ -12,6 +12,8 @@ import brandlogo from "../assets/Logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUserRole } from "../redux/slice/authSlice";
 import { useLogoutMutation } from "../redux/api/authApi";
+import { userApi } from "../redux/api/userApi";
+
 
 const menuConfig = {
   admin: [
@@ -123,14 +125,19 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
 
   const handleLogout = async () => {
     try {
-      await logoutMutation().unwrap(); // backend logout (optional)
+      await logoutMutation().unwrap();
     } catch (err) {
       // ignore backend error
     } finally {
-      dispatch(logout()); // ✅ clear Redux
+      dispatch(logout());
+
+      // ✅ VERY IMPORTANT
+      dispatch(userApi.util.resetApiState());
+
       navigate("/login", { replace: true });
     }
   };
+
 
   return (
     <div className="flex flex-col px-2 h-full">
@@ -145,11 +152,10 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
           <Link
             key={item.label}
             to={item.Link}
-            className={`flex items-center gap-3 px-5 py-2 cursor-pointer transition-all rounded-lg ${
-              activeLabel === item.label
-                ? "bg-[#007CCD] text-white font-semibold"
-                : "text-black hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-3 px-5 py-2 cursor-pointer transition-all rounded-lg ${activeLabel === item.label
+              ? "bg-[#007CCD] text-white font-semibold"
+              : "text-black hover:bg-gray-100"
+              }`}
             onClick={() => {
               setActiveLabel(item.label);
               if (onClose) onClose(); // closes the drawer
