@@ -4,6 +4,7 @@ export default function SalesRepresentativeModal({ isOpen, onClose, reps = [] })
   const [search, setSearch] = useState("");
 
   if (!isOpen) return null;
+  console.log('modal',reps)
 
   const filteredReps = reps.filter((rep) =>
     rep.toLowerCase().includes(search.toLowerCase())
