@@ -1,6 +1,30 @@
-import React from "react";
+import { Users } from "lucide-react";
+import React, { useState } from "react";
+import SalesRepresentativeModal from "./SalesRepresentativeModal";
 
 function SalesAssignement() {
+  const [open, setOpen] = useState(false);
+  const leadAssignmentData = [
+    {
+      leadId: "L12345",
+      client: "John Doe",
+      rep: "Rep A",
+      status: "Waiting Assignment",
+    },
+    {
+      leadId: "L12345",
+      client: "John Doe",
+      rep: "Rep A",
+      status: "Waiting Assignment",
+    },
+  ];
+   const reps = [
+    "John Doe",
+    "Sarah Parker",
+    "Michael Smith",
+    "Aisha Rahman",
+    "David Miller",
+  ];
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -61,9 +85,7 @@ function SalesAssignement() {
                 </td>
                 <td className="px-6 py-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                      item.status
-                    )}`}
+                    className={`px-3 py-1 rounded-full text-xs font-medium`}
                   >
                     {item.status}
                   </span>
@@ -86,6 +108,11 @@ function SalesAssignement() {
           </tbody>
         </table>
       </div>
+      <SalesRepresentativeModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        reps={reps}
+      />
     </div>
   );
 }

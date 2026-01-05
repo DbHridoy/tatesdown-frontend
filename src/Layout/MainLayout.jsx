@@ -85,7 +85,8 @@ const MainLayout = () => {
           <Outlet />
 
           {/* Floating Action Button */}
-          {role === "sales-rep" && <FAB />}
+          {/* {role === "sales-rep" && <FAB />} */}
+          <FAB/>
         </main>
       </div>
     </div>

@@ -69,6 +69,16 @@ export const router = createBrowserRouter([
             path: "clients",
             element: <AdminClients />,
           },
+          // {
+          //   path: "client",
+          //   children: [
+          //     { index: true, element: <Clients /> },
+          //     { path: ":clientId", element: <ClientDetails /> },
+          //   ],
+          // },
+
+          // { path: "add-call-log", element: <AddCallLog /> },
+          { path: "add-client", element: <AddClient /> },
           {
             path: "job/:jobId",
             element: <JobDetailsPage />,

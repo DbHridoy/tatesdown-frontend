@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { DollarSign, Briefcase, Map, Users } from "lucide-react";
-import SalesRepresentativeModal from "../../../Components/Dashboard/Approvals/SalesRepresentativeModal";
 import {
   useChangeMileageLogStatusMutation,
   useGetPendingMileageLogsQuery,
@@ -9,6 +8,8 @@ import DataTable from "../../../Components/Common/DataTable";
 import DownpaymentRequest from "../../../Components/Admin/Approval center/DownpaymentRequest";
 import MileageApprovalRequests from "../../../Components/Admin/Approval center/MileageApprovalRequests";
 import JobCloseRequests from "../../../Components/Admin/Approval center/JobCloseRequests";
+import SalesRepresentativeModal from "../../../Components/Admin/Approval center/SalesRepresentativeModal";
+import SalesAssignement from "../../../Components/Admin/Approval center/SalesAssignement";
 
 const Approvals = () => {
   const [activeTab, setActiveTab] = useState("downpayment");
@@ -25,7 +26,7 @@ const Approvals = () => {
     { id: "downpayment", label: "Downpayment Approval", count: 0 },
     { id: "jobclose", label: "Job Close Approvals", count: 0 },
     { id: "mileage", label: "Mileage Log Approvals", count: 0 },
-    // { id: "leadassignment", label: "Lead Assignment Approvals", count: 0 },
+    { id: "leadassignment", label: "Lead Assignment Approvals", count: 0 },
   ];
 
  
@@ -71,9 +72,9 @@ const Approvals = () => {
       {activeTab === "mileage" && <MileageApprovalRequests />}
 
       {/* Lead Assignment Approvals Section */}
-      {/* {activeTab === "leadassignment" && (
+      {activeTab === "leadassignment" && (
        <SalesAssignement/>
-      )} */}
+      )}
       <SalesRepresentativeModal
         isOpen={open}
         onClose={() => setOpen(false)}

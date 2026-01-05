@@ -1,7 +1,9 @@
 import { FiPlus, FiEdit, FiTrash2, FiDownload } from "react-icons/fi";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function FAB() {
+  const navigate=useNavigate()
   const [fabOpen, setFabOpen] = useState(false); // FAB state
   const toggleFab = () => setFabOpen((prev) => !prev);
 
@@ -11,7 +13,7 @@ function FAB() {
       {fabOpen && (
         <div className="flex flex-col items-end space-y-3 mb-2">
           <button
-            onClick={() => navigate("/s/sales-rep/add-client")}
+            onClick={() => navigate("/s/admin/add-client")}
             className="flex items-center justify-center w-50 p-2 h-12 rounded-2xl bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition"
           >
             Add Client

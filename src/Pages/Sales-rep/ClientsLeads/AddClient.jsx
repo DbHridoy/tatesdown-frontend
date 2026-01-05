@@ -9,7 +9,7 @@ const AddClient = () => {
   const user = useSelector(selectCurrentUser);
   console.log("User", user);
   const [formData, setFormData] = useState({
-    salesRepId: user._id,
+    salesRepId: user.role==="sales-rep"?user._id:null,
     clientName: "",
     partnerName: "",
     phoneNumber: "",
@@ -60,7 +60,7 @@ const AddClient = () => {
 
       // Reset form
       setFormData({
-        salesRepId: user._id,
+        salesRepId: user.role === "sales-rep" ? user._id : null,
         clientName: "",
         partnerName: "",
         phoneNumber: "",
@@ -78,7 +78,7 @@ const AddClient = () => {
 
   const handleCancel = () => {
     setFormData({
-      salesRepId: user._id,
+      salesRepId: user.role === "sales-rep" ? user._id : null,
       clientName: "",
       partnerName: "",
       phoneNumber: "",
