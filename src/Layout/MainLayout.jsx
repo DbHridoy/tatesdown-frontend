@@ -10,7 +10,8 @@ import SalesRepTopbar from "./SalesRepTopbar";
 import { useSelector } from "react-redux";
 import { selectUserRole } from "../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
-import FAB from "../Components/Sales-rep/Common/FAB";
+import FAB from "../Components/Common/FAB";
+import { Toaster } from "react-hot-toast";
 
 const MainLayout = () => {
   const role = useSelector(selectUserRole);
@@ -85,10 +86,11 @@ const MainLayout = () => {
           <Outlet />
 
           {/* Floating Action Button */}
-          {/* {role === "sales-rep" && <FAB />} */}
-          <FAB/>
+          {role != "production-manager" && <FAB />}
+          {/* <FAB/> */}
         </main>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };

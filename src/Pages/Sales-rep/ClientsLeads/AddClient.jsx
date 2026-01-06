@@ -3,13 +3,14 @@ import { useCreateClientMutation } from "../../../redux/api/clientApi";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddClient = () => {
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   console.log("User", user);
   const [formData, setFormData] = useState({
-    salesRepId: user.role==="sales-rep"?user._id:null,
+    salesRepId: user.role === "sales-rep" ? user._id : null,
     clientName: "",
     partnerName: "",
     phoneNumber: "",
@@ -29,7 +30,6 @@ const AddClient = () => {
   const leadSources = ["Door", "Inbound", "Social"];
 
   const [addClient, { isLoading }] = useCreateClientMutation();
-  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -55,9 +55,8 @@ const AddClient = () => {
     console.log("Form Data", formData);
     try {
       await addClient(formData).unwrap();
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
 
+      toast.success("Client added successfully")
       // Reset form
       setFormData({
         salesRepId: user.role === "sales-rep" ? user._id : null,
@@ -72,7 +71,9 @@ const AddClient = () => {
       });
     } catch (error) {
       console.error("Failed to create client:", error);
-      alert("Failed to create client. Please try again.");
+      // alert("Failed to create client. Please try again.");
+      toast.error(`${error.data.message[0].message}`)
+
     }
   };
 
@@ -99,11 +100,7 @@ const AddClient = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          {showSuccess && (
-            <div className="mb-4 p-4 text-green-800 bg-green-100 rounded border border-green-200">
-              Client added successfully!
-            </div>
-          )}
+
 
           <form onSubmit={handleCreateClient} className="space-y-6">
             {/* Client & Partner Name */}

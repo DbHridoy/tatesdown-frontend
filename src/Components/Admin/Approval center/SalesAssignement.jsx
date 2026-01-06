@@ -6,19 +6,15 @@ import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 
 function SalesAssignement() {
   const [open, setOpen] = useState(false);
-  const { data: user, isLoading: usersLoading } = useGetAllUsersQuery({
-    filters: { role: "sales-rep" },
-  });
-  const users = user?.data;
-  const reps = users?.map((item) => item.fullName);
-  console.log("reps", reps);
+  const [selectedLead,setSelectedLead]=useState(null)
+ 
 
   const { data: clientData, isLoading: clientsLoading } = useGetAllClientsQuery(
     { filters: { salesRepId: null } }
   );
   const leadAssignmentData = clientData?.data || [];
   console.log("Salesassignment", leadAssignmentData);
-  const isLoading = usersLoading || clientsLoading;
+  const isLoading = clientsLoading;
 
   if (isLoading) {
     return (
@@ -126,7 +122,7 @@ function SalesAssignement() {
       <SalesRepresentativeModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        reps={reps}
+            lead={selectedLead}
       />
     </div>
   );
