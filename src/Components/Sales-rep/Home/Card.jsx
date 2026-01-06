@@ -10,7 +10,7 @@ function Card() {
   const cards = [
     { title: "Total sold", count: 1234, icon: Dollar01Icon },
     { title: "Active leads", count: 567, icon: UserGroup02Icon },
-    { title: "Leader board", count: 890, icon: ChampionIcon },
+    // { title: "Leader board", count: 890, icon: ChampionIcon },
     { title: "Active jobs", count: 123, icon: Briefcase03Icon },
   ];
 

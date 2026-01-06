@@ -118,13 +118,13 @@ function Clients() {
           <h1 className="text-2xl font-semibold">Clients</h1>
           <p className="text-gray-500">Overview of your clients</p>
         </div>
-        <button
+        {/* <button
           onClick={() => navigate("/s/sales-rep/add-client")}
           className="bg-[#E6F2FA] text-gray-700 px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-[#d4eaf6] transition-colors"
         >
           <HugeiconsIcon icon={AddTeamIcon} />
           <span>Add Client</span>
-        </button>
+        </button> */}
       </div>
       <DataTable title="Clients" data={clients || []} config={tableConfig} />
     </div>

@@ -125,7 +125,7 @@ function Quotes() {
           <h1 className="text-2xl font-bold">Quotes</h1>
           <p>Manage your quotes here</p>
         </div>
-        <div className="flex flex-row gap-2 bg-primarycolor text-white p-4 rounded">
+        {/* <div className="flex flex-row gap-2 bg-primarycolor text-white p-4 rounded">
           <HugeiconsIcon icon={UserAdd01Icon} />
           <button
             className=" "
@@ -133,7 +133,7 @@ function Quotes() {
           >
             Add Quote
           </button>
-        </div>
+        </div> */}
       </div>
       <DataTable title="Quotes" data={formattedQuote} config={tableConfig} />;
     </div>

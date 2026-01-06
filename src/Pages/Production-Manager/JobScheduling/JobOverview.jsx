@@ -9,6 +9,7 @@ import {
 } from "../../../redux/api/jobApi";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import toast from "react-hot-toast";
 
 export default function JobOverview() {
   const navigate = useNavigate();
@@ -33,9 +34,10 @@ export default function JobOverview() {
     console.log("from change status handler",job._id,status)
     try {
       await changeStatus({ id: job._id, status }).unwrap();
-      alert("Status updated successfully");
+      toast.success("Status updated successfully");
     } catch (err) {
       console.error(err);
+      toast.error("Failed to update status");
     }
   };
 
@@ -52,9 +54,10 @@ export default function JobOverview() {
       await createJobNote(formData).unwrap();
       setNoteText("");
       setFile(null);
-      alert("Note added successfully");
+      toast.success("Note added successfully");
     } catch (err) {
       console.error(err);
+      toast.error("Failed to add note")
     }
   };
 

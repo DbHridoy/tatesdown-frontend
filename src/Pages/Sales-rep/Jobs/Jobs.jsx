@@ -81,13 +81,13 @@ function Jobs() {
           <h1 className="text-2xl font-bold text-gray-800">Jobs</h1>
           <p className="text-gray-600">Manage your jobs and track progress</p>
         </div>
-        <button
+        {/* <button
           className="bg-primarycolor text-white flex items-center gap-2 px-4 py-2 rounded"
           onClick={() => setShowAddModal(true)}
         >
           <HugeiconsIcon icon={UserAdd01Icon} />
           Add Job
-        </button>
+        </button> */}
       </div>
 
       <DataTable
