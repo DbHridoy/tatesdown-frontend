@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddNewJob = () => {
   const navigate = useNavigate();
@@ -47,10 +48,13 @@ const AddNewJob = () => {
     console.log("payload", payload);
     try {
       await createNewJob(payload).unwrap();
+      toast.success("Job created successfully")
+      navigate(-1)
 
-      navigate("/s/sales-rep/jobs"); // close modal after creation
+      // navigate("/s/sales-rep/jobs"); // close modal after creation
     } catch (error) {
-      console.error("Failed to create job:", error);
+      // console.error("Failed to create job:", error);
+      toast.error("Failed to create job")
     }
   };
 
@@ -60,7 +64,7 @@ const AddNewJob = () => {
       onClick={handleCreateJob}
     >
       <div
-        className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 relative"
+        className="bg-white rounded-lg shadow-lg  w-full p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -161,8 +165,8 @@ const AddNewJob = () => {
         </div>
 
         {/* Actions */}
-        {/* <div className="flex justify-end gap-4">
-          <button onClick={onClose} className="px-6 py-2 border rounded">
+        <div className="flex justify-end gap-4">
+          <button onClick={()=>navigate(-1)} className="px-6 py-2 border rounded">
             Cancel
           </button>
           <button
@@ -172,7 +176,7 @@ const AddNewJob = () => {
           >
             {isCreating ? "Creating..." : "Create Job"}
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -34,14 +34,14 @@ const JobDetailsPage = () => {
     <>
       <div className="mb-4 flex justify-between">
         <p className="text-xl font-semibold">Job Details</p>
-        <button
+        {/* <button
           className="text-xl font-semibold bg-primarycolor text-white px-4 py-2 rounded"
           onClick={() =>
             navigate(`/s/sales-rep/jobs/${jobId}/design-consultation`)
           }
         >
           + Add DC
-        </button>
+        </button> */}
       </div>
 
       <JobDetailsHeader job={job} isEditing={isEditing} />
@@ -50,6 +50,7 @@ const JobDetailsPage = () => {
       {/* <JobDetails job={job} isEditing={isEditing} /> */}
 
       <FinancialDetails job={job} isEditing={isEditing} />
+      
       <DC job={job} />
       <SharedNotes notes={job.notes} />
 

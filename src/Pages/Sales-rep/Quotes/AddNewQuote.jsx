@@ -3,6 +3,8 @@ import { useCreateQuoteMutation } from "../../../redux/api/quoteApi";
 import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const AddNewQuote = () => {
   const [selectedClient, setSelectedClient] = useState("");
   const [estimatedPrice, setEstimatedPrice] = useState(0);
@@ -10,9 +12,10 @@ const AddNewQuote = () => {
   const [expiryDate, setExpiryDate] = useState("");
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState(null);
-  const currentUser=useSelector(selectCurrentUser);
+  const currentUser = useSelector(selectCurrentUser);
   const { data, isLoading } = useGetAllClientsQuery();
   const clients = data?.data || [];
+  const navigate = useNavigate()
 
   const [createQuote, { isLoading: isSubmitting, error }] =
     useCreateQuoteMutation();
@@ -39,21 +42,22 @@ const AddNewQuote = () => {
     try {
       const res = await createQuote(formData).unwrap();
       console.log("Quote created:", res);
-      alert("Quote created successfully!");
+      toast.success("Quote created successfully!");
+      navigate(-1)
     } catch (err) {
-      console.error("Failed to create quote:", err);
+      toast.error(`Failed to create quote`);
     }
   };
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen ">
       <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
         Add New Quote
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto bg-white border rounded-lg shadow-sm p-6 space-y-8"
+        className=" mx-auto bg-white border rounded-lg shadow-sm p-6 space-y-8"
       >
         {/* Client Selection */}
         <div>

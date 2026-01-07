@@ -69,6 +69,7 @@ const AddClient = () => {
         rating: 0,
         callStatus: "",
       });
+      navigate("/s/sales-rep/clients")
     } catch (error) {
       console.error("Failed to create client:", error);
       // alert("Failed to create client. Please try again.");

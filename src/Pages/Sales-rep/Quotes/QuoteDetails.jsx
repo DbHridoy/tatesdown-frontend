@@ -4,6 +4,7 @@ import {
   useGetQuoteByIdQuery,
   useUpdateQuoteMutation,
 } from "../../../redux/api/quoteApi";
+import toast from "react-hot-toast";
 
 const QuoteDetails = () => {
   const { quoteId } = useParams();
@@ -68,11 +69,13 @@ const QuoteDetails = () => {
         id: quote._id,
         body: payload,
       }).unwrap();
-
+      toast.success("Quote updated successfully")
       setIsEditing(false);
       setBidSheetFile(null);
     } catch (err) {
       console.error("Update failed", err);
+      toast.error("Failed to update quote")
+
     }
   };
 
@@ -111,7 +114,7 @@ const QuoteDetails = () => {
   /* ---------------- UI ---------------- */
   return (
     <div className="min-h-screen p-6">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Quote Details</h1>

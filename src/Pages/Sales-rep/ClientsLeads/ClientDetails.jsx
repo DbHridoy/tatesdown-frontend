@@ -105,7 +105,7 @@ const ClientDetails = () => {
       }
 
       toast.success("All changes saved successfully!");
-      navigate(-1);
+      // navigate(-1);
     } catch (err) {
       console.error(err);
       toast.error("Failed to save changes");

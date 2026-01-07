@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCreateDesignConsultationMutation } from "../../../redux/api/jobApi";
+import toast from "react-hot-toast";
 
 const DesignConsultationCreate = () => {
   const [createDesignConsultation] =
@@ -56,11 +57,12 @@ const DesignConsultationCreate = () => {
       }
 
       await createDesignConsultation(formData).unwrap();
+      toast.success("Design consultation added successfully")
 
       navigate(`/s/sales-rep/jobs/${jobId}`);
     } catch (err) {
       console.error(err);
-      alert("Failed to create design consultation");
+      toast.error("Failed to create design consultation");
     }
   };
 

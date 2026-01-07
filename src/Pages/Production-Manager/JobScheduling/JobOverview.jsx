@@ -10,11 +10,13 @@ import {
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import toast from "react-hot-toast";
+const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 
+const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 export default function JobOverview() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const user=useSelector(selectCurrentUser)
+  const user = useSelector(selectCurrentUser)
 
   const [currentStatus, setCurrentStatus] = useState("");
   const [noteText, setNoteText] = useState("");
@@ -31,7 +33,7 @@ export default function JobOverview() {
 
   const changeStatusHandler = async (status) => {
     if (!status) return;
-    console.log("from change status handler",job._id,status)
+    console.log("from change status handler", job._id, status)
     try {
       await changeStatus({ id: job._id, status }).unwrap();
       toast.success("Status updated successfully");
@@ -216,14 +218,25 @@ export default function JobOverview() {
                     <strong>{note.authorId.fullName}:</strong> {note.note}
                   </p>
                   {note.file && (
-                    <a
-                      href={note.file}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-500 underline text-xs"
-                    >
-                      View File
-                    </a>
+                    <div className="mt-3">
+                      {isImageFile(note.file) ? (
+                        <img
+                          src={note.file}
+                          alt="Note attachment"
+                          className="w-32 h-32 object-cover rounded border"
+                        />
+                      ) : (
+                        <a
+                          href={note.file}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-blue-600 underline text-sm"
+                        >
+                          📎 {getFileName(note.file)}
+                          {/* View file */}
+                        </a>
+                      )}
+                    </div>
                   )}
                   <p className="text-gray-400 text-[10px]">
                     {new Date(note.createdAt).toLocaleString()}
