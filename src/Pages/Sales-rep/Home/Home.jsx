@@ -1,5 +1,5 @@
-import Card from "../../../Components/Sales-rep/Home/Card";
 import Pipeline from "../../../Components/Sales-rep/Home/Pipeline";
+import SalesRepHomeCards from "../../../Components/Sales-rep/Home/SalesRepHomeCards";
 const Home = () => {
   return (
     <>
@@ -8,7 +8,7 @@ const Home = () => {
         <p className="text-gray-500">Overview of your sales performance</p>
       </div>
       {/* Cards overview */}
-      <Card />
+      <SalesRepHomeCards />
 
       <div className="py-4">
         <div className="flex flex-col lg:flex-row gap-4">

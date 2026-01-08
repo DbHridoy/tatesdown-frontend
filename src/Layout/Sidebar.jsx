@@ -14,8 +14,68 @@ import { logout, selectUserRole } from "../redux/slice/authSlice";
 import { useLogoutMutation } from "../redux/api/authApi";
 import { userApi } from "../redux/api/userApi";
 
-
 const menuConfig = {
+  "sales-rep": [
+    {
+      icon: <MdDashboard className="w-5 h-5" />,
+      label: "Home",
+      Link: "/s/sales-rep/home",
+    },
+    {
+      icon: <PiUsers className="w-5 h-5" />,
+      label: "Leads",
+      Link: "/s/sales-rep/clients",
+    },
+    {
+      icon: <IoNewspaper className="w-5 h-5" />,
+      label: "Quotes",
+      Link: "/s/sales-rep/quotes",
+    },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Jobs",
+      Link: "/s/sales-rep/jobs",
+    },
+    // {
+    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+    //   label: "Design Consultation",
+    //   Link: "/s/sales-rep/design-consultation",
+    // },
+    // {
+    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+    //   label: "Stats / Reports",
+    //   Link: "/s/sales-rep/stats-reports",
+    // },
+    {
+      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Expenses",
+      Link: "/s/sales-rep/expense",
+    },
+  ],
+
+  "production-manager": [
+    {
+      icon: <CiHome className="w-5 h-5" />,
+      label: "Home",
+      Link: "/s/production-manager/production-home",
+    },
+    {
+      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      label: "Job Scheduling",
+      Link: "/s/production-manager/job-scheduling",
+    },
+    // {
+    //   icon: <MdAutoGraph className="w-5 h-5" />,
+    //   label: "Reports",
+    //   Link: "/s/production-manager/production-report",
+    // },
+    {
+      icon: <CiSettings className="w-5 h-5" />,
+      label: "Settings",
+      Link: "/s/production-manager/production-settings",
+    },
+  ],
+
   admin: [
     {
       icon: <MdDashboard className="w-5 h-5" />,
@@ -53,67 +113,6 @@ const menuConfig = {
       Link: "/s/admin/settings",
     },
   ],
-
-  "production-manager": [
-    {
-      icon: <CiHome className="w-5 h-5" />,
-      label: "Home",
-      Link: "/s/production-manager/production-home",
-    },
-    {
-      icon: <IoBagHandleOutline className="w-5 h-5" />,
-      label: "Job Scheduling",
-      Link: "/s/production-manager/job-scheduling",
-    },
-    // {
-    //   icon: <MdAutoGraph className="w-5 h-5" />,
-    //   label: "Reports",
-    //   Link: "/s/production-manager/production-report",
-    // },
-    {
-      icon: <CiSettings className="w-5 h-5" />,
-      label: "Settings",
-      Link: "/s/production-manager/production-settings",
-    },
-  ],
-
-  "sales-rep": [
-    {
-      icon: <MdDashboard className="w-5 h-5" />,
-      label: "Home",
-      Link: "/s/sales-rep/home",
-    },
-    {
-      icon: <PiUsers className="w-5 h-5" />,
-      label: "Clients / Leads",
-      Link: "/s/sales-rep/clients",
-    },
-    {
-      icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Quotes",
-      Link: "/s/sales-rep/quotes",
-    },
-    {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "Jobs",
-      Link: "/s/sales-rep/jobs",
-    },
-    // {
-    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-    //   label: "Design Consultation",
-    //   Link: "/s/sales-rep/design-consultation",
-    // },
-    // {
-    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-    //   label: "Stats / Reports",
-    //   Link: "/s/sales-rep/stats-reports",
-    // },
-    {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "Expenses",
-      Link: "/s/sales-rep/expense",
-    },
-  ],
 };
 
 const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
@@ -138,7 +137,6 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
     }
   };
 
-
   return (
     <div className="flex flex-col px-2 h-full">
       {/* Logo */}
@@ -152,10 +150,11 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
           <Link
             key={item.label}
             to={item.Link}
-            className={`flex items-center gap-3 px-5 py-2 cursor-pointer transition-all rounded-lg ${activeLabel === item.label
-              ? "bg-[#007CCD] text-white font-semibold"
-              : "text-black hover:bg-gray-100"
-              }`}
+            className={`flex items-center gap-3 px-5 py-2 cursor-pointer transition-all rounded-lg ${
+              activeLabel === item.label
+                ? "bg-[#007CCD] text-white font-semibold"
+                : "text-black hover:bg-gray-100"
+            }`}
             onClick={() => {
               setActiveLabel(item.label);
               if (onClose) onClose(); // closes the drawer

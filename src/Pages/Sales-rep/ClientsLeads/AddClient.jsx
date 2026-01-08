@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 const AddClient = () => {
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
+  const [draftNoteText, setDraftNoteText] = useState("");
+
   console.log("User", user);
   const [formData, setFormData] = useState({
     salesRepId: user.role === "sales-rep" ? user._id : null,
@@ -56,7 +58,7 @@ const AddClient = () => {
     try {
       await addClient(formData).unwrap();
 
-      toast.success("Client added successfully")
+      toast.success("Client added successfully");
       // Reset form
       setFormData({
         salesRepId: user.role === "sales-rep" ? user._id : null,
@@ -69,12 +71,11 @@ const AddClient = () => {
         rating: 0,
         callStatus: "",
       });
-      navigate("/s/sales-rep/clients")
+      navigate("/s/sales-rep/clients");
     } catch (error) {
       console.error("Failed to create client:", error);
       // alert("Failed to create client. Please try again.");
-      toast.error(`${error.data.message[0].message}`)
-
+      toast.error(`${error.data.message[0].message}`);
     }
   };
 
@@ -92,6 +93,7 @@ const AddClient = () => {
     });
     navigate("/s/sales-rep/clients");
   };
+  handleAddNote 
 
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8">
@@ -101,8 +103,6 @@ const AddClient = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-
-
           <form onSubmit={handleCreateClient} className="space-y-6">
             {/* Client & Partner Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -208,7 +208,7 @@ const AddClient = () => {
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Call Status *
                 </label>
@@ -227,7 +227,7 @@ const AddClient = () => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
             </div>
 
             {/* Rating */}
@@ -255,7 +255,34 @@ const AddClient = () => {
                 </span>
               </div>
             </div>
+            <div className="bg-white rounded-lg shadow-sm p-6 space-y-3">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Notes & Attachments
+              </h3>
 
+              {/* Note Text */}
+              <textarea
+                value={draftNoteText}
+                onChange={(e) => setDraftNoteText(e.target.value)}
+                placeholder="Add note..."
+                className="w-full h-24 px-3 py-2 border rounded-lg resize-none"
+              />
+
+              {/* File Input */}
+              <input
+                type="file"
+                onChange={(e) => setDraftNoteFiles(e.target.files)}
+                className="w-full mt-2"
+              />
+
+              {/* Add Note Button */}
+              <button
+                onClick={handleAddNote}
+                className="w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors mt-2"
+              >
+                Add Note
+              </button>
+            </div>
             {/* Action Buttons */}
             <div className="flex gap-4 pt-6">
               <button
