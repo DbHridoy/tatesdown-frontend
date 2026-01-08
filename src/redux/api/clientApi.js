@@ -13,6 +13,24 @@ const clientApi = createCustomApi({
       invalidatesTags: ["Client"],
     }),
 
+     addCallLog: builder.mutation({
+      query: ({clientId,callAt,status,reason,note}) => ({
+        url: `/client/${clientId}/call-log`,
+        method: "POST",
+        body: {callAt,status,reason,note},
+      }),
+      invalidatesTags: ["Client"],
+    }),
+
+    addNote: builder.mutation({
+      query: ({clientId,note,file}) => ({
+        url: `/client/${clientId}/client-note`,
+        method: "POST",
+        body: {note,file},
+      }),
+      invalidatesTags: ["Client"],
+    }),
+
     getAllClients: builder.query({
       query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
@@ -51,27 +69,11 @@ const clientApi = createCustomApi({
       invalidatesTags: ["Client"],
     }),
 
-    addCallLog: builder.mutation({
-      query: (callLogData) => ({
-        url: `/client/call-log`,
-        method: "POST",
-        body: callLogData,
-      }),
-      invalidatesTags: ["Client"],
-    }),
-
-    addNote: builder.mutation({
-      query: (noteData) => ({
-        url: `/client/client-note`,
-        method: "POST",
-        body: noteData,
-      }),
-      invalidatesTags: ["Client"],
-    }),
+   
 
     deleteClient: builder.mutation({
       query: (id) => ({
-        url: `/client/delete-client/${id}`,
+        url: `/client/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Client"],
