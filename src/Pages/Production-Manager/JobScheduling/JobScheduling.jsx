@@ -45,7 +45,7 @@ const [changeStatus]=useChangeStatusMutation()
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
           console.log(item);
-          navigate(`/s/production-manager/job-scheduling/${item._id}`);
+          navigate(`/production-manager/job-scheduling/${item._id}`);
         },
       },
       {

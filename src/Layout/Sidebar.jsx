@@ -11,7 +11,7 @@ import brandlogo from "../assets/Logo.svg";
 import { FiLogOut } from "react-icons/fi";
 import { userApi } from "../redux/api/userApi";
 
-const menuConfig = {
+export const menuConfig = {
   "Sales Rep": [
     {
       icon: <MdDashboard className="w-5 h-5" />,

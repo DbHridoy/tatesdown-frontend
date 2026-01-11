@@ -67,6 +67,7 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
+          { index: true, element: <Navigate to="home" replace /> },
           { path: "home", element: <Home /> },
           {
             path: "clients",
@@ -103,6 +104,7 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
+          { index: true, element: <Navigate to="home" replace /> },
           { path: "home", element: <ProductionHome /> }, // matches menuConfig
           { path: "job-scheduling", element: <JobScheduling /> },
           { path: "job-scheduling/:id", element: <JobOverview /> },
@@ -121,6 +123,7 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
+          { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "clients", element: <AdminClients /> },
           { path: "approvals-center", element: <Approvals /> },

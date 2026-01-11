@@ -3,28 +3,31 @@ import { Outlet } from "react-router-dom";
 import { ConfigProvider, Drawer } from "antd";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdClose } from "react-icons/io";
+import { FiArrowLeft } from "react-icons/fi";
 
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
+import { menuConfig } from "./Sidebar";
 import SalesRepTopbar from "./SalesRepTopbar";
 import { useSelector } from "react-redux";
 import { selectUserRole } from "../redux/slice/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FAB from "../Components/Common/FAB";
 import { Toaster } from "react-hot-toast";
 
 const MainLayout = () => {
   const role = useSelector(selectUserRole);
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
 
   const getDefaultLabel = (role) => {
     switch (role) {
-      case "admin":
+      case "Admin":
         return "Dashboard";
-      case "production-manager":
+      case "Production Manager":
         return "Home";
-      case "sales-rep":
+      case "Sales Rep":
         return "Home";
       default:
         return "Dashboard";
@@ -34,7 +37,28 @@ const MainLayout = () => {
   const [activeLabel, setActiveLabel] = useState(getDefaultLabel(role));
 
   const toggleDrawer = () => setOpen((prev) => !prev);
-  const toggleFab = () => setFabOpen((prev) => !prev);
+
+  const getParentPath = (pathname) => {
+    const normalized = pathname.replace(/\/+$/, "");
+    const parts = normalized.split("/").filter(Boolean);
+
+    if (parts.length <= 1) return "/";
+
+    return `/${parts.slice(0, -1).join("/")}`;
+  };
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+
+    navigate(getParentPath(location.pathname), { replace: true });
+  };
+
+  const sidebarLinks = (menuConfig?.[role] || []).map((item) => item.Link);
+  const normalizedPathname = location.pathname.replace(/\/+$/, "");
+  const shouldShowBackButton = !sidebarLinks.includes(normalizedPathname);
 
   return (
     <div className="min-h-screen flex bg-gray-50 relative">
@@ -73,7 +97,7 @@ const MainLayout = () => {
 
           {/* Topbar */}
           <div className="flex-1">
-            {role === "sales-rep" ? (
+            {role === "Sales Rep" ? (
               <SalesRepTopbar label={activeLabel} />
             ) : (
               <Topbar label={activeLabel} />
@@ -83,10 +107,22 @@ const MainLayout = () => {
 
         {/* PAGE CONTENT */}
         <main className="flex-1 mt-20 p-4 relative">
+          {shouldShowBackButton && (
+            <div className="mb-4">
+              <button
+                onClick={handleBack}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white shadow-sm border border-gray-200 hover:bg-gray-50"
+                type="button"
+              >
+                <FiArrowLeft className="text-lg" />
+                <span className="text-sm font-medium">Back</span>
+              </button>
+            </div>
+          )}
           <Outlet />
 
           {/* Floating Action Button */}
-          {role != "production-manager" && <FAB />}
+          {role !== "Production Manager" && <FAB />}
           {/* <FAB/> */}
         </main>
       </div>
