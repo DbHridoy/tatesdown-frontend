@@ -9,6 +9,7 @@ import { useLogoutMutation } from "../redux/api/authApi";
 import { logout, selectUserRole } from "../redux/slice/authSlice";
 import brandlogo from "../assets/Logo.svg";
 import { FiLogOut } from "react-icons/fi";
+import { userApi } from "../redux/api/userApi";
 
 const menuConfig = {
   "Sales Rep": [
@@ -34,8 +35,8 @@ const menuConfig = {
     },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-      label: "Expenses",
-      Link: "/sales-rep/expense",
+      label: "Mileage Log",
+      Link: "/sales-rep/mileage-log",
     },
   ],
 

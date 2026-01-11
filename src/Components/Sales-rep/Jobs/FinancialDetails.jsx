@@ -10,7 +10,6 @@ const FinancialDetails = ({ job = {}, isEditing = false }) => {
     estimatedPrice - initialBudgetSpent
   );
 
-  // 🔁 Recalculate remaining when values change
   useEffect(() => {
     setRemaining(contractValue - budgetSpent);
   }, [contractValue, budgetSpent]);
@@ -25,7 +24,6 @@ const FinancialDetails = ({ job = {}, isEditing = false }) => {
       </h2>
 
       <div className="flex space-x-8 mb-6">
-        {/* Contract Value */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700">
             Contract Value
@@ -42,7 +40,6 @@ const FinancialDetails = ({ job = {}, isEditing = false }) => {
           />
         </div>
 
-        {/* Budget Spent */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700">
             Budget Spent
@@ -59,7 +56,6 @@ const FinancialDetails = ({ job = {}, isEditing = false }) => {
           />
         </div>
 
-        {/* Remaining */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700">
             Remaining
@@ -74,18 +70,15 @@ const FinancialDetails = ({ job = {}, isEditing = false }) => {
         </div>
       </div>
 
-      {/* Progress Bar */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Budget Progress
         </label>
-
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-semibold text-blue-600">
             {progress.toFixed(0)}%
           </span>
         </div>
-
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-blue-500 h-2 rounded-full transition-all"

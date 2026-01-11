@@ -6,7 +6,7 @@ const quoteApi = createCustomApi({
   endpoints: (builder) => ({
     createQuote: builder.mutation({
       query: (newQuote) => ({
-        url: "/quote",
+        url: "/quotes",
         method: "POST",
         body: newQuote,
       }),
@@ -32,19 +32,19 @@ const quoteApi = createCustomApi({
           }
         });
 
-        return `/quote?${params.toString()}`;
+        return `/quotes?${params.toString()}`;
       },
       providesTags: ["Quote"],
     }),
 
     getQuoteById: builder.query({
-      query: (id) => `/quote/${id}`,
+      query: (id) => `/quotes/${id}`,
       providesTags: ["Quote"],
     }),
 
     updateQuote: builder.mutation({
       query: ({ id, body }) => ({
-        url: `/quote/${id}`,
+        url: `/quotes/${id}`,
         method: "PATCH",
         body, // send FormData directly, no wrapping
       }),
@@ -53,7 +53,7 @@ const quoteApi = createCustomApi({
 
     deleteQuote: builder.mutation({
       query: (id) => ({
-        url: `/quote/${id}`,
+        url: `/quotes/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Quote"],

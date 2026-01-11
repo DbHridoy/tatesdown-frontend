@@ -6,7 +6,7 @@ const expenseApi = createCustomApi({
   endpoints: (builder) => ({
     createMileageLog: builder.mutation({
       query: (data) => ({
-        url: "/expense/create-mileage",
+        url: "/expenses/mileage",
         method: "POST",
         body: data,
       }),
@@ -31,17 +31,17 @@ const expenseApi = createCustomApi({
           }
         });
 
-        return `/expense/get-my-mileage?${params.toString()}`;
+        return `/expenses/my-mileage?${params.toString()}`;
       },
       providesTags: ["Expense"],
     }),
     getPendingMileageLogs: builder.query({
-      query: () => "/expense/get-pending-mileage",
+      query: () => "/expenses/pending-mileage",
       providesTags: ["Expense"],
     }),
     changeMileageLogStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `/expense/${id}`,
+        url: `/expenses/${id}`,
         method: "PATCH",
         body: { status },
       }),

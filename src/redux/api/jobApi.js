@@ -6,25 +6,25 @@ const jobApi = createCustomApi({
   endpoints: (builder) => ({
     createNewJob: builder.mutation({
       query: (newJob) => ({
-        url: "/job",
+        url: "/jobs",
         method: "POST",
         body: newJob,
       }),
       invalidatesTags: ["Job"],
     }),
 
-     createJobNote: builder.mutation({
+    createJobNote: builder.mutation({
       query: (formData) => ({
-        url: "/job/job-note",
+        url: "/jobs/job-note",
         method: "POST",
         body: formData, // FormData
       }),
       invalidatesTags: ["Job"],
     }),
 
-      createDesignConsultation: builder.mutation({
+    createDesignConsultation: builder.mutation({
       query: (dc) => ({
-        url: `/job/design-consultation`,
+        url: `/jobs/design-consultation`,
         body: dc,
         method: "POST",
       }),
@@ -50,20 +50,18 @@ const jobApi = createCustomApi({
           }
         });
 
-        return `/job?${params.toString()}`;
+        return `/jobs?${params.toString()}`;
       },
       providesTags: ["Job"],
     }),
     getJobById: builder.query({
-      query: (id) => `/job/${id}`,
+      query: (id) => `/jobs/${id}`,
       providesTags: ["Job"],
     }),
-   
-  
 
     changeStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `/job/${id}`,
+        url: `/jobs/${id}`,
         method: "PATCH",
         body: {
           status,
@@ -91,7 +89,7 @@ const jobApi = createCustomApi({
           }
         });
 
-        return `/job/downpayment-request?${params.toString()}`;
+        return `/jobs/downpayment-request?${params.toString()}`;
       },
       providesTags: ["Job"],
     }),
@@ -114,13 +112,13 @@ const jobApi = createCustomApi({
           }
         });
 
-        return `/job/job-close-approval?${params.toString()}`;
+        return `/jobs/job-close-approval?${params.toString()}`;
       },
       providesTags: ["Job"],
     }),
     updateDownPaymentStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: "/job/downpayment-status",
+        url: "/jobs/downpayment-status",
         method: "PATCH",
         body: {
           id,
@@ -146,7 +144,7 @@ const jobApi = createCustomApi({
           }
         });
 
-        return `/job/${repId}?${params.toString()}`;
+        return `/jobs/${repId}?${params.toString()}`;
       },
       providesTags: ["Job"],
     }),

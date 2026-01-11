@@ -26,8 +26,8 @@ function Jobs() {
 
   // ✅ Safe formatting
   const formattedJobs = jobs.map((j) => ({
-    _id:j._id,
-    clientName: j.quoteId?.clientId?.clientName ?? "N/A",
+    _id: j._id,
+    clientName: j.clientId?.clientName ?? "N/A",
     jobTitle: j.title,
     estimatedPrice: j.estimatedPrice,
     jobStatus: j.status,
@@ -48,8 +48,8 @@ function Jobs() {
         label: "View",
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
-          console.log(item)
-          navigate(`/s/sales-rep/jobs/${item._id}`);
+          console.log(item);
+          navigate(`/sales-rep/jobs/${item._id}`);
         },
       },
       {
@@ -100,7 +100,6 @@ function Jobs() {
       {showAddModal && (
         <AddNewJobModal onClose={() => setShowAddModal(false)} />
       )}
-
     </div>
   );
 }

@@ -1,24 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 
 const DC = ({ job }) => {
-  console.log("from dc", job);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleDownload = (fileName) => {
     console.log(`Downloading ${fileName}`);
-    // Implement download logic here
   };
 
   const handleDelete = (fileName) => {
     console.log(`Deleting ${fileName}`);
-    // Implement delete logic here
   };
 
-  const hasDocs = job?.designConsultaion && job.designConsultaion.length > 0;
+  const hasDocs = job?.designConsultation && job.designConsultation.length > 0;
 
   return (
     <div className="p-6 bg-white shadow-md rounded-md border mb-6">
@@ -27,14 +23,14 @@ const DC = ({ job }) => {
           DC (Design Consultation)
         </h2>
 
-        {/* {!hasDocs && ( */}
-          <button
-            onClick={() => navigate(`/s/sales-rep/jobs/${job._id}/design-consultation`)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Add Document
-          </button>
-        {/* )} */}
+        <button
+          onClick={() =>
+            navigate(`/sales-rep/jobs/${job._id}/design-consultation`)
+          }
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Add Document
+        </button>
       </div>
 
       {hasDocs ? (
@@ -47,7 +43,7 @@ const DC = ({ job }) => {
             </tr>
           </thead>
           <tbody>
-            {job.designConsultaion.map((doc, index) => (
+            {job.designConsultation.map((doc, index) => (
               <tr key={index} className="border-t">
                 <td className="px-4 py-2 flex items-center">
                   <span className="mr-2 text-red-500">📄</span>
@@ -65,13 +61,6 @@ const DC = ({ job }) => {
                   >
                     Download
                   </a>
-                  {/* Optional Delete button */}
-                  {/* <button
-                    onClick={() => handleDelete(doc.file)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Delete
-                  </button> */}
                 </td>
               </tr>
             ))}

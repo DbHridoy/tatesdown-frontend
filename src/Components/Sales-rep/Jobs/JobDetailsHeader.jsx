@@ -1,10 +1,9 @@
 import React from "react";
 
-const JobDetailsHeader = ({job,isEditing}) => {
-  console.log("job from header",job)
+const JobDetailsHeader = ({ job, isEditing }) => {
   const jobData = {
     jobId: job.customJobId,
-    clientName: job.quoteId?.clientId?.clientName,
+    clientName: job.clientId?.clientName,
     jobTitle: job.title,
     startDate: job.startDate,
     jobStatus: job.status,
@@ -12,7 +11,6 @@ const JobDetailsHeader = ({job,isEditing}) => {
 
   return (
     <div className="flex justify-between items-center p-6 bg-white mb-6 shadow-md rounded-md border">
-      {/* Left Section: Job Details */}
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold text-gray-800">
           {jobData.jobTitle}
@@ -24,7 +22,10 @@ const JobDetailsHeader = ({job,isEditing}) => {
           <span className="font-semibold">Client:</span> {jobData.clientName}
         </p>
         <p className="text-lg text-gray-600">
-          <span className="font-semibold">Start Date:</span> {jobData.startDate}
+          <span className="font-semibold">Start Date:</span>{" "}
+          {jobData.startDate
+            ? new Date(jobData.startDate).toLocaleDateString()
+            : "N/A"}
         </p>
         <p className="text-lg text-gray-600">
           <span className="font-semibold">Job Status:</span>{" "}

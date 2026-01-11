@@ -13,7 +13,7 @@ function Quotes() {
     search: "",
     sortKey: "fullName",
     sortOrder: "asc",
-    filters: { role: "" },
+    filters: { status:"Pending"},
   });
 
   const { data } = useGetAllQuotesQuery(params);
@@ -44,16 +44,16 @@ function Quotes() {
       { label: "Creation date", accessor: "createdAt", sortable: true },
      
     ],
-    filters: [
-      {
-        label: "Role",
-        accessor: "role",
-        options: {
-          "Sales rep": "sales-rep",
-          "Production manager": "production-manager",
-        },
-      },
-    ],
+    // filters: [
+    //   {
+    //     label: "Role",
+    //     accessor: "role",
+    //     options: {
+    //       "Sales rep": "sales-rep",
+    //       "Production manager": "production-manager",
+    //     },
+    //   },
+    // ],
     actions: [
       {
         label: "View",

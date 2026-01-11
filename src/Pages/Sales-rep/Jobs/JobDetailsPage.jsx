@@ -1,65 +1,98 @@
 import JobDetailsHeader from "../../../Components/Sales-rep/Jobs/JobDetailsHeader";
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
 import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
+import DC from "../../../Components/Sales-rep/Jobs/DC";
 import { useState } from "react";
 import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import DC from "../../../Components/Sales-rep/Jobs/DC";
+import { useParams, useNavigate } from "react-router-dom";
 
 const JobDetailsPage = () => {
   const { jobId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useGetJobByIdQuery(jobId, {
     skip: !jobId,
   });
-  console.log(data)
 
   const job = data?.data;
-  console.log("job", job);
-  // 🔄 Loading state
-  if (isLoading) {
-    return <p className="p-6">Loading job details...</p>;
-  }
 
-  // ❌ Error or not found
-  if (isError || !job) {
-    return <p className="p-6 text-red-500">Job not found</p>;
-  }
+  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
+
+  const client = job.clientId;
+  const quote = job.quoteId;
 
   return (
-    <>
-      <div className="mb-4 flex justify-between">
-        <p className="text-xl font-semibold">Job Details</p>
-        {/* <button
-          className="text-xl font-semibold bg-primarycolor text-white px-4 py-2 rounded"
-          onClick={() =>
-            navigate(`/s/sales-rep/jobs/${jobId}/design-consultation`)
-          }
-        >
-          + Add DC
-        </button> */}
-      </div>
-
+    <div className="p-6 space-y-6">
+      {/* Job Header */}
       <JobDetailsHeader job={job} isEditing={isEditing} />
 
-      {/* Optional */}
-      {/* <JobDetails job={job} isEditing={isEditing} /> */}
+      {/* Top Section: Client Info + Financials */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Client Info */}
+        <div className="p-6 bg-white shadow-md rounded-md border">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Client Information</h2>
+          <div className="space-y-2 text-gray-700">
+            <p>
+              <span className="font-semibold">Name:</span> {client?.clientName || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Partner:</span> {client?.partnerName || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Email:</span> {client?.email || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Phone:</span> {client?.phoneNumber || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Address:</span> {client?.address || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Lead Source:</span> {client?.leadSource || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Lead Status:</span> {client?.leadStatus || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Rating:</span> {client?.rating || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Custom Client ID:</span> {client?.customClientId || "N/A"}
+            </p>
+          </div>
+        </div>
 
-      <FinancialDetails job={job} isEditing={isEditing} />
-      
+        {/* Financial Details */}
+        <FinancialDetails
+          job={{
+            estimatedPrice: quote?.estimatedPrice || job.estimatedPrice,
+            downPayment: job.downPayment,
+            budgetSpent: job.budgetSpent,
+            downPaymentStatus: job.downPaymentStatus,
+            totalHours: job.totalHours,
+            setupCleanup: job.setupCleanup,
+            powerwash: job.powerwash,
+            labourHours: job.labourHours,
+          }}
+          isEditing={isEditing}
+        />
+      </div>
+
+      {/* DC Section */}
       <DC job={job} />
+
+      {/* Notes Section */}
       <SharedNotes notes={job.notes} />
 
-      <div className="flex justify-end mt-6">
+      {/* Edit/Save Buttons */}
+      <div className="flex justify-end space-x-2">
         {isEditing ? (
           <>
             <button
               onClick={() => setIsEditing(false)}
-              className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
+              className="bg-red-500 text-white px-4 py-2 rounded-md"
             >
               Cancel
             </button>
@@ -79,7 +112,7 @@ const JobDetailsPage = () => {
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

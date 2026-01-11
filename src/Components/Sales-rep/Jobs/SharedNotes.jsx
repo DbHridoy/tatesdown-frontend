@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import { useCreateJobNoteMutation } from "../../../redux/api/jobApi";
 import { useParams } from "react-router-dom";
-const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 
+const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 
 const SharedNotes = ({ notes: initialNotes = [] }) => {
@@ -14,6 +14,7 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [createJobNoteMutation] = useCreateJobNoteMutation();
   const user = useSelector(selectCurrentUser);
+
   useEffect(() => {
     setNotes(initialNotes);
   }, [initialNotes]);
@@ -32,10 +33,7 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
 
     try {
       const res = await createJobNoteMutation(formData).unwrap();
-
-      // ✅ Optimistically update UI with server response
       setNotes((prev) => [...prev, res.data]);
-
       setNewNote("");
       setSelectedFile(null);
     } catch (err) {
@@ -49,7 +47,6 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
         Sales & PM Collaboration
       </h2>
 
-      {/* Notes */}
       <div className="space-y-4 mb-6">
         {notes.length === 0 && (
           <p className="text-gray-500 text-sm">No notes yet.</p>
@@ -61,7 +58,6 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
             className="p-4 bg-blue-50 rounded-lg shadow-sm flex space-x-4"
           >
             <div className="flex-1">
-              {/* Header */}
               <div className="flex justify-between items-center">
                 <p className="font-semibold text-gray-700">
                   {note.authorId?.fullName || "Unknown"}
@@ -71,10 +67,8 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
                 </p>
               </div>
 
-              {/* Note text */}
               <p className="text-sm text-gray-700 mt-2">{note.note}</p>
 
-              {/* File / Image */}
               {note.file && (
                 <div className="mt-3">
                   {isImageFile(note.file) ? (
@@ -100,9 +94,7 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
         ))}
       </div>
 
-      {/* Add Note */}
       <div className="border-t pt-4 space-y-3">
-        {/* Note Input */}
         <textarea
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
@@ -111,7 +103,6 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
           className="w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
-        {/* File Attachment */}
         <div className="flex items-center gap-3">
           <label className="cursor-pointer flex items-center gap-2 text-blue-600 text-sm">
             📎 Attach file
@@ -129,7 +120,6 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
           )}
         </div>
 
-        {/* Actions */}
         <button
           onClick={handlePostNote}
           disabled={!newNote.trim() && !selectedFile}

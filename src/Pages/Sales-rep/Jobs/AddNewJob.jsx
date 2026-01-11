@@ -1,74 +1,97 @@
 import React, { useState, useEffect } from "react";
 import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const AddNewJobModal = ({ onClose }) => {
-  const { data: quoteData } = useGetAllQuotesQuery();
+const AddNewJob = () => {
+  const { data: quoteData } = useGetAllQuotesQuery({filters:{status:"Pending"}});
   const quotes = quoteData?.data ?? [];
+  const navigate = useNavigate();
 
   const [createNewJob, { isLoading: isCreating }] = useCreateNewJobMutation();
 
-  // 🔹 Form State
-  const [selectedQuoteId, setSelectedQuoteId] = useState(quotes[0]?._id || "");
+  // Read quoteId from URL
+  const [searchParams] = useSearchParams();
+  const quoteIdFromUrl = searchParams.get("quoteId");
+
+  // Form state
+  const [selectedQuoteId, setSelectedQuoteId] = useState("");
   const [title, setTitle] = useState("");
   const [downPayment, setDownPayment] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [jobStatus, setJobStatus] = useState("Scheduled");
   const [description, setDescription] = useState("");
   const [estimatedPrice, setEstimatedPrice] = useState(0);
 
-  // Update estimatedPrice when quote changes
+  // New fields
+  const [totalHours, setTotalHours] = useState("");
+  const [setupCleanup, setSetupCleanup] = useState("");
+  const [powerwash, setPowerwash] = useState("");
+  const [labourHours, setLabourHours] = useState(0);
+
+  // Set selected quote when quotes load or URL param exists
+  useEffect(() => {
+    if (quotes.length && quoteIdFromUrl) {
+      setSelectedQuoteId(quoteIdFromUrl);
+    } else if (quotes.length && !selectedQuoteId) {
+      setSelectedQuoteId(quotes[0]._id);
+    }
+  }, [quotes, quoteIdFromUrl]);
+
+  // Auto-fill fields when selectedQuoteId changes
   useEffect(() => {
     const selectedQuote = quotes.find((q) => q._id === selectedQuoteId);
     if (selectedQuote) {
       setEstimatedPrice(selectedQuote.estimatedPrice);
       setTitle(`Job for ${selectedQuote.clientId.clientName}`);
+      setDescription(selectedQuote.notes || "");
     }
   }, [selectedQuoteId, quotes]);
 
+  // Compute Labour Hours whenever related fields change
+  useEffect(() => {
+    const total = parseFloat(totalHours) || 0;
+    const setup = parseFloat(setupCleanup) || 0;
+    const power = parseFloat(powerwash) || 0;
+    setLabourHours(total - setup - power);
+  }, [totalHours, setupCleanup, powerwash]);
+
   const handleCreateJob = async () => {
     if (!selectedQuoteId || !startDate || !downPayment) {
-      alert("Please fill required fields");
+      alert("Please fill required fields: Quote, Start Date, Down Payment");
       return;
     }
 
+    // Get clientId from selected quote
     const selectedQuote = quotes.find((q) => q._id === selectedQuoteId);
-    const payload={
-        quoteId: selectedQuote._id,
-        title,
-        description,
-        estimatedPrice: selectedQuote.estimatedPrice,
-        downPayment: Number(downPayment),
-        startDate: new Date(startDate),
-        status: jobStatus,
-      }
-      console.log("payload",payload)
+    if (!selectedQuote) return;
+
+    const payload = {
+      quoteId: selectedQuote._id,
+      clientId: selectedQuote.clientId._id, // <- include clientId here
+      title,
+      description,
+      estimatedPrice,
+      downPayment: Number(downPayment),
+      startDate: new Date(startDate),
+      totalHours: Number(totalHours),
+      setupCleanup: Number(setupCleanup),
+      powerwash: Number(powerwash),
+      labourHours,
+    };
+
     try {
       await createNewJob(payload).unwrap();
-
-      onClose(); // close modal after creation
+      toast.success("Job created successfully!");
+      navigate("/sales-rep/jobs");
     } catch (error) {
-      console.error("Failed to create job:", error);
+      toast.error("Failed to create job");
     }
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6 relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl font-bold"
-        >
-          &times;
-        </button>
-
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">Add New Job</h1>
 
         {/* Select Quote */}
@@ -78,6 +101,7 @@ const AddNewJobModal = ({ onClose }) => {
             value={selectedQuoteId}
             onChange={(e) => setSelectedQuoteId(e.target.value)}
             className="w-full border px-3 py-2 rounded"
+            disabled={!!quoteIdFromUrl}
           >
             {quotes.map((quote) => (
               <option key={quote._id} value={quote._id}>
@@ -87,7 +111,60 @@ const AddNewJobModal = ({ onClose }) => {
           </select>
         </div>
 
-       
+        {/* Job Title */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Job Title *</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Total Hours */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Total Hours *</label>
+          <input
+            type="number"
+            value={totalHours}
+            onChange={(e) => setTotalHours(e.target.value)}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Setup/Cleanup */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Setup/Cleanup *</label>
+          <input
+            type="number"
+            value={setupCleanup}
+            onChange={(e) => setSetupCleanup(e.target.value)}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Powerwash */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Powerwash *</label>
+          <input
+            type="number"
+            value={powerwash}
+            onChange={(e) => setPowerwash(e.target.value)}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
+
+        {/* Labour Hours (auto-calculated) */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Labour Hours</label>
+          <input
+            type="number"
+            value={labourHours}
+            readOnly
+            className="w-full border px-3 py-2 rounded bg-gray-100"
+          />
+        </div>
 
         {/* Prices */}
         <div className="flex gap-4 mb-4">
@@ -95,8 +172,8 @@ const AddNewJobModal = ({ onClose }) => {
             <label className="block font-semibold mb-1">Price</label>
             <input
               value={estimatedPrice}
-              readOnly
               className="w-full border px-3 py-2 rounded bg-gray-100"
+              readOnly
             />
           </div>
 
@@ -113,29 +190,13 @@ const AddNewJobModal = ({ onClose }) => {
 
         {/* Start Date */}
         <div className="mb-4">
-          <label className="block font-semibold mb-1">Start Date *</label>
+          <label className="block font-semibold mb-1">Preferred Start Date *</label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
-        </div>
-
-        {/* Status */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Job Status</label>
-          <select
-            value={jobStatus}
-            onChange={(e) => setJobStatus(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          >
-            <option>Scheduled</option>
-            <option>In Progress</option>
-            <option>On Hold</option>
-            <option>Completed</option>
-            <option>Cancelled</option>
-          </select>
         </div>
 
         {/* Description */}
@@ -151,7 +212,10 @@ const AddNewJobModal = ({ onClose }) => {
 
         {/* Actions */}
         <div className="flex justify-end gap-4">
-          <button onClick={onClose} className="px-6 py-2 border rounded">
+          <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-2 border rounded"
+          >
             Cancel
           </button>
           <button
@@ -167,5 +231,4 @@ const AddNewJobModal = ({ onClose }) => {
   );
 };
 
-export default AddNewJobModal;
-
+export default AddNewJob;

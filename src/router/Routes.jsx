@@ -29,7 +29,7 @@ import AddNewQuote from "../Pages/Sales-rep/Quotes/AddNewQuote";
 import QuoteDetails from "../Pages/Sales-rep/Quotes/QuoteDetails";
 import Jobs from "../Pages/Sales-rep/Jobs/Jobs";
 import JobDetailsPage from "../Pages/Sales-rep/Jobs/JobDetailsPage";
-import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob2";
+import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob";
 import DesignConsultation from "../Pages/Sales-rep/Jobs/DesignConsultation";
 import StatsReports from "../Pages/Sales-rep/StatsReports/StatsReports";
 import UserExpenses from "../Pages/Sales-rep/ExpensesMileage/Expenses";
@@ -85,7 +85,7 @@ export const router = createBrowserRouter([
             element: <DesignConsultation />,
           },
           { path: "stats-reports", element: <StatsReports /> },
-          { path: "expense", element: <UserExpenses /> },
+          { path: "mileage-log", element: <UserExpenses /> },
           { path: "*", element: <GlobalNoRoute /> },
         ],
       },

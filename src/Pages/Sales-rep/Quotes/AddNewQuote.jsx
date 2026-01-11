@@ -5,17 +5,18 @@ import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+
 const AddNewQuote = () => {
   const [selectedClient, setSelectedClient] = useState("");
   const [estimatedPrice, setEstimatedPrice] = useState(0);
   const [bookedOnSpot, setBookedOnSpot] = useState(null);
-  const [expiryDate, setExpiryDate] = useState("");
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState(null);
+
   const currentUser = useSelector(selectCurrentUser);
   const { data, isLoading } = useGetAllClientsQuery();
   const clients = data?.data || [];
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [createQuote, { isLoading: isSubmitting, error }] =
     useCreateQuoteMutation();
@@ -28,36 +29,38 @@ const AddNewQuote = () => {
       return;
     }
 
-    console.log(currentUser)
-
     const formData = new FormData();
     formData.append("clientId", selectedClient);
     formData.append("salesRepId", currentUser._id);
     formData.append("estimatedPrice", estimatedPrice);
     formData.append("bookedOnSpot", bookedOnSpot);
-    // formData.append("expiryDate", expiryDate);
     formData.append("notes", notes);
     if (file) formData.append("bidSheet", file);
 
     try {
       const res = await createQuote(formData).unwrap();
-      console.log("Quote created:", res);
       toast.success("Quote created successfully!");
-      navigate(-1)
+
+      // Redirect to Add Job if booked on spot
+      if (bookedOnSpot === true) {
+        navigate(`/sales-rep/add-job?quoteId=${res.data._id}`);
+      } else {
+        navigate(-1);
+      }
     } catch (err) {
-      toast.error(`Failed to create quote`);
+      toast.error("Failed to create quote");
     }
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
         Add New Quote
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className=" mx-auto bg-white border rounded-lg shadow-sm p-6 space-y-8"
+        className="mx-auto bg-white border rounded-lg shadow-sm p-6 space-y-8"
       >
         {/* Client Selection */}
         <div>
@@ -88,7 +91,6 @@ const AddNewQuote = () => {
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
               $
             </span>
-
             <input
               type="number"
               inputMode="decimal"
@@ -148,7 +150,6 @@ const AddNewQuote = () => {
           </div>
         </div>
 
-
         {/* Additional Notes */}
         <div>
           <label className="block text-lg font-semibold mb-3">
@@ -168,6 +169,7 @@ const AddNewQuote = () => {
           <button
             type="button"
             className="flex-1 border py-3 rounded-lg hover:bg-gray-50"
+            onClick={() => navigate(-1)}
           >
             Cancel
           </button>
