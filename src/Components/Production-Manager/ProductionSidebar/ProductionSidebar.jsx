@@ -21,7 +21,7 @@ const ProductionSidebar = () => {
     {
       icon: <IoBagHandleOutline className="w-5 h-5" />,
       label: "Job Scheduling",
-      Link: "/s/production-manager/job-scheduling",
+      Link: "/s/production-manager/jobs",
     },
     {
       icon: <MdAutoGraph className="w-5 h-5" />,
@@ -38,7 +38,6 @@ const ProductionSidebar = () => {
   const handleLogout = () => {
     navigate("/login");
   };
-
 
   return (
     <div className="flex flex-col px-2">
@@ -68,9 +67,7 @@ const ProductionSidebar = () => {
                   <p>{item.label}</p>
                 </div>
                 <BiChevronDown
-                  className={`${
-                    active === item.label ? "rotate-180" : ""
-                  }`}
+                  className={`${active === item.label ? "rotate-180" : ""}`}
                 />
               </div>
             ) : (

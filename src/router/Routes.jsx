@@ -106,8 +106,8 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="home" replace /> },
           { path: "home", element: <ProductionHome /> }, // matches menuConfig
-          { path: "job-scheduling", element: <JobScheduling /> },
-          { path: "job-scheduling/:id", element: <JobOverview /> },
+          { path: "jobs", element: <JobScheduling /> },
+          { path: "jobs/:id", element: <JobOverview /> },
           { path: "settings", element: <ProductionSettings /> }, // matches menuConfig
           { path: "*", element: <GlobalNoRoute /> },
         ],

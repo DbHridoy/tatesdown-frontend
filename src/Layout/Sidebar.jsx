@@ -53,8 +53,8 @@ export const menuConfig = {
     },
     {
       icon: <IoBagHandleOutline className="w-5 h-5" />,
-      label: "Job Scheduling",
-      Link: "/production-manager/job-scheduling",
+      label: "Jobs",
+      Link: "/production-manager/jobs",
     },
     {
       icon: <CiSettings className="w-5 h-5" />,

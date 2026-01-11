@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useChangeStatusMutation, useGetAllJobsQuery } from "../../../redux/api/jobApi";
+import {
+  useChangeStatusMutation,
+  useGetAllJobsQuery,
+} from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
 
 function JobScheduling() {
   const navigate = useNavigate();
-const [changeStatus]=useChangeStatusMutation()
+  const [changeStatus] = useChangeStatusMutation();
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -23,7 +26,7 @@ const [changeStatus]=useChangeStatusMutation()
   // ✅ Safe formatting
   const formattedJobs = jobs.map((j) => ({
     _id: j._id,
-    clientName: j.quoteId?.clientId?.clientName ?? "N/A",
+    clientName: j.clientId?.clientName ?? "N/A",
     jobTitle: j.title,
     estimatedPrice: j.estimatedPrice,
     jobStatus: j.status,
@@ -45,7 +48,7 @@ const [changeStatus]=useChangeStatusMutation()
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
           console.log(item);
-          navigate(`/production-manager/job-scheduling/${item._id}`);
+          navigate(`/production-manager/jobs/${item._id}`);
         },
       },
       {
@@ -55,7 +58,8 @@ const [changeStatus]=useChangeStatusMutation()
         modalTitle: "Mark as scheduled",
         modalMessage: (item) =>
           `Are you sure you want to mark ${item.title} as scheduled?`,
-        onConfirm: (item) => (changeStatus({id:item._id,status:"Scheduled"}).unwrap()),
+        onConfirm: (item) =>
+          changeStatus({ id: item._id, status: "Scheduled" }).unwrap(),
         // onConfirm: (item) => (console.log(item)),
       },
     ],
