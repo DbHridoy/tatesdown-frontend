@@ -19,7 +19,7 @@ export const userApi = createCustomApi({
     }),
 
     getMe: builder.query({
-      query: () => `/user/me`,
+      query: () => `/users/me`,
       providesTags: ["User"],
     }),
 

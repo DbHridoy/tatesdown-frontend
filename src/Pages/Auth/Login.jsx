@@ -65,7 +65,7 @@ function Login() {
     //     navigate("/production");
     //     break;
     //   default:
-        navigate("/s");
+        navigate("/");
     // }
   }, [isAuthenticated, navigate]);
 

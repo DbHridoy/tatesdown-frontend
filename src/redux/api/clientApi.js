@@ -6,7 +6,7 @@ const clientApi = createCustomApi({
   endpoints: (builder) => ({
     createClient: builder.mutation({
       query: (newClient) => ({
-        url: "/client",
+        url: "/clients",
         method: "POST",
         body: newClient,
       }),
@@ -15,7 +15,7 @@ const clientApi = createCustomApi({
 
     addCallLog: builder.mutation({
       query: ({ clientId, callAt, status, reason, note }) => ({
-        url: `/client/${clientId}/call-log`,
+        url: `/clients/${clientId}/call-log`,
         method: "POST",
         body: { callAt, status, reason, note },
       }),
@@ -24,7 +24,7 @@ const clientApi = createCustomApi({
 
     addNote: builder.mutation({
       query: ({ clientId, formData }) => ({
-        url: `/client/${clientId}/client-note`,
+        url: `/clients/${clientId}/client-note`,
         method: "POST",
         body: formData, // ✅ FormData
       }),
@@ -50,19 +50,19 @@ const clientApi = createCustomApi({
           }
         });
 
-        return `/client?${params.toString()}`;
+        return `/clients?${params.toString()}`;
       },
       providesTags: ["Client"],
     }),
 
     getClientById: builder.query({
-      query: (id) => `/client/${id}`,
+      query: (id) => `/clients/${id}`,
       providesTags: ["Client"],
     }),
 
     updateClient: builder.mutation({
       query: ({ id, ...updateData }) => ({
-        url: `/client/${id}`,
+        url: `/clients/${id}`,
         method: "PATCH",
         body: updateData,
       }),
@@ -71,7 +71,7 @@ const clientApi = createCustomApi({
 
     deleteClient: builder.mutation({
       query: (id) => ({
-        url: `/client/${id}`,
+        url: `/clients/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Client"],

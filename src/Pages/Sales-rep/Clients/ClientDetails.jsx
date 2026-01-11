@@ -9,6 +9,8 @@ import {
   useAddCallLogMutation,
   useAddNoteMutation,
 } from "../../../redux/api/clientApi";
+
+/* -------------------- Utils -------------------- */
 const isImageFile = (url) => {
   if (!url) return false;
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
@@ -22,9 +24,9 @@ const getFileNameFromUrl = (url) => {
   }
 };
 
+/* -------------------- Component -------------------- */
 const ClientDetails = () => {
   const { clientId } = useParams();
-  console.log("ClientId from details", clientId);
   const navigate = useNavigate();
 
   const { data, isLoading, isError, refetch } = useGetClientByIdQuery(
@@ -38,18 +40,23 @@ const ClientDetails = () => {
 
   const client = data?.data;
 
-  /* -------------------- Edit Mode -------------------- */
+  /* -------------------- State -------------------- */
   const [isEditing, setIsEditing] = useState(false);
+  const [showCallModal, setShowCallModal] = useState(false);
+
   const [form, setForm] = useState({
     clientName: "",
     email: "",
     phoneNumber: "",
     address: "",
+    leadSource: "",
+    rating: 0,
   });
 
   const [noteText, setNoteText] = useState("");
   const [noteFile, setNoteFile] = useState(null);
-  const [showCallModal, setShowCallModal] = useState(false);
+
+  const leadSources = ["Door to Door", "Inbound", "Social"];
 
   /* -------------------- Sync API → Form -------------------- */
   useEffect(() => {
@@ -60,6 +67,8 @@ const ClientDetails = () => {
       email: client.email || "",
       phoneNumber: client.phoneNumber || "",
       address: client.address || "",
+      leadSource: client.leadSource || "",
+      rating: client.rating || 0,
     });
   }, [client]);
 
@@ -81,11 +90,15 @@ const ClientDetails = () => {
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+    if (!client) return;
+
     setForm({
       clientName: client.clientName || "",
       email: client.email || "",
       phoneNumber: client.phoneNumber || "",
       address: client.address || "",
+      leadSource: client.leadSource || "",
+      rating: client.rating || 0,
     });
   };
 
@@ -99,7 +112,7 @@ const ClientDetails = () => {
     try {
       await addNote({
         clientId,
-        formData,
+        formData, // ✅ must match API
       }).unwrap();
 
       toast.success("Note added");
@@ -116,6 +129,7 @@ const ClientDetails = () => {
   if (isError || !client)
     return <div className="p-6">Failed to load client</div>;
 
+  /* -------------------- Render -------------------- */
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -124,6 +138,12 @@ const ClientDetails = () => {
           <h1 className="text-2xl font-bold">{client.clientName}</h1>
           <p className="text-gray-500">
             Client ID: {client.customClientId || "—"}
+          </p>
+          <p className="text-gray-500">
+            Created At:{" "}
+            {client.createdAt
+              ? new Date(client.createdAt).toLocaleDateString()
+              : "—"}
           </p>
         </div>
 
@@ -152,7 +172,7 @@ const ClientDetails = () => {
         )}
       </div>
 
-      {/* Client Info */}
+      {/* Client Information */}
       <div className="bg-white p-6 rounded shadow space-y-4">
         <h3 className="font-semibold">Client Information</h3>
 
@@ -165,7 +185,7 @@ const ClientDetails = () => {
           <div key={field}>
             <label className="block text-sm font-medium mb-1">{label}</label>
             <input
-              type={field}
+              type="text"
               value={form[field]}
               disabled={!isEditing}
               onChange={(e) => handleChange(field, e.target.value)}
@@ -175,6 +195,45 @@ const ClientDetails = () => {
             />
           </div>
         ))}
+
+        {/* Lead Source */}
+        <div>
+          <label className="block text-sm font-medium mb-1">Lead Source</label>
+          <select
+            value={form.leadSource}
+            disabled={!isEditing}
+            onChange={(e) => handleChange("leadSource", e.target.value)}
+            className={`w-full border px-3 py-2 rounded ${
+              !isEditing ? "bg-gray-100" : ""
+            }`}
+          >
+            <option value="">Select</option>
+            {leadSources.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Rating */}
+        <div>
+          <label className="block text-sm font-medium mb-2">Lead Rating</label>
+          <div className="flex items-center gap-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                disabled={!isEditing}
+                onClick={() => handleChange("rating", star)}
+                className={`text-2xl ${!isEditing ? "cursor-not-allowed" : ""}`}
+              >
+                {star <= form.rating ? "★" : "☆"}
+              </button>
+            ))}
+            <span className="text-sm text-gray-600">{form.rating}/5</span>
+          </div>
+        </div>
       </div>
 
       {/* Call History */}
@@ -185,8 +244,8 @@ const ClientDetails = () => {
           <p className="text-gray-400 italic">No call logs</p>
         )}
 
-        {client.callLogs?.map((log, i) => (
-          <div key={i} className="border-b pb-2">
+        {client.callLogs?.map((log) => (
+          <div key={log._id} className="border-b pb-2">
             <div className="flex justify-between">
               <span>{log.status}</span>
               <span className="text-sm text-gray-500">
@@ -194,10 +253,8 @@ const ClientDetails = () => {
               </span>
             </div>
 
-            {/* Note */}
             {log.note && <p className="text-sm">{log.note}</p>}
 
-            {/* Reason (if exists) */}
             {log.reason && (
               <p className="text-sm text-gray-600 italic">
                 <b>Reason:</b> {log.reason}
@@ -218,7 +275,6 @@ const ClientDetails = () => {
       <div className="bg-white p-6 rounded shadow space-y-4">
         <h3 className="font-semibold">Notes & Attachments</h3>
 
-        {/* Add Note */}
         <textarea
           value={noteText}
           onChange={(e) => setNoteText(e.target.value)}
@@ -238,18 +294,15 @@ const ClientDetails = () => {
           Add Note
         </button>
 
-        {/* Existing Notes */}
         {client.notes?.length > 0 ? (
           <div className="space-y-3">
-            {client.notes.map((note, i) => (
+            {client.notes.map((note) => (
               <div
-                key={i}
+                key={note._id}
                 className="border rounded-lg p-3 bg-gray-50 space-y-2"
               >
-                {/* Note text */}
-                <p className="text-sm text-gray-800">{note.note || "—"}</p>
+                <p className="text-sm">{note.note || "—"}</p>
 
-                {/* Attachment */}
                 {note.file && (
                   <div>
                     {isImageFile(note.file) ? (
@@ -271,7 +324,6 @@ const ClientDetails = () => {
                   </div>
                 )}
 
-                {/* Timestamp (optional) */}
                 {note.createdAt && (
                   <div className="text-xs text-gray-500">
                     {new Date(note.createdAt).toLocaleString()}
@@ -293,7 +345,6 @@ const ClientDetails = () => {
             refetch();
           }}
           onSubmit={async (payload) => {
-            console.log("Payload from details", payload);
             await addCallLog(payload).unwrap();
             toast.success("Call log added");
             setShowCallModal(false);

@@ -28,7 +28,7 @@ const AddClient = () => {
     rating: 0,
   });
 
-  const leadSources = ["Door", "Inbound", "Social"];
+  const leadSources = ["Door to Door", "Inbound", "Social"];
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
