@@ -3,22 +3,23 @@ import PublicRoute from "./PublicRoute";
 import RoleGuard from "./RoleGuard";
 import MainLayout from "../Layout/MainLayout";
 
+// Auth Pages
 import Login from "../Pages/Auth/Login";
 import ForgetPassword from "../Pages/Auth/ForgotPassword";
 import VerifyOtp from "../Pages/Auth/VerifyOTP";
 import SetNewPassword from "../Pages/Auth/SetNewPassword";
 import Successful from "../Pages/Auth/Successful";
 
+// Admin Pages
 import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
 import AdminClients from "../Pages/Admin/Clients/AdminClients";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
 import Reports from "../Pages/Admin/Reports/Reports";
 import RepDetails from "../Pages/Admin/Reports/RepDetails";
 import UserManagement from "../Pages/Admin/UserManagement/UserManagement";
-import Settings from "../Pages/Admin/Settings/Settings";
-import Expenses from "../Pages/Admin/Expenses/Expenses";
-import ImpersonateView from "../Pages/Admin/Clients/ImpersonateView";
+import Parameters from "../Pages/Admin/Params/Parameters";
 
+// Sales Rep Pages
 import Home from "../Pages/Sales-rep/Home/Home";
 import Clients from "../Pages/Sales-rep/Clients/Clients";
 import ClientDetails from "../Pages/Sales-rep/Clients/ClientDetails";
@@ -31,18 +32,20 @@ import Jobs from "../Pages/Sales-rep/Jobs/Jobs";
 import JobDetailsPage from "../Pages/Sales-rep/Jobs/JobDetailsPage";
 import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob";
 import DesignConsultation from "../Pages/Sales-rep/Jobs/DesignConsultation";
-import StatsReports from "../Pages/Sales-rep/StatsReports/StatsReports";
 import UserExpenses from "../Pages/Sales-rep/ExpensesMileage/Expenses";
 
+// Production Manager Pages
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
 import JobScheduling from "../Pages/Production-Manager/JobScheduling/JobScheduling";
 import JobOverview from "../Pages/Production-Manager/JobScheduling/JobOverview";
-import ProductionReport from "../Pages/Production-Manager/ProductionReport/ProductionReport";
-import ProductionSettings from "../Pages/Production-Manager/ProductionSettings/ProductionSettings";
+import ProductionSettings from "../Pages/Common/ProductionSettings";
 
+// Common
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
+import Settings from "../Pages/Common/ProductionSettings";
 
 export const router = createBrowserRouter([
+  // Public Routes
   {
     path: "/",
     element: <PublicRoute />,
@@ -84,8 +87,8 @@ export const router = createBrowserRouter([
             path: "jobs/:jobId/design-consultation",
             element: <DesignConsultation />,
           },
-          { path: "stats-reports", element: <StatsReports /> },
           { path: "mileage-log", element: <UserExpenses /> },
+          { path: "settings", element: <Settings /> },
           { path: "*", element: <GlobalNoRoute /> },
         ],
       },
@@ -100,15 +103,10 @@ export const router = createBrowserRouter([
       {
         element: <MainLayout />,
         children: [
-          { path: "production-home", element: <ProductionHome /> },
+          { path: "home", element: <ProductionHome /> }, // matches menuConfig
           { path: "job-scheduling", element: <JobScheduling /> },
           { path: "job-scheduling/:id", element: <JobOverview /> },
-          {
-            path: "job-scheduling/:id/design-consultation",
-            element: <DesignConsultation />,
-          },
-          { path: "production-settings", element: <ProductionSettings /> },
-          { path: "production-report", element: <ProductionReport /> },
+          { path: "settings", element: <ProductionSettings /> }, // matches menuConfig
           { path: "*", element: <GlobalNoRoute /> },
         ],
       },
@@ -125,14 +123,11 @@ export const router = createBrowserRouter([
         children: [
           { path: "dashboard", element: <Dashboard /> },
           { path: "clients", element: <AdminClients /> },
-          { path: "add-client", element: <AddClient /> },
-          { path: "job/:jobId", element: <JobDetailsPage /> },
-          { path: "impersonate-view", element: <ImpersonateView /> },
           { path: "approvals-center", element: <Approvals /> },
           { path: "reports", element: <Reports /> },
           { path: "reports-details/:id", element: <RepDetails /> },
-          { path: "expenses", element: <Expenses /> },
           { path: "user-management", element: <UserManagement /> },
+          { path: "parameters", element: <Parameters /> }, // I assume this is Parameters page
           { path: "settings", element: <Settings /> },
           { path: "*", element: <GlobalNoRoute /> },
         ],
@@ -140,5 +135,6 @@ export const router = createBrowserRouter([
     ],
   },
 
+  // Fallback
   { path: "*", element: <GlobalNoRoute /> },
 ]);

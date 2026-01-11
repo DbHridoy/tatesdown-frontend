@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Edit, Briefcase, Camera, Check } from "lucide-react";
-import { useGetMeQuery, useUpdateMeMutation } from "../../../redux/api/userApi";
+import { useGetMeQuery, useUpdateMeMutation } from "../../redux/api/userApi";
 
-const ProductionSettings = () => {
+const Settings = () => {
   const { data: profileData } = useGetMeQuery();
   const profile = profileData?.data;
   console.log("from setting", profile);
@@ -261,4 +261,4 @@ const ProductionSettings = () => {
   );
 };
 
-export default ProductionSettings;
+export default Settings;

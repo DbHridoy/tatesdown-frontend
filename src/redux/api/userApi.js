@@ -24,7 +24,7 @@ export const userApi = createCustomApi({
     }),
 
     getUser: builder.query({
-      query: (id) => `/user/${id}`,
+      query: (id) => `/users/${id}`,
       providesTags: ["User"],
     }),
 
@@ -47,14 +47,14 @@ export const userApi = createCustomApi({
           }
         });
 
-        return `/user/?${params.toString()}`;
+        return `/users/?${params.toString()}`;
       },
       providesTags: ["User"],
     }),
 
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/user/${id}`,
+        url: `/users/${id}`,
         method: "PATCH",
         body: data,
       }),
@@ -63,7 +63,7 @@ export const userApi = createCustomApi({
 
     updateMe: builder.mutation({
       query: (payload) => ({
-        url: `/user/me`,
+        url: `/users/me`,
         method: "PATCH",
         body: payload,
       }),
@@ -72,7 +72,7 @@ export const userApi = createCustomApi({
 
     creatUser: builder.mutation({
       query: (userData) => ({
-        url: "/user",
+        url: "/users",
         method: "POST",
         body: userData,
       }),
@@ -81,14 +81,14 @@ export const userApi = createCustomApi({
 
     deleteUser: builder.mutation({
       query: (userId) => ({
-        url: `/user/${userId}`,
+        url: `/users/${userId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["User"],
     }),
 
     getAllSalesRep: builder.query({
-      query: () => `/user/sales-reps`,
+      query: () => `/users/sales-reps`,
       providesTags: ["User"],
     }),
   }),

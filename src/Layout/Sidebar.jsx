@@ -38,13 +38,18 @@ const menuConfig = {
       label: "Mileage Log",
       Link: "/sales-rep/mileage-log",
     },
+    {
+      icon: <CiSettings className="w-5 h-5" />,
+      label: "Settings",
+      Link: "/sales-rep/settings",
+    },
   ],
 
   "Production Manager": [
     {
       icon: <CiHome className="w-5 h-5" />,
       label: "Home",
-      Link: "/production-manager/production-home",
+      Link: "/production-manager/home",
     },
     {
       icon: <IoBagHandleOutline className="w-5 h-5" />,
@@ -54,7 +59,7 @@ const menuConfig = {
     {
       icon: <CiSettings className="w-5 h-5" />,
       label: "Settings",
-      Link: "/production-manager/production-settings",
+      Link: "/production-manager/settings",
     },
   ],
 
@@ -86,6 +91,11 @@ const menuConfig = {
     },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      label: "Parameters",
+      Link: "/admin/parameters",
+    },
+    {
+      icon: <CiSettings className="w-5 h-5" />,
       label: "Settings",
       Link: "/admin/settings",
     },

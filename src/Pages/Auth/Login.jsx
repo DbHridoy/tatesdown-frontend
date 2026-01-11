@@ -54,19 +54,7 @@ function Login() {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    // switch (role) {
-    //   case "admin":
-    //     navigate("/admin");
-    //     break;
-    //   case "sales-rep":
-    //     navigate("/sales");
-    //     break;
-    //   case "production-manager":
-    //     navigate("/production");
-    //     break;
-    //   default:
-        navigate("/");
-    // }
+    navigate("/");
   }, [isAuthenticated, navigate]);
 
   return (

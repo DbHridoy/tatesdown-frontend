@@ -5,7 +5,7 @@ import {
   useGetVariablesQuery,
 } from "../../../redux/api/common";
 
-const settings = () => {
+const Parameters = () => {
   const { data: variable, isLoading } = useGetVariablesQuery();
   const [mileageRate, setMileageRate] = useState(0);
 
@@ -524,4 +524,4 @@ const settings = () => {
   );
 };
 
-export default settings;
+export default Parameters;
