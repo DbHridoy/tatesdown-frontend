@@ -87,21 +87,12 @@ const AddNewJobModal = ({ onClose }) => {
           </select>
         </div>
 
-        {/* Job Title */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Job Title *</label>
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            placeholder="Job Title"
-          />
-        </div>
+       
 
         {/* Prices */}
         <div className="flex gap-4 mb-4">
           <div className="flex-1">
-            <label className="block font-semibold mb-1">Estimated Price</label>
+            <label className="block font-semibold mb-1">Price</label>
             <input
               value={estimatedPrice}
               readOnly

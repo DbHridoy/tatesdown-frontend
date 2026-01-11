@@ -35,7 +35,7 @@ const AddNewQuote = () => {
     formData.append("salesRepId", currentUser._id);
     formData.append("estimatedPrice", estimatedPrice);
     formData.append("bookedOnSpot", bookedOnSpot);
-    formData.append("expiryDate", expiryDate);
+    // formData.append("expiryDate", expiryDate);
     formData.append("notes", notes);
     if (file) formData.append("bidSheet", file);
 
@@ -148,18 +148,6 @@ const AddNewQuote = () => {
           </div>
         </div>
 
-        {/* Expiry Date */}
-        <div>
-          <label className="block text-lg font-semibold mb-3">
-            Quote Expiry Date
-          </label>
-          <input
-            type="date"
-            value={expiryDate}
-            onChange={(e) => setExpiryDate(e.target.value)}
-            className="w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
 
         {/* Additional Notes */}
         <div>

@@ -11,40 +11,53 @@ function FAB() {
 
   const toggleFab = () => setFabOpen((prev) => !prev);
 
-  // Helper function to navigate and close FAB
+  // Navigate and close FAB
   const handleClick = (path) => {
     navigate(path);
-    setFabOpen(false); // close FAB after clicking
+    setFabOpen(false);
   };
+
+  // Hide FAB for Production Manager only
+  if (role === "Production Manager") return null;
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col items-end z-50 space-y-3">
       {/* Expanded Buttons */}
-      {fabOpen && role !== "production-manager" && (
+      {fabOpen && (
         <div className="flex flex-col items-end space-y-3 mb-2">
-          <button
-            onClick={() => handleClick(`/s/${role}/add-client`)}
-            className="flex items-center justify-center w-48 p-2 h-12 rounded-2xl bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition"
-          >
-            Add Client
-          </button>
+          {/* Add Client button for Sales Rep and Admin */}
+          {(role === "Sales Rep" || role === "Admin") && (
+            <button
+              onClick={() =>
+                handleClick(
+                  role === "Admin" ? `/admin/clients` : `/sales-rep/add-client`
+                )
+              }
+              className="flex items-center justify-center w-48 p-2 h-12 rounded-2xl bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition"
+            >
+              Add Client
+            </button>
+          )}
 
-          {role === "sales-rep" && (
+          {/* Sales Rep specific actions */}
+          {role === "Sales Rep" && (
             <>
               <button
-                onClick={() => handleClick(`/s/${role}/add-new-quote`)}
+                onClick={() => handleClick(`/sales-rep/add-new-quote`)}
                 className="flex items-center justify-center w-48 p-2 h-12 rounded-2xl bg-green-500 text-white shadow-lg hover:bg-green-600 transition"
               >
                 Add Quote
               </button>
               <button
-                onClick={() => handleClick(`/s/${role}/add-job`)}
+                onClick={() => handleClick(`/sales-rep/add-job`)}
                 className="flex items-center justify-center w-48 p-2 h-12 rounded-2xl bg-red-500 text-white shadow-lg hover:bg-red-600 transition"
               >
                 Add Job
               </button>
             </>
           )}
+
+          {/* Admin could have additional FAB buttons if needed */}
         </div>
       )}
 

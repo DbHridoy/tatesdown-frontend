@@ -4,18 +4,18 @@ import { Navigate, Outlet } from "react-router-dom";
 const RoleGuard = ({ allowedRole }) => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!user) return <div>Loading...</div>;
 
-  if (user.role !== allowedRole) {
+  if (allowedRole && user.role !== allowedRole) {
+    // redirect based on user.role
     switch (user.role) {
-      case "admin":
-        return <Navigate to="/s/admin/dashboard" replace />;
-      case "sales-rep":
-        return <Navigate to="/s/sales-rep/home" replace />;
-      case "production-manager":
-        return <Navigate to="/s/production-manager/production-home" replace />;
+      case "Admin":
+        return <Navigate to="/admin/dashboard" replace />;
+      case "Sales Rep":
+        return <Navigate to="/sales-rep/home" replace />;
+      case "Production Manager":
+        return <Navigate to="/production-manager/production-home" replace />;
       default:
         return <Navigate to="/login" replace />;
     }

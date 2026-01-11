@@ -8,6 +8,7 @@ import {
   useGetUserQuery,
   useUpdateUserMutation,
 } from "../../../redux/api/userApi";
+import UserForm from "../../../Components/Admin/UserMangement/UserForm";
 
 const UserManagement = () => {
   /* ================= STATE ================= */
@@ -93,6 +94,7 @@ const UserManagement = () => {
 
   /* ================= ACTIONS ================= */
   const handleAddUser = async () => {
+    console.log("from Add user", formUser);
     await createUser(formUser).unwrap();
     closeAddModal();
   };
@@ -124,20 +126,20 @@ const UserManagement = () => {
         label: "Role",
         accessor: "role",
         options: {
-          "Sales rep": "sales-rep",
-          "Production manager": "production-manager",
+          "Sales Rep": "Sales Rep",
+          "Production Manager": "Production Manager",
         },
       },
     ],
     actions: [
-      {
-        label: "View",
-        className: "bg-blue-500 text-white p-2 rounded-lg",
-        onClick: (item) => {
-          setSelectedUserId(item._id);
-          setIsViewModal(true);
-        },
-      },
+      // {
+      //   label: "View",
+      //   className: "bg-blue-500 text-white p-2 rounded-lg",
+      //   onClick: (item) => {
+      //     setSelectedUserId(item._id);
+      //     setIsViewModal(true);
+      //   },
+      // },
       {
         label: "Delete",
         className: "bg-red-500 text-white p-2 rounded-lg",
@@ -244,62 +246,14 @@ const ModalActions = ({ onCancel, onSave }) => (
   </div>
 );
 
-const UserForm = ({ formUser, setFormUser, isAdd }) => (
-  <div className="space-y-3">
-    <input
-      className="w-full p-2 border rounded"
-      placeholder="Full Name"
-      value={formUser.fullName}
-      onChange={(e) => setFormUser({ ...formUser, fullName: e.target.value })}
-    />
-
-    <input
-      className="w-full p-2 border rounded"
-      placeholder="Email"
-      type="email"
-      value={formUser.email}
-      onChange={(e) => setFormUser({ ...formUser, email: e.target.value })}
-    />
-
-    <select
-      className="w-full p-2 border rounded"
-      value={formUser.role}
-      onChange={(e) => setFormUser({ ...formUser, role: e.target.value })}
-    >
-      <option value="">Select Role</option>
-      <option value="sales-rep">Sales Rep</option>
-      <option value="production-manager">Production Manager</option>
-    </select>
-
-    {formUser.role === "sales-rep" && (
-      <input
-        className="w-full p-2 border rounded"
-        placeholder="Cluster"
-        value={formUser.cluster}
-        onChange={(e) => setFormUser({ ...formUser, cluster: e.target.value })}
-      />
-    )}
-
-    {isAdd && (
-      <input
-        type="password"
-        className="w-full p-2 border rounded"
-        placeholder="Password"
-        value={formUser.password}
-        onChange={(e) => setFormUser({ ...formUser, password: e.target.value })}
-      />
-    )}
-  </div>
-);
 
 const ViewUser = ({ user }) => (
+  console.log(user),
   <div className="space-y-2">
     <Input label="Full Name" value={user.fullName} />
     <Input label="Email" value={user.email} />
     <Input label="Role" value={user.role} />
-    {user.role === "sales-rep" && (
-      <Input label="Cluster" value={user.cluster || "-"} />
-    )}
+    
   </div>
 );
 

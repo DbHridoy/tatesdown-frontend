@@ -8,25 +8,33 @@ const CALL_STATUS_OPTIONS = [
 ];
 
 const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
-  const [callDate, setCallDate] = useState("");
-  const [callTime, setCallTime] = useState("");
   const [status, setStatus] = useState("");
   const [note, setNote] = useState("");
+  const [reason, setReason] = useState(""); // New state for reason
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!callDate || !callTime || !status) {
-      alert("Please fill all required fields");
+
+    if (!status) {
+      alert("Please select a call outcome");
       return;
     }
-    const callAt = new Date(`${callDate}T${callTime}`).toISOString();
-    const formData = {
+
+    if (status === "Picked-Up: No Appointment" && !reason.trim()) {
+      alert("Please provide a reason for 'No Appointment'");
+      return;
+    }
+
+    const payload = {
       clientId,
-      callAt,
+      callAt: new Date().toISOString(), // Current local time
       status,
       note,
+      reason: status === "Picked-Up: No Appointment" ? reason : undefined,
     };
-    onSubmit?.(formData); // Pass the form data to parent
+
+    console.log("Payload", payload);
+    onSubmit(payload);
     closeModal();
   };
 
@@ -38,37 +46,13 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
       >
         {/* Header */}
         <div className="px-6 py-4 border-b">
-          <h2 className="text-xl font-semibold text-gray-800">Add Call Log</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Add Call Log
+          </h2>
         </div>
 
         {/* Body */}
         <div className="px-6 py-5 space-y-4">
-          {/* Date & Time */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Call Date <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="date"
-                value={callDate}
-                onChange={(e) => setCallDate(e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                Call Time <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="time"
-                value={callTime}
-                onChange={(e) => setCallTime(e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg"
-              />
-            </div>
-          </div>
-
           {/* Call Outcome */}
           <div>
             <label className="block text-sm font-medium mb-1">
@@ -88,6 +72,22 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
             </select>
           </div>
 
+          {/* Reason (conditional) */}
+          {status === "Picked-Up: No Appointment" && (
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Reason <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Enter reason..."
+                className="w-full px-3 py-2 border rounded-lg"
+              />
+            </div>
+          )}
+
           {/* Notes */}
           <div>
             <label className="block text-sm font-medium mb-1">Call Notes</label>
@@ -98,6 +98,11 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
               placeholder="Enter details about the call..."
               className="w-full px-3 py-2 border rounded-lg resize-none"
             />
+          </div>
+
+          {/* Timestamp Preview */}
+          <div className="text-sm text-gray-500">
+            Call Time: {new Date().toLocaleString()}
           </div>
         </div>
 
@@ -114,7 +119,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
             type="submit"
             className="flex-1 py-2 bg-blue-600 text-white rounded-lg"
           >
-            Save Changes
+            Save Call Log
           </button>
         </div>
       </form>

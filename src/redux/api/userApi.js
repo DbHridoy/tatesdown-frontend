@@ -4,14 +4,30 @@ export const userApi = createCustomApi({
   reducerPath: "userApi",
   tagTypes: ["User"],
   endpoints: (builder) => ({
+    createCluster: builder.mutation({
+      query: (clusterName) => ({
+        url: "/common/cluster",
+        method: "POST",
+        body: { clusterName },
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    getAllClusters: builder.query({
+      query: () => `/common/cluster`,
+      providesTags: ["User"],
+    }),
+
     getMe: builder.query({
       query: () => `/user/me`,
       providesTags: ["User"],
     }),
+
     getUser: builder.query({
       query: (id) => `/user/${id}`,
       providesTags: ["User"],
     }),
+
     getAllUsers: builder.query({
       query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
@@ -35,6 +51,7 @@ export const userApi = createCustomApi({
       },
       providesTags: ["User"],
     }),
+
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
         url: `/user/${id}`,
@@ -43,6 +60,7 @@ export const userApi = createCustomApi({
       }),
       invalidatesTags: ["User"],
     }),
+
     updateMe: builder.mutation({
       query: (payload) => ({
         url: `/user/me`,
@@ -60,6 +78,7 @@ export const userApi = createCustomApi({
       }),
       invalidatesTags: ["User"],
     }),
+
     deleteUser: builder.mutation({
       query: (userId) => ({
         url: `/user/${userId}`,
@@ -67,6 +86,7 @@ export const userApi = createCustomApi({
       }),
       invalidatesTags: ["User"],
     }),
+
     getAllSalesRep: builder.query({
       query: () => `/user/sales-reps`,
       providesTags: ["User"],
@@ -75,6 +95,8 @@ export const userApi = createCustomApi({
 });
 
 export const {
+  useCreateClusterMutation,
+  useGetAllClustersQuery,
   useGetMeQuery,
   useGetUserQuery,
   useGetAllUsersQuery,

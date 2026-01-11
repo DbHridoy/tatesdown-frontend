@@ -19,7 +19,6 @@ const AddClient = () => {
   const [draftNotes, setDraftNotes] = useState([]);
 
   const [formData, setFormData] = useState({
-    salesRepId: user.role === "sales-rep" ? user._id : null,
     clientName: "",
     partnerName: "",
     phoneNumber: "",
@@ -38,6 +37,11 @@ const AddClient = () => {
   /* ================= NOTES ================= */
 
   const handleAddDraftNote = ({ note, file }) => {
+    if (!note && !file) {
+      toast.error("Note or attachment required");
+      return;
+    }
+
     setDraftNotes((prev) => [...prev, { note, file }]);
     toast.success("Note added to draft");
   };
@@ -50,19 +54,24 @@ const AddClient = () => {
     try {
       // 1️⃣ Create client
       const client = await createClient(formData).unwrap();
-      const clientId = client._id;
+      const clientId = client.data._id;
 
-      // 2️⃣ Upload notes
+      console.log("Client from add client", client);
+
+      // 2️⃣ Upload draft notes
       for (const n of draftNotes) {
         const fd = new FormData();
-        fd.append("note", n.note);
+        if (n.note) fd.append("note", n.note);
         if (n.file) fd.append("file", n.file);
 
-        await addNote({ clientId, ...Object.fromEntries(fd) });
+        await addNote({
+          clientId,
+          formData: fd,
+        }).unwrap();
       }
 
       toast.success("Client & notes added successfully");
-      navigate("/s/sales-rep/clients");
+      navigate("/sales-rep/clients");
     } catch (error) {
       console.error(error);
       toast.error("Failed to create client");
@@ -85,8 +94,11 @@ const AddClient = () => {
             <label className="block text-sm font-medium">Client Name *</label>
             <input
               value={formData.clientName}
-              onChange={(e) => handleInputChange("clientName", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("clientName", e.target.value)
+              }
               className="w-full border px-3 py-2 rounded-lg"
+              required
             />
           </div>
 
@@ -94,7 +106,9 @@ const AddClient = () => {
             <label className="block text-sm font-medium">Partner Name</label>
             <input
               value={formData.partnerName}
-              onChange={(e) => handleInputChange("partnerName", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("partnerName", e.target.value)
+              }
               className="w-full border px-3 py-2 rounded-lg"
             />
           </div>
@@ -106,14 +120,18 @@ const AddClient = () => {
             <label className="block text-sm font-medium">Phone *</label>
             <input
               value={formData.phoneNumber}
-              onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("phoneNumber", e.target.value)
+              }
               className="w-full border px-3 py-2 rounded-lg"
+              required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium">Email</label>
             <input
+              type="email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
               className="w-full border px-3 py-2 rounded-lg"
@@ -128,6 +146,7 @@ const AddClient = () => {
             value={formData.address}
             onChange={(e) => handleInputChange("address", e.target.value)}
             className="w-full border px-3 py-2 rounded-lg"
+            required
           />
         </div>
 
@@ -136,8 +155,11 @@ const AddClient = () => {
           <label className="block text-sm font-medium">Lead Source *</label>
           <select
             value={formData.leadSource}
-            onChange={(e) => handleInputChange("leadSource", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("leadSource", e.target.value)
+            }
             className="w-full border px-3 py-2 rounded-lg"
+            required
           >
             <option value="">Select</option>
             {leadSources.map((s) => (
@@ -149,43 +171,37 @@ const AddClient = () => {
         </div>
 
         {/* Lead Rating */}
-<div>
-  <label className="block text-sm font-medium mb-2">
-    Lead Rating
-  </label>
-
-  <div className="flex items-center gap-2">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <button
-        key={star}
-        type="button"
-        aria-label={`Set rating ${star}`}
-        onClick={() => handleInputChange("rating", star)}
-        className="text-2xl focus:outline-none"
-      >
-        {star <= formData.rating ? (
-          <span className="text-yellow-400">★</span>
-        ) : (
-          <span className="text-gray-300">☆</span>
-        )}
-      </button>
-    ))}
-
-    <span className="ml-2 text-sm text-gray-600">
-      {formData.rating}/5
-    </span>
-  </div>
-</div>
-
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Lead Rating
+          </label>
+          <div className="flex items-center gap-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => handleInputChange("rating", star)}
+                className="text-2xl"
+              >
+                {star <= formData.rating ? "★" : "☆"}
+              </button>
+            ))}
+            <span className="text-sm text-gray-600">
+              {formData.rating}/5
+            </span>
+          </div>
+        </div>
 
         {/* Notes */}
         <ClientNote onSubmit={handleAddDraftNote} />
 
         {draftNotes.length > 0 && (
-          <div className="border rounded-lg p-3 text-sm">
+          <div className="border rounded-lg p-3 text-sm space-y-1">
             <b>Draft Notes:</b>
             {draftNotes.map((n, i) => (
-              <div key={i}>• {n.note || n.file?.name}</div>
+              <div key={i}>
+                • {n.note || n.file?.name}
+              </div>
             ))}
           </div>
         )}

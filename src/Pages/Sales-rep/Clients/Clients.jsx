@@ -7,6 +7,7 @@ import {
   useGetAllClientsQuery,
 } from "../../../redux/api/clientApi";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 function Clients() {
   const navigate = useNavigate();
@@ -39,11 +40,21 @@ function Clients() {
         accessor: "callStatus",
         colorMap: {
           "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
-          "Picked-Up Yes":
+          "Picked-Up: Appointment Booked":
             "bg-green-100 text-green-800 rounded-2xl text-center p-2",
-          "Picked-Up No": "bg-red-100 text-red-700 rounded-2xl text-center p-2",
+          "Picked-Up: No Appointment":
+            "bg-red-100 text-red-700 rounded-2xl text-center p-2",
           "No Pickup":
             "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
+        },
+      },
+      {
+        label: "Lead Status",
+        accessor: "leadStatus",
+        colorMap: {
+          "Not quoted": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
+          Quoted: "bg-blue-100 text-blue-800 rounded-2xl text-center p-2",
+          Job: "bg-green-100 text-green-800 rounded-2xl text-center p-2",
         },
       },
     ],
@@ -53,8 +64,8 @@ function Clients() {
         accessor: "callStatus",
         options: {
           "Not Called": "Not Called",
-          "Picked-Up Yes": "Picked-Up Yes",
-          "Picked-Up No": "Picked-Up No",
+          "Picked-Up: Appointment Booked": "Picked-Up: Appointment Booked",
+          "Picked-Up: No Appointment": "Picked-Up: No Appointment",
           "No Pickup": "No Pickup",
         },
       },
@@ -72,7 +83,10 @@ function Clients() {
         modalTitle: "Delete Client",
         modalMessage: (item) =>
           `Are you sure you want to delete ${item.clientName}?`,
-        onConfirm: (item) => deleteClient(item._id),
+        onConfirm: (item) => {
+          deleteClient(item._id);
+          toast.success("Client deleted successfully");
+        },
       },
     ],
     totalItems: totalItems,
@@ -91,24 +105,6 @@ function Clients() {
     onSortChange: (sortKey, sortOrder) =>
       setParams((p) => ({ ...p, sortKey, sortOrder })),
   };
-  // const handleSortChange = (key) => {
-  //   setParams((prev) => {
-  //     let order = "asc";
-
-  //     // same column → toggle
-  //     if (prev.sortKey === key) {
-  //       order = prev.sortOrder === "asc" ? "desc" : "asc";
-  //     }
-
-  //     return {
-  //       ...prev,
-  //       page: 1,
-  //       sortKey: key,
-  //       sortOrder: order,
-  //       sort: order === "asc" ? key : `-${key}`,
-  //     };
-  //   });
-  // };
 
   return (
     <div className="p-4 md:p-6">

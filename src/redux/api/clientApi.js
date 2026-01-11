@@ -13,20 +13,20 @@ const clientApi = createCustomApi({
       invalidatesTags: ["Client"],
     }),
 
-     addCallLog: builder.mutation({
-      query: ({clientId,callAt,status,reason,note}) => ({
+    addCallLog: builder.mutation({
+      query: ({ clientId, callAt, status, reason, note }) => ({
         url: `/client/${clientId}/call-log`,
         method: "POST",
-        body: {callAt,status,reason,note},
+        body: { callAt, status, reason, note },
       }),
       invalidatesTags: ["Client"],
     }),
 
     addNote: builder.mutation({
-      query: ({clientId,note,file}) => ({
+      query: ({ clientId, formData }) => ({
         url: `/client/${clientId}/client-note`,
         method: "POST",
-        body: {note,file},
+        body: formData, // ✅ FormData
       }),
       invalidatesTags: ["Client"],
     }),
@@ -62,14 +62,12 @@ const clientApi = createCustomApi({
 
     updateClient: builder.mutation({
       query: ({ id, ...updateData }) => ({
-        url: `/client/update-client/${id}`,
+        url: `/client/${id}`,
         method: "PATCH",
         body: updateData,
       }),
       invalidatesTags: ["Client"],
     }),
-
-   
 
     deleteClient: builder.mutation({
       query: (id) => ({

@@ -1,26 +1,23 @@
-import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PublicRoute = ({ children }) => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated) return children ? children : <Outlet />;
+  if (!isAuthenticated) return children || <Outlet />;
+  if (!user) return <div>Loading...</div>;
 
-  // if authenticated but user is not loaded yet, show a loader
-  if (isAuthenticated && !user) return <div>Loading...</div>;
-
-  // now safe to access user.role
+  // redirect authenticated users to their dashboard
   switch (user.role) {
-    case "admin":
-      return <Navigate to="/s/admin/dashboard" replace />;
-    case "sales-rep":
-      return <Navigate to="/s/sales-rep/home" replace />;
-    case "production-manager":
-      return <Navigate to="/s/production-manager/production-home" replace />;
+    case "Admin":
+      return <Navigate to="/admin/dashboard" replace />;
+    case "Sales Rep":
+      return <Navigate to="/sales-rep/home" replace />;
+    case "Production Manager":
+      return <Navigate to="/production-manager/production-home" replace />;
     default:
       return <Navigate to="/login" replace />;
   }
-
 };
 
 export default PublicRoute;

@@ -42,7 +42,7 @@ function Quotes() {
       { label: "Client name", accessor: "clientName", sortable: true },
       { label: "Estimated price", accessor: "estimatedPrice", sortable: true },
       { label: "Creation date", accessor: "createdAt", sortable: true },
-      { label: "Status", accessor: "status", sortable: true },
+     
     ],
     filters: [
       {

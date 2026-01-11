@@ -1,116 +1,92 @@
-import { FiLogOut } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { CiHome, CiSettings } from "react-icons/ci";
+import { IoBagHandleOutline, IoNewspaper } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
 import { PiUsers } from "react-icons/pi";
-import { IoNewspaper } from "react-icons/io5";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { CiHome } from "react-icons/ci";
-import { IoBagHandleOutline } from "react-icons/io5";
-import { MdAutoGraph } from "react-icons/md";
-import { CiSettings } from "react-icons/ci";
-import brandlogo from "../assets/Logo.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectUserRole } from "../redux/slice/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../redux/api/authApi";
-import { userApi } from "../redux/api/userApi";
+import { logout, selectUserRole } from "../redux/slice/authSlice";
+import brandlogo from "../assets/Logo.svg";
+import { FiLogOut } from "react-icons/fi";
 
 const menuConfig = {
-  "sales-rep": [
+  "Sales Rep": [
     {
       icon: <MdDashboard className="w-5 h-5" />,
       label: "Home",
-      Link: "/s/sales-rep/home",
+      Link: "/sales-rep/home",
     },
     {
       icon: <PiUsers className="w-5 h-5" />,
-      label: "Leads",
-      Link: "/s/sales-rep/clients",
+      label: "Clients",
+      Link: "/sales-rep/clients",
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
       label: "Quotes",
-      Link: "/s/sales-rep/quotes",
+      Link: "/sales-rep/quotes",
     },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Jobs",
-      Link: "/s/sales-rep/jobs",
+      Link: "/sales-rep/jobs",
     },
-    // {
-    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-    //   label: "Design Consultation",
-    //   Link: "/s/sales-rep/design-consultation",
-    // },
-    // {
-    //   icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
-    //   label: "Stats / Reports",
-    //   Link: "/s/sales-rep/stats-reports",
-    // },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Expenses",
-      Link: "/s/sales-rep/expense",
+      Link: "/sales-rep/expense",
     },
   ],
 
-  "production-manager": [
+  "Production Manager": [
     {
       icon: <CiHome className="w-5 h-5" />,
       label: "Home",
-      Link: "/s/production-manager/production-home",
+      Link: "/production-manager/production-home",
     },
     {
       icon: <IoBagHandleOutline className="w-5 h-5" />,
       label: "Job Scheduling",
-      Link: "/s/production-manager/job-scheduling",
+      Link: "/production-manager/job-scheduling",
     },
-    // {
-    //   icon: <MdAutoGraph className="w-5 h-5" />,
-    //   label: "Reports",
-    //   Link: "/s/production-manager/production-report",
-    // },
     {
       icon: <CiSettings className="w-5 h-5" />,
       label: "Settings",
-      Link: "/s/production-manager/production-settings",
+      Link: "/production-manager/production-settings",
     },
   ],
 
-  admin: [
+  Admin: [
     {
       icon: <MdDashboard className="w-5 h-5" />,
       label: "Dashboard",
-      Link: "/s/admin/dashboard",
+      Link: "/admin/dashboard",
     },
     {
       icon: <PiUsers className="w-5 h-5" />,
       label: "Jobs",
-      Link: "/s/admin/clients",
+      Link: "/admin/clients",
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
       label: "Approvals Center",
-      Link: "/s/admin/approvals-center",
+      Link: "/admin/approvals-center",
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
       label: "Reports",
-      Link: "/s/admin/reports",
+      Link: "/admin/reports",
     },
-    // {
-    //   icon: <IoNewspaper className="w-5 h-5" />,
-    //   label: "Expenses",
-    //   Link: "/s/admin/expenses",
-    // },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "User Management",
-      Link: "/s/admin/user-management",
+      Link: "/admin/user-management",
     },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "Settings",
-      Link: "/s/admin/settings",
+      Link: "/admin/settings",
     },
   ],
 };
@@ -129,22 +105,17 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
       // ignore backend error
     } finally {
       dispatch(logout());
-
-      // ✅ VERY IMPORTANT
       dispatch(userApi.util.resetApiState());
-
       navigate("/login", { replace: true });
     }
   };
 
   return (
     <div className="flex flex-col px-2 h-full">
-      {/* Logo */}
       <div className="flex justify-center items-center py-4">
         <img src={brandlogo} alt="logo" className="w-20 h-20 object-contain" />
       </div>
 
-      {/* Menu */}
       <div className="flex-1 overflow-y-auto max-h-[calc(100vh-150px)]">
         {menuItems.map((item) => (
           <Link
@@ -157,8 +128,8 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
             }`}
             onClick={() => {
               setActiveLabel(item.label);
-              if (onClose) onClose(); // closes the drawer
-            }} // now works
+              if (onClose) onClose();
+            }}
           >
             {item.icon}
             <p>{item.label}</p>
@@ -166,7 +137,6 @@ const Sidebar = ({ activeLabel, setActiveLabel, onClose }) => {
         ))}
       </div>
 
-      {/* Logout */}
       <button
         onClick={handleLogout}
         className="bg-primarycolor text-white mb-4 w-full py-3 flex justify-center items-center cursor-pointer rounded-lg mt-4"
