@@ -1,8 +1,6 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-const jobApi = createCustomApi({
-  reducerPath: "jobApi",
-  tagTypes: ["Job"],
+const jobApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createNewJob: builder.mutation({
       query: (newJob) => ({
@@ -10,7 +8,7 @@ const jobApi = createCustomApi({
         method: "POST",
         body: newJob,
       }),
-      invalidatesTags: ["Job"],
+      invalidatesTags: ["Job","User"],
     }),
 
     createJobNote: builder.mutation({

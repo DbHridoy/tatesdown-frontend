@@ -1,17 +1,8 @@
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Dollar01Icon,
-  UserGroup02Icon,
-  ChampionIcon,
-  Briefcase03Icon,
-} from "@hugeicons/core-free-icons";
 
-function SalesRepHomeCards() {
-  const cards = [
-    { title: "Total sold", count: 1234, icon: Dollar01Icon },
-    { title: "Total leads", count: 567, icon: UserGroup02Icon },
-    { title: "Total jobs", count: 123, icon: Briefcase03Icon },
-  ];
+function SalesRepHomeCards({ cards }) {
+
+
 
   return (
     <div className="flex flex-wrap gap-4">

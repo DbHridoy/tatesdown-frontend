@@ -9,14 +9,10 @@ import {
   Legend,
 } from "recharts";
 
-const data = [
-  { name: "Total Leads", sales: 4000 },
-  { name: "Total Quotes", sales: 3000 },
-  { name: "Total Jobs", sales: 5000 },
-  { name: "Total DC", sales: 4000 },
-];
 
-function Pipeline() {
+
+function Pipeline({data}) {
+  console.log("data from pipeline:", data);
   return (
     <div className="flex-1 bg-white shadow-md rounded-xl p-6">
       <h2 className="text-3xl font-semibold mb-4">Pipeline Overview</h2>
@@ -28,11 +24,11 @@ function Pipeline() {
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="title" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="sales" fill="#8884d8" />
+            <Bar dataKey="count" fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
       </div>

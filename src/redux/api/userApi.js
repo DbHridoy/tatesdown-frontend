@@ -1,8 +1,6 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-export const userApi = createCustomApi({
-  reducerPath: "userApi",
-  tagTypes: ["User"],
+export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createCluster: builder.mutation({
       query: (clusterName) => ({

@@ -1,8 +1,6 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-const expenseApi = createCustomApi({
-  reducerPath: "expenseApi",
-  tagTypes: ["Expense"],
+const expenseApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createMileageLog: builder.mutation({
       query: (data) => ({

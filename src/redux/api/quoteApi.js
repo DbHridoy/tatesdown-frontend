@@ -1,8 +1,7 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-const quoteApi = createCustomApi({
-  reducerPath: "quoteApi",
-  tagTypes: ["Quote"],
+
+const quoteApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createQuote: builder.mutation({
       query: (newQuote) => ({
@@ -10,7 +9,7 @@ const quoteApi = createCustomApi({
         method: "POST",
         body: newQuote,
       }),
-      invalidatesTags: ["Quote"],
+      invalidatesTags: ["Quote","User"],
     }),
 
     getAllQuotes: builder.query({

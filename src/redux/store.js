@@ -1,56 +1,46 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import { authApi } from "./api/authApi";
-import authReducer from "./slice/authSlice";
-import { userApi } from "./api/userApi";
-import clientApi from "./api/clientApi";
-import quoteApi from "./api/quoteApi";
-import commonApi from "./api/common";
-import expenseApi from "./api/expenseApi";
-import jobApi from "./api/jobApi";
-import statsApi from "./api/statsApi";
-// 🧩 1. Combine reducers
-const rootReducer = combineReducers({
-  auth: authReducer,
-  [authApi.reducerPath]: authApi.reducer,
-  [userApi.reducerPath]: userApi.reducer,
-  [clientApi.reducerPath]:clientApi.reducer,
-  [quoteApi.reducerPath]:quoteApi.reducer,
-  [commonApi.reducerPath]: commonApi.reducer,
-  [expenseApi.reducerPath]: expenseApi.reducer,
-  [jobApi.reducerPath]: jobApi.reducer,
-  [statsApi.reducerPath]: statsApi.reducer,
-});
 
-// 🧩 2. Setup persist config (only persist auth)
-const persistConfig = {
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slice/authSlice.js";
+import { baseApi } from "./baseApi.js";
+import storage from 'redux-persist/lib/storage'
+
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from "redux-persist";
+
+import { setupListeners } from "@reduxjs/toolkit/query";
+
+const persistedConfig = {
   key: "root",
+  version: 1,
   storage,
-  whitelist: ["auth"], // persist auth and user state
+  whitelist: ["auth"],
 };
 
-// 🧩 3. Wrap rootReducer with persistReducer
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const combinedReducer = combineReducers({
+  auth: authReducer,
+  [baseApi.reducerPath]: baseApi.reducer,
+});
 
-// 4. Configure store
+const persistedReducer = persistReducer(persistedConfig, combinedReducer);
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, // required for redux-persist
-    }).concat(
-      authApi.middleware,
-      userApi.middleware,
-      clientApi.middleware,
-      quoteApi.middleware,
-      commonApi.middleware,
-      expenseApi.middleware,
-      jobApi.middleware,
-      statsApi.middleware
-    ),
-  devTools: import.meta.env.VITE_NODE_ENV !== "production",
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(baseApi.middleware),
 });
 
-// 5. Create persistor
 export const persistor = persistStore(store);
+
+setupListeners(store.dispatch);

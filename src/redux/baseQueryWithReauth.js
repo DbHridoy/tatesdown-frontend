@@ -1,6 +1,6 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { setCredentials } from "../slice/authSlice";
-import { logout } from "../slice/authSlice";
+import { fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { logout } from "./slice/authSlice";
+
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_BASE_URL,
@@ -18,7 +18,6 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    // Try to refresh the accessToken using the refresh cookie
     const refreshResult = await baseQuery(
       { url: "/auth/refresh-token", method: "POST" },
       api,
@@ -29,7 +28,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
       api.dispatch(
         setCredentials({
           accessToken: refreshResult.data.accessToken,
-          refreshToken: refreshResult.data.refreshToken, // important
+          refreshToken: refreshResult.data.refreshToken,
           user: api.getState().auth.user,
         })
       );

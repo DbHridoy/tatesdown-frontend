@@ -1,8 +1,6 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-const clientApi = createCustomApi({
-  reducerPath: "clientApi",
-  tagTypes: ["Client"],
+const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createClient: builder.mutation({
       query: (newClient) => ({
@@ -10,7 +8,7 @@ const clientApi = createCustomApi({
         method: "POST",
         body: newClient,
       }),
-      invalidatesTags: ["Client"],
+      invalidatesTags: ["Client","User"],
     }),
 
     addCallLog: builder.mutation({

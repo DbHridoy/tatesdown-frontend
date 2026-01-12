@@ -1,8 +1,6 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-const commonApi = createCustomApi({
-  reducerPath: "commonApi",
-  tagTypes: ["Variable"],
+const commonApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     upsertVariable: builder.mutation({
       query: (newVariable) => ({
@@ -16,8 +14,16 @@ const commonApi = createCustomApi({
       query: () => "/common/get-variable",
       providesTags: ["Variable"],
     }),
+    getLeaderBoard: builder.query({
+      query: () => "/common/salesrep-leaderboard",
+      providesTags: ["LeaderBoard"],
+    }),
   }),
 });
 
-export const { useUpsertVariableMutation, useGetVariablesQuery } = commonApi;
+export const {
+  useUpsertVariableMutation,
+  useGetVariablesQuery,
+  useGetLeaderBoardQuery,
+} = commonApi;
 export default commonApi;

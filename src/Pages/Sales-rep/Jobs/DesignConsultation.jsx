@@ -59,7 +59,7 @@ const DesignConsultationCreate = () => {
       await createDesignConsultation(formData).unwrap();
       toast.success("Design consultation added successfully")
 
-      navigate(`/s/sales-rep/jobs/${jobId}`);
+      navigate(`/sales-rep/jobs/${jobId}`);
     } catch (err) {
       console.error(err);
       toast.error("Failed to create design consultation");

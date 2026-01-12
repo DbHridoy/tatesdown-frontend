@@ -3,8 +3,9 @@ import { useGetMeQuery } from "../redux/api/userApi";
 
 const SalesRepTopbar = () => {
   const { data: profileData } = useGetMeQuery();
-    const profile = profileData?.data;
-    console.log("Profile data:", profile);
+  console.log("Profile data from topbar", profileData);
+  const profile = profileData?.data;
+  console.log("Profile data:", profile);
   return (
     <div className="flex justify-between items-center w-full">
       {/* Page Title */}

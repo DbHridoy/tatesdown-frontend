@@ -1,8 +1,6 @@
-import { createCustomApi } from "./createCustomApi";
+import { baseApi } from "../baseApi";
 
-const statsApi = createCustomApi({
-  reducerPath: "statsApi",
-  tagTypes: ["Stats"],
+const statsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdminStats: builder.query({
       query: () => "/stats/admin",
