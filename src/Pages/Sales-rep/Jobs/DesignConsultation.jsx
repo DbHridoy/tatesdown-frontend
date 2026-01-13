@@ -4,8 +4,7 @@ import { useCreateDesignConsultationMutation } from "../../../redux/api/jobApi";
 import toast from "react-hot-toast";
 
 const DesignConsultationCreate = () => {
-  const [createDesignConsultation] =
-    useCreateDesignConsultationMutation();
+  const [createDesignConsultation] = useCreateDesignConsultationMutation();
 
   const navigate = useNavigate();
   const { jobId } = useParams();
@@ -18,7 +17,7 @@ const DesignConsultationCreate = () => {
 
   const [upsellDetails, setUpsellDetails] = useState({
     upsellDescription: "",
-    upsellItem: "",
+    upsellValue: "",
     addedHours: "",
   });
 
@@ -45,7 +44,7 @@ const DesignConsultationCreate = () => {
 
       // upsell
       formData.append("upsellDescription", upsellDetails.upsellDescription);
-      formData.append("upsellItem", upsellDetails.upsellItem);
+      formData.append("upsellValue", upsellDetails.upsellValue);
       formData.append("addedHours", upsellDetails.addedHours);
 
       // scheduling
@@ -57,7 +56,7 @@ const DesignConsultationCreate = () => {
       }
 
       await createDesignConsultation(formData).unwrap();
-      toast.success("Design consultation added successfully")
+      toast.success("Design consultation added successfully");
 
       navigate(`/sales-rep/jobs/${jobId}`);
     } catch (err) {
@@ -96,7 +95,10 @@ const DesignConsultationCreate = () => {
             type="text"
             value={productDetails.colorCode}
             onChange={(e) =>
-              setProductDetails({ ...productDetails, colorCode: e.target.value })
+              setProductDetails({
+                ...productDetails,
+                colorCode: e.target.value,
+              })
             }
             className="mt-1 p-3 w-full border rounded-md"
           />
@@ -123,45 +125,57 @@ const DesignConsultationCreate = () => {
       {/* Upsell */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-4">Upsell</h3>
-
-        <input
-          type="text"
-          placeholder="Upsell Description"
-          value={upsellDetails.upsellDescription}
-          onChange={(e) =>
-            setUpsellDetails({
-              ...upsellDetails,
-              upsellDescription: e.target.value,
-            })
-          }
-          className="mb-3 p-3 w-full border rounded-md"
-        />
-
-        <input
-          type="text"
-          placeholder="Upsell Item"
-          value={upsellDetails.upsellItem}
-          onChange={(e) =>
-            setUpsellDetails({
-              ...upsellDetails,
-              upsellItem: e.target.value,
-            })
-          }
-          className="mb-3 p-3 w-full border rounded-md"
-        />
-
-        <input
-          type="number"
-          placeholder="Added Hours"
-          value={upsellDetails.addedHours}
-          onChange={(e) =>
-            setUpsellDetails({
-              ...upsellDetails,
-              addedHours: e.target.value,
-            })
-          }
-          className="p-3 w-full border rounded-md"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Upsell Description
+          </label>
+          <input
+            type="text"
+            placeholder="Upsell Description"
+            value={upsellDetails.upsellDescription}
+            onChange={(e) =>
+              setUpsellDetails({
+                ...upsellDetails,
+                upsellDescription: e.target.value,
+              })
+            }
+            className="mt-1 mb-3 p-3 w-full border rounded-md"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Upsell Value
+          </label>
+          <input
+            type="text"
+            placeholder="Upsell Value"
+            value={upsellDetails.upsellValue}
+            onChange={(e) =>
+              setUpsellDetails({
+                ...upsellDetails,
+                upsellValue: e.target.value,
+              })
+            }
+            className="mt-1 mb-3 p-3 w-full border rounded-md"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Added Hours
+          </label>
+          <input
+            type="number"
+            placeholder="Added Hours"
+            value={upsellDetails.addedHours}
+            onChange={(e) =>
+              setUpsellDetails({
+                ...upsellDetails,
+                addedHours: e.target.value,
+              })
+            }
+            className="mt-1 mb-3 p-3 w-full border rounded-md"
+          />
+        </div>{" "}
       </div>
 
       {/* Scheduling */}

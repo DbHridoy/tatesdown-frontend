@@ -1,10 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
 
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 
-const DC = ({ job }) => {
+const DC = ({ jobId }) => {
   const navigate = useNavigate();
+  const { data: jobDetails } = useGetJobByIdQuery(jobId);
+  const job = jobDetails?.data;
 
   const handleDownload = (fileName) => {
     console.log(`Downloading ${fileName}`);
@@ -25,7 +28,7 @@ const DC = ({ job }) => {
 
         <button
           onClick={() =>
-            navigate(`/sales-rep/jobs/${job._id}/design-consultation`)
+            navigate(`/sales-rep/jobs/${jobId}/design-consultation`)
           }
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >

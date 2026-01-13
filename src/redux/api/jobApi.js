@@ -8,7 +8,7 @@ const jobApi = baseApi.injectEndpoints({
         method: "POST",
         body: newJob,
       }),
-      invalidatesTags: ["Job","User"],
+      invalidatesTags: ["Job", "User"],
     }),
 
     createJobNote: builder.mutation({
@@ -26,7 +26,7 @@ const jobApi = baseApi.injectEndpoints({
         body: dc,
         method: "POST",
       }),
-      providesTags: ["Job"],
+      invalidatesTags: ["Job"],
     }),
 
     getAllJobs: builder.query({
@@ -52,6 +52,7 @@ const jobApi = baseApi.injectEndpoints({
       },
       providesTags: ["Job"],
     }),
+
     getJobById: builder.query({
       query: (id) => `/jobs/${id}`,
       providesTags: ["Job"],
@@ -91,6 +92,7 @@ const jobApi = baseApi.injectEndpoints({
       },
       providesTags: ["Job"],
     }),
+
     getPendingCloseRequest: builder.query({
       query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
@@ -114,6 +116,7 @@ const jobApi = baseApi.injectEndpoints({
       },
       providesTags: ["Job"],
     }),
+
     updateDownPaymentStatus: builder.mutation({
       query: ({ id, status }) => ({
         url: "/jobs/downpayment-status",
@@ -125,6 +128,7 @@ const jobApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Job"],
     }),
+
     getSalesRepJobs: builder.query({
       query: ({ options = {}, repId }) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
@@ -146,6 +150,7 @@ const jobApi = baseApi.injectEndpoints({
       },
       providesTags: ["Job"],
     }),
+
     getSalesRepDeduction: builder.query({
       query: (repId) => `/stats/sales-rep-stats/${repId}`,
       providesTags: ["Job"],

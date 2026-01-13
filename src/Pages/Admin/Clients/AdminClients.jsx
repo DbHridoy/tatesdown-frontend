@@ -26,8 +26,8 @@ const AdminClients = () => {
   // ✅ Safe formatting
   const formattedJobs = jobs.map((j) => ({
     _id: j._id,
-    clientName: j.quoteId?.clientId?.clientName ?? "N/A",
-    cluster: j.quoteId?.clientId?.salesRepId?.cluster,
+    clientName: j.clientId?.clientName ?? "N/A",
+    cluster: j.salesRepId?.cluster,
     estimatedPrice: j.estimatedPrice,
     jobStatus: j.status,
     startDate: new Date(j.startDate).toLocaleDateString(),

@@ -25,67 +25,6 @@ const JobDetailsPage = () => {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Job Header */}
-      <JobDetailsHeader job={job} isEditing={isEditing} />
-
-      {/* Top Section: Client Info + Financials */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Client Info */}
-        <div className="p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Client Information</h2>
-          <div className="space-y-2 text-gray-700">
-            <p>
-              <span className="font-semibold">Name:</span> {client?.clientName || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Partner:</span> {client?.partnerName || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Email:</span> {client?.email || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Phone:</span> {client?.phoneNumber || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Address:</span> {client?.address || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Lead Source:</span> {client?.leadSource || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Lead Status:</span> {client?.leadStatus || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Rating:</span> {client?.rating || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Custom Client ID:</span> {client?.customClientId || "N/A"}
-            </p>
-          </div>
-        </div>
-
-        {/* Financial Details */}
-        <FinancialDetails
-          job={{
-            estimatedPrice: quote?.estimatedPrice || job.estimatedPrice,
-            downPayment: job.downPayment,
-            budgetSpent: job.budgetSpent,
-            downPaymentStatus: job.downPaymentStatus,
-            totalHours: job.totalHours,
-            setupCleanup: job.setupCleanup,
-            powerwash: job.powerwash,
-            labourHours: job.labourHours,
-          }}
-          isEditing={isEditing}
-        />
-      </div>
-
-      {/* DC Section */}
-      <DC job={job} />
-
-      {/* Notes Section */}
-      <SharedNotes notes={job.notes} />
-
       {/* Edit/Save Buttons */}
       <div className="flex justify-end space-x-2">
         {isEditing ? (
@@ -112,6 +51,77 @@ const JobDetailsPage = () => {
           </button>
         )}
       </div>
+      {/* Job Header */}
+      <JobDetailsHeader job={job} isEditing={isEditing} />
+
+      {/* Top Section: Client Info + Financials */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Client Info */}
+        <div className="p-6 bg-white shadow-md rounded-md border">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Client Information
+          </h2>
+          <div className="space-y-2 text-gray-700">
+            <p>
+              <span className="font-semibold">Name:</span>{" "}
+              {client?.clientName || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Partner:</span>{" "}
+              {client?.partnerName || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Email:</span>{" "}
+              {client?.email || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Phone:</span>{" "}
+              {client?.phoneNumber || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Address:</span>{" "}
+              {client?.address || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Lead Source:</span>{" "}
+              {client?.leadSource || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Lead Status:</span>{" "}
+              {client?.leadStatus || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Rating:</span>{" "}
+              {client?.rating || "N/A"}
+            </p>
+            <p>
+              <span className="font-semibold">Custom Client ID:</span>{" "}
+              {client?.customClientId || "N/A"}
+            </p>
+          </div>
+        </div>
+
+        {/* Financial Details */}
+        <FinancialDetails
+          job={{
+            estimatedPrice: quote?.estimatedPrice || job.estimatedPrice,
+            downPayment: job.downPayment,
+            budgetSpent: job.budgetSpent,
+            downPaymentStatus: job.downPaymentStatus,
+            totalHours: job.totalHours,
+            setupCleanup: job.setupCleanup,
+            powerwash: job.powerwash,
+            labourHours: job.labourHours,
+          }}
+          isEditing={isEditing}
+        />
+      </div>
+
+      {/* DC Section */}
+      <DC jobId={jobId} />
+
+      {/* Notes Section */}
+      <SharedNotes notes={job.notes} />
     </div>
   );
 };

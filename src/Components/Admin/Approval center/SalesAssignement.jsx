@@ -6,8 +6,7 @@ import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 
 function SalesAssignement() {
   const [open, setOpen] = useState(false);
-  const [selectedLead,setSelectedLead]=useState(null)
- 
+  const [selectedLead, setSelectedLead] = useState(null);
 
   const { data: clientData, isLoading: clientsLoading } = useGetAllClientsQuery(
     { filters: { salesRepId: null } }
@@ -28,19 +27,12 @@ function SalesAssignement() {
     <div className="bg-white rounded-lg shadow">
       <div className="flex items-center justify-between p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-100 rounded">
-            <Users className="w-5 h-5 text-blue-600" />
-          </div>
           <div>
             <h2 className="text-xl font-semibold text-gray-800">
               Lead Assignment Approvals
             </h2>
-            <p className="text-sm text-gray-600">
-              Review and approve lead assignments
-            </p>
           </div>
         </div>
-        <span className="font-semibold text-blue-600">2 Pending</span>
       </div>
 
       <div className="overflow-x-auto">
@@ -56,9 +48,6 @@ function SalesAssignement() {
               <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
                 Phone Number
               </th>
-              {/* <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
-                Approval Status
-              </th> */}
               <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
                 Actions
               </th>
@@ -122,7 +111,7 @@ function SalesAssignement() {
       <SalesRepresentativeModal
         isOpen={open}
         onClose={() => setOpen(false)}
-            lead={selectedLead}
+        lead={selectedLead}
       />
     </div>
   );

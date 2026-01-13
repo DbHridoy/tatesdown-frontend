@@ -18,6 +18,20 @@ const commonApi = baseApi.injectEndpoints({
       query: () => "/common/salesrep-leaderboard",
       providesTags: ["LeaderBoard"],
     }),
+
+    createFiscalYear: builder.mutation({
+      query: (newFiscalYear) => ({
+        url: "/common/fiscal-year",
+        method: "POST",
+        body: newFiscalYear,
+      }),
+      invalidatesTags: ["FiscalYear"],
+    }),
+
+    getFiscalYear: builder.query({
+      query: () => "/common/active-fiscal-year",
+      providesTags: ["FiscalYear"],
+    }),
   }),
 });
 
@@ -25,5 +39,7 @@ export const {
   useUpsertVariableMutation,
   useGetVariablesQuery,
   useGetLeaderBoardQuery,
+  useCreateFiscalYearMutation,
+  useGetFiscalYearQuery,
 } = commonApi;
 export default commonApi;

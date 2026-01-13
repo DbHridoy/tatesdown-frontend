@@ -2,12 +2,12 @@ import { useState } from "react";
 import {
   useCreateClientMutation,
   useAddNoteMutation,
-} from "../../../redux/api/clientApi";
+} from "../../redux/api/clientApi";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import { selectCurrentUser } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import ClientNote from "../../../Components/Sales-rep/Clients/ClientNote";
+import ClientNote from "../../Components/Sales-rep/Clients/ClientNote";
 
 const AddClient = () => {
   const navigate = useNavigate();
@@ -94,9 +94,7 @@ const AddClient = () => {
             <label className="block text-sm font-medium">Client Name *</label>
             <input
               value={formData.clientName}
-              onChange={(e) =>
-                handleInputChange("clientName", e.target.value)
-              }
+              onChange={(e) => handleInputChange("clientName", e.target.value)}
               className="w-full border px-3 py-2 rounded-lg"
               required
             />
@@ -106,9 +104,7 @@ const AddClient = () => {
             <label className="block text-sm font-medium">Partner Name</label>
             <input
               value={formData.partnerName}
-              onChange={(e) =>
-                handleInputChange("partnerName", e.target.value)
-              }
+              onChange={(e) => handleInputChange("partnerName", e.target.value)}
               className="w-full border px-3 py-2 rounded-lg"
             />
           </div>
@@ -119,10 +115,9 @@ const AddClient = () => {
           <div>
             <label className="block text-sm font-medium">Phone *</label>
             <input
+              type="tel"
               value={formData.phoneNumber}
-              onChange={(e) =>
-                handleInputChange("phoneNumber", e.target.value)
-              }
+              onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
               className="w-full border px-3 py-2 rounded-lg"
               required
             />
@@ -155,9 +150,7 @@ const AddClient = () => {
           <label className="block text-sm font-medium">Lead Source *</label>
           <select
             value={formData.leadSource}
-            onChange={(e) =>
-              handleInputChange("leadSource", e.target.value)
-            }
+            onChange={(e) => handleInputChange("leadSource", e.target.value)}
             className="w-full border px-3 py-2 rounded-lg"
             required
           >
@@ -172,9 +165,7 @@ const AddClient = () => {
 
         {/* Lead Rating */}
         <div>
-          <label className="block text-sm font-medium mb-2">
-            Lead Rating
-          </label>
+          <label className="block text-sm font-medium mb-2">Lead Rating</label>
           <div className="flex items-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -186,9 +177,7 @@ const AddClient = () => {
                 {star <= formData.rating ? "★" : "☆"}
               </button>
             ))}
-            <span className="text-sm text-gray-600">
-              {formData.rating}/5
-            </span>
+            <span className="text-sm text-gray-600">{formData.rating}/5</span>
           </div>
         </div>
 
@@ -199,9 +188,7 @@ const AddClient = () => {
           <div className="border rounded-lg p-3 text-sm space-y-1">
             <b>Draft Notes:</b>
             {draftNotes.map((n, i) => (
-              <div key={i}>
-                • {n.note || n.file?.name}
-              </div>
+              <div key={i}>• {n.note || n.file?.name}</div>
             ))}
           </div>
         )}

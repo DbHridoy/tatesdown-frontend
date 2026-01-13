@@ -24,7 +24,6 @@ import Home from "../Pages/Sales-rep/Home/Home";
 import Clients from "../Pages/Sales-rep/Clients/Clients";
 import ClientDetails from "../Pages/Sales-rep/Clients/ClientDetails";
 import AddCallLog from "../Pages/Sales-rep/Clients/AddCallLog";
-import AddClient from "../Pages/Sales-rep/Clients/AddClient";
 import Quotes from "../Pages/Sales-rep/Quotes/Quote";
 import AddNewQuote from "../Pages/Sales-rep/Quotes/AddNewQuote";
 import QuoteDetails from "../Pages/Sales-rep/Quotes/QuoteDetails";
@@ -43,6 +42,7 @@ import ProductionSettings from "../Pages/Common/ProductionSettings";
 // Common
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
 import Settings from "../Pages/Common/ProductionSettings";
+import AddClient from "../Pages/Common/AddClient";
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -107,7 +107,7 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="home" replace /> },
           { path: "home", element: <ProductionHome /> }, // matches menuConfig
           { path: "jobs", element: <JobScheduling /> },
-          { path: "jobs/:id", element: <JobOverview /> },
+          { path: "jobs/:jobId", element: <JobOverview /> },
           { path: "settings", element: <ProductionSettings /> }, // matches menuConfig
           { path: "*", element: <GlobalNoRoute /> },
         ],
@@ -127,7 +127,7 @@ export const router = createBrowserRouter([
           { path: "dashboard", element: <Dashboard /> },
           { path: "clients", element: <AdminClients /> },
           { path: "add-clients", element: <AddClient /> },
-          { path: "jobs/:id", element: <JobDetailsPage /> },
+          { path: "jobs/:jobId", element: <JobDetailsPage /> },
           { path: "approvals-center", element: <Approvals /> },
           { path: "reports", element: <Reports /> },
           { path: "reports-details/:id", element: <RepDetails /> },
