@@ -18,7 +18,9 @@ function FAB() {
   };
 
   // Hide FAB for Production Manager only
-  if (role === "Production Manager") return null;
+  if (role === "Production Manager") {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col items-end z-50 space-y-3">
@@ -30,7 +32,7 @@ function FAB() {
             <button
               onClick={() =>
                 handleClick(
-                  role === "Admin" ? `/admin/clients` : `/sales-rep/add-client`
+                  role === "Admin" ? `/admin/add-clients` : `/sales-rep/add-client`
                 )
               }
               className="flex items-center justify-center w-48 p-2 h-12 rounded-2xl bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition"

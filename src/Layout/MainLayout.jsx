@@ -97,11 +97,7 @@ const MainLayout = () => {
 
           {/* Topbar */}
           <div className="flex-1">
-            {role === "Sales Rep" ? (
-              <SalesRepTopbar label={activeLabel} />
-            ) : (
-              <Topbar label={activeLabel} />
-            )}
+            <Topbar label={activeLabel} />
           </div>
         </header>
 

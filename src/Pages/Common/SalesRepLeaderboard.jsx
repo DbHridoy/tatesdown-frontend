@@ -18,10 +18,9 @@ function SalesRepLeaderboard() {
           <tr className="bg-gray-100">
             <th className="border px-4 py-2 text-left">#</th>
             <th className="border px-4 py-2 text-left">Name</th>
-            <th className="border px-4 py-2 text-left">Email</th>
             <th className="border px-4 py-2 text-left">Total Clients</th>
+            <th className="border px-4 py-2 text-left">Total Quotes</th>
             <th className="border px-4 py-2 text-left">Total Sold</th>
-            <th className="border px-4 py-2 text-left">Commission Earned</th>
           </tr>
         </thead>
         <tbody>
@@ -29,10 +28,9 @@ function SalesRepLeaderboard() {
             <tr key={rep._id} className="hover:bg-gray-50">
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">{rep.userId.fullName}</td>
-              <td className="border px-4 py-2">{rep.userId.email}</td>
               <td className="border px-4 py-2">{rep.totalClients}</td>
+              <td className="border px-4 py-2">{rep.totalQuotes}</td>
               <td className="border px-4 py-2">{rep.totalSold}</td>
-              <td className="border px-4 py-2">{rep.commissionEarned}</td>
             </tr>
           ))}
         </tbody>

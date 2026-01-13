@@ -126,6 +126,8 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "clients", element: <AdminClients /> },
+          { path: "add-clients", element: <AddClient /> },
+          { path: "jobs/:id", element: <JobDetailsPage /> },
           { path: "approvals-center", element: <Approvals /> },
           { path: "reports", element: <Reports /> },
           { path: "reports-details/:id", element: <RepDetails /> },

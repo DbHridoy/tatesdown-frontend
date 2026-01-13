@@ -21,7 +21,7 @@ const AddNewJob = () => {
   const [downPayment, setDownPayment] = useState("");
   const [startDate, setStartDate] = useState("");
   const [description, setDescription] = useState("");
-  const [estimatedPrice, setEstimatedPrice] = useState(0);
+  const [price, setPrice] = useState(0);
 
   // New fields
   const [totalHours, setTotalHours] = useState("");
@@ -42,7 +42,7 @@ const AddNewJob = () => {
   useEffect(() => {
     const selectedQuote = quotes.find((q) => q._id === selectedQuoteId);
     if (selectedQuote) {
-      setEstimatedPrice(selectedQuote.estimatedPrice);
+      setPrice(selectedQuote.estimatedPrice);
       setTitle(`Job for ${selectedQuote.clientId.clientName}`);
       setDescription(selectedQuote.notes || "");
     }
@@ -71,7 +71,7 @@ const AddNewJob = () => {
       clientId: selectedQuote.clientId._id, // <- include clientId here
       title,
       description,
-      estimatedPrice,
+      price,
       downPayment: Number(downPayment),
       startDate: new Date(startDate),
       totalHours: Number(totalHours),
@@ -171,7 +171,7 @@ const AddNewJob = () => {
           <div className="flex-1">
             <label className="block font-semibold mb-1">Price</label>
             <input
-              value={estimatedPrice}
+              value={price}
               className="w-full border px-3 py-2 rounded bg-gray-100"
               readOnly
             />

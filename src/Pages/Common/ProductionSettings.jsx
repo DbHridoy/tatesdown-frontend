@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Edit, Briefcase, Camera, Check } from "lucide-react";
 import { useGetMeQuery, useUpdateMeMutation } from "../../redux/api/userApi";
+import toast from "react-hot-toast";
 
 const Settings = () => {
   const { data: profileData } = useGetMeQuery();
@@ -9,7 +10,6 @@ const Settings = () => {
 
   const [updateUser, { isLoading: isUpdating }] = useUpdateMeMutation();
   const [isEditing, setIsEditing] = useState(false);
-  const [showSaveSuccess, setShowSaveSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -76,28 +76,15 @@ const Settings = () => {
       if (formData.avatar) payload.append("profileImage", formData.avatar);
 
       await updateUser(payload).unwrap();
-
+      toast.success("Profile updated successfully!");
       setIsEditing(false);
-      setShowSaveSuccess(true);
-      setTimeout(() => setShowSaveSuccess(false), 3000);
     } catch (error) {
-      console.error("Failed to update profile:", error);
-      alert("Failed to update profile. Please try again.");
+      toast.error("Failed to update profile. Please try again.");
     }
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      {/* Success Message */}
-      {showSaveSuccess && (
-        <div className="flex items-center gap-2 p-4 mb-4 border border-green-200 rounded-lg bg-green-50">
-          <Check className="w-5 h-5 text-green-600" />
-          <span className="text-sm font-medium text-green-800">
-            Profile updated successfully!
-          </span>
-        </div>
-      )}
-
+    <div className="p-8 bg-gray-50">
       <div className="p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
         {/* Header */}
         <div className="mb-8">
