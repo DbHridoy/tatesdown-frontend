@@ -10,6 +10,11 @@ const commonApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Variable"],
     }),
+
+    getMyStats: builder.query({
+      query: () => "/common/my-stats",
+      providesTags: ["MyStats"],
+    }),
     getVariables: builder.query({
       query: () => "/common/get-variable",
       providesTags: ["Variable"],
@@ -41,5 +46,6 @@ export const {
   useGetLeaderBoardQuery,
   useCreateFiscalYearMutation,
   useGetFiscalYearQuery,
+  useGetMyStatsQuery,
 } = commonApi;
 export default commonApi;

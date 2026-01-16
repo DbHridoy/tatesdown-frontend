@@ -11,14 +11,14 @@ const AddMileageLog = ({ closeModal }) => {
   const [totalMilesDriven, setTotalMilesDriven] = useState("");
   const [file, setFile] = useState(null);
   const [note, setNote] = useState("");
-  
+
 
   const [createMileageLog, { isLoading }] =
     useCreateMileageLogMutation();
 
   const months = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
   ];
 
   const currentYear = new Date().getFullYear();
@@ -55,7 +55,7 @@ const AddMileageLog = ({ closeModal }) => {
 
     // ✅ Correct way to debug FormData
     for (const [key, value] of formData.entries()) {
-      console.log(key, value);
+      //console.log(key, value);
     }
 
     try {

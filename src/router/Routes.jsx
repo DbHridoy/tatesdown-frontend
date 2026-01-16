@@ -32,6 +32,7 @@ import JobDetailsPage from "../Pages/Sales-rep/Jobs/JobDetailsPage";
 import AddNewJob from "../Pages/Sales-rep/Jobs/AddNewJob";
 import DesignConsultation from "../Pages/Sales-rep/Jobs/DesignConsultation";
 import UserExpenses from "../Pages/Sales-rep/ExpensesMileage/Expenses";
+import SalesReports from "../Pages/Sales-rep/Reports/SalesRepReports";
 
 // Production Manager Pages
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
@@ -43,6 +44,7 @@ import ProductionSettings from "../Pages/Common/ProductionSettings";
 import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
 import Settings from "../Pages/Common/ProductionSettings";
 import AddClient from "../Pages/Common/AddClient";
+import ProductionManagerReports from "../Pages/Production-Manager/Reports/ProductionManagerReports";
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -88,6 +90,7 @@ export const router = createBrowserRouter([
             path: "jobs/:jobId/design-consultation",
             element: <DesignConsultation />,
           },
+          { path: "reports", element: <SalesReports /> },
           { path: "mileage-log", element: <UserExpenses /> },
           { path: "settings", element: <Settings /> },
           { path: "*", element: <GlobalNoRoute /> },
@@ -108,6 +111,7 @@ export const router = createBrowserRouter([
           { path: "home", element: <ProductionHome /> }, // matches menuConfig
           { path: "jobs", element: <JobScheduling /> },
           { path: "jobs/:jobId", element: <JobOverview /> },
+          { path: "reports", element: <ProductionManagerReports /> },
           { path: "settings", element: <ProductionSettings /> }, // matches menuConfig
           { path: "*", element: <GlobalNoRoute /> },
         ],
@@ -143,3 +147,4 @@ export const router = createBrowserRouter([
   // Fallback
   { path: "*", element: <GlobalNoRoute /> },
 ]);
+

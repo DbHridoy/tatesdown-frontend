@@ -31,7 +31,7 @@ const clientApi = baseApi.injectEndpoints({
 
     getAllClients: builder.query({
       query: (options = {}) => {
-        const { page = 1, limit = 10, search, sort, filters = {} } = options;
+        const { page = 1, limit = 0, search, sort, filters = {} } = options;
 
         const params = new URLSearchParams();
 
@@ -47,6 +47,8 @@ const clientApi = baseApi.injectEndpoints({
             params.set(key, value);
           }
         });
+
+        console.log(params.toString());
 
         return `/clients?${params.toString()}`;
       },

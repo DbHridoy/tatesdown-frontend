@@ -31,7 +31,7 @@ const jobApi = baseApi.injectEndpoints({
 
     getAllJobs: builder.query({
       query: (options = {}) => {
-        const { page = 1, limit = 10, search, sort, filters = {} } = options;
+        const { page = 1, limit = 0, search, sort, filters = {} } = options;
 
         const params = new URLSearchParams();
 
@@ -59,11 +59,12 @@ const jobApi = baseApi.injectEndpoints({
     }),
 
     changeStatus: builder.mutation({
-      query: ({ id, status }) => ({
+      query: ({ id, status, productionManagerId }) => ({
         url: `/jobs/${id}`,
         method: "PATCH",
         body: {
           status,
+          productionManagerId
         },
       }),
       invalidatesTags: ["Job"],

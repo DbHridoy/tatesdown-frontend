@@ -23,7 +23,7 @@ function Clients() {
 
   const { data: clientsData, isLoading } = useGetAllClientsQuery(params);
 
-  console.log("clientsData", clientsData);
+  //console.log("clientsData", clientsData);
   const [deleteClient] = useDeleteClientMutation();
 
   const clients = clientsData?.data;

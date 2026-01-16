@@ -18,7 +18,7 @@ const RepDetails = () => {
     sortOrder: "asc",
     filters: {},
   });
-  console.log("repId", id);
+  //console.log("repId", id);
   const { data: jobsData = [] } = useGetSalesRepJobsQuery({
     options: params,
     repId: id,

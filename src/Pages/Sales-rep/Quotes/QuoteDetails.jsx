@@ -62,7 +62,7 @@ const QuoteDetails = () => {
       payload.append("_dummy", "true");
       // ✅ correct debug
       for (let [key, value] of payload.entries()) {
-        console.log(key, value);
+        //console.log(key, value);
       }
 
       await updateQuote({

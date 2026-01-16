@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const Settings = () => {
   const { data: profileData } = useGetMeQuery();
   const profile = profileData?.data;
-  console.log("from setting", profile);
+  //console.log("from setting", profile);
 
   const [updateUser, { isLoading: isUpdating }] = useUpdateMeMutation();
   const [isEditing, setIsEditing] = useState(false);
@@ -157,11 +157,10 @@ const Settings = () => {
                 value={formData.name}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`w-full px-3 py-2 text-sm border rounded ${
-                  isEditing
+                className={`w-full px-3 py-2 text-sm border rounded ${isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
-                }`}
+                  }`}
               />
             </div>
 
@@ -190,11 +189,10 @@ const Settings = () => {
                 onChange={(e) =>
                   handleInputChange("phoneNumber", e.target.value)
                 }
-                className={`w-full px-3 py-2 text-sm border rounded ${
-                  isEditing
+                className={`w-full px-3 py-2 text-sm border rounded ${isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
-                }`}
+                  }`}
               />
             </div>
 
@@ -207,11 +205,10 @@ const Settings = () => {
                 value={formData.address}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("address", e.target.value)}
-                className={`w-full px-3 py-2 text-sm border rounded ${
-                  isEditing
+                className={`w-full px-3 py-2 text-sm border rounded ${isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
-                }`}
+                  }`}
               />
             </div>
           </div>
@@ -223,11 +220,10 @@ const Settings = () => {
             <button
               onClick={handleSaveChanges}
               disabled={isUpdating}
-              className={`px-6 py-2.5 text-white rounded text-sm font-medium transition-colors ${
-                isUpdating
+              className={`px-6 py-2.5 text-white rounded text-sm font-medium transition-colors ${isUpdating
                   ? "bg-blue-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
-              }`}
+                }`}
             >
               {isUpdating ? "Saving..." : "Save Changes"}
             </button>
@@ -235,9 +231,8 @@ const Settings = () => {
               type="button"
               onClick={handleCancel}
               disabled={isUpdating}
-              className={`px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded text-sm font-medium hover:bg-gray-50 ${
-                isUpdating ? "cursor-not-allowed" : ""
-              }`}
+              className={`px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded text-sm font-medium hover:bg-gray-50 ${isUpdating ? "cursor-not-allowed" : ""
+                }`}
             >
               Cancel
             </button>

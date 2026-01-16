@@ -30,7 +30,7 @@ const Modal = ({ show, title, message, onCancel, onConfirm }) => {
 };
 
 const DataTable = ({ title, data = [], config = {} }) => {
-  console.log(data);
+  //console.log(data);
   const {
     columns = [],
     actions = [],
@@ -55,9 +55,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
   });
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  console.log("totalPages", totalPages);
-  console.log("totalItems", totalItems);
-  console.log("itemsPerPage", itemsPerPage);
+  console.log("line:58-totalItems", totalItems);
+  console.log("line:59-itemsPerPage", itemsPerPage);
+  console.log("line:60-totalPages", totalPages);
   const handleSort = (col) => {
     if (!col.sortable) return;
     onSortChange?.(col.accessor);
@@ -123,9 +123,8 @@ const DataTable = ({ title, data = [], config = {} }) => {
                   <th
                     key={col.accessor}
                     onClick={() => col.sortable && handleSort(col)}
-                    className={`px-4 py-3 text-center align-middle text-sm font-semibold ${
-                      col.sortable ? "cursor-pointer" : ""
-                    }`}
+                    className={`px-4 py-3 text-center align-middle text-sm font-semibold ${col.sortable ? "cursor-pointer" : ""
+                      }`}
                   >
                     {col.label}
                     {col.sortable &&
@@ -158,9 +157,8 @@ const DataTable = ({ title, data = [], config = {} }) => {
                     return (
                       <td key={col.accessor}>
                         <div
-                          className={`text-center align-middle text-sm ${
-                            col.colorMap?.[value] || ""
-                          }`}
+                          className={`text-center align-middle text-sm ${col.colorMap?.[value] || ""
+                            }`}
                         >
                           {value}
                         </div>

@@ -18,7 +18,7 @@ function Quickbooks() {
       )
     ) {
       setIsConnected(false);
-      console.log("QuickBooks disconnected");
+      //console.log("QuickBooks disconnected");
     }
   };
 
@@ -29,7 +29,7 @@ function Quickbooks() {
       setLastSync(new Date());
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
-      console.log("QuickBooks connected");
+      //console.log("QuickBooks connected");
     }, 1000);
   };
 
@@ -44,7 +44,7 @@ function Quickbooks() {
       setIsSyncing(false);
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
-      console.log("Synced at:", new Date().toISOString());
+      //console.log("Synced at:", new Date().toISOString());
     }, 2000);
   };
   return (
@@ -111,11 +111,10 @@ function Quickbooks() {
             <button
               onClick={handleSyncNow}
               disabled={!isConnected || isSyncing}
-              className={`flex items-center px-4 py-2 rounded-md font-medium transition-colors ${
-                isConnected && !isSyncing
+              className={`flex items-center px-4 py-2 rounded-md font-medium transition-colors ${isConnected && !isSyncing
                   ? "bg-blue-500 text-white hover:bg-blue-600"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+                }`}
             >
               <RefreshCw
                 className={`w-4 h-4 mr-2 ${isSyncing ? "animate-spin" : ""}`}

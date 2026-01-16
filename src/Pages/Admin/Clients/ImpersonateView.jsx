@@ -45,7 +45,7 @@ const ImpersonateView = () => {
   ];
 
   const handleExitImpersonation = () => {
-    console.log('Exiting impersonation mode');
+    //console.log('Exiting impersonation mode');
     navigate('/s/admin/clients');
   };
 
@@ -65,7 +65,7 @@ const ImpersonateView = () => {
   return (
     <div className="bg-white p-6 shadow-lg rounded-lg">
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Impersonate View</h1>
-      
+
       {/* User Info Section */}
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-900">Michael Chen</h2>
@@ -79,7 +79,7 @@ const ImpersonateView = () => {
       {/* Additional Leads Section */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Leads</h3>
-        
+
         <div className="overflow-x-auto rounded-lg border border-gray-200">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">

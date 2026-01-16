@@ -47,7 +47,7 @@ const AdminClients = () => {
         label: "View",
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
-          console.log(item);
+          //console.log(item);
           navigate(`/admin/jobs/${item._id}`);
         },
       },

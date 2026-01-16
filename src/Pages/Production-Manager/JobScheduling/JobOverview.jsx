@@ -33,7 +33,7 @@ export default function JobOverview() {
 
   const changeStatusHandler = async (status) => {
     if (!status) return;
-    console.log("from change status handler", job._id, status)
+    //console.log("from change status handler", job._id, status)
     try {
       await changeStatus({ id: job._id, status }).unwrap();
       toast.success("Status updated successfully");

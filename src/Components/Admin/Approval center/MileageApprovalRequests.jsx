@@ -12,7 +12,7 @@ function MileageApprovalRequests() {
 
   const { data: getPendingMileageLogs, isLoading: isGetLoading } =
     useGetPendingMileageLogsQuery();
-  console.log(getPendingMileageLogs);
+  //console.log(getPendingMileageLogs);
   const mileageData = getPendingMileageLogs?.data ?? [];
 
   const formattedMileageData = mileageData.map((m) => ({
@@ -58,7 +58,7 @@ function MileageApprovalRequests() {
         modalMessage: (item) =>
           `Are you sure you want to reject ${item.fullName}?`,
         onConfirm: (item) => {
-          console.log(item); // logs the whole item
+          //console.log(item); // logs the whole item
           changeMileageLogStatus({ id: item.id, status: "Rejected" });
         },
       },

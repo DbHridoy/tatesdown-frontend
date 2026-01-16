@@ -1,5 +1,5 @@
 const ExpenseCard = ({ totalMiles, totalDeduction }) => {
-  console.log("from expense card",totalMiles,totalDeduction)
+  //console.log("from expense card",totalMiles,totalDeduction)
   return (
     <div className="">
       <div className="mx-auto">

@@ -23,7 +23,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
       api,
       extraOptions
     );
-    console.log(refreshResult);
+    //console.log(refreshResult);
     if (refreshResult && refreshResult.data) {
       api.dispatch(
         setCredentials({
@@ -33,7 +33,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
         })
       );
     } else {
-      console.log("Refresh token failed, logging out...");
+      //console.log("Refresh token failed, logging out...");
       api.dispatch(logout());
     }
     result = await baseQuery(args, api, extraOptions);

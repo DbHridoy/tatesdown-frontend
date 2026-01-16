@@ -13,23 +13,24 @@ function Quotes() {
     search: "",
     sortKey: "fullName",
     sortOrder: "asc",
-    filters: { status:"Pending"},
+    filters: { status: "Pending" },
   });
 
   const { data } = useGetAllQuotesQuery(params);
   const quotes = data?.data ?? [];
-  console.log(quotes);
-  const totalItems = quotes?.total;
+  console.log("line:21-quotes", quotes);
+  const totalItems = data?.total;
+  console.log("line:23-totalItems", totalItems);
   const formattedQuote = quotes.map((q) => {
     return {
-      _id:q._id,
+      _id: q._id,
       clientName: q.clientId.clientName,
       estimatedPrice: q.estimatedPrice,
       bidSheet: q.bidSheet,
       bookedOnSpot: q.bookedOnSpot,
       expiryDate: new Date(q.expiryDate).toLocaleDateString(),
       notes: q.notes,
-      status: q.status==='pending'?'Pending':q.status==='approved'?'Approved':'Rejected',
+      status: q.status === 'pending' ? 'Pending' : q.status === 'approved' ? 'Approved' : 'Rejected',
       createdAt: new Date(q.createdAt).toLocaleDateString(),
       updatedAt: new Date(q.updatedAt).toLocaleDateString(),
       customQuoteId: q.customQuoteId,
@@ -42,7 +43,7 @@ function Quotes() {
       { label: "Client name", accessor: "clientName", sortable: true },
       { label: "Estimated price", accessor: "estimatedPrice", sortable: true },
       { label: "Creation date", accessor: "createdAt", sortable: true },
-     
+
     ],
     // filters: [
     //   {
@@ -59,8 +60,9 @@ function Quotes() {
         label: "View",
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
-          console.log(item)
-          navigate(`/s/sales-rep/quotes/${item._id}`)},
+          //console.log(item)
+          navigate(`/s/sales-rep/quotes/${item._id}`)
+        },
       },
     ],
     totalItems: totalItems,
@@ -125,15 +127,6 @@ function Quotes() {
           <h1 className="text-2xl font-bold">Quotes</h1>
           <p>Manage your quotes here</p>
         </div>
-        {/* <div className="flex flex-row gap-2 bg-primarycolor text-white p-4 rounded">
-          <HugeiconsIcon icon={UserAdd01Icon} />
-          <button
-            className=" "
-            onClick={() => navigate("/s/sales-rep/add-new-quote")}
-          >
-            Add Quote
-          </button>
-        </div> */}
       </div>
       <DataTable title="Quotes" data={formattedQuote} config={tableConfig} />;
     </div>

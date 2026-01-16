@@ -20,7 +20,7 @@ function JobCloseRequests() {
 
   const { data: getPendingMileageLogs, isLoading: isGetLoading } =
     useGetPendingCloseRequestQuery(params);
-  console.log(getPendingMileageLogs);
+  //console.log(getPendingMileageLogs);
   const mileageData = getPendingMileageLogs?.data ?? [];
 
   const formattedJobCloseData = mileageData.map((m) => ({

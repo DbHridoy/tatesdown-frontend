@@ -30,9 +30,9 @@ const UserManagement = () => {
   const users = allUsersData?.data || [];
   const totalItems = allUsersData?.total;
 
-  console.log("users", users);
+  //console.log("users", users);
 
-  console.log("totalItems", totalItems);
+  //console.log("totalItems", totalItems);
 
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [formUser, setFormUser] = useState({
@@ -94,7 +94,7 @@ const UserManagement = () => {
 
   /* ================= ACTIONS ================= */
   const handleAddUser = async () => {
-    console.log("from Add user", formUser);
+    //console.log("from Add user", formUser);
     await createUser(formUser).unwrap();
     closeAddModal();
   };
@@ -248,12 +248,12 @@ const ModalActions = ({ onCancel, onSave }) => (
 
 
 const ViewUser = ({ user }) => (
-  console.log(user),
+  //console.log(user),
   <div className="space-y-2">
     <Input label="Full Name" value={user.fullName} />
     <Input label="Email" value={user.email} />
     <Input label="Role" value={user.role} />
-    
+
   </div>
 );
 

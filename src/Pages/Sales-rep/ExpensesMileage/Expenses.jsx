@@ -27,7 +27,7 @@ function UserExpenses() {
       { label: "Date", accessor: "createdAt", sortable: true },
       { label: "Total Miles Driven", accessor: "totalMilesDriven" },
       { label: "Deduction", accessor: "deduction" },
-      { label: "Status", accessor: "status",colorMap:{"Pending":"bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2","Approved":"bg-green-100 text-green-800 rounded-2xl text-center p-2","Rejected":"bg-red-100 text-red-700 rounded-2xl text-center p-2","Rejected":"bg-red-100 text-red-700 rounded-2xl text-center p-2"} },
+      { label: "Status", accessor: "status", colorMap: { "Pending": "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2", "Approved": "bg-green-100 text-green-800 rounded-2xl text-center p-2", "Rejected": "bg-red-100 text-red-700 rounded-2xl text-center p-2" } },
     ],
     filters: [],
     totalItems,

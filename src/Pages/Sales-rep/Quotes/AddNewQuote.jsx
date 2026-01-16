@@ -14,8 +14,10 @@ const AddNewQuote = () => {
   const [file, setFile] = useState(null);
 
   const currentUser = useSelector(selectCurrentUser);
-  const { data, isLoading } = useGetAllClientsQuery();
+  const { data, isLoading } = useGetAllClientsQuery({ filters: { leadStatus: "Not quoted" } });
+  console.log(data);
   const clients = data?.data || [];
+  console.log(clients);
   const navigate = useNavigate();
 
   const [createQuote, { isLoading: isSubmitting, error }] =

@@ -10,11 +10,11 @@ const DC = ({ jobId }) => {
   const job = jobDetails?.data;
 
   const handleDownload = (fileName) => {
-    console.log(`Downloading ${fileName}`);
+    //console.log(`Downloading ${fileName}`);
   };
 
   const handleDelete = (fileName) => {
-    console.log(`Deleting ${fileName}`);
+    //console.log(`Deleting ${fileName}`);
   };
 
   const hasDocs = job?.designConsultation && job.designConsultation.length > 0;

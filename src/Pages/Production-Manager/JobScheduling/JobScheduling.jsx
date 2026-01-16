@@ -5,9 +5,13 @@ import {
   useGetAllJobsQuery,
 } from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 function JobScheduling() {
   const navigate = useNavigate();
+  const me = useSelector(selectCurrentUser)
+  console.log("line:14-me", me)
   const [changeStatus] = useChangeStatusMutation();
   const [params, setParams] = useState({
     page: 1,
@@ -15,6 +19,7 @@ function JobScheduling() {
     search: "",
     sortKey: "",
     sortOrder: "asc",
+    filters: { status: "Ready to Schedule" },
   });
 
   // ✅ Hook at top level
@@ -47,7 +52,6 @@ function JobScheduling() {
         label: "View",
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
-          console.log(item);
           navigate(`/production-manager/jobs/${item._id}`);
         },
       },
@@ -58,9 +62,17 @@ function JobScheduling() {
         modalTitle: "Mark as scheduled",
         modalMessage: (item) =>
           `Are you sure you want to mark ${item.title} as scheduled?`,
-        onConfirm: (item) =>
-          changeStatus({ id: item._id, status: "Scheduled" }).unwrap(),
-        // onConfirm: (item) => (console.log(item)),
+        onConfirm: async (item) => {
+          try {
+            await changeStatus({
+              id: item._id,
+              status: "Scheduled",
+              productionManagerId: me.productionManager._id,
+            }).unwrap();
+          } catch (err) {
+            console.error(err);
+          }
+        },
       },
     ],
     totalItems,
@@ -82,25 +94,9 @@ function JobScheduling() {
           <h1 className="text-2xl font-bold text-gray-800">Job Scheduling</h1>
           <p className="text-gray-600">Manage your jobs and track progress</p>
         </div>
-        {/* <button
-          className="bg-primarycolor text-white flex items-center gap-2 px-4 py-2 rounded"
-          onClick={() => setShowAddModal(true)}
-        >
-          <HugeiconsIcon icon={UserAdd01Icon} />
-          Add Job
-        </button> */}
       </div>
 
-      <DataTable
-        title="Jobs"
-        data={formattedJobs}
-        config={tableConfig}
-        loading={isLoading}
-      />
-
-      {/* {showAddModal && (
-        <AddNewJobModal onClose={() => setShowAddModal(false)} />
-      )} */}
+      <DataTable title="Jobs" data={formattedJobs} config={tableConfig} />
     </div>
   );
 }

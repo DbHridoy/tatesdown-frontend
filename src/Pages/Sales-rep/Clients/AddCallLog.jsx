@@ -33,7 +33,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
       reason: status === "Picked-Up: No Appointment" ? reason : undefined,
     };
 
-    console.log("Payload", payload);
+    //console.log("Payload", payload);
     onSubmit(payload);
     closeModal();
   };

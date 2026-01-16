@@ -12,7 +12,7 @@ function SalesAssignement() {
     { filters: { salesRepId: null } }
   );
   const leadAssignmentData = clientData?.data || [];
-  console.log("Salesassignment", leadAssignmentData);
+  //console.log("Salesassignment", leadAssignmentData);
   const isLoading = clientsLoading;
 
   if (isLoading) {

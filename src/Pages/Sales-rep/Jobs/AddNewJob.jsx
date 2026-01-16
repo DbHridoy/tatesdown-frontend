@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
+import { useCreateJobNoteMutation, useCreateNewJobMutation } from "../../../redux/api/jobApi";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const AddNewJob = () => {
-  const { data: quoteData } = useGetAllQuotesQuery({filters:{status:"Pending"}});
+  const { data: quoteData } = useGetAllQuotesQuery({ filters: { status: "Pending" } });
   const quotes = quoteData?.data ?? [];
+  console.log("Line:10-quotes", quotes);
   const navigate = useNavigate();
 
   const [createNewJob, { isLoading: isCreating }] = useCreateNewJobMutation();
+  const [createJobNote, { isLoading: isCreatingJobNote }] = useCreateJobNoteMutation();
 
   // Read quoteId from URL
   const [searchParams] = useSearchParams();
@@ -70,7 +72,6 @@ const AddNewJob = () => {
       quoteId: selectedQuote._id,
       clientId: selectedQuote.clientId._id, // <- include clientId here
       title,
-      description,
       price,
       downPayment: Number(downPayment),
       startDate: new Date(startDate),
@@ -82,6 +83,11 @@ const AddNewJob = () => {
 
     try {
       await createNewJob(payload).unwrap();
+      await createJobNote({
+        jobId: payload.quoteId,
+        clientId: payload.clientId,
+        note: description,
+      }).unwrap();
       toast.success("Job created successfully!");
       navigate("/sales-rep/jobs");
     } catch (error) {

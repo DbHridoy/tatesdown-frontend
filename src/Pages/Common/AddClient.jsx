@@ -56,7 +56,7 @@ const AddClient = () => {
       const client = await createClient(formData).unwrap();
       const clientId = client.data._id;
 
-      console.log("Client from add client", client);
+      //console.log("Client from add client", client);
 
       // 2️⃣ Upload draft notes
       for (const n of draftNotes) {
@@ -154,7 +154,6 @@ const AddClient = () => {
             className="w-full border px-3 py-2 rounded-lg"
             required
           >
-            <option value="">Select</option>
             {leadSources.map((s) => (
               <option key={s} value={s}>
                 {s}

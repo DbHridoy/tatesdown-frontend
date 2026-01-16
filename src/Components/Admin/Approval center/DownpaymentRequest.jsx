@@ -19,11 +19,11 @@ function DownpaymentRequest() {
   const { data: downpaymentRequests, isLoading } =
     useGetDownpaymentRequestQuery(params);
 
-  console.log(downpaymentRequests);
-  
+  //console.log(downpaymentRequests);
+
   const downpaymentRequestData = downpaymentRequests?.data ?? [];
   const totalItems = downpaymentRequests?.total ?? 0;
-  console.log(downpaymentRequestData);
+  //console.log(downpaymentRequestData);
 
   const formattedData = downpaymentRequestData.map((item, index) => ({
     id: item._id,
@@ -48,7 +48,7 @@ function DownpaymentRequest() {
         modalMessage: (item) =>
           `Are you sure you want to accept ${item.clientName}?`,
         onConfirm: (item) => {
-          console.log("item",item)
+          //console.log("item",item)
           updateDownPaymentStatus({ id: item.id, status: "Approved" });
         },
       },
