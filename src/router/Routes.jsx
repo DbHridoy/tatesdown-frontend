@@ -12,7 +12,7 @@ import Successful from "../Pages/Auth/Successful";
 
 // Admin Pages
 import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
-import AdminClients from "../Pages/Admin/Jobs/AdminClients";
+import AdminClients from "../z/Jobs/AdminClients";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
 import Reports from "../Pages/Admin/Reports/Reports";
 import RepDetails from "../Pages/Admin/Reports/RepDetails";
@@ -45,6 +45,14 @@ import GlobalNoRoute from "../Pages/Common/GlobalNoRoute";
 import Settings from "../Pages/Common/ProductionSettings";
 import AddClient from "../Pages/Common/AddClient";
 import ProductionManagerReports from "../Pages/Production-Manager/Reports/ProductionManagerReports";
+import MyJobs from "../Pages/Production-Manager/MyJobs/PmJobs";
+import AdminClientDetails from "../Pages/Admin/Clients/AdminClientDetails";
+import AdminQuote from "../Pages/Admin/Quotes/AdminQuote";
+import AdminQuoteDetails from "../Pages/Admin/Quotes/AdminQuoteDetails";
+import AdminJobs from "../Pages/Admin/Jobs/AdminJobs";
+import AdminJobDetailsPage from "../Pages/Admin/Jobs/AdminJobDetailsPage";
+import ViewUser from "../Pages/Admin/UserManagement/ViewUser";
+import PmJobDetailsPage from "../Pages/Production-Manager/MyJobs/PmJobDetailsPage";
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -110,7 +118,12 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="home" replace /> },
           { path: "home", element: <ProductionHome /> }, // matches menuConfig
           { path: "jobs", element: <JobScheduling /> },
-          { path: "jobs/:jobId", element: <JobOverview /> },
+          { path: "jobs/:jobId", element: <PmJobDetailsPage /> },
+          { path: "my-jobs", element: <MyJobs /> },
+          {
+            path: "my-jobs/:jobId",
+            element: <PmJobDetailsPage />,
+          },
           { path: "reports", element: <ProductionManagerReports /> },
           { path: "settings", element: <ProductionSettings /> }, // matches menuConfig
           { path: "*", element: <GlobalNoRoute /> },
@@ -130,12 +143,17 @@ export const router = createBrowserRouter([
           { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "clients", element: <AdminClients /> },
+          { path: "clients/:clientId", element: <AdminClientDetails /> },
           { path: "add-clients", element: <AddClient /> },
-          { path: "jobs/:jobId", element: <JobDetailsPage /> },
+          { path: "quotes", element: <AdminQuote /> },
+          { path: "quotes/:quoteId", element: <AdminQuoteDetails /> },
+          { path: "jobs", element: <AdminJobs /> },
+          { path: "jobs/:jobId", element: <AdminJobDetailsPage /> },
           { path: "approvals-center", element: <Approvals /> },
           { path: "reports", element: <Reports /> },
           { path: "reports-details/:id", element: <RepDetails /> },
           { path: "user-management", element: <UserManagement /> },
+          { path: "user-management/:userId", element: <ViewUser /> },
           { path: "parameters", element: <Parameters /> }, // I assume this is Parameters page
           { path: "settings", element: <Settings /> },
           { path: "*", element: <GlobalNoRoute /> },

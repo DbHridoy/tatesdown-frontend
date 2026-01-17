@@ -5,7 +5,7 @@ import DataTable from "../../../Components/Common/DataTable";
 import { useState } from "react";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
 
-function Quotes() {
+function AdminQuote() {
   const navigate = useNavigate();
   const [params, setParams] = useState({
     page: 1,
@@ -61,7 +61,7 @@ function Quotes() {
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
           //console.log(item)
-          navigate(`/sales-rep/quotes/${item._id}`)
+          navigate(`/admin/quotes/${item._id}`)
         },
       },
     ],
@@ -133,4 +133,4 @@ function Quotes() {
   );
 }
 
-export default Quotes;
+export default AdminQuote;

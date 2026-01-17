@@ -62,6 +62,11 @@ export const menuConfig = {
       Link: "/production-manager/jobs",
     },
     {
+      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      label: "My Jobs",
+      Link: "/production-manager/my-jobs",
+    },
+    {
       icon: <CiHome className="w-5 h-5" />,
       label: "Reports",
       Link: "/production-manager/reports",
@@ -80,20 +85,30 @@ export const menuConfig = {
       Link: "/admin/dashboard",
     },
     {
+      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      label: "Clients",
+      Link: "/admin/clients",
+    },
+    {
+      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      label: "Quotes",
+      Link: "/admin/quotes",
+    },
+    {
       icon: <PiUsers className="w-5 h-5" />,
       label: "Jobs",
-      Link: "/admin/clients",
+      Link: "/admin/jobs",
     },
     {
       icon: <IoNewspaper className="w-5 h-5" />,
       label: "Approvals Center",
       Link: "/admin/approvals-center",
     },
-    {
-      icon: <IoNewspaper className="w-5 h-5" />,
-      label: "Reports",
-      Link: "/admin/reports",
-    },
+    // {
+    //   icon: <IoNewspaper className="w-5 h-5" />,
+    //   label: "Reports",
+    //   Link: "/admin/reports",
+    // },
     {
       icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
       label: "User Management",

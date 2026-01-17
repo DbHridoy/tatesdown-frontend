@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
-import DataTable from "../../../Components/Common/DataTable";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserAdd01Icon } from "@hugeicons/core-free-icons";
+import { useState } from "react";
+import AddNewJobModal from "./SalesRepAddNewJob";
+import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
+import DataTable from "../../../Components/Common/DataTable";
 
-const AdminClients = () => {
+function Jobs() {
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -27,7 +28,7 @@ const AdminClients = () => {
   const formattedJobs = jobs.map((j) => ({
     _id: j._id,
     clientName: j.clientId?.clientName ?? "N/A",
-    cluster: j.salesRepId?.cluster,
+    jobTitle: j.title,
     estimatedPrice: j.estimatedPrice,
     jobStatus: j.status,
     startDate: new Date(j.startDate).toLocaleDateString(),
@@ -37,7 +38,7 @@ const AdminClients = () => {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Cluster", accessor: "cluster" },
+      { label: "Job Title", accessor: "jobTitle" },
       { label: "Estimated Price", accessor: "estimatedPrice" },
       { label: "Job Status", accessor: "jobStatus" },
       { label: "Start Date", accessor: "startDate" },
@@ -48,7 +49,7 @@ const AdminClients = () => {
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
           //console.log(item);
-          navigate(`/admin/jobs/${item._id}`);
+          navigate(`/sales-rep/jobs/${item._id}`);
         },
       },
       {
@@ -80,13 +81,13 @@ const AdminClients = () => {
           <h1 className="text-2xl font-bold text-gray-800">Jobs</h1>
           <p className="text-gray-600">Manage your jobs and track progress</p>
         </div>
-        <button
+        {/* <button
           className="bg-primarycolor text-white flex items-center gap-2 px-4 py-2 rounded"
           onClick={() => setShowAddModal(true)}
         >
           <HugeiconsIcon icon={UserAdd01Icon} />
           Add Job
-        </button>
+        </button> */}
       </div>
 
       <DataTable
@@ -101,6 +102,6 @@ const AdminClients = () => {
       )}
     </div>
   );
-};
+}
 
-export default AdminClients;
+export default Jobs;

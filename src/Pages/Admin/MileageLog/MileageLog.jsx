@@ -2,14 +2,14 @@ import ExpenseBreakdown from "../../../Components/Dashboard/ExpenseBreakdown";
 import ExpensesData from "../../../Components/Dashboard/ExpensesData";
 import ReportsData from "../../../Components/Dashboard/ReportsData";
 
-const Expenses = () => {
+const MileageLog = () => {
   return (
     <div>
-      <ExpensesData />
+      <MileageLogData />
       <ReportsData />
       <ExpenseBreakdown />
     </div>
   );
 };
 
-export default Expenses;
+export default MileageLog;

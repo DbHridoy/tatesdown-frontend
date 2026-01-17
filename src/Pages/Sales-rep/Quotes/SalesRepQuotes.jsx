@@ -61,7 +61,7 @@ function Quotes() {
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => {
           //console.log(item)
-          navigate(`/sales-rep/quotes/${item._id}`)
+          navigate(`/s/sales-rep/quotes/${item._id}`)
         },
       },
     ],

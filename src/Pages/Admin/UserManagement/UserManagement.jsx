@@ -9,8 +9,11 @@ import {
   useUpdateUserMutation,
 } from "../../../redux/api/userApi";
 import UserForm from "../../../Components/Admin/UserMangement/UserForm";
+import ViewUser from "./ViewUser";
+import { useNavigate } from "react-router-dom";
 
 const UserManagement = () => {
+  const navigate = useNavigate();
   /* ================= STATE ================= */
   const [params, setParams] = useState({
     page: 1,
@@ -132,14 +135,13 @@ const UserManagement = () => {
       },
     ],
     actions: [
-      // {
-      //   label: "View",
-      //   className: "bg-blue-500 text-white p-2 rounded-lg",
-      //   onClick: (item) => {
-      //     setSelectedUserId(item._id);
-      //     setIsViewModal(true);
-      //   },
-      // },
+      {
+        label: "View",
+        className: "bg-blue-500 text-white p-2 rounded-lg",
+        onClick: (item) => {
+          navigate(`/admin/user-management/${item._id}`);
+        },
+      },
       {
         label: "Delete",
         className: "bg-red-500 text-white p-2 rounded-lg",
@@ -246,23 +248,5 @@ const ModalActions = ({ onCancel, onSave }) => (
   </div>
 );
 
-
-const ViewUser = ({ user }) => (
-  //console.log(user),
-  <div className="space-y-2">
-    <Input label="Full Name" value={user.fullName} />
-    <Input label="Email" value={user.email} />
-    <Input label="Role" value={user.role} />
-
-  </div>
-);
-
-const Input = ({ label, value }) => (
-  <input
-    className="w-full p-2 border rounded"
-    value={`${label}: ${value}`}
-    readOnly
-  />
-);
 
 export default UserManagement;
