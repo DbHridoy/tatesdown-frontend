@@ -12,7 +12,7 @@ import Successful from "../Pages/Auth/Successful";
 
 // Admin Pages
 import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
-import AdminClients from "../Pages/Admin/Clients/AdminClients";
+import AdminClients from "../Pages/Admin/Jobs/AdminClients";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
 import Reports from "../Pages/Admin/Reports/Reports";
 import RepDetails from "../Pages/Admin/Reports/RepDetails";
@@ -20,7 +20,7 @@ import UserManagement from "../Pages/Admin/UserManagement/UserManagement";
 import Parameters from "../Pages/Admin/Params/Parameters";
 
 // Sales Rep Pages
-import Home from "../Pages/Sales-rep/Home/Home";
+import SalesRepHome from "../Pages/Sales-rep/Home/SalesRepHome";
 import Clients from "../Pages/Sales-rep/Clients/Clients";
 import ClientDetails from "../Pages/Sales-rep/Clients/ClientDetails";
 import AddCallLog from "../Pages/Sales-rep/Clients/AddCallLog";
@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           { index: true, element: <Navigate to="home" replace /> },
-          { path: "home", element: <Home /> },
+          { path: "home", element: <SalesRepHome /> },
           {
             path: "clients",
             children: [

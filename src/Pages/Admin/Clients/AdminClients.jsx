@@ -1,106 +1,122 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
-import DataTable from "../../../Components/Common/DataTable";
+import { AddTeamIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { UserAdd01Icon } from "@hugeicons/core-free-icons";
+import { useNavigate } from "react-router-dom";
+import DataTable from "../../../Components/Common/DataTable";
+import {
+    useDeleteClientMutation,
+    useGetAllClientsQuery,
+} from "../../../redux/api/clientApi";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-const AdminClients = () => {
-  const navigate = useNavigate();
-  const [showAddModal, setShowAddModal] = useState(false);
+function AdminClients() {
+    const navigate = useNavigate();
 
-  const [params, setParams] = useState({
-    page: 1,
-    limit: 10,
-    search: "",
-    sortKey: "",
-    sortOrder: "asc",
-  });
+    const [params, setParams] = useState({
+        page: 1,
+        limit: 10,
+        search: "",
+        sortKey: "clientName",
+        sortOrder: "asc",
+        filters: { role: "" },
+    });
 
-  // ✅ Hook at top level
-  const { data, isLoading } = useGetAllJobsQuery(params);
+    const { data: clientsData, isLoading } = useGetAllClientsQuery(params);
 
-  const jobs = data?.data || [];
-  const totalItems = data?.total || 0;
+    const [deleteClient] = useDeleteClientMutation();
 
-  // ✅ Safe formatting
-  const formattedJobs = jobs.map((j) => ({
-    _id: j._id,
-    clientName: j.clientId?.clientName ?? "N/A",
-    cluster: j.salesRepId?.cluster,
-    estimatedPrice: j.estimatedPrice,
-    jobStatus: j.status,
-    startDate: new Date(j.startDate).toLocaleDateString(),
-  }));
+    const clients = clientsData?.data;
 
-  const tableConfig = {
-    columns: [
-      { label: "No", accessor: "No" },
-      { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Cluster", accessor: "cluster" },
-      { label: "Estimated Price", accessor: "estimatedPrice" },
-      { label: "Job Status", accessor: "jobStatus" },
-      { label: "Start Date", accessor: "startDate" },
-    ],
-    actions: [
-      {
-        label: "View",
-        className: "bg-blue-500 text-white p-2 rounded-lg",
-        onClick: (item) => {
-          //console.log(item);
-          navigate(`/admin/jobs/${item._id}`);
-        },
-      },
-      {
-        label: "Delete",
-        className: "bg-red-500 text-white p-2 rounded-lg",
-        modal: true,
-        modalTitle: "Delete User",
-        modalMessage: (item) =>
-          `Are you sure you want to delete ${item.title}?`,
-        onConfirm: (item) => deleteUser(item._id),
-      },
-    ],
-    totalItems,
-    currentPage: params.page,
-    itemsPerPage: params.limit,
-    sortKey: params.sortKey,
-    sortOrder: params.sortOrder,
-    onPageChange: (page) => setParams((p) => ({ ...p, page })),
-    onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
-  };
+    const totalItems = clientsData?.total;
 
-  return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Jobs</h1>
-          <p className="text-gray-600">Manage your jobs and track progress</p>
+    const tableConfig = {
+        columns: [
+            { label: "No", accessor: "No" },
+            { label: "Client Name", accessor: "clientName", sortable: true },
+            { label: "Phone", accessor: "phoneNumber" },
+            {
+                label: "Call Status",
+                accessor: "callStatus",
+                colorMap: {
+                    "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
+                    "Picked-Up: Appointment Booked":
+                        "bg-green-100 text-green-800 rounded-2xl text-center p-2",
+                    "Picked-Up: No Appointment":
+                        "bg-red-100 text-red-700 rounded-2xl text-center p-2",
+                    "No Pickup":
+                        "bg-yellow-100 text-yellow-700 rounded-2xl text-center p-2",
+                },
+            },
+            {
+                label: "Lead Status",
+                accessor: "leadStatus",
+                colorMap: {
+                    "Not quoted": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
+                    Quoted: "bg-blue-100 text-blue-800 rounded-2xl text-center p-2",
+                    Job: "bg-green-100 text-green-800 rounded-2xl text-center p-2",
+                },
+            },
+        ],
+        filters: [
+            {
+                label: "Call Status",
+                accessor: "callStatus",
+                options: {
+                    "Not Called": "Not Called",
+                    "Picked-Up: Appointment Booked": "Picked-Up: Appointment Booked",
+                    "Picked-Up: No Appointment": "Picked-Up: No Appointment",
+                    "No Pickup": "No Pickup",
+                },
+            },
+        ],
+        actions: [
+            {
+                label: "View",
+                className: "bg-blue-500 text-white p-2 rounded-lg",
+                onClick: (item) => navigate(`${item._id}`),
+            },
+            {
+                label: "Delete",
+                className: "bg-red-500 text-white p-2 rounded-lg",
+                modal: true,
+                modalTitle: "Delete Client",
+                modalMessage: (item) =>
+                    `Are you sure you want to delete ${item.clientName}?`,
+                onConfirm: (item) => {
+                    deleteClient(item._id);
+                    toast.success("Client deleted successfully");
+                },
+            },
+        ],
+        totalItems: totalItems,
+        currentPage: params.page,
+        itemsPerPage: params.limit,
+        sortKey: params.sortKey,
+        sortOrder: params.sortOrder,
+        onPageChange: (page) => setParams((p) => ({ ...p, page })),
+        onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
+        onFilterChange: (key, value) =>
+            setParams((p) => ({
+                ...p,
+                page: 1,
+                filters: { ...p.filters, [key]: value },
+            })),
+        onSortChange: (sortKey, sortOrder) =>
+            setParams((p) => ({ ...p, sortKey, sortOrder })),
+    };
+
+    return (
+        <div className="p-4 md:p-6">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6">
+                <div className="mb-3 md:mb-0">
+                    <h1 className="text-2xl font-semibold">My Clients</h1>
+                    <p className="text-gray-500">Overview of your clients</p>
+                </div>
+            </div>
+            <DataTable title="Clients" data={clients || []} config={tableConfig} />
         </div>
-        <button
-          className="bg-primarycolor text-white flex items-center gap-2 px-4 py-2 rounded"
-          onClick={() => setShowAddModal(true)}
-        >
-          <HugeiconsIcon icon={UserAdd01Icon} />
-          Add Job
-        </button>
-      </div>
-
-      <DataTable
-        title="Jobs"
-        data={formattedJobs}
-        config={tableConfig}
-        loading={isLoading}
-      />
-
-      {showAddModal && (
-        <AddNewJobModal onClose={() => setShowAddModal(false)} />
-      )}
-    </div>
-  );
-};
+    );
+}
 
 export default AdminClients;

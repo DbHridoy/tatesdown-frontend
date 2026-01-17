@@ -13,7 +13,7 @@ const commonApi = baseApi.injectEndpoints({
 
     getMyStats: builder.query({
       query: () => "/common/my-stats",
-      providesTags: ["MyStats"],
+      providesTags: ["MyStats", "User"],
     }),
     getVariables: builder.query({
       query: () => "/common/get-variable",

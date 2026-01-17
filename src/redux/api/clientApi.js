@@ -8,7 +8,7 @@ const clientApi = baseApi.injectEndpoints({
         method: "POST",
         body: newClient,
       }),
-      invalidatesTags: ["Client","User"],
+      invalidatesTags: ["Client","User","MyStats"],
     }),
 
     addCallLog: builder.mutation({

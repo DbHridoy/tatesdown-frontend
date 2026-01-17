@@ -10,28 +10,30 @@ import {
   Briefcase03Icon,
 } from "@hugeicons/core-free-icons";
 import { useGetMeQuery } from "../../../redux/api/userApi";
-const Home = () => {
+import { useGetMyStatsQuery } from "../../../redux/api/common";
+const SalesRepHome = () => {
   const { data: userData, isLoading } = useGetMeQuery();
+  const { data: myStats } = useGetMyStatsQuery()
   const user = userData?.data;
   const cards = [
     {
       title: "Total sold",
-      count: user?.salesRep?.totalSold || 0,
+      count: myStats?.data?.totalSold || 0,
       icon: Dollar01Icon,
     },
     {
       title: "Total clients",
-      count: user?.salesRep?.totalClients || 0,
+      count: myStats?.data?.totalClients || 0,
       icon: UserGroup02Icon,
     },
     {
       title: "Total quotes",
-      count: user?.salesRep?.totalQuotes || 0,
+      count: myStats?.data?.totalQuotes || 0,
       icon: ChampionIcon,
     },
     {
       title: "Total jobs",
-      count: user?.salesRep?.totalJobs || 0,
+      count: myStats?.data?.totalJobs || 0,
       icon: Briefcase03Icon,
     },
   ];
@@ -54,4 +56,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default SalesRepHome;
