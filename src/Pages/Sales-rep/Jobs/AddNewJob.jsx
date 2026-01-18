@@ -84,11 +84,13 @@ const AddNewJob = () => {
 
     try {
       await createNewJob(payload).unwrap();
-      await createJobNote({
-        jobId: payload.quoteId,
-        clientId: payload.clientId,
-        note: description,
-      }).unwrap();
+      if (description.trim()) {
+        await createJobNote({
+          jobId: payload.quoteId,
+          clientId: payload.clientId,
+          note: description.trim(),
+        }).unwrap();
+      }
       toast.success("Job created successfully!");
       navigate("/sales-rep/jobs");
     } catch (error) {
@@ -206,16 +208,14 @@ const AddNewJob = () => {
           />
         </div>
 
-        {/* Description */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-1">Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
+        {!!description.trim() && (
+          <div className="mb-6">
+            <label className="block font-semibold mb-1">Client Note</label>
+            <div className="w-full border px-3 py-2 rounded bg-gray-50 text-gray-700">
+              {description}
+            </div>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex justify-end gap-4">

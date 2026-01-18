@@ -16,7 +16,8 @@ const AddClient = () => {
   const [createClient, { isLoading }] = useCreateClientMutation();
   const [addNote] = useAddNoteMutation();
 
-  const [draftNotes, setDraftNotes] = useState([]);
+  const [note, setNote] = useState("");
+  const [noteFile, setNoteFile] = useState(null);
 
   const [formData, setFormData] = useState({
     clientName: "",
@@ -34,18 +35,6 @@ const AddClient = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  /* ================= NOTES ================= */
-
-  const handleAddDraftNote = ({ note, file }) => {
-    if (!note && !file) {
-      toast.error("Note or attachment required");
-      return;
-    }
-
-    setDraftNotes((prev) => [...prev, { note, file }]);
-    toast.success("Note added to draft");
-  };
-
   /* ================= SUBMIT ================= */
 
   const handleCreateClient = async (e) => {
@@ -58,19 +47,16 @@ const AddClient = () => {
 
       //console.log("Client from add client", client);
 
-      // 2️⃣ Upload draft notes
-      for (const n of draftNotes) {
+      // 2️⃣ Upload note (if provided)
+      if (note.trim() || noteFile) {
         const fd = new FormData();
-        if (n.note) fd.append("note", n.note);
-        if (n.file) fd.append("file", n.file);
+        if (note.trim()) fd.append("note", note.trim());
+        if (noteFile) fd.append("file", noteFile);
 
-        await addNote({
-          clientId,
-          formData: fd,
-        }).unwrap();
+        await addNote({ clientId, formData: fd }).unwrap();
       }
 
-      toast.success("Client & notes added successfully");
+      toast.success("Client added successfully");
       navigate("/sales-rep/clients");
     } catch (error) {
       console.error(error);
@@ -181,16 +167,12 @@ const AddClient = () => {
         </div>
 
         {/* Notes */}
-        <ClientNote onSubmit={handleAddDraftNote} />
-
-        {draftNotes.length > 0 && (
-          <div className="border rounded-lg p-3 text-sm space-y-1">
-            <b>Draft Notes:</b>
-            {draftNotes.map((n, i) => (
-              <div key={i}>• {n.note || n.file?.name}</div>
-            ))}
-          </div>
-        )}
+        <ClientNote
+          note={note}
+          file={noteFile}
+          onNoteChange={setNote}
+          onFileChange={setNoteFile}
+        />
 
         {/* Actions */}
         <div className="flex gap-4 pt-4">
