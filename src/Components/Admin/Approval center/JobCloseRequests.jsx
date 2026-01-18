@@ -1,9 +1,6 @@
 import React from "react";
 import DataTable from "../../Common/DataTable";
-import {
-  useChangeStatusMutation,
-  useGetPendingCloseRequestQuery,
-} from "../../../redux/api/jobApi";
+import { useGetAllJobsQuery, useUpdateJobMutation } from "../../../redux/api/jobApi";
 import { useState } from "react";
 
 function JobCloseRequests() {
@@ -16,10 +13,10 @@ function JobCloseRequests() {
     filters: { role: "" },
   });
 
-  const [changeJobStatus] = useChangeStatusMutation();
+  const [changeJobStatus] = useUpdateJobMutation();
 
   const { data: getPendingMileageLogs, isLoading: isGetLoading } =
-    useGetPendingCloseRequestQuery(params);
+    useGetAllJobsQuery(params);
   //console.log(getPendingMileageLogs);
   const mileageData = getPendingMileageLogs?.data ?? [];
 

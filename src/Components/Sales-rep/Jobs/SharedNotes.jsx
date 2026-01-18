@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
-import { useCreateJobNoteMutation } from "../../../redux/api/jobApi";
+import { useAddNoteMutation } from "../../../redux/api/clientApi";
 import { useParams } from "react-router-dom";
+import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
 
 const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 
-const SharedNotes = ({ notes: initialNotes = [] }) => {
+const SharedNotes = () => {
   const { jobId } = useParams();
-  const [notes, setNotes] = useState(initialNotes);
+  const { data } = useGetJobByIdQuery(jobId, { skip: !jobId });
+
+  const job = data?.data;
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [createJobNoteMutation] = useCreateJobNoteMutation();
+  const [addNoteMutation] = useAddNoteMutation();
   const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
-    setNotes(initialNotes);
-  }, [initialNotes]);
+    setNotes(job?.notes ?? []);
+  }, [job?.notes]);
 
   const handlePostNote = async () => {
     if (!newNote.trim() && !selectedFile) return;
+    if (!job?.clientId?._id) return;
 
     const formData = new FormData();
     formData.append("jobId", jobId);
-    formData.append("authorId", user._id);
+    formData.append("createdBy", user._id);
     formData.append("note", newNote.trim());
 
     if (selectedFile) {
@@ -32,7 +37,10 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
     }
 
     try {
-      const res = await createJobNoteMutation(formData).unwrap();
+      const res = await addNoteMutation({
+        clientId: job.clientId._id,
+        formData,
+      }).unwrap();
       setNotes((prev) => [...prev, res.data]);
       setNewNote("");
       setSelectedFile(null);
@@ -44,7 +52,7 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
   return (
     <div className="mb-6 p-6 bg-white shadow-md rounded-md border">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-        Sales & PM Collaboration
+        Notes and Attachments
       </h2>
 
       <div className="space-y-4 mb-6">
@@ -60,7 +68,7 @@ const SharedNotes = ({ notes: initialNotes = [] }) => {
             <div className="flex-1">
               <div className="flex justify-between items-center">
                 <p className="font-semibold text-gray-700">
-                  {note.authorId?.fullName || "Unknown"}
+                  {note.createdBy?.fullName || note.authorId?.fullName || "Unknown"}
                 </p>
                 <p className="text-xs text-gray-500">
                   {new Date(note.createdAt).toLocaleString()}

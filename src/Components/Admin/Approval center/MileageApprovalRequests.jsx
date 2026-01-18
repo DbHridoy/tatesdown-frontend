@@ -1,17 +1,14 @@
 import React from "react";
 import DataTable from "../../Common/DataTable";
-import {
-  useChangeMileageLogStatusMutation,
-  useGetPendingMileageLogsQuery,
-} from "../../../redux/api/expenseApi";
+import { useGetAllMileageLogsQuery } from "../../../redux/api/expenseApi";
 import { useState } from "react";
 
 function MileageApprovalRequests() {
   const [changeMileageLogStatus, { isLoading: isChangeLoading }] =
-    useChangeMileageLogStatusMutation();
+    useGetAllMileageLogsQuery();
 
   const { data: getPendingMileageLogs, isLoading: isGetLoading } =
-    useGetPendingMileageLogsQuery();
+    useGetAllMileageLogsQuery({ filter: { status: "Pending" } });
   //console.log(getPendingMileageLogs);
   const mileageData = getPendingMileageLogs?.data ?? [];
 

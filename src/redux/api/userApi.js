@@ -85,10 +85,6 @@ export const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
-    getAllSalesRep: builder.query({
-      query: () => `/users/sales-reps`,
-      providesTags: ["User"],
-    }),
   }),
 });
 

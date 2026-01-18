@@ -4,12 +4,12 @@ import { FaHourglass } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetJobByIdQuery,
-  useChangeStatusMutation,
-  useCreateJobNoteMutation,
+  useUpdateJobMutation
 } from "../../../redux/api/jobApi";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import toast from "react-hot-toast";
+import { useAddNoteMutation } from "../../../redux/api/clientApi";
 const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
@@ -26,8 +26,8 @@ export default function JobOverview() {
   );
 
   const { data, isLoading } = useGetJobByIdQuery(id);
-  const [changeStatus] = useChangeStatusMutation();
-  const [createJobNote] = useCreateJobNoteMutation();
+  const [changeStatus] = useUpdateJobMutation();
+  const [createJobNote] = useAddNoteMutation();
 
   const job = data?.data;
 

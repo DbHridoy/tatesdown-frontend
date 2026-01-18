@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import { DollarSign, Briefcase, Map, Users } from "lucide-react";
-import {
-  useChangeMileageLogStatusMutation,
-  useGetPendingMileageLogsQuery,
-} from "../../../redux/api/expenseApi";
-import DataTable from "../../../Components/Common/DataTable";
+
 import DownpaymentRequest from "../../../Components/Admin/Approval center/DownpaymentRequest";
 import MileageApprovalRequests from "../../../Components/Admin/Approval center/MileageApprovalRequests";
 import JobCloseRequests from "../../../Components/Admin/Approval center/JobCloseRequests";
-import SalesRepresentativeModal from "../../../Components/Admin/Approval center/SalesRepresentativeModal";
 import SalesAssignement from "../../../Components/Admin/Approval center/SalesAssignement";
-import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
 
 const Approvals = () => {
   const [activeTab, setActiveTab] = useState("downpayment");
@@ -32,14 +25,14 @@ const Approvals = () => {
     { id: "leadassignment", label: "Lead Assignment", count: 0 },
   ];
 
- 
 
 
 
- 
 
 
- 
+
+
+
 
   return (
     <div className="w-full min-h-screen p-6 mx-auto ">
@@ -49,11 +42,10 @@ const Approvals = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors ${
-              activeTab === tab.id
+            className={`flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors ${activeTab === tab.id
                 ? "border-b-2 border-blue-500 text-blue-600 font-medium"
                 : "text-gray-600 hover:text-gray-800"
-            }`}
+              }`}
           >
             {tab.label}
             {/* <span className="bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded-full">
@@ -68,7 +60,7 @@ const Approvals = () => {
 
       {/* Job Close Approvals Section */}
       {activeTab === "jobclose" && (
-        <JobCloseRequests/>
+        <JobCloseRequests />
       )}
 
       {/* Mileage Log Approvals Section */}
@@ -76,9 +68,9 @@ const Approvals = () => {
 
       {/* Lead Assignment Approvals Section */}
       {activeTab === "leadassignment" && (
-       <SalesAssignement/>
+        <SalesAssignement />
       )}
-      
+
     </div>
   );
 };

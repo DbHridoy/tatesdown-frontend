@@ -65,8 +65,8 @@ export const router = createBrowserRouter([
       { path: "forgot-password", element: <ForgetPassword /> },
       { path: "verify-otp", element: <VerifyOtp /> },
       { path: "set-password", element: <SetNewPassword /> },
-      { path: "successful", element: <Successful /> },
-    ],
+      { path: "successful", element: <Successful /> }
+    ]
   },
 
   // Sales Rep Routes
@@ -94,10 +94,7 @@ export const router = createBrowserRouter([
           { path: "jobs", element: <Jobs /> },
           { path: "add-job", element: <AddNewJob /> },
           { path: "jobs/:jobId", element: <JobDetailsPage /> },
-          {
-            path: "jobs/:jobId/design-consultation",
-            element: <DesignConsultation />,
-          },
+          { path: "jobs/:jobId/design-consultation", element: <DesignConsultation /> },
           { path: "reports", element: <SalesReports /> },
           { path: "mileage-log", element: <UserExpenses /> },
           { path: "settings", element: <Settings /> },

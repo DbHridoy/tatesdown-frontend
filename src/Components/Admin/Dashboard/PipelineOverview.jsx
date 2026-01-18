@@ -1,4 +1,4 @@
-import React from "react";
+
 import {
   BarChart,
   Bar,
@@ -8,11 +8,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { useGetAdminStatsQuery } from "../../../redux/api/statsApi";
 
 export default function PipelineOverview() {
-  const { data: adminStatsData } = useGetAdminStatsQuery();
-  const adminStats = adminStatsData?.data || {};
   const data = [
     { name: "New Leads", value: adminStats?.totalLeads || 0, color: "#0EA5E9" },
     { name: "Quotes", value: adminStats?.totalQuotes || 0, color: "#7DD3FC" },

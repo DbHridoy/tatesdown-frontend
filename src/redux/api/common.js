@@ -15,27 +15,15 @@ const commonApi = baseApi.injectEndpoints({
       query: () => "/common/my-stats",
       providesTags: ["MyStats", "User"],
     }),
+
     getVariables: builder.query({
       query: () => "/common/get-variable",
       providesTags: ["Variable"],
     }),
+
     getLeaderBoard: builder.query({
       query: () => "/common/salesrep-leaderboard",
       providesTags: ["LeaderBoard"],
-    }),
-
-    createFiscalYear: builder.mutation({
-      query: (newFiscalYear) => ({
-        url: "/common/fiscal-year",
-        method: "POST",
-        body: newFiscalYear,
-      }),
-      invalidatesTags: ["FiscalYear"],
-    }),
-
-    getFiscalYear: builder.query({
-      query: () => "/common/active-fiscal-year",
-      providesTags: ["FiscalYear"],
     }),
   }),
 });

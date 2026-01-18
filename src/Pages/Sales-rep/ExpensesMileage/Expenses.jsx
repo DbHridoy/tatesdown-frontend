@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddExpense from "../../../Components/Sales-rep/Expenses/AddExpense";
 import ExpenseCard from "../../../Components/Sales-rep/Expenses/ExpenseCard";
-import { useGetMyMileageLogsQuery } from "../../../redux/api/expenseApi";
+import { useGetAllMileageLogsQuery } from "../../../redux/api/expenseApi";
 import DataTable from "../../../Components/Common/DataTable";
 
 function UserExpenses() {
@@ -13,7 +13,7 @@ function UserExpenses() {
     sortOrder: "asc",
     filters: { role: "" },
   });
-  const { data: mileageLogs } = useGetMyMileageLogsQuery(params);
+  const { data: mileageLogs } = useGetAllMileageLogsQuery({ ...params, role: "Sales Rep" });
 
   const mileageLogsData = mileageLogs?.data ?? [];
   const totalMiles = mileageLogs?.totalMilesDriven ?? 0;

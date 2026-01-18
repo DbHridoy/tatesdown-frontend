@@ -1,10 +1,7 @@
 import { User } from 'lucide-react';
-import React, { useState } from 'react';
-import { useGetAdminStatsQuery } from '../../redux/api/statsApi';
 
 const CardData = () => {
-  const { data: adminStatsData, isLoading } = useGetAdminStatsQuery();
-  const adminStats = adminStatsData?.data || {};
+
 
   // const [activeFilter, setActiveFilter] = useState('Week');
 

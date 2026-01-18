@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
-  useChangeStatusMutation,
+  useUpdateJobMutation,
   useGetAllJobsQuery,
 } from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
@@ -12,7 +12,10 @@ function JobScheduling() {
   const navigate = useNavigate();
   const me = useSelector(selectCurrentUser)
   console.log("line:14-me", me)
-  const [changeStatus] = useChangeStatusMutation();
+  const [updateJob] = useUpdateJobMutation();
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [selectedJob, setSelectedJob] = useState(null);
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -33,19 +36,46 @@ function JobScheduling() {
     _id: j._id,
     clientName: j.clientId?.clientName ?? "N/A",
     jobTitle: j.title,
-    estimatedPrice: j.estimatedPrice,
+    estimatedPrice: j.price,
     jobStatus: j.status,
-    startDate: new Date(j.startDate).toLocaleDateString(),
+    estimatedStartDate: new Date(j.estimatedStartDate).toLocaleDateString(),
   }));
+
+  const openScheduleModal = (item) => {
+    setSelectedJob(item);
+    setScheduleDate("");
+    setIsScheduleModalOpen(true);
+  };
+
+  const handleConfirmSchedule = async () => {
+    if (!scheduleDate || !selectedJob) return;
+console.log("line:52-me", me)
+    try {
+      await updateJob({
+        id: selectedJob._id,
+        data: {
+          status: "Scheduled and Open",
+          productionManagerId: me?._id,
+          startDate: new Date(`${scheduleDate}T00:00:00`).toISOString(),
+        },
+      }).unwrap();
+
+      setIsScheduleModalOpen(false);
+      setSelectedJob(null);
+      setScheduleDate("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Job Title", accessor: "jobTitle" },
+      // { label: "Job Title", accessor: "jobTitle" },
       { label: "Estimated Price", accessor: "estimatedPrice" },
       { label: "Job Status", accessor: "jobStatus" },
-      { label: "Start Date", accessor: "startDate" },
+      { label: "Estimated Start Date", accessor: "estimatedStartDate" },
     ],
     actions: [
       {
@@ -58,21 +88,7 @@ function JobScheduling() {
       {
         label: "Mark as scheduled",
         className: "bg-red-500 text-white p-2 rounded-lg",
-        modal: true,
-        modalTitle: "Mark as scheduled",
-        modalMessage: (item) =>
-          `Are you sure you want to mark ${item.title} as scheduled?`,
-        onConfirm: async (item) => {
-          try {
-            await changeStatus({
-              id: item._id,
-              status: "Scheduled",
-              productionManagerId: me.productionManager._id,
-            }).unwrap();
-          } catch (err) {
-            console.error(err);
-          }
-        },
+        onClick: (item) => openScheduleModal(item),
       },
     ],
     totalItems,
@@ -97,6 +113,46 @@ function JobScheduling() {
       </div>
 
       <DataTable title="Jobs" data={formattedJobs} config={tableConfig} />
+
+      {isScheduleModalOpen && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-3">
+                Mark as scheduled
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Select a start date for {selectedJob?.jobTitle}.
+              </p>
+              <input
+                type="date"
+                value={scheduleDate}
+                onChange={(e) => setScheduleDate(e.target.value)}
+                className="w-full px-3 py-2 border rounded-lg mb-6"
+              />
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => {
+                    setIsScheduleModalOpen(false);
+                    setSelectedJob(null);
+                    setScheduleDate("");
+                  }}
+                  className="px-4 py-2 bg-gray-100 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmSchedule}
+                  disabled={!scheduleDate}
+                  className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

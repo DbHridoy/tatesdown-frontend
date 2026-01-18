@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
+import { useGetAllJobsQuery, useDeleteJobMutation } from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
-
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 function PmJobs() {
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
+
+  const me = useSelector(selectCurrentUser);
 
   const [params, setParams] = useState({
     page: 1,
@@ -14,6 +17,7 @@ function PmJobs() {
     search: "",
     sortKey: "",
     sortOrder: "asc",
+    filters: { productionManagerId: me._id },
   });
 
   // ✅ Hook at top level
@@ -22,12 +26,14 @@ function PmJobs() {
   const jobs = data?.data || [];
   const totalItems = data?.total || 0;
 
+  const [deleteJob] = useDeleteJobMutation();
+
   // ✅ Safe formatting
   const formattedJobs = jobs.map((j) => ({
     _id: j._id,
     clientName: j.clientId?.clientName ?? "N/A",
     jobTitle: j.title,
-    estimatedPrice: j.estimatedPrice,
+    estimatedPrice: j.price,
     jobStatus: j.status,
     startDate: new Date(j.startDate).toLocaleDateString(),
   }));
@@ -57,7 +63,7 @@ function PmJobs() {
         modalTitle: "Delete User",
         modalMessage: (item) =>
           `Are you sure you want to delete ${item.title}?`,
-        onConfirm: (item) => deleteUser(item._id),
+        onConfirm: (item) => deleteJob(item._id),
       },
     ],
     totalItems,

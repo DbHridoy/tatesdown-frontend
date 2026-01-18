@@ -11,15 +11,6 @@ const jobApi = baseApi.injectEndpoints({
       invalidatesTags: ["Job", "User"],
     }),
 
-    createJobNote: builder.mutation({
-      query: (formData) => ({
-        url: "/jobs/job-note",
-        method: "POST",
-        body: formData, // FormData
-      }),
-      invalidatesTags: ["Job"],
-    }),
-
     createDesignConsultation: builder.mutation({
       query: (dc) => ({
         url: `/jobs/design-consultation`,
@@ -62,109 +53,18 @@ const jobApi = baseApi.injectEndpoints({
       query: ({ id, data }) => ({
         url: `/jobs/${id}`,
         method: "PATCH",
-        body: data,
+        body: data, // ✅ send the fields directly
       }),
-      invalidatesTags: ["Job"],
-    }),
+      invalidatesTags: (result, error, { id }) => [{ type: "Job", id }, { type: "Job", id: "LIST" }],
+    }), 
 
-    changeStatus: builder.mutation({
-      query: ({ id, status, productionManagerId }) => ({
+    deleteJob: builder.mutation({
+      query: (id) => ({
         url: `/jobs/${id}`,
-        method: "PATCH",
-        body: {
-          status,
-          productionManagerId
-        },
+        method: "DELETE"
       }),
-      invalidatesTags: ["Job"],
-    }),
-
-    getDownpaymentRequest: builder.query({
-      query: (options = {}) => {
-        const { page = 1, limit = 10, search, sort, filters = {} } = options;
-
-        const params = new URLSearchParams();
-
-        params.set("page", page);
-        params.set("limit", limit);
-
-        if (search) params.set("search", search);
-        if (sort) params.set("sort", sort);
-
-        // 🔥 Dynamic filters
-        Object.entries(filters).forEach(([key, value]) => {
-          if (value !== undefined && value !== "") {
-            params.set(key, value);
-          }
-        });
-
-        return `/jobs/downpayment-request?${params.toString()}`;
-      },
-      providesTags: ["Job"],
-    }),
-
-    getPendingCloseRequest: builder.query({
-      query: (options = {}) => {
-        const { page = 1, limit = 10, search, sort, filters = {} } = options;
-
-        const params = new URLSearchParams();
-
-        params.set("page", page);
-        params.set("limit", limit);
-
-        if (search) params.set("search", search);
-        if (sort) params.set("sort", sort);
-
-        // 🔥 Dynamic filters
-        Object.entries(filters).forEach(([key, value]) => {
-          if (value !== undefined && value !== "") {
-            params.set(key, value);
-          }
-        });
-
-        return `/jobs/job-close-approval?${params.toString()}`;
-      },
-      providesTags: ["Job"],
-    }),
-
-    updateDownPaymentStatus: builder.mutation({
-      query: ({ id, status }) => ({
-        url: "/jobs/downpayment-status",
-        method: "PATCH",
-        body: {
-          id,
-          status,
-        },
-      }),
-      invalidatesTags: ["Job"],
-    }),
-
-    getSalesRepJobs: builder.query({
-      query: ({ options = {}, repId }) => {
-        const { page = 1, limit = 10, search, sort, filters = {} } = options;
-
-        const params = new URLSearchParams();
-        params.set("page", page);
-        params.set("limit", limit);
-
-        if (search) params.set("search", search);
-        if (sort) params.set("sort", sort);
-
-        Object.entries(filters).forEach(([key, value]) => {
-          if (value !== undefined && value !== "") {
-            params.set(key, value);
-          }
-        });
-
-        return `/jobs/${repId}?${params.toString()}`;
-      },
-      providesTags: ["Job"],
-    }),
-
-    getSalesRepDeduction: builder.query({
-      query: (repId) => `/stats/sales-rep-stats/${repId}`,
-      providesTags: ["Job"],
-    }),
+      invalidatesTags: ["Job"]
+    })
   }),
 });
 
@@ -172,14 +72,8 @@ export const {
   useCreateNewJobMutation,
   useGetAllJobsQuery,
   useGetJobByIdQuery,
-  useCreateJobNoteMutation,
   useCreateDesignConsultationMutation,
-  useChangeStatusMutation,
   useUpdateJobMutation,
-  useGetDownpaymentRequestQuery,
-  useGetPendingCloseRequestQuery,
-  useUpdateDownPaymentStatusMutation,
-  useGetSalesRepJobsQuery,
-  useGetSalesRepDeductionQuery,
+  useDeleteJobMutation,
 } = jobApi;
 export default jobApi;

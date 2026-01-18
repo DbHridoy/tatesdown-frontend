@@ -3,7 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { UserAdd01Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 import AddNewJobModal from "./AddNewJob";
-import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
+import { useGetAllJobsQuery, useDeleteJobMutation } from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
 
 function Jobs() {
@@ -24,24 +24,26 @@ function Jobs() {
   const jobs = data?.data || [];
   const totalItems = data?.total || 0;
 
+  const [deleteJob] = useDeleteJobMutation();
+
   // ✅ Safe formatting
   const formattedJobs = jobs.map((j) => ({
     _id: j._id,
     clientName: j.clientId?.clientName ?? "N/A",
     jobTitle: j.title,
-    estimatedPrice: j.estimatedPrice,
+    price: j.price,
     jobStatus: j.status,
-    startDate: new Date(j.startDate).toLocaleDateString(),
+    estimatedStartDate: new Date(j.estimatedStartDate).toLocaleDateString(),
   }));
 
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Job Title", accessor: "jobTitle" },
-      { label: "Estimated Price", accessor: "estimatedPrice" },
-      { label: "Job Status", accessor: "jobStatus" },
-      { label: "Start Date", accessor: "startDate" },
+      // { label: "Job Title", accessor: "jobTitle" },
+      { label: "Price", accessor: "price" },
+      { label: "Status", accessor: "jobStatus" },
+      { label: "Est. Start Date", accessor: "estimatedStartDate" },
     ],
     actions: [
       {
@@ -59,7 +61,7 @@ function Jobs() {
         modalTitle: "Delete User",
         modalMessage: (item) =>
           `Are you sure you want to delete ${item.title}?`,
-        onConfirm: (item) => deleteUser(item._id),
+        onConfirm: (item) => deleteJob(item._id),
       },
     ],
     totalItems,

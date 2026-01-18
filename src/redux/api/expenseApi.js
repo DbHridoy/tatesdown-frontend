@@ -10,7 +10,8 @@ const expenseApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Expense"],
     }),
-    getMyMileageLogs: builder.query({
+
+    getAllMileageLogs: builder.query({
       query: (options = {}) => {
         const { page = 1, limit = 10, search, sort, filters = {} } = options;
 
@@ -33,11 +34,8 @@ const expenseApi = baseApi.injectEndpoints({
       },
       providesTags: ["Expense"],
     }),
-    getPendingMileageLogs: builder.query({
-      query: () => "/expenses/pending-mileage",
-      providesTags: ["Expense"],
-    }),
-    changeMileageLogStatus: builder.mutation({
+
+    updateMileageLogStatus: builder.mutation({
       query: ({ id, status }) => ({
         url: `/expenses/${id}`,
         method: "PATCH",
@@ -50,8 +48,7 @@ const expenseApi = baseApi.injectEndpoints({
 
 export const {
   useCreateMileageLogMutation,
-  useGetMyMileageLogsQuery,
-  useGetPendingMileageLogsQuery,
-  useChangeMileageLogStatusMutation,
+  useGetAllMileageLogsQuery,
+  useUpdateMileageLogStatusMutation,
 } = expenseApi;
 export default expenseApi;

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import PaymentModal from "../../../Components/Admin/Reports/PaymentModal";
 import { useParams } from "react-router-dom";
-import EarningBreakdown from "../../../Components/Admin/Reports/EarningBreakdown";
 import {
-  useGetSalesRepJobsQuery,
-  useGetSalesRepDeductionQuery,
+  useGetAllJobsQuery,
 } from "../../../redux/api/jobApi";
+import { useGetAllMileageLogsQuery } from "../../../redux/api/expenseApi";
 
 const RepDetails = () => {
   const [addPaymentModal, setAddPaymentModal] = useState(false);
@@ -19,12 +18,12 @@ const RepDetails = () => {
     filters: {},
   });
   //console.log("repId", id);
-  const { data: jobsData = [] } = useGetSalesRepJobsQuery({
+  const { data: jobsData = [] } = useGetAllJobsQuery({
     options: params,
     repId: id,
   });
 
-  const { data: deductionData } = useGetSalesRepDeductionQuery(id);
+  const { data: deductionData } = useGetAllMileageLogsQuery(id);
 
   // Use the rep ID from params
   const jobs = jobsData.data || [];

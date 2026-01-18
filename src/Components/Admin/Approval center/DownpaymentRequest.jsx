@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
-  useGetDownpaymentRequestQuery,
-  useUpdateDownPaymentStatusMutation,
+  useGetAllJobsQuery,
+  useUpdateJobMutation,
 } from "../../../redux/api/jobApi";
 import DataTable from "../../Common/DataTable";
 
@@ -12,12 +12,12 @@ function DownpaymentRequest() {
     search: "",
     sortKey: "",
     sortOrder: "asc",
-    filters: {},
+    filters: {downPaymentStatus:"Pending"},
   });
 
   // ✅ pass params to RTK Query
   const { data: downpaymentRequests, isLoading } =
-    useGetDownpaymentRequestQuery(params);
+    useGetAllJobsQuery(params);
 
   //console.log(downpaymentRequests);
 
@@ -31,7 +31,7 @@ function DownpaymentRequest() {
     amount: item?.downPayment ?? 0,
     status: item?.downPaymentStatus ?? "Pending",
   }));
-  const [updateDownPaymentStatus] = useUpdateDownPaymentStatusMutation();
+  const [updateDownPaymentStatus] = useUpdateJobMutation();
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useCreateJobNoteMutation, useCreateNewJobMutation } from "../../../redux/api/jobApi";
+import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useAddNoteMutation } from "../../../redux/api/clientApi";
 
 const AddNewJob = () => {
   const { data: quoteData } = useGetAllQuotesQuery({ filters: { status: "Pending" } });
@@ -11,7 +12,7 @@ const AddNewJob = () => {
   const navigate = useNavigate();
 
   const [createNewJob, { isLoading: isCreating }] = useCreateNewJobMutation();
-  const [createJobNote, { isLoading: isCreatingJobNote }] = useCreateJobNoteMutation();
+  const [createJobNote, { isLoading: isCreatingJobNote }] = useAddNoteMutation();
 
   // Read quoteId from URL
   const [searchParams] = useSearchParams();
@@ -21,7 +22,7 @@ const AddNewJob = () => {
   const [selectedQuoteId, setSelectedQuoteId] = useState("");
   const [title, setTitle] = useState("");
   const [downPayment, setDownPayment] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [estimatedStartDate, setEstimatedStartDate] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
 
@@ -59,7 +60,7 @@ const AddNewJob = () => {
   }, [totalHours, setupCleanup, powerwash]);
 
   const handleCreateJob = async () => {
-    if (!selectedQuoteId || !startDate || !downPayment) {
+    if (!selectedQuoteId || !estimatedStartDate || !downPayment) {
       alert("Please fill required fields: Quote, Start Date, Down Payment");
       return;
     }
@@ -74,7 +75,7 @@ const AddNewJob = () => {
       title,
       price,
       downPayment: Number(downPayment),
-      startDate: new Date(startDate),
+      estimatedStartDate: new Date(estimatedStartDate),
       totalHours: Number(totalHours),
       setupCleanup: Number(setupCleanup),
       powerwash: Number(powerwash),
@@ -199,8 +200,8 @@ const AddNewJob = () => {
           <label className="block font-semibold mb-1">Preferred Start Date *</label>
           <input
             type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            value={estimatedStartDate}
+            onChange={(e) => setEstimatedStartDate(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
         </div>

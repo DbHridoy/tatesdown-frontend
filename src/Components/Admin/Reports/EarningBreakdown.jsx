@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "../../Common/DataTable";
-import { useGetSalesRepJobsQuery } from "../../../redux/api/jobApi";
+import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
 
 function EarningBreakdown({ id }) {
   const [params, setParams] = useState({
@@ -11,7 +11,7 @@ function EarningBreakdown({ id }) {
     sortOrder: "asc",
     filters: {},
   });
-  const { data: jobsData = [] } = useGetSalesRepJobsQuery({id, ...params}); // Use the rep ID from params
+  const { data: jobsData = [] } = useGetAllJobsQuery({id, ...params}); // Use the rep ID from params
   const jobs = jobsData.data || [];
   const totalItems = jobsData.total || 0;
   const totalEarnings = jobsData.totalEarning || 0;

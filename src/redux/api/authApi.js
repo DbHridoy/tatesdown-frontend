@@ -9,6 +9,7 @@ export const authApi = baseApi.injectEndpoints({
         body: credentials,
       }),
     }),
+
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
@@ -24,6 +25,7 @@ export const authApi = baseApi.injectEndpoints({
         body: { email },
       }),
     }),
+
     verifyOtp: builder.mutation({
       query: (data) => ({
         url: "/auth/verify-otp",
@@ -31,6 +33,7 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+
     setNewPassword: builder.mutation({
       query: (data) => ({
         url: "/auth/set-new-password",

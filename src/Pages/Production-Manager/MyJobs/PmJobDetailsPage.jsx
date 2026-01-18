@@ -41,19 +41,10 @@ const PmJobDetailsPage = () => {
     laborHours: 0,
   });
 
-  const { data, isLoading, isError } = useGetJobByIdQuery(jobId, {
-    skip: !jobId,
-  });
+  const { data, isLoading, isError } = useGetJobByIdQuery(jobId, { skip: !jobId });
   const [updateJob, { isLoading: isSaving }] = useUpdateJobMutation();
 
   const job = data?.data;
-
-  if (isLoading) return <p className="p-6">Loading job details...</p>;
-  if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
-
-  const client = job.clientId;
-  const quote = job.quoteId;
-  const salesRep = job.salesRepId;
 
   useEffect(() => {
     if (!job) return;
@@ -70,6 +61,13 @@ const PmJobDetailsPage = () => {
       laborHours: job.laborHours ?? 0,
     });
   }, [job]);
+
+  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
+
+  const client = job.clientId;
+  const quote = job.quoteId;
+  const salesRep = job.salesRepId;
 
   const handleCancel = () => {
     setFormJob({
@@ -141,7 +139,7 @@ const PmJobDetailsPage = () => {
         )}
       </div>
       {/* Job Header */}
-      <JobDetailsHeader job={job} isEditing={isEditing} />
+      {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="p-6 bg-white shadow-md rounded-md border">
@@ -271,13 +269,7 @@ const PmJobDetailsPage = () => {
               />
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Top Section: Client Info + Financials */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Client Info */}
-        <div className="p-6 bg-white shadow-md rounded-md border">
+          <div className="p-6 bg-white shadow-md rounded-md border">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Client Information
           </h2>
@@ -320,21 +312,13 @@ const PmJobDetailsPage = () => {
             </p>
           </div>
         </div>
+        </div>
+      </div>
 
-        {/* Financial Details */}
-        <FinancialDetails
-          job={{
-            estimatedPrice: quote?.estimatedPrice || job.estimatedPrice,
-            downPayment: job.downPayment,
-            budgetSpent: job.budgetSpent,
-            downPaymentStatus: job.downPaymentStatus,
-            totalHours: job.totalHours,
-            setupCleanup: job.setupCleanup,
-            powerwash: job.powerwash,
-            labourHours: job.labourHours,
-          }}
-          isEditing={false}
-        />
+      {/* Top Section: Client Info + Financials */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Client Info */}
+        
       </div>
 
 
