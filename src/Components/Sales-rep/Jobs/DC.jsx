@@ -4,7 +4,7 @@ import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
 
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
 
-const DC = ({ jobId }) => {
+const DC = ({ jobId, actionLabel = "Add Document", onAction, hideAction = false }) => {
   const navigate = useNavigate();
   const { data: jobDetails } = useGetJobByIdQuery(jobId);
   const job = jobDetails?.data;
@@ -26,14 +26,18 @@ const DC = ({ jobId }) => {
           DC (Design Consultation)
         </h2>
 
-        <button
-          onClick={() =>
-            navigate(`/sales-rep/jobs/${jobId}/design-consultation`)
-          }
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add Document
-        </button>
+        {!hideAction && (
+          <button
+            onClick={
+              onAction
+                ? onAction
+                : () => navigate(`/sales-rep/jobs/${jobId}/design-consultation`)
+            }
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            {actionLabel}
+          </button>
+        )}
       </div>
 
       {hasDocs ? (

@@ -2,12 +2,13 @@ import JobDetailsHeader from "../../../Components/Sales-rep/Jobs/JobDetailsHeade
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
 import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
 import DC from "../../../Components/Sales-rep/Jobs/DC";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useGetJobByIdQuery,
   useUpdateJobMutation,
 } from "../../../redux/api/jobApi";
 import { useParams } from "react-router-dom";
+import DesignConsultationCreate from "./DesignConsultation";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -28,6 +29,7 @@ const statusOptions = [
 const JobDetailsPage = () => {
   const { jobId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
+  const [showDcForm, setShowDcForm] = useState(false);
   const [formJob, setFormJob] = useState({
     title: "",
     status: "",
@@ -45,6 +47,10 @@ const JobDetailsPage = () => {
   const [updateJob, { isLoading: isSaving }] = useUpdateJobMutation();
 
   const job = data?.data;
+  const designConsultation = useMemo(() => {
+    if (!job?.designConsultation?.length) return null;
+    return job.designConsultation[job.designConsultation.length - 1];
+  }, [job?.designConsultation]);
 
   useEffect(() => {
     if (!job) return;
@@ -270,57 +276,72 @@ const JobDetailsPage = () => {
             </div>
           </div>
           <div className="p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Client Information
-          </h2>
-          <div className="space-y-2 text-gray-700">
-            <p>
-              <span className="font-semibold">Name:</span>{" "}
-              {client?.clientName || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Partner:</span>{" "}
-              {client?.partnerName || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Email:</span>{" "}
-              {client?.email || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Phone:</span>{" "}
-              {client?.phoneNumber || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Address:</span>{" "}
-              {client?.address || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Lead Source:</span>{" "}
-              {client?.leadSource || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Lead Status:</span>{" "}
-              {client?.leadStatus || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Rating:</span>{" "}
-              {client?.rating || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Custom Client ID:</span>{" "}
-              {client?.customClientId || "N/A"}
-            </p>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Client Information
+            </h2>
+            <div className="space-y-2 text-gray-700">
+              <p>
+                <span className="font-semibold">Name:</span>{" "}
+                {client?.clientName || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Partner:</span>{" "}
+                {client?.partnerName || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Email:</span>{" "}
+                {client?.email || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Phone:</span>{" "}
+                {client?.phoneNumber || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Address:</span>{" "}
+                {client?.address || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Lead Source:</span>{" "}
+                {client?.leadSource || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Lead Status:</span>{" "}
+                {client?.leadStatus || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Rating:</span>{" "}
+                {client?.rating || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Custom Client ID:</span>{" "}
+                {client?.customClientId || "N/A"}
+              </p>
+            </div>
           </div>
-        </div>
         </div>
       </div>
 
       {/* Top Section: Client Info + Financials */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Client Info */}
-        
+
       </div>
 
+      <DC
+        jobId={jobId}
+        actionLabel={designConsultation ? "Edit DC" : "Add DC"}
+        onAction={() => setShowDcForm((prev) => !prev)}
+      />
+
+      {showDcForm && (
+        <DesignConsultationCreate
+          jobId={jobId}
+          initialData={designConsultation}
+          mode={designConsultation ? "edit" : "create"}
+          onCancel={() => setShowDcForm(false)}
+          onSaved={() => setShowDcForm(false)}
+        />
+      )}
 
       {/* Notes Section */}
       <SharedNotes notes={job.notes} />

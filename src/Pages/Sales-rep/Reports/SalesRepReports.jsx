@@ -9,19 +9,49 @@ export default function SalesRepReports() {
   // ✅ Replace these with real values from your API (or props if you want)
 
   const { data: myStats } = useGetMyStatsQuery();
-  console.log("Line:12-SalesRepReports",myStats)
+  const statsData = myStats?.data;
   const stats = [
-
-    { key: "totalSold", label: "Total Sold", value: myStats?.data?.totalSold ?? 0, prefix: "$" },
-    { key: "income", label: "Income", value: myStats?.data?.income ?? 0, prefix: "$" },
-    { key: "commissionEarned", label: "Commission Earned", value: myStats?.data?.commissionEarned ?? 0, prefix: "$" },
-    { key: "commissionPending", label: "Commission Pending", value: myStats?.data?.commissionPending ?? 0, prefix: "$" },
-    { key: "totalRevenue", label: "Total Revenue", value: myStats?.data?.totalRevenue ?? 0, prefix: "$" },
-    { key: "totalProducedRevenue", label: "Total Produced Revenue", value: myStats?.data?.totalProducedRevenue ?? 0, prefix: "$" },
-    { key: "totalClients", label: "Total Clients", value: myStats?.data?.totalClients ?? 0 },
-    { key: "totalQuotes", label: "Total Quotes", value: myStats?.data?.totalQuotes ?? 0 },
-    { key: "totalJobs", label: "Total Jobs", value: myStats?.data?.totalJobs ?? 0 },
-    { key: "totalDc", label: "Total DC", value: myStats?.data?.totalDc ?? 0 },
+    {
+      key: "totalRevenueEarned",
+      label: "Total Revenue Earned",
+      value: statsData?.totalRevenueEarned ?? 0,
+      prefix: "$",
+    },
+    {
+      key: "totalRevenueProduced",
+      label: "Total Revenue Produced",
+      value: statsData?.totalRevenueProduced ?? 0,
+      prefix: "$",
+    },
+    {
+      key: "totalCommissionEarned",
+      label: "Total Commission Earned",
+      value: statsData?.totalCommissionEarned ?? 0,
+      prefix: "$",
+    },
+    {
+      key: "totalCommissionPaid",
+      label: "Total Commission Paid",
+      value: statsData?.totalCommissionPaid ?? 0,
+      prefix: "$",
+    },
+    {
+      key: "totalCommissionPending",
+      label: "Total Commission Pending",
+      value: statsData?.totalCommissionPending ?? 0,
+      prefix: "$",
+    },
+    {
+      key: "totalClients",
+      label: "Total Clients",
+      value: statsData?.totalClients ?? 0,
+    },
+    {
+      key: "totalQuotes",
+      label: "Total Quotes",
+      value: statsData?.totalQuotes ?? 0,
+    },
+    { key: "totalJobs", label: "Total Jobs", value: statsData?.totalJobs ?? 0 },
   ];
 
   const formatValue = (item) => {

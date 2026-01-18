@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCreateDesignConsultationMutation } from "../../../redux/api/jobApi";
 import toast from "react-hot-toast";
 
-const DesignConsultationCreate = () => {
+const formatDateInput = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 10);
+};
+
+const DesignConsultationCreate = ({
+  jobId: jobIdProp,
+  initialData,
+  onCancel,
+  onSaved,
+  mode = "create",
+}) => {
   const [createDesignConsultation] = useCreateDesignConsultationMutation();
 
   const navigate = useNavigate();
   const { jobId } = useParams();
+  const resolvedJobId = jobIdProp || jobId;
 
   const [productDetails, setProductDetails] = useState({
     product: "",
@@ -26,6 +40,27 @@ const DesignConsultationCreate = () => {
   });
 
   const [contractFile, setContractFile] = useState(null);
+  const [existingFileUrl, setExistingFileUrl] = useState("");
+
+  useEffect(() => {
+    if (!initialData) return;
+    setProductDetails({
+      product: initialData.product ?? "",
+      colorCode: initialData.colorCode ?? "",
+      estimatedGallons: initialData.estimatedGallons ?? "",
+    });
+    setUpsellDetails({
+      upsellDescription: initialData.upsellDescription ?? "",
+      upsellValue: initialData.upsellValue ?? "",
+      addedHours: initialData.addedHours ?? "",
+    });
+    setScheduling({
+      estimatedStartDate: formatDateInput(
+        initialData.estimatedStartDate || initialData.startDate
+      ),
+    });
+    setExistingFileUrl(initialData.file || "");
+  }, [initialData]);
 
   const handleFileChange = (e) => {
     setContractFile(e.target.files[0]);
@@ -35,7 +70,7 @@ const DesignConsultationCreate = () => {
     try {
       const formData = new FormData();
 
-      formData.append("jobId", jobId);
+      formData.append("jobId", resolvedJobId);
 
       // product
       formData.append("product", productDetails.product);
@@ -56,19 +91,31 @@ const DesignConsultationCreate = () => {
       }
 
       await createDesignConsultation(formData).unwrap();
-      toast.success("Design consultation added successfully");
+      toast.success(
+        mode === "edit"
+          ? "Design consultation updated successfully"
+          : "Design consultation added successfully"
+      );
 
-      navigate(`/sales-rep/jobs/${jobId}`);
+      if (onSaved) {
+        onSaved();
+      } else {
+        navigate(`/sales-rep/jobs/${resolvedJobId}`);
+      }
     } catch (err) {
       console.error(err);
-      toast.error("Failed to create design consultation");
+      toast.error(
+        mode === "edit"
+          ? "Failed to update design consultation"
+          : "Failed to create design consultation"
+      );
     }
   };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold mb-6">
-        Create Design Consultation
+        {mode === "edit" ? "Edit Design Consultation" : "Create Design Consultation"}
       </h2>
 
       {/* Product Details */}
@@ -198,6 +245,16 @@ const DesignConsultationCreate = () => {
 
       {/* File Upload */}
       <div className="mb-6">
+        {existingFileUrl && (
+          <a
+            href={existingFileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-3 inline-block text-sm text-blue-600 underline"
+          >
+            View current file
+          </a>
+        )}
         <input
           type="file"
           accept=".pdf,.docx,.xlsx"
@@ -207,7 +264,7 @@ const DesignConsultationCreate = () => {
 
       <div className="flex justify-end gap-4">
         <button
-          onClick={() => navigate(-1)}
+          onClick={onCancel ? onCancel : () => navigate(-1)}
           className="bg-gray-400 px-6 py-2 rounded text-white"
         >
           Cancel
@@ -216,7 +273,7 @@ const DesignConsultationCreate = () => {
           onClick={handleSave}
           className="bg-blue-600 px-6 py-2 rounded text-white"
         >
-          Create Job
+          {mode === "edit" ? "Update DC" : "Create DC"}
         </button>
       </div>
     </div>
