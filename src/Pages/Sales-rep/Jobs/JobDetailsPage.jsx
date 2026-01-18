@@ -118,7 +118,7 @@ const JobDetailsPage = () => {
     <div className="p-6 space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex justify-end space-x-2">
-        {isEditing ? (
+        {/* {isEditing ? (
           <>
             <button
               onClick={handleCancel}
@@ -142,7 +142,7 @@ const JobDetailsPage = () => {
           >
             Edit
           </button>
-        )}
+        )} */}
       </div>
       {/* Job Header */}
       {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}

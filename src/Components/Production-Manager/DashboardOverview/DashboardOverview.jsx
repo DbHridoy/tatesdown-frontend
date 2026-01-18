@@ -4,36 +4,44 @@ import { useGetMyStatsQuery } from "../../../redux/api/common";
 const DashboardOverview = ({
   title = "Dashboard Overview",
   subtitle = "Welcome back! Here's what's happening with your production jobs today.",
-
   isLoading = false,
   error = "",
+  stats,
 }) => {
-
-  // const { data } = useGetMyStatsQuery();
-  const stats = [{
-    id: 2,
-    title: "Ready to Schedule",
-    value: 5,
-    icon: Clock,
-    bgColor: "bg-blue-50",
-    iconColor: "text-blue-600",
-  },
-  {
-    id: 3,
-    title: "Scheduled & Open",
-    value: 7,
-    icon: Calendar,
-    bgColor: "bg-blue-50",
-    iconColor: "text-blue-600",
-  },
-  {
-    id: 4,
-    title: "Pending Close",
-    value: 3,
-    icon: Hourglass,
-    bgColor: "bg-blue-50",
-    iconColor: "text-blue-600",
-  }];
+  const overviewStats = [
+    {
+      id: 2,
+      title: "Ready to Schedule",
+      value: stats?.readyToScheduleCount ?? 0,
+      icon: Clock,
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      id: 3,
+      title: "Scheduled & Open",
+      value: stats?.scheduledAndOpenCount ?? 0,
+      icon: Calendar,
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      id: 4,
+      title: "Pending Close",
+      value: stats?.pendingCloseCount ?? 0,
+      icon: Hourglass,
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      id: 5,
+      title: "Cancelled",
+      value: stats?.cancelledCount ?? 0,
+      icon: Briefcase,
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+  ];
 
 
   if (error) {
@@ -54,7 +62,7 @@ const DashboardOverview = ({
 
       {/* Stats */}
       <div className="flex flex-wrap gap-6">
-        {stats.map((stat, index) => {
+        {overviewStats.map((stat, index) => {
           const Icon = stat.icon || Briefcase;
 
           return (

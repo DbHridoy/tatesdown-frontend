@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "../../Common/DataTable";
-import { useGetAllMileageLogsQuery } from "../../../redux/api/expenseApi";
-import { useState } from "react";
+import {
+  useGetAllMileageLogsQuery,
+  useUpdateMileageLogStatusMutation,
+} from "../../../redux/api/expenseApi";
 
 function MileageApprovalRequests() {
-  const [changeMileageLogStatus, { isLoading: isChangeLoading }] =
-    useGetAllMileageLogsQuery();
+  const [changeMileageLogStatus] = useUpdateMileageLogStatusMutation();
 
-  const { data: getPendingMileageLogs, isLoading: isGetLoading } =
-    useGetAllMileageLogsQuery({ filter: { status: "Pending" } });
+  const { data: getPendingMileageLogs } = useGetAllMileageLogsQuery({
+    filters: { status: "Pending" },
+  });
   //console.log(getPendingMileageLogs);
-  const mileageData = getPendingMileageLogs?.data ?? [];
+  const mileageData = getPendingMileageLogs?.data?.data ?? [];
 
   const formattedMileageData = mileageData.map((m) => ({
     id: m._id,
-    salesRep: m.salesRepId?.fullName ?? "N/A",
+    salesRep: m.salesRepId?.fullName ?? m.salesRepId ?? "N/A",
     requestedAmount: m.deduction,
     status: m.status,
   }));
@@ -28,7 +30,7 @@ function MileageApprovalRequests() {
     filters: { role: "" },
   });
 
-  const totalItems = getPendingMileageLogs?.total;
+  const totalItems = getPendingMileageLogs?.data?.total ?? 0;
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },
