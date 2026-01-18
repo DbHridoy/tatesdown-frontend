@@ -2,6 +2,20 @@ import { baseApi } from "../baseApi";
 
 const expenseApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getExpenseSettings: builder.query({
+      query: () => "/common/get-variable",
+      providesTags: ["Variable"],
+    }),
+
+    updateExpenseSettings: builder.mutation({
+      query: (data) => ({
+        url: "/common/upsert-variable",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Variable"],
+    }),
+
     createMileageLog: builder.mutation({
       query: (data) => ({
         url: "/expenses/mileage",
@@ -30,7 +44,7 @@ const expenseApi = baseApi.injectEndpoints({
           }
         });
 
-        return `/expenses/my-mileage?${params.toString()}`;
+        return `/expenses/all-mileage?${params.toString()}`;
       },
       providesTags: ["Expense"],
     }),
@@ -50,5 +64,7 @@ export const {
   useCreateMileageLogMutation,
   useGetAllMileageLogsQuery,
   useUpdateMileageLogStatusMutation,
+  useGetExpenseSettingsQuery,
+  useUpdateExpenseSettingsMutation,
 } = expenseApi;
 export default expenseApi;

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  useGetVariablesQuery,
-  useUpsertVariableMutation,
-} from "../../../redux/api/common";
+  useGetExpenseSettingsQuery,
+  useUpdateExpenseSettingsMutation,
+} from "../../../redux/api/expenseApi";
 import toast from "react-hot-toast";
 
 function MileageRate() {
-  const { data: variable } = useGetVariablesQuery();
-  const [upsertVariable] = useUpsertVariableMutation();
+  const { data: variable } = useGetExpenseSettingsQuery();
+  const [updateExpenseSettings] = useUpdateExpenseSettingsMutation();
 
   const [mileageRate, setMileageRate] = useState("");
   const [originalRate, setOriginalRate] = useState("");
@@ -36,9 +36,12 @@ function MileageRate() {
     }
 
     try {
-      await upsertVariable({
-        mileageRate: parseFloat(mileageRate),
-      }).unwrap();
+      const payload = { mileageRate: parseFloat(mileageRate) };
+      if (variable?.data?.salesRepCommissionRate !== undefined) {
+        payload.salesRepCommissionRate = variable.data.salesRepCommissionRate;
+      }
+
+      await updateExpenseSettings(payload).unwrap();
 
       toast.success("Mileage rate updated successfully");
       setOriginalRate(mileageRate);

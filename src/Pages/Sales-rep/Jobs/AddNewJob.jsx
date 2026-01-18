@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
-import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
+import { useGetAllQuotesQuery, useGetQuoteByIdQuery } from "../../../redux/api/quoteApi";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAddNoteMutation } from "../../../redux/api/clientApi";
 
 const AddNewJob = () => {
+  // Read quoteId from URL
+  const [searchParams] = useSearchParams();
+  const quoteIdFromUrl = searchParams.get("quoteId");
+
   const { data: quoteData } = useGetAllQuotesQuery({ filters: { status: "Pending" } });
-  const quotes = quoteData?.data ?? [];
+  const { data: quoteByIdData } = useGetQuoteByIdQuery(quoteIdFromUrl, {
+    skip: !quoteIdFromUrl,
+  });
+  const quoteFromUrl = quoteByIdData?.data;
+  const quotesFromList = quoteData?.data ?? [];
+  const quotes = quoteFromUrl
+    ? [quoteFromUrl, ...quotesFromList.filter((q) => q._id !== quoteFromUrl._id)]
+    : quotesFromList;
   console.log("Line:10-quotes", quotes);
   const navigate = useNavigate();
 
   const [createNewJob, { isLoading: isCreating }] = useCreateNewJobMutation();
   const [createJobNote, { isLoading: isCreatingJobNote }] = useAddNoteMutation();
-
-  // Read quoteId from URL
-  const [searchParams] = useSearchParams();
-  const quoteIdFromUrl = searchParams.get("quoteId");
 
   // Form state
   const [selectedQuoteId, setSelectedQuoteId] = useState("");
@@ -24,6 +31,7 @@ const AddNewJob = () => {
   const [downPayment, setDownPayment] = useState("");
   const [estimatedStartDate, setEstimatedStartDate] = useState("");
   const [description, setDescription] = useState("");
+  const [additionalNote, setAdditionalNote] = useState("");
   const [price, setPrice] = useState(0);
 
   // New fields
@@ -47,7 +55,10 @@ const AddNewJob = () => {
     if (selectedQuote) {
       setPrice(selectedQuote.estimatedPrice);
       setTitle(`Job for ${selectedQuote.clientId.clientName}`);
-      setDescription(selectedQuote.notes || "");
+      const noteText = Array.isArray(selectedQuote.notes)
+        ? selectedQuote.notes.find((note) => note.quoteId === selectedQuote._id)?.note || ""
+        : selectedQuote.notes || "";
+      setDescription(noteText);
     }
   }, [selectedQuoteId, quotes]);
 
@@ -83,12 +94,23 @@ const AddNewJob = () => {
     };
 
     try {
-      await createNewJob(payload).unwrap();
-      if (description.trim()) {
+      const createdJob = await createNewJob(payload).unwrap();
+      const createdJobId = createdJob?.data?._id || createdJob?._id;
+      if (!createdJobId) {
+        throw new Error("Job creation did not return an id");
+      }
+      const notesToCreate = [description, additionalNote]
+        .map((note) => note.trim())
+        .filter(Boolean);
+
+      for (const note of notesToCreate) {
+        const formData = new FormData();
+        formData.append("jobId", createdJobId);
+        formData.append("note", note);
         await createJobNote({
-          jobId: payload.quoteId,
+          jobId: createdJobId,
           clientId: payload.clientId,
-          note: description.trim(),
+          formData,
         }).unwrap();
       }
       toast.success("Job created successfully!");
@@ -210,12 +232,22 @@ const AddNewJob = () => {
 
         {!!description.trim() && (
           <div className="mb-6">
-            <label className="block font-semibold mb-1">Client Note</label>
+            <label className="block font-semibold mb-1">Existing Client Note</label>
             <div className="w-full border px-3 py-2 rounded bg-gray-50 text-gray-700">
               {description}
             </div>
           </div>
         )}
+
+        <div className="mb-6">
+          <label className="block font-semibold mb-1">Add New Note</label>
+          <textarea
+            value={additionalNote}
+            onChange={(e) => setAdditionalNote(e.target.value)}
+            rows={4}
+            className="w-full border px-3 py-2 rounded"
+          />
+        </div>
 
         {/* Actions */}
         <div className="flex justify-end gap-4">

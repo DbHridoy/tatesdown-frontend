@@ -11,20 +11,20 @@ import {
 
 export default function PipelineOverview() {
   const data = [
-    { name: "New Leads", value: adminStats?.totalLeads || 0, color: "#0EA5E9" },
-    { name: "Quotes", value: adminStats?.totalQuotes || 0, color: "#7DD3FC" },
-    { name: "Dc Pending", value: adminStats?.dcPending || 0, color: "#F59E0B" },
+    { name: "New Leads", value:0, color: "#0EA5E9" },
+    { name: "Quotes", value:0 , color: "#7DD3FC" },
+    { name: "Dc Pending", value:  0, color: "#F59E0B" },
     {
       name: "Ready",
-      value: adminStats?.readyToSchedule || 0,
+      value:  0,
       color: "#FCD34D",
     },
     {
       name: "Scheduled",
-      value: adminStats?.scheduledOpen || 0,
+      value: 0,
       color: "#8B5CF6",
     },
-    { name: "Closed", value: adminStats?.closedJobs || 0, color: "#6B7280" },
+    { name: "Closed", value: 0, color: "#6B7280" },
   ];
 
   return (

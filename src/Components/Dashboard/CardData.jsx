@@ -3,19 +3,15 @@ import { User } from 'lucide-react';
 const CardData = () => {
 
 
-  // const [activeFilter, setActiveFilter] = useState('Week');
-
-  // const filters = ['Week', 'Month', 'Year', 'All Clusters'];
-
   const data = [
-    { title: 'Total Leads', value: adminStats?.totalLeads || '0', change: '+12%', color: 'text-green-500' },
-    { title: 'Total Quotes', value: adminStats?.totalQuotes || '0', change: '+8%', color: 'text-green-500' },
-    { title: 'Booked Jobs', value: adminStats?.bookedJobs || '0', change: '-3%', color: 'text-red-500' },
-    { title: 'DC Pending', value: adminStats?.dcPending || '0', change: 'Pending', color: 'text-yellow-500' },
-    { title: 'Ready to Schedule', value: adminStats?.readyToSchedule || '0', change: '', color: 'text-green-500' },
-    { title: 'Scheduled & Open', value: adminStats?.scheduledOpen || '0', change: '', color: 'text-gray-500' },
-    { title: 'Closed Jobs', value: adminStats?.closedJobs || '0', change: '', color: 'text-blue-500' },
-    { title: 'Total Produced for Revenue', value: adminStats?.totalProducedForRevenue || '$0', change: '', color: 'text-blue-500' },
+    { title: 'Total Leads', value: '0', change: '+12%', color: 'text-green-500' },
+    { title: 'Total Quotes', value: '0', change: '+8%', color: 'text-green-500' },
+    { title: 'Booked Jobs', value: '0', change: '-3%', color: 'text-red-500' },
+    { title: 'DC Pending', value: '0', change: 'Pending', color: 'text-yellow-500' },
+    { title: 'Ready to Schedule', value: '0', change: '', color: 'text-green-500' },
+    { title: 'Scheduled & Open', value: '0', change: '', color: 'text-gray-500' },
+    { title: 'Closed Jobs', value: '0', change: '', color: 'text-blue-500' },
+    { title: 'Total Produced for Revenue', value: '$0', change: '', color: 'text-blue-500' },
   ];
 
   return (
@@ -42,9 +38,8 @@ const CardData = () => {
         {data.map((item, index) => (
           <div
             key={index}
-            className={`flex justify-between p-6 rounded-lg shadow-md ${
-              index === data.length - 1 ? '!bg-[#B0D6F0]' : 'bg-white'
-            }`}
+            className={`flex justify-between p-6 rounded-lg shadow-md ${index === data.length - 1 ? '!bg-[#B0D6F0]' : 'bg-white'
+              }`}
           >
             <div>
               <div className="w-[52px] h-[52px] flex items-center justify-center bg-blue-100 rounded-lg mb-4">

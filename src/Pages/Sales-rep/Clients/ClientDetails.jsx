@@ -185,7 +185,7 @@ const ClientDetails = () => {
           <div key={field}>
             <label className="block text-sm font-medium mb-1">{label}</label>
             <input
-              type="text"
+              type={field === "email" ? "email" : "text"}
               value={form[field]}
               disabled={!isEditing}
               onChange={(e) => handleChange(field, e.target.value)}

@@ -3,23 +3,32 @@ import AddExpense from "../../../Components/Sales-rep/Expenses/AddExpense";
 import ExpenseCard from "../../../Components/Sales-rep/Expenses/ExpenseCard";
 import { useGetAllMileageLogsQuery } from "../../../redux/api/expenseApi";
 import DataTable from "../../../Components/Common/DataTable";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 function UserExpenses() {
+  const user = useSelector(selectCurrentUser);
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
     search: "",
     sortKey: "fullName",
     sortOrder: "asc",
-    filters: { role: "" },
+    filters: { salesRepId: user?._id },
   });
-  const { data: mileageLogs } = useGetAllMileageLogsQuery({ ...params, role: "Sales Rep" });
+  const { data: mileageLogs } = useGetAllMileageLogsQuery(params);
 
-  const mileageLogsData = mileageLogs?.data ?? [];
-  const totalMiles = mileageLogs?.totalMilesDriven ?? 0;
-  const totalDeduction = mileageLogs?.totalDeduction ?? 0;
+  const mileageLogsData = mileageLogs?.data?.data ?? [];
+  const totalItems = mileageLogs?.data?.total ?? 0;
 
-  const totalItems = mileageLogs?.total ?? 0;
+  const totalMiles = mileageLogsData.reduce(
+    (sum, log) => sum + (Number(log.totalMilesDriven) || 0),
+    0
+  );
+  const totalDeduction = mileageLogsData.reduce(
+    (sum, log) => sum + (Number(log.deduction) || 0),
+    0
+  );
 
   const tableConfig = {
     columns: [

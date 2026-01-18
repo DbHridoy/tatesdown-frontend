@@ -1,14 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import { useGetVariablesQuery, useUpsertVariableMutation } from '../../../redux/api/common';
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import {
+  useGetExpenseSettingsQuery,
+  useUpdateExpenseSettingsMutation,
+} from "../../../redux/api/expenseApi";
 
 function SalesRepCommission() {
-     const { data: variable } = useGetVariablesQuery();
-     const salesRepCommission = variable?.data?.salesRepCommissionRate;
-     const [upsertVariable] = useUpsertVariableMutation();
-     const [isEditable, setIsEditable] = useState(false);
-     const [originalCommission, setOriginalCommission] = useState("");
+  const { data: variable } = useGetExpenseSettingsQuery();
+  const [updateExpenseSettings] = useUpdateExpenseSettingsMutation();
+  const [commissionRate, setCommissionRate] = useState("");
+  const [originalCommission, setOriginalCommission] = useState("");
+  const [isEditable, setIsEditable] = useState(false);
 
-     console.log("Line:11-Salesrepcomission",variable)
+  useEffect(() => {
+    if (variable?.data?.salesRepCommissionRate !== undefined) {
+      setCommissionRate(variable.data.salesRepCommissionRate);
+      setOriginalCommission(variable.data.salesRepCommissionRate);
+    }
+  }, [variable]);
+
+  const validateCommissionRate = (rate) => {
+    const numRate = parseFloat(rate);
+    if (isNaN(numRate)) return "Please enter a valid number";
+    if (numRate < 0) return "Commission rate cannot be negative";
+    if (numRate > 100) return "Commission rate seems unusually high";
+    return null;
+  };
+
+  const handleSave = async () => {
+    const error = validateCommissionRate(commissionRate);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    try {
+      const payload = { salesRepCommissionRate: parseFloat(commissionRate) };
+      if (variable?.data?.mileageRate !== undefined) {
+        payload.mileageRate = variable.data.mileageRate;
+      }
+
+      await updateExpenseSettings(payload).unwrap();
+      toast.success("Sales rep commission updated successfully");
+      setOriginalCommission(commissionRate);
+      setIsEditable(false);
+    } catch (err) {
+      toast.error("Failed to update sales rep commission");
+    }
+  };
+
+  const handleCancel = () => {
+    setCommissionRate(originalCommission);
+    setIsEditable(false);
+  };
     
   return (
     <div className="p-4 bg-white rounded-lg shadow-sm">
@@ -21,9 +65,9 @@ function SalesRepCommission() {
           <input
             type="number"
             step="0.01"
-            value={salesRepCommission}
+            value={commissionRate}
             disabled={!isEditable}
-            onChange={(e) => setSalesRepCommission(e.target.value)}
+            onChange={(e) => setCommissionRate(e.target.value)}
             className="w-full py-2 pr-3 border border-gray-300 rounded-md pl-7 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
             placeholder="0.50"
           />

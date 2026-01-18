@@ -6,6 +6,19 @@ import {
 } from "../../../redux/api/quoteApi";
 import toast from "react-hot-toast";
 
+const getFileName = (url = "") => {
+  const parts = decodeURIComponent(url).split("/");
+  return parts[parts.length - 1] || "File";
+};
+
+const normalizeStatus = (value = "") => {
+  const lowered = value.toString().toLowerCase();
+  if (lowered === "pending") return "Pending";
+  if (lowered === "approved") return "Approved";
+  if (lowered === "rejected") return "Rejected";
+  return value;
+};
+
 const QuoteDetails = () => {
   const { quoteId } = useParams();
   const navigate = useNavigate();
@@ -19,14 +32,23 @@ const QuoteDetails = () => {
   const [formData, setFormData] = useState(null);
   const [bidSheetFile, setBidSheetFile] = useState(null);
 
+  const getQuoteNoteText = (quoteData) => {
+    if (!quoteData) return "";
+    if (typeof quoteData.notes === "string") return quoteData.notes;
+    if (Array.isArray(quoteData.notes)) {
+      const note = quoteData.notes.find((n) => n.quoteId === quoteData._id);
+      return note?.note || "";
+    }
+    return "";
+  };
+
   /* ---------------- Init editable data ---------------- */
   useEffect(() => {
     if (quote) {
       setFormData({
         estimatedPrice: quote.estimatedPrice,
-        expiryDate: quote.expiryDate?.split("T")[0],
-        notes: quote.notes || "",
-        status: quote.status,
+        notes: getQuoteNoteText(quote),
+        status: normalizeStatus(quote.status),
         bookedOnSpot: quote.bookedOnSpot,
       });
       setBidSheetFile(null); // reset file on load
@@ -72,6 +94,9 @@ const QuoteDetails = () => {
       toast.success("Quote updated successfully")
       setIsEditing(false);
       setBidSheetFile(null);
+      if (normalizeStatus(formData.status) === "Approved") {
+        navigate(`/sales-rep/add-job?quoteId=${quote._id}`);
+      }
     } catch (err) {
       console.error("Update failed", err);
       toast.error("Failed to update quote")
@@ -84,9 +109,8 @@ const QuoteDetails = () => {
     setBidSheetFile(null);
     setFormData({
       estimatedPrice: quote.estimatedPrice,
-      expiryDate: quote.expiryDate?.split("T")[0],
-      notes: quote.notes || "",
-      status: quote.status,
+      notes: getQuoteNoteText(quote),
+      status: normalizeStatus(quote.status),
       bookedOnSpot: quote.bookedOnSpot,
     });
   };
@@ -102,14 +126,24 @@ const QuoteDetails = () => {
   const {
     clientId,
     estimatedPrice,
-    expiryDate,
-    notes,
+    notes: quoteNotes,
     status,
     bookedOnSpot,
     bidSheet,
     createdAt,
     customQuoteId,
   } = quote;
+  const normalizedStatus = normalizeStatus(status);
+  const notesList = Array.isArray(quoteNotes)
+    ? quoteNotes
+    : quoteNotes
+      ? [{ note: quoteNotes }]
+      : [];
+  const bidSheets = Array.isArray(bidSheet)
+    ? bidSheet
+    : bidSheet
+      ? [{ bidSheetUrl: bidSheet }]
+      : [];
 
   /* ---------------- UI ---------------- */
   return (
@@ -128,7 +162,7 @@ const QuoteDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500">Client</p>
-              <p className="font-semibold">{clientId.clientName}</p>
+              <p className="font-semibold">{clientId?.clientName || "-"}</p>
             </div>
 
             <div>
@@ -162,12 +196,12 @@ const QuoteDetails = () => {
                   onChange={handleChange}
                   className="border rounded px-3 py-2"
                 >
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
                 </select>
               ) : (
-                <span className="font-medium">{status}</span>
+                <span className="font-medium">{normalizedStatus}</span>
               )}
             </div>
           </div>
@@ -175,29 +209,16 @@ const QuoteDetails = () => {
 
         {/* Info */}
         <div className="bg-white border rounded-lg p-6 mb-6">
-          <div className="mb-4">
-            <p className="text-sm text-gray-500">Expiry Date</p>
-            {isEditing ? (
-              <input
-                type="date"
-                name="expiryDate"
-                value={formData.expiryDate}
-                onChange={handleChange}
-                className="border rounded px-3 py-2"
-              />
-            ) : (
-              <p>{new Date(expiryDate).toLocaleDateString()}</p>
-            )}
-          </div>
+
 
           <div className="mb-4">
             <p className="text-sm text-gray-500">Booked on Spot</p>
-            <p>{bookedOnSpot === "true" ? "Yes" : "No"}</p>
+            <p>{bookedOnSpot ? "Yes" : "No"}</p>
           </div>
 
-          <div>
-            <p className="text-sm text-gray-500 mb-1">Notes</p>
-            {isEditing ? (
+          {isEditing ? (
+            <div className="mb-4">
+              <p className="text-sm text-gray-500 mb-1">Quote Note</p>
               <textarea
                 name="notes"
                 value={formData.notes}
@@ -205,8 +226,34 @@ const QuoteDetails = () => {
                 rows={4}
                 className="border rounded p-3 w-full"
               />
+            </div>
+          ) : null}
+
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Notes</p>
+            {notesList.length === 0 ? (
+              <p>-</p>
             ) : (
-              <p>{notes || "-"}</p>
+              <div className="space-y-3">
+                {notesList.map((noteItem) => (
+                  <div
+                    key={noteItem._id || noteItem.id || noteItem.note}
+                    className="rounded border p-3"
+                  >
+                    <p className="text-sm text-gray-800">{noteItem.note}</p>
+                    {noteItem.file && (
+                      <a
+                        href={noteItem.file}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 block text-sm text-blue-600 underline"
+                      >
+                        {getFileName(noteItem.file)}
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>
@@ -215,20 +262,25 @@ const QuoteDetails = () => {
         <div className="bg-white border rounded-lg p-6 mb-6">
           <h3 className="font-semibold mb-3">Bid Sheet</h3>
 
-          {bidSheet && !isEditing && (
-            <a
-              href={bidSheet}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              View Current Bid Sheet
-            </a>
+          {bidSheets.length > 0 && !isEditing && (
+            <div className="space-y-2">
+              {bidSheets.map((sheet) => (
+                <a
+                  key={sheet._id || sheet.id || sheet.bidSheetUrl}
+                  href={sheet.bidSheetUrl || sheet}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-blue-600 underline"
+                >
+                  {getFileName(sheet.bidSheetUrl || sheet)}
+                </a>
+              ))}
+            </div>
           )}
 
           {isEditing && (
             <div className="space-y-2">
-              {bidSheet && (
+              {bidSheets.length > 0 && (
                 <p className="text-sm text-gray-600">
                   Current file will be replaced if you upload a new one
                 </p>
