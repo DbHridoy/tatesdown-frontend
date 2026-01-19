@@ -40,6 +40,12 @@ const AddClient = () => {
   const handleCreateClient = async (e) => {
     e.preventDefault();
 
+    const noteValue = note.trim();
+    if (!noteValue && noteFile) {
+      toast.error("Add a note for the attachment.");
+      return;
+    }
+
     try {
       // 1️⃣ Create client
       const client = await createClient(formData).unwrap();
@@ -48,9 +54,9 @@ const AddClient = () => {
       //console.log("Client from add client", client);
 
       // 2️⃣ Upload note (if provided)
-      if (note.trim() || noteFile) {
+      if (noteValue || noteFile) {
         const fd = new FormData();
-        if (note.trim()) fd.append("note", note.trim());
+        if (noteValue) fd.append("note", noteValue);
         if (noteFile) fd.append("file", noteFile);
 
         await addNote({ clientId, formData: fd }).unwrap();

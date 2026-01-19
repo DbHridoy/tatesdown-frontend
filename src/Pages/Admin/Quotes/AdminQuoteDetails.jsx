@@ -25,7 +25,7 @@ const AdminQuoteDetails = () => {
       setFormData({
         estimatedPrice: quote.estimatedPrice,
         expiryDate: quote.expiryDate?.split("T")[0],
-        notes: quote.notes || "",
+        notes: Array.isArray(quote.notes) ? "" : quote.notes || "",
         status: quote.status,
         bookedOnSpot: quote.bookedOnSpot,
       });
@@ -208,7 +208,23 @@ const AdminQuoteDetails = () => {
                 className="border rounded p-3 w-full text-sm sm:text-base"
               />
             ) : (
-              <p>{notes || "-"}</p>
+              <>
+                {Array.isArray(notes) ? (
+                  notes.length ? (
+                    <ul className="list-disc list-inside space-y-1">
+                      {notes.map((note) => (
+                        <li key={note._id || note.id}>
+                          {note.note || note.text || "-"}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>-</p>
+                  )
+                ) : (
+                  <p>{notes || "-"}</p>
+                )}
+              </>
             )}
           </div>
         </div>
