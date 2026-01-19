@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ArrowLeft, Plus, Upload, ChevronDown, Edit } from "lucide-react";
 import { FaHourglass } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,12 +30,18 @@ export default function JobOverview() {
   const [createJobNote] = useAddNoteMutation();
 
   const job = data?.data;
+  const productionManagerId = job?.productionManagerId?._id ?? job?.productionManagerId;
+  const canManageStatus = Boolean(productionManagerId && user?._id && productionManagerId === user._id);
+  const statusOptions = useMemo(() => {
+    const options = [job?.status, "Scheduled", "In Progress", "On Hold", "Completed", "Cancelled"];
+    return [...new Set(options)].filter((option) => option && option !== "Closed");
+  }, [job?.status]);
 
   const changeStatusHandler = async (status) => {
     if (!status) return;
     //console.log("from change status handler", job._id, status)
     try {
-      await changeStatus({ id: job._id, status }).unwrap();
+      await changeStatus({ id: job._id, data: { status } }).unwrap();
       toast.success("Status updated successfully");
     } catch (err) {
       console.error(err);
@@ -138,37 +144,42 @@ export default function JobOverview() {
             <h2 className="mb-4 text-base font-semibold text-gray-900">
               Job Status
             </h2>
-            <div className="space-y-4">
-              <div className="relative">
-                <select
-                  value={currentStatus || job?.status}
-                  onChange={(e) => setCurrentStatus(e.target.value)}
-                  className="w-full px-3 py-2 text-sm sm:text-base text-gray-900 bg-white border border-gray-300 rounded appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            {!canManageStatus ? (
+              <p className="text-sm text-gray-600">You do not have access to update this job.</p>
+            ) : job?.status === "Closed" ? (
+              <p className="text-sm text-gray-600">This job is closed and cannot be updated.</p>
+            ) : (
+              <div className="space-y-4">
+                <div className="relative">
+                  <select
+                    value={currentStatus || job?.status}
+                    onChange={(e) => setCurrentStatus(e.target.value)}
+                    className="w-full px-3 py-2 text-sm sm:text-base text-gray-900 bg-white border border-gray-300 rounded appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {statusOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 pointer-events-none right-2 top-1/2" />
+                </div>
+
+                <button
+                  onClick={() => changeStatusHandler(currentStatus || job?.status)}
+                  className="w-full flex justify-center items-center gap-x-2 bg-blue-400 hover:bg-blue-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
                 >
-                  <option>{job?.status}</option>
-                  <option>Scheduled</option>
-                  <option>In Progress</option>
-                  <option>On Hold</option>
-                  <option>Completed</option>
-                  <option>Cancelled</option>
-                </select>
-                <ChevronDown className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 pointer-events-none right-2 top-1/2" />
+                  Change Status
+                </button>
+
+                <button
+                  onClick={() => changeStatusHandler("Pending Close")}
+                  className="w-full flex justify-center items-center gap-x-2 bg-yellow-400 hover:bg-yellow-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
+                >
+                  <FaHourglass /> Mark as Pending Close
+                </button>
               </div>
-
-              <button
-                onClick={() => changeStatusHandler(currentStatus)}
-                className="w-full flex justify-center items-center gap-x-2 bg-blue-400 hover:bg-blue-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
-              >
-                Change Status
-              </button>
-
-              <button
-                onClick={() => changeStatusHandler("Pending Close")}
-                className="w-full flex justify-center items-center gap-x-2 bg-yellow-400 hover:bg-yellow-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
-              >
-                <FaHourglass /> Mark as Pending Close
-              </button>
-            </div>
+            )}
           </div>
         </div>
 

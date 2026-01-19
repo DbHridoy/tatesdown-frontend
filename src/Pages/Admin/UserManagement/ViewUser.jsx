@@ -196,7 +196,7 @@ const ViewUser = () => {
 
   return (
     <div className="space-y-6 p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
             User Details
@@ -211,7 +211,7 @@ const ViewUser = () => {
         >
           Back
         </button>
-      </div>
+      </div> */}
 
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>

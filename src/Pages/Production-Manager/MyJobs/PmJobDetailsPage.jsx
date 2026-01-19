@@ -2,12 +2,14 @@ import JobDetailsHeader from "../../../Components/Sales-rep/Jobs/JobDetailsHeade
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
 import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
 import DC from "../../../Components/Sales-rep/Jobs/DC";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useGetJobByIdQuery,
   useUpdateJobMutation,
 } from "../../../redux/api/jobApi";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -21,12 +23,12 @@ const statusOptions = [
   "Scheduled and Open",
   "Scheduled",
   "Pending Close",
-  "Closed",
   "Cancelled",
 ];
 
 const PmJobDetailsPage = () => {
   const { jobId } = useParams();
+  const user = useSelector(selectCurrentUser);
   const [isEditing, setIsEditing] = useState(false);
   const [formJob, setFormJob] = useState({
     title: "",
@@ -45,6 +47,12 @@ const PmJobDetailsPage = () => {
   const [updateJob, { isLoading: isSaving }] = useUpdateJobMutation();
 
   const job = data?.data;
+  const productionManagerId = job?.productionManagerId?._id ?? job?.productionManagerId;
+  const canManageJob = Boolean(productionManagerId && user?._id && productionManagerId === user._id);
+  const statusOptionsForEdit = useMemo(
+    () => [...new Set([formJob.status, ...statusOptions])].filter(Boolean),
+    [formJob.status]
+  );
 
   useEffect(() => {
     if (!job) return;
@@ -108,11 +116,19 @@ const PmJobDetailsPage = () => {
     setIsEditing(false);
   };
 
+  const handleMarkPendingClose = async () => {
+    if (!jobId) return;
+    await updateJob({
+      id: jobId,
+      data: { status: "Pending Close" },
+    }).unwrap();
+  };
+
   return (
     <div className="p-4 sm:p-6 space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
-        {isEditing ? (
+        {!canManageJob ? null : isEditing ? (
           <>
             <button
               onClick={handleCancel}
@@ -128,14 +144,29 @@ const PmJobDetailsPage = () => {
             >
               Save
             </button>
+            <button
+              onClick={handleMarkPendingClose}
+              className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+              disabled={isSaving}
+            >
+              Mark as Pending Close
+            </button>
           </>
         ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-md text-sm sm:text-base"
-          >
-            Edit
-          </button>
+          <>
+            <button
+              onClick={() => setIsEditing(true)}
+              className="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-md text-sm sm:text-base"
+            >
+              Edit
+            </button>
+            <button
+              onClick={handleMarkPendingClose}
+              className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
+            >
+              Mark as Pending Close
+            </button>
+          </>
         )}
       </div>
       {/* Job Header */}
@@ -160,9 +191,7 @@ const PmJobDetailsPage = () => {
               value={formJob.status}
               isEditing={isEditing}
               asSelect
-              options={[...new Set([formJob.status, ...statusOptions])].filter(
-                Boolean
-              )}
+              options={statusOptionsForEdit}
               onChange={(value) =>
                 setFormJob((prev) => ({ ...prev, status: value }))
               }
