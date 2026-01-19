@@ -10,7 +10,7 @@ function JobCloseRequests() {
     search: "",
     sortKey: "fullName",
     sortOrder: "asc",
-    filters: { role: "" },
+    filters: { status: "Pending Close" },
   });
 
   const [changeJobStatus] = useUpdateJobMutation();
@@ -22,8 +22,8 @@ function JobCloseRequests() {
 
   const formattedJobCloseData = mileageData.map((m) => ({
     id: m._id,
-    clientName: m.quoteId?.clientId?.clientName ?? "N/A",
-    totalAmount: m.estimatedPrice,
+    clientName: m.clientId?.clientName ?? "N/A",
+    totalAmount: m.price ?? m.estimatedPrice ?? 0,
     status: m.status,
   }));
 
@@ -42,9 +42,9 @@ function JobCloseRequests() {
         modal: true,
         modalTitle: "Approve Job Close Request",
         modalMessage: (item) =>
-          `Are you sure you want to approve ${item.fullName}?`,
+          `Are you sure you want to approve ${item.clientName}?`,
         onConfirm: (item) =>
-          changeJobStatus({ id: item._id, status: "Closed" }),
+          changeJobStatus({ id: item.id, data: { status: "Closed" } }),
       },
       {
         label: "Reject",
@@ -52,9 +52,9 @@ function JobCloseRequests() {
         modal: true,
         modalTitle: "Reject Job Close Request",
         modalMessage: (item) =>
-          `Are you sure you want to reject ${item.fullName}?`,
+          `Are you sure you want to reject ${item.clientName}?`,
         onConfirm: (item) =>
-          changeJobStatus({ id: item.id, status: "Rejected" }),
+          changeJobStatus({ id: item.id, data: { status: "Rejected" } }),
       },
     ],
     totalItems: totalItems,

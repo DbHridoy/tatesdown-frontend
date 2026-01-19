@@ -8,19 +8,6 @@ import {
 function MileageApprovalRequests() {
   const [changeMileageLogStatus] = useUpdateMileageLogStatusMutation();
 
-  const { data: getPendingMileageLogs } = useGetAllMileageLogsQuery({
-    filters: { status: "Pending" },
-  });
-  //console.log(getPendingMileageLogs);
-  const mileageData = getPendingMileageLogs?.data?.data ?? [];
-
-  const formattedMileageData = mileageData.map((m) => ({
-    id: m._id,
-    salesRep: m.salesRepId?.fullName ?? m.salesRepId ?? "N/A",
-    requestedAmount: m.deduction,
-    status: m.status,
-  }));
-
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -30,12 +17,45 @@ function MileageApprovalRequests() {
     filters: { role: "" },
   });
 
-  const totalItems = getPendingMileageLogs?.data?.total ?? 0;
+  const { data: getPendingMileageLogs } = useGetAllMileageLogsQuery({
+    ...params,
+    filters: { ...params.filters, status: "Pending" },
+  });
+  //console.log(getPendingMileageLogs);
+  const mileageData = getPendingMileageLogs?.data ?? [];
+
+  const formattedMileageData = mileageData.map((m) => ({
+    id: m._id,
+    salesRep: m.salesRepId?.fullName ?? m.salesRepId ?? "N/A",
+    requestedAmount: m.deduction,
+    totalMilesDriven: m.totalMilesDriven ?? 0,
+    period: m.month && m.year ? `${m.month} ${m.year}` : "N/A",
+    note: m.note || "—",
+    receipt: m.file ? (
+      <a
+        href={m.file}
+        target="_blank"
+        rel="noreferrer"
+        className="text-blue-600 underline"
+      >
+        View
+      </a>
+    ) : (
+      "—"
+    ),
+    status: m.status,
+  }));
+
+  const totalItems = getPendingMileageLogs?.total ?? 0;
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Sales Rep", accessor: "salesRep", sortable: true },
       { label: "Requested Amount", accessor: "requestedAmount" },
+      { label: "Total Miles", accessor: "totalMilesDriven" },
+      // { label: "Period", accessor: "period" },
+      // { label: "Note", accessor: "note" },
+      // { label: "Receipt", accessor: "receipt" },
       { label: "Status", accessor: "status" },
     ],
     actions: [
@@ -45,7 +65,7 @@ function MileageApprovalRequests() {
         modal: true,
         modalTitle: "Approve Mileage Log",
         modalMessage: (item) =>
-          `Are you sure you want to approve ${item.fullName}?`,
+          `Are you sure you want to approve ${item.salesRep}?`,
         onConfirm: (item) =>
           changeMileageLogStatus({ id: item.id, status: "Approved" }),
       },
@@ -55,7 +75,7 @@ function MileageApprovalRequests() {
         modal: true,
         modalTitle: "Reject Mileage Log",
         modalMessage: (item) =>
-          `Are you sure you want to reject ${item.fullName}?`,
+          `Are you sure you want to reject ${item.salesRep}?`,
         onConfirm: (item) => {
           //console.log(item); // logs the whole item
           changeMileageLogStatus({ id: item.id, status: "Rejected" });
