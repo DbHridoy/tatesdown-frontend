@@ -59,7 +59,7 @@ const DesignConsultationCreate = ({
         initialData.estimatedStartDate || initialData.startDate
       ),
     });
-    setExistingFileUrl(initialData.file || "");
+    setExistingFileUrl(initialData.contract || "");
   }, [initialData]);
 
   const handleFileChange = (e) => {
@@ -87,7 +87,7 @@ const DesignConsultationCreate = ({
 
       // file
       if (contractFile) {
-        formData.append("file", contractFile);
+        formData.append("contract", contractFile);
       }
 
       await createDesignConsultation(formData).unwrap();
@@ -259,6 +259,9 @@ const DesignConsultationCreate = ({
             View current file
           </a>
         )}
+        <label className="block text-sm font-medium text-gray-700">
+          Contract
+        </label>
         <input
           type="file"
           accept=".pdf,.docx,.xlsx"

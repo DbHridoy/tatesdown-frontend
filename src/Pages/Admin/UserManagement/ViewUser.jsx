@@ -6,6 +6,7 @@ import {
   useGetUserStatsQuery,
   useUpdateUserMutation,
 } from "../../../redux/api/userApi";
+import PeriodFilter from "../../../Components/Common/PeriodFilter";
 import {
   useCreatePaymentMutation,
   useGetPaymentsQuery,
@@ -26,6 +27,7 @@ const ViewUser = () => {
   const { userId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [formUser, setFormUser] = useState(emptyForm);
+  const [statsPeriodType, setStatsPeriodType] = useState("week");
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentForm, setPaymentForm] = useState({
     amount: "",
@@ -48,7 +50,10 @@ const ViewUser = () => {
     skip: !userId,
   });
   const { data: userStatsData, isLoading: isStatsLoading } =
-    useGetUserStatsQuery(userId, { skip: !userId });
+    useGetUserStatsQuery(
+      { userId, periodType: statsPeriodType },
+      { skip: !userId }
+    );
   const { data: clustersData } = useGetAllClustersQuery();
   const user = userData?.data;
   const userStats = userStatsData?.data;
@@ -290,13 +295,21 @@ const ViewUser = () => {
       </div>
 
       <div className="border-t pt-6">
-        <div className="mb-4">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-            Role Stats
-          </h3>
-          <p className="text-sm sm:text-base text-gray-500">
-            Performance metrics for {user?.role ?? "this role"}.
-          </p>
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+              Role Stats
+            </h3>
+            <p className="text-sm sm:text-base text-gray-500">
+              Performance metrics for {user?.role ?? "this role"}.
+            </p>
+          </div>
+          <PeriodFilter
+            label="Stats"
+            periodType={statsPeriodType}
+            showDate={false}
+            onPeriodTypeChange={setStatsPeriodType}
+          />
         </div>
         {isStatsLoading ? (
           <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
@@ -323,147 +336,149 @@ const ViewUser = () => {
         )}
       </div>
 
-      <div className="border-t pt-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-            Payment
-          </h3>
-          <button
-            type="button"
-            onClick={() => {
-              setEditingPaymentId(null);
-              setPaymentForm({ amount: "", date: "", taxStatus: "taxed" });
-              setShowPaymentModal(true);
-            }}
-            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md text-sm sm:text-base"
-          >
-            Add Payment
-          </button>
-        </div>
-        <div className="mt-4">
-          {isPaymentsLoading ? (
-            <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
-              Loading payments...
-            </div>
-          ) : payments.length === 0 ? (
-            <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
-              No payments yet.
-            </div>
-          ) : (
-            <>
-              {/* Mobile cards */}
-              <div className="sm:hidden space-y-3">
-                {payments.map((payment) => (
-                  <div
-                    key={payment.id || payment._id}
-                    className="border rounded-lg p-4 bg-white shadow-sm space-y-2"
-                  >
-                    <div className="text-sm">
-                      <span className="text-gray-500">Amount:</span>{" "}
-                      <span className="text-gray-900 font-medium">
-                        {Number(payment.amount || 0).toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                          maximumFractionDigits: 0,
-                        })}
-                      </span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-500">Payment Date:</span>{" "}
-                      <span className="text-gray-900">
-                        {payment.paymentDate
-                          ? new Date(payment.paymentDate).toLocaleDateString()
-                          : "—"}
-                      </span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-500">Tax Status:</span>{" "}
-                      <span className="text-gray-900 capitalize">
-                        {payment.taxStatus || "—"}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => handleEditPayment(payment)}
-                        className="w-full px-3 py-2 border rounded text-sm"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleDeletePayment(payment.id || payment._id)
-                        }
-                        disabled={isDeletingPayment}
-                        className="w-full px-3 py-2 bg-red-600 text-white rounded text-sm disabled:opacity-60"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))}
+      {user?.role === "Sales Rep" && (
+        <div className="border-t pt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+              Payment
+            </h3>
+            <button
+              type="button"
+              onClick={() => {
+                setEditingPaymentId(null);
+                setPaymentForm({ amount: "", date: "", taxStatus: "taxed" });
+                setShowPaymentModal(true);
+              }}
+              className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md text-sm sm:text-base"
+            >
+              Add Payment
+            </button>
+          </div>
+          <div className="mt-4">
+            {isPaymentsLoading ? (
+              <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+                Loading payments...
               </div>
-
-              {/* Desktop table */}
-              <div className="hidden sm:block overflow-x-auto">
-                <table className="min-w-max w-full text-left text-sm sm:text-base border border-gray-200 rounded-lg">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 border-b">Amount</th>
-                      <th className="px-4 py-2 border-b">Payment Date</th>
-                      <th className="px-4 py-2 border-b">Tax Status</th>
-                      <th className="px-4 py-2 border-b">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {payments.map((payment) => (
-                      <tr key={payment.id || payment._id} className="border-b last:border-b-0">
-                        <td className="px-4 py-2">
+            ) : payments.length === 0 ? (
+              <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+                No payments yet.
+              </div>
+            ) : (
+              <>
+                {/* Mobile cards */}
+                <div className="sm:hidden space-y-3">
+                  {payments.map((payment) => (
+                    <div
+                      key={payment.id || payment._id}
+                      className="border rounded-lg p-4 bg-white shadow-sm space-y-2"
+                    >
+                      <div className="text-sm">
+                        <span className="text-gray-500">Amount:</span>{" "}
+                        <span className="text-gray-900 font-medium">
                           {Number(payment.amount || 0).toLocaleString("en-US", {
                             style: "currency",
                             currency: "USD",
                             maximumFractionDigits: 0,
                           })}
-                        </td>
-                        <td className="px-4 py-2">
+                        </span>
+                      </div>
+                      <div className="text-sm">
+                        <span className="text-gray-500">Payment Date:</span>{" "}
+                        <span className="text-gray-900">
                           {payment.paymentDate
                             ? new Date(payment.paymentDate).toLocaleDateString()
                             : "—"}
-                        </td>
-                        <td className="px-4 py-2 capitalize">
+                        </span>
+                      </div>
+                      <div className="text-sm">
+                        <span className="text-gray-500">Tax Status:</span>{" "}
+                        <span className="text-gray-900 capitalize">
                           {payment.taxStatus || "—"}
-                        </td>
-                        <td className="px-4 py-2">
-                          <div className="flex flex-wrap gap-2">
-                            <button
-                              type="button"
-                              onClick={() => handleEditPayment(payment)}
-                              className="px-3 py-1.5 border rounded text-xs sm:text-sm"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleDeletePayment(payment.id || payment._id)
-                              }
-                              disabled={isDeletingPayment}
-                              className="px-3 py-1.5 bg-red-600 text-white rounded text-xs sm:text-sm disabled:opacity-60"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => handleEditPayment(payment)}
+                          className="w-full px-3 py-2 border rounded text-sm"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleDeletePayment(payment.id || payment._id)
+                          }
+                          disabled={isDeletingPayment}
+                          className="w-full px-3 py-2 bg-red-600 text-white rounded text-sm disabled:opacity-60"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop table */}
+                <div className="hidden sm:block overflow-x-auto">
+                  <table className="min-w-max w-full text-left text-sm sm:text-base border border-gray-200 rounded-lg">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 border-b">Amount</th>
+                        <th className="px-4 py-2 border-b">Payment Date</th>
+                        <th className="px-4 py-2 border-b">Tax Status</th>
+                        <th className="px-4 py-2 border-b">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
+                    </thead>
+                    <tbody>
+                      {payments.map((payment) => (
+                        <tr key={payment.id || payment._id} className="border-b last:border-b-0">
+                          <td className="px-4 py-2">
+                            {Number(payment.amount || 0).toLocaleString("en-US", {
+                              style: "currency",
+                              currency: "USD",
+                              maximumFractionDigits: 0,
+                            })}
+                          </td>
+                          <td className="px-4 py-2">
+                            {payment.paymentDate
+                              ? new Date(payment.paymentDate).toLocaleDateString()
+                              : "—"}
+                          </td>
+                          <td className="px-4 py-2 capitalize">
+                            {payment.taxStatus || "—"}
+                          </td>
+                          <td className="px-4 py-2">
+                            <div className="flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                onClick={() => handleEditPayment(payment)}
+                                className="px-3 py-1.5 border rounded text-xs sm:text-sm"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleDeletePayment(payment.id || payment._id)
+                                }
+                                disabled={isDeletingPayment}
+                                className="px-3 py-1.5 bg-red-600 text-white rounded text-xs sm:text-sm disabled:opacity-60"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {showPaymentModal && (
         <PaymentModal

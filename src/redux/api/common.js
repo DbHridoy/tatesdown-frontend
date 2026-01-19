@@ -12,7 +12,13 @@ const commonApi = baseApi.injectEndpoints({
     }),
 
     getMyStats: builder.query({
-      query: () => "/common/my-stats",
+      query: ({ periodType, date } = {}) => {
+        const params = new URLSearchParams();
+        if (periodType) params.set("periodType", periodType);
+        if (date) params.set("date", date);
+        const query = params.toString();
+        return query ? `/common/my-stats?${query}` : "/common/my-stats";
+      },
       providesTags: ["MyStats", "User"],
     }),
 
@@ -22,7 +28,14 @@ const commonApi = baseApi.injectEndpoints({
     }),
 
     getLeaderBoard: builder.query({
-      query: () => "/common/salesrep-leaderboard",
+      query: ({ periodType } = {}) => {
+        const params = new URLSearchParams();
+        if (periodType) params.set("periodType", periodType);
+        const query = params.toString();
+        return query
+          ? `/common/salesrep-leaderboard?${query}`
+          : "/common/salesrep-leaderboard";
+      },
       providesTags: ["LeaderBoard"],
     }),
 

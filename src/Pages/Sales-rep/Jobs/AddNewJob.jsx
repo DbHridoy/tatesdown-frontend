@@ -33,6 +33,8 @@ const AddNewJob = () => {
   const [description, setDescription] = useState("");
   const [additionalNote, setAdditionalNote] = useState("");
   const [price, setPrice] = useState(0);
+  const [estimatedGallons, setEstimatedGallons] = useState("");
+  const [contractFile, setContractFile] = useState(null);
 
   // New fields
   const [totalHours, setTotalHours] = useState("");
@@ -71,8 +73,16 @@ const AddNewJob = () => {
   }, [totalHours, setupCleanup, powerwash]);
 
   const handleCreateJob = async () => {
-    if (!selectedQuoteId || !estimatedStartDate || !downPayment) {
-      alert("Please fill required fields: Quote, Start Date, Down Payment");
+    if (
+      !selectedQuoteId ||
+      !estimatedStartDate ||
+      !downPayment ||
+      !estimatedGallons ||
+      !contractFile
+    ) {
+      alert(
+        "Please fill required fields: Quote, Start Date, Down Payment, Estimated Gallons, Contract"
+      );
       return;
     }
 
@@ -80,18 +90,20 @@ const AddNewJob = () => {
     const selectedQuote = quotes.find((q) => q._id === selectedQuoteId);
     if (!selectedQuote) return;
 
-    const payload = {
-      quoteId: selectedQuote._id,
-      clientId: selectedQuote.clientId._id, // <- include clientId here
-      title,
-      price,
-      downPayment: Number(downPayment),
-      estimatedStartDate: new Date(estimatedStartDate),
-      totalHours: Number(totalHours),
-      setupCleanup: Number(setupCleanup),
-      powerwash: Number(powerwash),
-      labourHours,
-    };
+    const clientId = selectedQuote.clientId._id;
+    const payload = new FormData();
+    payload.append("quoteId", selectedQuote._id);
+    payload.append("clientId", clientId);
+    payload.append("title", title);
+    payload.append("price", String(price));
+    payload.append("downPayment", String(Number(downPayment)));
+    payload.append("estimatedStartDate", estimatedStartDate);
+    payload.append("totalHours", String(Number(totalHours)));
+    payload.append("setupCleanup", String(Number(setupCleanup)));
+    payload.append("powerwash", String(Number(powerwash)));
+    payload.append("labourHours", String(labourHours));
+    payload.append("estimatedGallons", String(Number(estimatedGallons)));
+    payload.append("contract", contractFile);
 
     try {
       const createdJob = await createNewJob(payload).unwrap();
@@ -109,7 +121,7 @@ const AddNewJob = () => {
         formData.append("note", note);
         await createJobNote({
           jobId: createdJobId,
-          clientId: payload.clientId,
+          clientId,
           formData,
         }).unwrap();
       }
@@ -221,6 +233,16 @@ const AddNewJob = () => {
           </div>
         </div>
 
+        <div className="mb-4">
+          <label className="block font-semibold mb-1">Estimated Gallons *</label>
+          <input
+            type="number"
+            value={estimatedGallons}
+            onChange={(e) => setEstimatedGallons(e.target.value)}
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+          />
+        </div>
+
         {/* Start Date */}
         <div className="mb-4">
           <label className="block font-semibold mb-1">
@@ -233,6 +255,9 @@ const AddNewJob = () => {
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
+
+
+
 
         {!!description.trim() && (
           <div className="mb-6">
@@ -250,6 +275,16 @@ const AddNewJob = () => {
             onChange={(e) => setAdditionalNote(e.target.value)}
             rows={4}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block font-semibold mb-1">Contract *</label>
+          <input
+            type="file"
+            onChange={(e) => setContractFile(e.target.files?.[0] || null)}
+            className="w-full text-sm sm:text-base"
+            required
           />
         </div>
 

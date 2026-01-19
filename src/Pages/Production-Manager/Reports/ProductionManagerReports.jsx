@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGetMyStatsQuery } from "../../../redux/api/common";
+import PeriodFilter from "../../../Components/Common/PeriodFilter";
+import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
 
 /**
  * Single component that can render any set of stats.
@@ -8,7 +10,12 @@ import { useGetMyStatsQuery } from "../../../redux/api/common";
 export default function ProductionManagerReports() {
   // ✅ Replace these with real values from your API (or props if you want)
 
-  const { data: myStats } = useGetMyStatsQuery();
+  const [periodType, setPeriodType] = useState("month");
+  const [dateInput, setDateInput] = useState(getDefaultPeriodInput("month"));
+  const { data: myStats } = useGetMyStatsQuery({
+    periodType,
+    date: normalizePeriodDate(periodType, dateInput),
+  });
   console.log("Line:12-ProductionManagerReports",myStats)
   const stats = [
 
@@ -36,11 +43,22 @@ export default function ProductionManagerReports() {
 
   return (
     <div className="p-4 sm:p-6">
-      <div className="mb-4">
-        <h1 className="text-xl sm:text-2xl font-semibold">Reports</h1>
-        <p className="text-sm sm:text-base text-gray-500">
-          Overall business stats
-        </p>
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-semibold">Reports</h1>
+          <p className="text-sm sm:text-base text-gray-500">
+            Overall business stats
+          </p>
+        </div>
+        <PeriodFilter
+          periodType={periodType}
+          dateValue={dateInput}
+          onPeriodTypeChange={(value) => {
+            setPeriodType(value);
+            setDateInput(getDefaultPeriodInput(value));
+          }}
+          onDateChange={setDateInput}
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

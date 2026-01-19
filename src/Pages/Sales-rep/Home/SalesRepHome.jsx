@@ -1,6 +1,7 @@
 import Pipeline from "../../../Components/Sales-rep/Home/Pipeline";
 import SalesRepHomeCards from "../../../Components/Sales-rep/Home/SalesRepHomeCards";
 import DataTable from "../../../Components/Common/DataTable";
+import PeriodFilter from "../../../Components/Common/PeriodFilter";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import {
@@ -11,10 +12,22 @@ import {
 } from "@hugeicons/core-free-icons";
 import { useGetMeQuery } from "../../../redux/api/userApi";
 import { useGetLeaderBoardQuery, useGetMyStatsQuery } from "../../../redux/api/common";
+import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
+import { useState } from "react";
 const SalesRepHome = () => {
   const { data: userData, isLoading } = useGetMeQuery();
-  const { data: myStats } = useGetMyStatsQuery();
-  const { data: leaderBoardData } = useGetLeaderBoardQuery();
+  const [statsPeriodType, setStatsPeriodType] = useState("month");
+  const [statsDateInput, setStatsDateInput] = useState(
+    getDefaultPeriodInput("month")
+  );
+  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("day");
+  const { data: myStats } = useGetMyStatsQuery({
+    periodType: statsPeriodType,
+    date: normalizePeriodDate(statsPeriodType, statsDateInput),
+  });
+  const { data: leaderBoardData } = useGetLeaderBoardQuery({
+    periodType: leaderboardPeriodType,
+  });
   const user = userData?.data;
   const cards = [
     {
@@ -83,16 +96,42 @@ const SalesRepHome = () => {
           Overview of your sales performance
         </p>
       </div>
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mt-2">
+        <div className="text-sm text-gray-500">
+          Filter stats by period
+        </div>
+        <PeriodFilter
+          periodType={statsPeriodType}
+          dateValue={statsDateInput}
+          onPeriodTypeChange={(value) => {
+            setStatsPeriodType(value);
+            setStatsDateInput(getDefaultPeriodInput(value));
+          }}
+          onDateChange={setStatsDateInput}
+        />
+      </div>
+
       {/* Cards overview */}
       <SalesRepHomeCards cards={cards} />
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+          Sales Rep Leaderboard
+        </h2>
+        <PeriodFilter
+          label="Leaderboard"
+          periodType={leaderboardPeriodType}
+          showDate={false}
+          onPeriodTypeChange={setLeaderboardPeriodType}
+        />
+      </div>
       <DataTable
-        title="Sales Rep Leaderboard"
+        title=""
         data={leaderboardRows.map((row) => ({
           ...row,
           revenueEarned: formatCurrency(row.revenueEarned),
           revenueProduced: formatCurrency(row.revenueProduced),
         }))}
-        config={leaderboardConfig}
+        config={{ ...leaderboardConfig, showSearch: false, filters: [] }}
       />
 
       <div className="py-4">
