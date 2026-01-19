@@ -1,49 +1,71 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useUpdateUserMutation } from "../../../redux/api/userApi";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useGetAllClustersQuery,
+  useGetUserQuery,
+  useGetUserStatsQuery,
+  useUpdateUserMutation,
+} from "../../../redux/api/userApi";
 
 const emptyForm = {
   fullName: "",
   email: "",
-  phoneNumber: "",
-  address: "",
+  role: "",
+  cluster: "",
 };
 
-const ViewUser = ({ user }) => {
+const ViewUser = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [formUser, setFormUser] = useState(emptyForm);
   const [updateUser, { isLoading: isSaving }] = useUpdateUserMutation();
+  const { data: userData, isLoading } = useGetUserQuery(userId, {
+    skip: !userId,
+  });
+  const { data: userStatsData, isLoading: isStatsLoading } =
+    useGetUserStatsQuery(userId, { skip: !userId });
+  const { data: clustersData } = useGetAllClustersQuery();
+  const user = userData?.data;
+  const userStats = userStatsData?.data;
+  const clusters = clustersData?.data ?? [];
 
   useEffect(() => {
     if (!user) return;
     setFormUser({
       fullName: user.fullName ?? "",
       email: user.email ?? "",
-      phoneNumber: user.phoneNumber ?? "",
-      address: user.address ?? "",
+      role: user.role ?? "",
+      cluster: user.cluster ?? "",
     });
   }, [user]);
 
-  const roleStats = useMemo(() => {
-    if (!user) return null;
-    if (user.role === "Sales Rep") return user.salesRep ?? null;
-    if (user.role === "Production Manager") return user.productionManager ?? null;
-    return null;
-  }, [user]);
-
   const stats = useMemo(() => {
-    if (!roleStats) return [];
+    if (!userStats?.stats) return [];
+    const statsData = userStats.stats;
+
+    if (userStats.role === "Production Manager") {
+      return [
+        { key: "readyToScheduleCount", label: "Ready to Schedule", value: statsData.readyToScheduleCount ?? 0 },
+        { key: "scheduledAndOpenCount", label: "Scheduled & Open", value: statsData.scheduledAndOpenCount ?? 0 },
+        { key: "pendingCloseCount", label: "Pending Close", value: statsData.pendingCloseCount ?? 0 },
+        { key: "cancelledCount", label: "Cancelled", value: statsData.cancelledCount ?? 0 },
+        { key: "totalRevenue", label: "Total Revenue", value: statsData.totalRevenue ?? 0, prefix: "$" },
+        { key: "totalProducedRevenue", label: "Total Produced Revenue", value: statsData.totalProducedRevenue ?? 0, prefix: "$" },
+      ];
+    }
+
     return [
-      { key: "totalSold", label: "Total Sold", value: roleStats.totalSold ?? 0, prefix: "$" },
-      { key: "commissionEarned", label: "Commission Earned", value: roleStats.commissionEarned ?? 0, prefix: "$" },
-      { key: "commissionPending", label: "Commission Pending", value: roleStats.commissionPending ?? 0, prefix: "$" },
-      { key: "totalRevenue", label: "Total Revenue", value: roleStats.totalRevenue ?? 0, prefix: "$" },
-      { key: "totalProducedRevenue", label: "Total Produced Revenue", value: roleStats.totalProducedRevenue ?? 0, prefix: "$" },
-      { key: "totalClients", label: "Total Clients", value: roleStats.totalClients ?? 0 },
-      { key: "totalQuotes", label: "Total Quotes", value: roleStats.totalQuotes ?? 0 },
-      { key: "totalJobs", label: "Total Jobs", value: roleStats.totalJobs ?? 0 },
-      { key: "totalDc", label: "Total DC", value: roleStats.totalDc ?? 0 },
+      { key: "totalClients", label: "Total Clients", value: statsData.totalClients ?? 0 },
+      { key: "totalQuotes", label: "Total Quotes", value: statsData.totalQuotes ?? 0 },
+      { key: "totalJobs", label: "Total Jobs", value: statsData.totalJobs ?? 0 },
+      { key: "totalRevenueEarned", label: "Revenue Earned", value: statsData.totalRevenueEarned ?? 0, prefix: "$" },
+      { key: "totalRevenueProduced", label: "Revenue Produced", value: statsData.totalRevenueProduced ?? 0, prefix: "$" },
+      { key: "totalCommissionEarned", label: "Commission Earned", value: statsData.totalCommissionEarned ?? 0, prefix: "$" },
+      { key: "totalCommissionPaid", label: "Commission Paid", value: statsData.totalCommissionPaid ?? 0, prefix: "$" },
+      { key: "totalCommissionPending", label: "Commission Pending", value: statsData.totalCommissionPending ?? 0, prefix: "$" },
     ];
-  }, [roleStats]);
+  }, [userStats]);
 
   const formatValue = (item) => {
     const raw = item.value ?? 0;
@@ -56,8 +78,8 @@ const ViewUser = ({ user }) => {
     setFormUser({
       fullName: user.fullName ?? "",
       email: user.email ?? "",
-      phoneNumber: user.phoneNumber ?? "",
-      address: user.address ?? "",
+      role: user.role ?? "",
+      cluster: user.cluster ?? "",
     });
     setIsEditing(false);
   };
@@ -69,15 +91,38 @@ const ViewUser = ({ user }) => {
       data: {
         fullName: formUser.fullName,
         email: formUser.email,
-        phoneNumber: formUser.phoneNumber,
-        address: formUser.address,
+        role: formUser.role,
+        cluster: formUser.role === "Sales Rep" ? formUser.cluster : "",
       },
     }).unwrap();
     setIsEditing(false);
   };
 
+  if (isLoading) {
+    return <div className="p-6">Loading user...</div>;
+  }
+
+  if (!user) {
+    return <div className="p-6 text-red-500">User not found.</div>;
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-900">User Details</h2>
+          <p className="text-sm text-gray-500">
+            Manage basic account information.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="px-3 py-2 border rounded-md text-sm"
+        >
+          Back
+        </button>
+      </div>
+
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Personal Info</h3>
@@ -129,25 +174,33 @@ const ViewUser = ({ user }) => {
           onChange={(value) => setFormUser((prev) => ({ ...prev, email: value }))}
         />
         <InfoField
-          label="Phone Number"
-          value={formUser.phoneNumber}
-          type="tel"
+          label="Role"
+          value={formUser.role}
           isEditing={isEditing}
+          asSelect
+          options={["Sales Rep", "Production Manager"]}
           onChange={(value) =>
-            setFormUser((prev) => ({ ...prev, phoneNumber: value }))
+            setFormUser((prev) => ({
+              ...prev,
+              role: value,
+              cluster: value === "Sales Rep" ? prev.cluster : "",
+            }))
           }
         />
-        <InfoField
-          label="Address"
-          value={formUser.address}
-          isEditing={isEditing}
-          onChange={(value) => setFormUser((prev) => ({ ...prev, address: value }))}
-        />
-        <DisplayField label="Role" value={user?.role ?? "N/A"} />
-        <DisplayField
-          label="Cluster"
-          value={roleStats?.cluster ?? "N/A"}
-        />
+        {formUser.role === "Sales Rep" ? (
+          <InfoField
+            label="Cluster"
+            value={formUser.cluster}
+            isEditing={isEditing}
+            asSelect
+            options={clusters.map((cluster) => cluster.clusterName)}
+            onChange={(value) =>
+              setFormUser((prev) => ({ ...prev, cluster: value }))
+            }
+          />
+        ) : (
+          <DisplayField label="Cluster" value="N/A" />
+        )}
       </div>
 
       <div className="border-t pt-6">
@@ -157,7 +210,11 @@ const ViewUser = ({ user }) => {
             Performance metrics for {user?.role ?? "this role"}.
           </p>
         </div>
-        {stats.length === 0 ? (
+        {isStatsLoading ? (
+          <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+            Loading stats...
+          </div>
+        ) : stats.length === 0 ? (
           <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
             No stats available for this role yet.
           </div>
@@ -181,16 +238,39 @@ const ViewUser = ({ user }) => {
   );
 };
 
-const InfoField = ({ label, value, type = "text", isEditing, onChange }) => (
+const InfoField = ({
+  label,
+  value,
+  type = "text",
+  isEditing,
+  onChange,
+  asSelect = false,
+  options = [],
+}) => (
   <div className="space-y-1">
     <div className="text-sm font-medium text-gray-700">{label}</div>
     {isEditing ? (
-      <input
-        type={type}
-        className="w-full rounded-md border px-3 py-2 text-sm"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      asSelect ? (
+        <select
+          className="w-full rounded-md border px-3 py-2 text-sm"
+          value={value ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          <option value="">Select</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          type={type}
+          className="w-full rounded-md border px-3 py-2 text-sm"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      )
     ) : (
       <div className="rounded-md border px-3 py-2 text-sm text-gray-800">
         {value || "N/A"}

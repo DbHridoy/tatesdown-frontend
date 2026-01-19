@@ -1,26 +1,40 @@
 import React, { useState, useMemo } from "react";
-import { useGetAllUsersQuery } from "../../../redux/api/userApi";
+import {
+  useGetAllClustersQuery,
+  useGetAllUsersQuery,
+} from "../../../redux/api/userApi";
 import { useUpdateClientMutation } from "../../../redux/api/clientApi";
 
 export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
   const [search, setSearch] = useState("");
+  const [selectedCluster, setSelectedCluster] = useState("All Clusters");
 
   const [updateClient, { isLoading: updating }] =
     useUpdateClientMutation();
 
+  const { data: clustersData } = useGetAllClustersQuery();
+  const clusters = clustersData?.data ?? [];
+
   const { data: user, isLoading } = useGetAllUsersQuery({
-    filters: { role: "sales-rep" },
+    page: 1,
+    limit: 0,
+    filters: { role: "Sales Rep" },
   });
 
   const users = user?.data || [];
 
   const filteredReps = useMemo(() => {
-    return users.filter(
-      (rep) =>
-        rep.fullName.toLowerCase().includes(search.toLowerCase()) ||
-        rep.email.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [users, search]);
+    const searchValue = search.toLowerCase();
+    return users.filter((rep) => {
+      const fullName = (rep.fullName || "").toLowerCase();
+      const email = (rep.email || "").toLowerCase();
+      const matchesCluster =
+        selectedCluster === "All Clusters" || rep.cluster === selectedCluster;
+      const matchesSearch =
+        fullName.includes(searchValue) || email.includes(searchValue);
+      return matchesCluster && matchesSearch;
+    });
+  }, [users, search, selectedCluster]);
 
   const handleAssignSalesRep = async (rep) => {
     if (!lead?._id) return;
@@ -61,14 +75,29 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
           </button>
         </div>
 
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search sales rep..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full mb-4 px-3 py-2 border rounded-lg bg-gray-100"
-        />
+        {/* Filters */}
+        <div className="space-y-3 mb-4">
+          <select
+            value={selectedCluster}
+            onChange={(e) => setSelectedCluster(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg bg-gray-100"
+          >
+            <option value="All Clusters">All Clusters</option>
+            {clusters.map((cluster) => (
+              <option key={cluster._id} value={cluster.clusterName}>
+                {cluster.clusterName}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="text"
+            placeholder="Search sales rep..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg bg-gray-100"
+          />
+        </div>
 
         {/* List */}
         <div className="max-h-64 overflow-y-auto space-y-2">

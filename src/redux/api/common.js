@@ -25,6 +25,19 @@ const commonApi = baseApi.injectEndpoints({
       query: () => "/common/salesrep-leaderboard",
       providesTags: ["LeaderBoard"],
     }),
+
+    getNotifications: builder.query({
+      query: () => "/common/my-notifications",
+      providesTags: ["User"],
+    }),
+
+    markNotificationRead: builder.mutation({
+      query: (id) => ({
+        url: `/common/notification/${id}/read`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -35,5 +48,7 @@ export const {
   useCreateFiscalYearMutation,
   useGetFiscalYearQuery,
   useGetMyStatsQuery,
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
 } = commonApi;
 export default commonApi;

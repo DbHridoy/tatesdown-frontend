@@ -50,6 +50,11 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["User"],
     }),
 
+    getUserStats: builder.query({
+      query: (id) => `/common/admin/users-stats/${id}`,
+      providesTags: ["User"],
+    }),
+
     updateUser: builder.mutation({
       query: ({ id, data }) => ({
         url: `/users/${id}`,
@@ -93,6 +98,7 @@ export const {
   useGetAllClustersQuery,
   useGetMeQuery,
   useGetUserQuery,
+  useGetUserStatsQuery,
   useGetAllUsersQuery,
   useUpdateUserMutation,
   useUpdateMeMutation,

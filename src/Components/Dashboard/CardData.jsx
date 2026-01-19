@@ -1,17 +1,40 @@
-import { User } from 'lucide-react';
+import { User } from "lucide-react";
 
-const CardData = () => {
+const formatCurrency = (value) => {
+  const amount = Number(value) || 0;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
 
+const CardData = ({ stats, isLoading, isError }) => {
+  const data = [{
+    title: "Revenue Produced",
+    value: formatCurrency(stats?.totalRevenueProduced),
+  },
+  {
+    title: "Total Revenue",
+    value: formatCurrency(stats?.totalRevenue),
+  },
+  { title: "Total Clients", value: stats?.totalClients ?? 0 },
+  { title: "Total Quotes", value: stats?.totalQuotes ?? 0 },
+  { title: "Total Jobs", value: stats?.totalJobs ?? 0 },
+  { title: "Ready to Schedule", value: stats?.readyToScheduleCount ?? 0 },
+  { title: "Scheduled & Open", value: stats?.scheduledAndOpenCount ?? 0 },
+  { title: "Pending Close", value: stats?.pendingCloseCount ?? 0 },
+  { title: "Closed Jobs", value: stats?.closedCount ?? 0 },
+  { title: "Cancelled Jobs", value: stats?.cancelledCount ?? 0 },
+  // {
+  //   title: "Revenue Earned",
+  //   value: formatCurrency(stats?.totalRevenueEarned),
+  // },
+  // {
+  //   title: "Revenue Pending",
+  //   value: formatCurrency(stats?.totalRevenuePending),
+  // },
 
-  const data = [
-    { title: 'Total Leads', value: '0', change: '+12%', color: 'text-green-500' },
-    { title: 'Total Quotes', value: '0', change: '+8%', color: 'text-green-500' },
-    { title: 'Booked Jobs', value: '0', change: '-3%', color: 'text-red-500' },
-    { title: 'DC Pending', value: '0', change: 'Pending', color: 'text-yellow-500' },
-    { title: 'Ready to Schedule', value: '0', change: '', color: 'text-green-500' },
-    { title: 'Scheduled & Open', value: '0', change: '', color: 'text-gray-500' },
-    { title: 'Closed Jobs', value: '0', change: '', color: 'text-blue-500' },
-    { title: 'Total Produced for Revenue', value: '$0', change: '', color: 'text-blue-500' },
   ];
 
   return (
@@ -34,11 +57,16 @@ const CardData = () => {
       </div> */}
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {isError && (
+          <div className="col-span-full rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+            Failed to load stats.
+          </div>
+        )}
         {data.map((item, index) => (
           <div
             key={index}
-            className={`flex justify-between p-6 rounded-lg shadow-md ${index === data.length - 1 ? '!bg-[#B0D6F0]' : 'bg-white'
+            className={`flex justify-between rounded-lg p-6 shadow-md ${index === 0 ? "bg-[#B0D6F0]" : "bg-white"
               }`}
           >
             <div>
@@ -46,14 +74,9 @@ const CardData = () => {
                 <User />
               </div>
               <div className="text-sm text-gray-500">{item.title}</div>
-              <div className="mt-2 text-xl font-bold">{item.value}</div>
-            </div>
-            <div>
-              {item.change && (
-                <div className={`mt-1 text-sm ${item.color}`}>
-                  {item.change}
-                </div>
-              )}
+              <div className="mt-2 text-xl font-bold">
+                {isLoading ? "..." : item.value}
+              </div>
             </div>
           </div>
         ))}

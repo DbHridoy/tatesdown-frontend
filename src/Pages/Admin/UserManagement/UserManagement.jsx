@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import DataTable from "../../../Components/Common/DataTable";
 import {
   useCreatUserMutation,
   useDeleteUserMutation,
   useGetAllUsersQuery,
-  useGetUserQuery,
-  useUpdateUserMutation,
 } from "../../../redux/api/userApi";
 import UserForm from "../../../Components/Admin/UserMangement/UserForm";
-import ViewUser from "./ViewUser";
 import { useNavigate } from "react-router-dom";
 
 const UserManagement = () => {
@@ -25,19 +22,52 @@ const UserManagement = () => {
   });
 
   /* ================= API ================= */
-  const { data: allUsersData } = useGetAllUsersQuery(params);
+  const { data: allUsersData } = useGetAllUsersQuery({
+    page: 1,
+    limit: 0,
+  });
   const [createUser] = useCreatUserMutation();
-  const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
 
   const users = allUsersData?.data || [];
-  const totalItems = allUsersData?.total;
+  const allowedRoles = ["Sales Rep", "Production Manager"];
 
-  //console.log("users", users);
+  const filteredUsers = useMemo(() => {
+    const searchValue = params.search.toLowerCase();
+    return users.filter((user) => {
+      const roleMatch = allowedRoles.includes(user.role);
+      const filterRole = params.filters?.role;
+      const filterMatch = filterRole ? user.role === filterRole : true;
+      const nameMatch = (user.fullName || "")
+        .toLowerCase()
+        .includes(searchValue);
+      const emailMatch = (user.email || "")
+        .toLowerCase()
+        .includes(searchValue);
+      return roleMatch && filterMatch && (nameMatch || emailMatch);
+    });
+  }, [users, params.search, params.filters, allowedRoles]);
 
-  //console.log("totalItems", totalItems);
+  const sortedUsers = useMemo(() => {
+    const { sortKey, sortOrder } = params;
+    if (!sortKey) return filteredUsers;
+    const sorted = [...filteredUsers].sort((a, b) => {
+      const aValue = a?.[sortKey];
+      const bValue = b?.[sortKey];
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return aValue - bValue;
+      }
+      return String(aValue || "").localeCompare(String(bValue || ""));
+    });
+    return sortOrder === "desc" ? sorted.reverse() : sorted;
+  }, [filteredUsers, params.sortKey, params.sortOrder]);
 
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const totalItems = sortedUsers.length;
+  const pagedUsers = useMemo(() => {
+    const start = (params.page - 1) * params.limit;
+    return sortedUsers.slice(start, start + params.limit);
+  }, [sortedUsers, params.page, params.limit]);
+
   const [formUser, setFormUser] = useState({
     fullName: "",
     email: "",
@@ -47,27 +77,6 @@ const UserManagement = () => {
   });
 
   const [isAddModal, setIsAddModal] = useState(false);
-  const [isEditModal, setIsEditModal] = useState(false);
-  const [isViewModal, setIsViewModal] = useState(false);
-
-  /* ================= SINGLE USER ================= */
-  const { data: userData, isFetching: isUserFetching } = useGetUserQuery(
-    selectedUserId,
-    { skip: selectedUserId === null }
-  );
-
-  useEffect(() => {
-    if (!userData?.data) return;
-
-    const user = userData.data;
-    setFormUser({
-      fullName: user.fullName ?? "",
-      email: user.email ?? "",
-      role: user.role ?? "",
-      cluster: user.cluster ?? "",
-      password: "",
-    });
-  }, [userData]);
 
   /* ================= HELPERS ================= */
   const resetForm = () =>
@@ -84,17 +93,6 @@ const UserManagement = () => {
     setIsAddModal(false);
   };
 
-  const closeEditModal = () => {
-    resetForm();
-    setSelectedUserId(null);
-    setIsEditModal(false);
-  };
-
-  const closeViewModal = () => {
-    setSelectedUserId(null);
-    setIsViewModal(false);
-  };
-
   /* ================= ACTIONS ================= */
   const handleAddUser = async () => {
     //console.log("from Add user", formUser);
@@ -102,18 +100,8 @@ const UserManagement = () => {
     closeAddModal();
   };
 
-  const handleEditUser = async () => {
-    await updateUser({
-      id: selectedUserId,
-      data: {
-        fullName: formUser.fullName,
-        email: formUser.email,
-        role: formUser.role,
-        cluster: formUser.cluster,
-      },
-    }).unwrap();
-
-    closeEditModal();
+  const handleDeleteUser = async (item) => {
+    await deleteUser(item._id).unwrap();
   };
 
   /* ================= TABLE CONFIG ================= */
@@ -149,7 +137,7 @@ const UserManagement = () => {
         modalTitle: "Delete User",
         modalMessage: (item) =>
           `Are you sure you want to delete ${item.fullName}?`,
-        onConfirm: (item) => deleteUser(item._id),
+        onConfirm: handleDeleteUser,
       },
     ],
     totalItems: totalItems,
@@ -165,8 +153,12 @@ const UserManagement = () => {
         page: 1,
         filters: { ...p.filters, [key]: value },
       })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const nextOrder =
+          p.sortKey === sortKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   /* ================= UI ================= */
@@ -184,7 +176,7 @@ const UserManagement = () => {
 
       <DataTable
         title="Users"
-        data={users}
+        data={pagedUsers}
         config={tableConfig}
       />
 
@@ -193,27 +185,6 @@ const UserManagement = () => {
         <Modal title="Add User" onClose={closeAddModal}>
           <UserForm formUser={formUser} setFormUser={setFormUser} isAdd />
           <ModalActions onCancel={closeAddModal} onSave={handleAddUser} />
-        </Modal>
-      )}
-
-      {/* EDIT */}
-      {isEditModal && (
-        <Modal title="Edit User" onClose={closeEditModal}>
-          {isUserFetching ? (
-            <p>Loading...</p>
-          ) : (
-            <>
-              <UserForm formUser={formUser} setFormUser={setFormUser} />
-              <ModalActions onCancel={closeEditModal} onSave={handleEditUser} />
-            </>
-          )}
-        </Modal>
-      )}
-
-      {/* VIEW */}
-      {isViewModal && userData?.data && (
-        <Modal title="View User" onClose={closeViewModal}>
-          <ViewUser user={userData.data} />
         </Modal>
       )}
     </div>
