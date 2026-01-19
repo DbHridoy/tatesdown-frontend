@@ -19,7 +19,7 @@ const Approvals = () => {
   //   "David Miller",
   // ];
   const tabs = [
-    { id: "downpayment", label: "Downpayment Approval", count: 0 },
+    { id: "downpayment", label: "Down Payment Approval", count: 0 },
     { id: "jobclose", label: "Job Close Approvals", count: 0 },
     { id: "mileage", label: "Mileage Log Approvals", count: 0 },
     { id: "leadassignment", label: "Lead Assignment", count: 0 },
@@ -56,7 +56,7 @@ const Approvals = () => {
         ))}
       </div>
 
-      {/* Downpayment Approval Section */}
+      {/* Down Payment Approval Section */}
       {activeTab === "downpayment" && <DownpaymentRequest />}
 
       {/* Job Close Approvals Section */}

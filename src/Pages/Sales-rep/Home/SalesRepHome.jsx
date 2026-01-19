@@ -1,6 +1,6 @@
 import Pipeline from "../../../Components/Sales-rep/Home/Pipeline";
 import SalesRepHomeCards from "../../../Components/Sales-rep/Home/SalesRepHomeCards";
-import SalesRepLeaderboard from "../../Common/SalesRepLeaderboard";
+import DataTable from "../../../Components/Common/DataTable";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import {
@@ -10,10 +10,11 @@ import {
   Briefcase03Icon,
 } from "@hugeicons/core-free-icons";
 import { useGetMeQuery } from "../../../redux/api/userApi";
-import { useGetMyStatsQuery } from "../../../redux/api/common";
+import { useGetLeaderBoardQuery, useGetMyStatsQuery } from "../../../redux/api/common";
 const SalesRepHome = () => {
   const { data: userData, isLoading } = useGetMeQuery();
-  const { data: myStats } = useGetMyStatsQuery()
+  const { data: myStats } = useGetMyStatsQuery();
+  const { data: leaderBoardData } = useGetLeaderBoardQuery();
   const user = userData?.data;
   const cards = [
     {
@@ -37,6 +38,41 @@ const SalesRepHome = () => {
       icon: Briefcase03Icon,
     },
   ];
+  const leaderBoard = leaderBoardData?.data || [];
+  const leaderboardRows = leaderBoard.map((rep) => ({
+    id: rep._id,
+    name: rep.user?.fullName || rep.userId?.fullName || "N/A",
+    totalClients: rep.totalClients,
+    totalQuotes: rep.totalQuotes,
+    totalJobs: rep.totalJobs,
+    revenueEarned: rep.totalRevenueSold,
+    revenueProduced: rep.totalRevenueProduced,
+  }));
+  const formatCurrency = (value) => {
+    const amount = Number(value) || 0;
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+  const leaderboardConfig = {
+    columns: [
+      { label: "No", accessor: "No" },
+      { label: "Name", accessor: "name" },
+      { label: "Total Clients", accessor: "totalClients" },
+      { label: "Total Quotes", accessor: "totalQuotes" },
+      { label: "Total Jobs", accessor: "totalJobs" },
+      { label: "Revenue Earned", accessor: "revenueEarned" },
+      { label: "Revenue Produced", accessor: "revenueProduced" },
+    ],
+    totalItems: leaderboardRows.length,
+    currentPage: 1,
+    itemsPerPage: Math.max(leaderboardRows.length, 1),
+    sortKey: "",
+    sortOrder: "asc",
+    onPageChange: () => { },
+  };
   return (
     <>
       <div>
@@ -49,7 +85,15 @@ const SalesRepHome = () => {
       </div>
       {/* Cards overview */}
       <SalesRepHomeCards cards={cards} />
-      <SalesRepLeaderboard />
+      <DataTable
+        title="Sales Rep Leaderboard"
+        data={leaderboardRows.map((row) => ({
+          ...row,
+          revenueEarned: formatCurrency(row.revenueEarned),
+          revenueProduced: formatCurrency(row.revenueProduced),
+        }))}
+        config={leaderboardConfig}
+      />
 
       <div className="py-4">
         <div className="flex flex-col lg:flex-row gap-4">

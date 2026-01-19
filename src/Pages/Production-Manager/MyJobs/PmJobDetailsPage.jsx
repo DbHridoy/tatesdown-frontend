@@ -264,7 +264,7 @@ const PmJobDetailsPage = () => {
               <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
               <InfoLine label="Status" value={quote?.status} />
               <InfoLine
-                label="Booked On Spot"
+                label="Booked on the spot"
                 value={quote?.bookedOnSpot ? "Yes" : "No"}
               />
             </div>

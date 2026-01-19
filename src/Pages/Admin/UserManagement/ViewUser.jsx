@@ -6,6 +6,13 @@ import {
   useGetUserStatsQuery,
   useUpdateUserMutation,
 } from "../../../redux/api/userApi";
+import {
+  useCreatePaymentMutation,
+  useGetPaymentsQuery,
+  useUpdatePaymentMutation,
+  useDeletePaymentMutation,
+} from "../../../redux/api/common";
+import toast from "react-hot-toast";
 
 const emptyForm = {
   fullName: "",
@@ -19,7 +26,24 @@ const ViewUser = () => {
   const { userId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [formUser, setFormUser] = useState(emptyForm);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentForm, setPaymentForm] = useState({
+    amount: "",
+    date: "",
+    taxStatus: "taxed",
+  });
+  const [editingPaymentId, setEditingPaymentId] = useState(null);
   const [updateUser, { isLoading: isSaving }] = useUpdateUserMutation();
+  const [createPayment, { isLoading: isSavingPayment }] =
+    useCreatePaymentMutation();
+  const [updatePayment, { isLoading: isUpdatingPayment }] =
+    useUpdatePaymentMutation();
+  const [deletePayment, { isLoading: isDeletingPayment }] =
+    useDeletePaymentMutation();
+  const {
+    data: paymentsData,
+    isLoading: isPaymentsLoading,
+  } = useGetPaymentsQuery(userId, { skip: !userId });
   const { data: userData, isLoading } = useGetUserQuery(userId, {
     skip: !userId,
   });
@@ -59,7 +83,7 @@ const ViewUser = () => {
       { key: "totalClients", label: "Total Clients", value: statsData.totalClients ?? 0 },
       { key: "totalQuotes", label: "Total Quotes", value: statsData.totalQuotes ?? 0 },
       { key: "totalJobs", label: "Total Jobs", value: statsData.totalJobs ?? 0 },
-      { key: "totalRevenueEarned", label: "Revenue Earned", value: statsData.totalRevenueEarned ?? 0, prefix: "$" },
+      { key: "totalRevenueSold", label: "Revenue Earned", value: statsData.totalRevenueSold ?? 0, prefix: "$" },
       { key: "totalRevenueProduced", label: "Revenue Produced", value: statsData.totalRevenueProduced ?? 0, prefix: "$" },
       { key: "totalCommissionEarned", label: "Commission Earned", value: statsData.totalCommissionEarned ?? 0, prefix: "$" },
       { key: "totalCommissionPaid", label: "Commission Paid", value: statsData.totalCommissionPaid ?? 0, prefix: "$" },
@@ -97,6 +121,64 @@ const ViewUser = () => {
     }).unwrap();
     setIsEditing(false);
   };
+
+  const handlePaymentChange = (field, value) => {
+    setPaymentForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+    if (!userId) return;
+    try {
+      if (editingPaymentId) {
+        await updatePayment({
+          paymentId: editingPaymentId,
+          amount: Number(paymentForm.amount),
+          paymentDate: paymentForm.date,
+          taxStatus: paymentForm.taxStatus,
+        }).unwrap();
+        toast.success("Payment updated successfully");
+      } else {
+        await createPayment({
+          salesRepId: userId,
+          amount: Number(paymentForm.amount),
+          paymentDate: paymentForm.date,
+          taxStatus: paymentForm.taxStatus,
+        }).unwrap();
+        toast.success("Payment added successfully");
+      }
+      setShowPaymentModal(false);
+      setPaymentForm({ amount: "", date: "", taxStatus: "taxed" });
+      setEditingPaymentId(null);
+    } catch (error) {
+      toast.error(
+        editingPaymentId ? "Failed to update payment" : "Failed to add payment"
+      );
+    }
+  };
+
+  const handleEditPayment = (payment) => {
+    setEditingPaymentId(payment.id || payment._id);
+    setPaymentForm({
+      amount: String(payment.amount ?? ""),
+      date: payment.paymentDate
+        ? new Date(payment.paymentDate).toISOString().slice(0, 10)
+        : "",
+      taxStatus: payment.taxStatus || "taxed",
+    });
+    setShowPaymentModal(true);
+  };
+
+  const handleDeletePayment = async (paymentId) => {
+    try {
+      await deletePayment(paymentId).unwrap();
+      toast.success("Payment deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete payment");
+    }
+  };
+
+  const payments = paymentsData?.data || [];
 
   if (isLoading) {
     return <div className="p-6">Loading user...</div>;
@@ -240,6 +322,162 @@ const ViewUser = () => {
           </div>
         )}
       </div>
+
+      <div className="border-t pt-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+            Payment
+          </h3>
+          <button
+            type="button"
+            onClick={() => {
+              setEditingPaymentId(null);
+              setPaymentForm({ amount: "", date: "", taxStatus: "taxed" });
+              setShowPaymentModal(true);
+            }}
+            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md text-sm sm:text-base"
+          >
+            Add Payment
+          </button>
+        </div>
+        <div className="mt-4">
+          {isPaymentsLoading ? (
+            <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+              Loading payments...
+            </div>
+          ) : payments.length === 0 ? (
+            <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+              No payments yet.
+            </div>
+          ) : (
+            <>
+              {/* Mobile cards */}
+              <div className="sm:hidden space-y-3">
+                {payments.map((payment) => (
+                  <div
+                    key={payment.id || payment._id}
+                    className="border rounded-lg p-4 bg-white shadow-sm space-y-2"
+                  >
+                    <div className="text-sm">
+                      <span className="text-gray-500">Amount:</span>{" "}
+                      <span className="text-gray-900 font-medium">
+                        {Number(payment.amount || 0).toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          maximumFractionDigits: 0,
+                        })}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-500">Payment Date:</span>{" "}
+                      <span className="text-gray-900">
+                        {payment.paymentDate
+                          ? new Date(payment.paymentDate).toLocaleDateString()
+                          : "—"}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-500">Tax Status:</span>{" "}
+                      <span className="text-gray-900 capitalize">
+                        {payment.taxStatus || "—"}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => handleEditPayment(payment)}
+                        className="w-full px-3 py-2 border rounded text-sm"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDeletePayment(payment.id || payment._id)
+                        }
+                        disabled={isDeletingPayment}
+                        className="w-full px-3 py-2 bg-red-600 text-white rounded text-sm disabled:opacity-60"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop table */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="min-w-max w-full text-left text-sm sm:text-base border border-gray-200 rounded-lg">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 border-b">Amount</th>
+                      <th className="px-4 py-2 border-b">Payment Date</th>
+                      <th className="px-4 py-2 border-b">Tax Status</th>
+                      <th className="px-4 py-2 border-b">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.map((payment) => (
+                      <tr key={payment.id || payment._id} className="border-b last:border-b-0">
+                        <td className="px-4 py-2">
+                          {Number(payment.amount || 0).toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 0,
+                          })}
+                        </td>
+                        <td className="px-4 py-2">
+                          {payment.paymentDate
+                            ? new Date(payment.paymentDate).toLocaleDateString()
+                            : "—"}
+                        </td>
+                        <td className="px-4 py-2 capitalize">
+                          {payment.taxStatus || "—"}
+                        </td>
+                        <td className="px-4 py-2">
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleEditPayment(payment)}
+                              className="px-3 py-1.5 border rounded text-xs sm:text-sm"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleDeletePayment(payment.id || payment._id)
+                              }
+                              disabled={isDeletingPayment}
+                              className="px-3 py-1.5 bg-red-600 text-white rounded text-xs sm:text-sm disabled:opacity-60"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {showPaymentModal && (
+        <PaymentModal
+          paymentForm={paymentForm}
+          isSaving={isSavingPayment || isUpdatingPayment}
+          title={editingPaymentId ? "Edit Payment" : "Add Payment"}
+          onChange={handlePaymentChange}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setEditingPaymentId(null);
+          }}
+          onSubmit={handlePaymentSubmit}
+        />
+      )}
     </div>
   );
 };
@@ -290,6 +528,91 @@ const DisplayField = ({ label, value }) => (
     <div className="text-sm font-medium text-gray-700">{label}</div>
     <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
       {value || "N/A"}
+    </div>
+  </div>
+);
+
+const PaymentModal = ({
+  paymentForm,
+  isSaving,
+  title,
+  onChange,
+  onClose,
+  onSubmit,
+}) => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+    <div className="relative w-full max-w-md rounded-lg bg-white p-5 sm:p-6 shadow-lg">
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-base sm:text-lg font-semibold text-gray-900">
+          {title}
+        </h4>
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-gray-500 hover:text-gray-900"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Amount</label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={paymentForm.amount}
+            onChange={(e) => onChange("amount", e.target.value)}
+            className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
+            required
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Date</label>
+          <input
+            type="date"
+            value={paymentForm.date}
+            onChange={(e) => onChange("date", e.target.value)}
+            className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
+            required
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">
+            Tax Status
+          </label>
+          <select
+            value={paymentForm.taxStatus}
+            onChange={(e) => onChange("taxStatus", e.target.value)}
+            className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
+          >
+            <option value="taxed">Taxed</option>
+            <option value="untaxed">Untaxed</option>
+          </select>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full sm:w-auto px-4 py-2 border rounded-md text-sm sm:text-base"
+            disabled={isSaving}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md text-sm sm:text-base disabled:opacity-60"
+            disabled={isSaving}
+          >
+            {isSaving ? "Saving..." : "Save Payment"}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 );

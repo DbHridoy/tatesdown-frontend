@@ -12,9 +12,9 @@ export default function SalesRepReports() {
   const statsData = myStats?.data;
   const stats = [
     {
-      key: "totalRevenueEarned",
-      label: "Total Revenue Earned",
-      value: statsData?.totalRevenueEarned ?? 0,
+      key: "totalRevenueSold",
+      label: "Total Revenue Sold",
+      value: statsData?.totalRevenueSold ?? 0,
       prefix: "$",
     },
     {

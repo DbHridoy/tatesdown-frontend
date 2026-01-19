@@ -4,7 +4,7 @@ import { HiOutlineCash, HiOutlineBriefcase, HiOutlineTruck } from "react-icons/h
 const approvals = [
   {
     id: 1,
-    title: "Downpayment Approval",
+    title: "Down Payment Approval",
     subtitle: "John Doe – $500 for Job #12345",
     icon: <HiOutlineCash size={28} />,
     bg: "bg-orange-50",

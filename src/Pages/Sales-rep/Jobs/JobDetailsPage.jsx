@@ -34,6 +34,7 @@ const JobDetailsPage = () => {
     title: "",
     status: "",
     startDate: "",
+    estimatedStartDate: "",
     price: 0,
     downPayment: 0,
     budgetSpent: 0,
@@ -58,6 +59,7 @@ const JobDetailsPage = () => {
       title: job.title ?? "",
       status: job.status ?? "",
       startDate: formatDateInput(job.startDate),
+      estimatedStartDate: formatDateInput(job.estimatedStartDate),
       price: job.price ?? 0,
       downPayment: job.downPayment ?? 0,
       budgetSpent: job.budgetSpent ?? 0,
@@ -80,6 +82,7 @@ const JobDetailsPage = () => {
       title: job.title ?? "",
       status: job.status ?? "",
       startDate: formatDateInput(job.startDate),
+      estimatedStartDate: formatDateInput(job.estimatedStartDate),
       price: job.price ?? 0,
       downPayment: job.downPayment ?? 0,
       budgetSpent: job.budgetSpent ?? 0,
@@ -102,6 +105,7 @@ const JobDetailsPage = () => {
         title: formJob.title,
         status: formJob.status,
         startDate: formJob.startDate ? new Date(formJob.startDate) : undefined,
+        estimatedStartDate: formJob.estimatedStartDate ? new Date(formJob.estimatedStartDate) : undefined,
         price: Number(formJob.price) || 0,
         downPayment: Number(formJob.downPayment) || 0,
         budgetSpent: Number(formJob.budgetSpent) || 0,
@@ -118,34 +122,8 @@ const JobDetailsPage = () => {
     <div className="p-4 sm:p-6 space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex justify-end space-x-2">
-        {/* {isEditing ? (
-          <>
-            <button
-              onClick={handleCancel}
-              className="bg-red-500 text-white px-4 py-2 rounded-md disabled:opacity-60"
-              disabled={isSaving}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="bg-green-500 text-white px-4 py-2 rounded-md disabled:opacity-60"
-              disabled={isSaving}
-            >
-              Save
-            </button>
-          </>
-        ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-          >
-            Edit
-          </button>
-        )} */}
+
       </div>
-      {/* Job Header */}
-      {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
@@ -173,15 +151,8 @@ const JobDetailsPage = () => {
                 setFormJob((prev) => ({ ...prev, status: value }))
               }
             />
-            <InfoField
-              label="Start Date"
-              value={formJob.startDate}
-              isEditing={isEditing}
-              type="date"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, startDate: value }))
-              }
-            />
+
+
             <InfoField label="Job ID" value={job.customJobId} readOnly />
             <InfoField
               label="Price"
@@ -190,6 +161,24 @@ const JobDetailsPage = () => {
               type="number"
               onChange={(value) =>
                 setFormJob((prev) => ({ ...prev, price: value }))
+              }
+            />
+            <InfoField
+              label="Estimated Start Date"
+              value={formJob.estimatedStartDate}
+              isEditing={isEditing}
+              type="date"
+              onChange={(value) =>
+                setFormJob((prev) => ({ ...prev, estimatedStartDate: value }))
+              }
+            />
+            <InfoField
+              label="Start Date"
+              value={formJob.startDate}
+              isEditing={isEditing}
+              type="date"
+              onChange={(value) =>
+                setFormJob((prev) => ({ ...prev, startDate: value }))
               }
             />
             <InfoField
@@ -270,7 +259,7 @@ const JobDetailsPage = () => {
               <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
               <InfoLine label="Status" value={quote?.status} />
               <InfoLine
-                label="Booked On Spot"
+                label="Booked on the spot"
                 value={quote?.bookedOnSpot ? "Yes" : "No"}
               />
             </div>

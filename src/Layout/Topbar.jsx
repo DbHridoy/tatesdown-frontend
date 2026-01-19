@@ -6,8 +6,13 @@ import {
   useMarkNotificationReadMutation,
 } from "../redux/api/common";
 import { useGetMeQuery } from "../redux/api/userApi";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUserRole } from "../redux/slice/authSlice";
 
 const Topbar = ({ label }) => {
+  const navigate = useNavigate();
+  const role = useSelector(selectUserRole);
   const { data: profileData } = useGetMeQuery();
   const profile = profileData?.data;
   const { data: notificationsData } = useGetNotificationsQuery();
@@ -15,43 +20,55 @@ const Topbar = ({ label }) => {
   const notifications = notificationsData?.data ?? [];
   const unreadCount = notifications.filter((item) => !item.isRead).length;
   const [isOpen, setIsOpen] = useState(false);
+  const profilePath =
+    role === "Admin"
+      ? "/admin/settings"
+      : role === "Production Manager"
+        ? "/production-manager/settings"
+        : role === "Sales Rep"
+          ? "/sales-rep/settings"
+          : "/";
   //console.log("Profile data:", profile);
   return (
-    <div className="flex justify-between  items-center ">
+    <div className="flex items-center justify-between w-full">
       {/* Page Title */}
-      <div>
-        <h1 className="text-xl font-semibold">{label}</h1>
+      <div className="min-w-0">
+        <h1 className="text-base sm:text-xl font-semibold truncate">
+          {label}
+        </h1>
       </div>
 
       {/* Right section: notifications + avatar */}
-      <div className="flex items-center gap-4">
+      <div className="relative flex items-center gap-3 sm:gap-4">
         {/* Notification */}
-        <div className="relative">
-          <button
-            onClick={() => setIsOpen((prev) => !prev)}
-            className="relative hover:text-gray-900 dark:hover:text-white transition-colors"
-          >
-          <FiBell className="w-6 h-6" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-xs text-white">
-                {unreadCount}
-              </span>
-            )}
-          </button>
-          {isOpen && (
-            <NotificationsDropdown
-              notifications={notifications}
-              onItemClick={async (item) => {
-                if (item.isRead) return;
-                await markNotificationRead(item._id).unwrap();
-              }}
-              onClose={() => setIsOpen(false)}
-            />
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        >
+          <FiBell className="h-6 w-6" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-xs text-white">
+              {unreadCount}
+            </span>
           )}
-        </div>
+        </button>
+        {isOpen && (
+          <NotificationsDropdown
+            notifications={notifications}
+            onItemClick={async (item) => {
+              if (item.isRead) return;
+              await markNotificationRead(item._id).unwrap();
+            }}
+            onClose={() => setIsOpen(false)}
+          />
+        )}
 
         {/* User avatar */}
-        <div className="flex items-center gap-2 cursor-pointer">
+        <button
+          type="button"
+          onClick={() => navigate(profilePath)}
+          className="flex items-center gap-2 cursor-pointer text-left"
+        >
           <img
             src={profile?.profileImage || ""}
             alt={profile?.fullName || "User"}
@@ -61,9 +78,11 @@ const Topbar = ({ label }) => {
             <p className="hidden md:block font-medium">
               {profile?.fullName || "Username"}
             </p>
-            <p>{profile?.role || "User Role"}</p>
+            <p className="hidden md:block text-sm text-gray-500">
+              {profile?.role || "User Role"}
+            </p>
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );

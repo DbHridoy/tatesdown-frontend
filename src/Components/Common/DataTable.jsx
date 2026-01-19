@@ -35,6 +35,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
     columns = [],
     actions = [],
     filters = [],
+    showSearch,
 
     // server controlled
     currentPage,
@@ -76,38 +77,44 @@ const DataTable = ({ title, data = [], config = {} }) => {
     setModalConfig({ show: false, item: null, action: null });
   };
 
+  const shouldShowSearch = showSearch ?? Boolean(onSearch);
+
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
       {title && (
         <div className="px-4 sm:px-6 py-4 border-b flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
           <h2 className="text-lg sm:text-xl font-bold">{title}</h2>
-          <input
-            type="text"
-            placeholder="Search..."
-            onChange={(e) => onSearch?.(e.target.value)}
-            className="w-full sm:w-64 px-3 py-2 border rounded-lg text-sm sm:text-base"
-          />
+          {shouldShowSearch && (
+            <input
+              type="text"
+              placeholder="Search..."
+              onChange={(e) => onSearch?.(e.target.value)}
+              className="w-full sm:w-64 px-3 py-2 border rounded-lg text-sm sm:text-base"
+            />
+          )}
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 px-4 sm:px-6 py-4 border-b">
-        {filters.map((f) => (
-          <select
-            key={f.accessor}
-            onChange={(e) => onFilterChange?.(f.accessor, e.target.value)}
-            className="w-full sm:w-auto px-3 py-2 border rounded-lg text-sm sm:text-base"
-          >
-            <option value="">{f.label}</option>
-            {Object.entries(f.options).map(([label, value]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        ))}
-      </div>
+      {filters.length > 0 && (
+        <div className="flex flex-wrap gap-3 px-4 sm:px-6 py-4 border-b">
+          {filters.map((f) => (
+            <select
+              key={f.accessor}
+              onChange={(e) => onFilterChange?.(f.accessor, e.target.value)}
+              className="w-full sm:w-auto px-3 py-2 border rounded-lg text-sm sm:text-base"
+            >
+              <option value="">{f.label}</option>
+              {Object.entries(f.options).map(([label, value]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          ))}
+        </div>
+      )}
 
       {/* Table */}
       {totalPages === 0 ? (
@@ -115,80 +122,158 @@ const DataTable = ({ title, data = [], config = {} }) => {
           <p className="text-gray-500">No clients found</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y">
-            <thead className="bg-gray-50">
-              <tr>
-                {columns.map((col) => (
-                  <th
-                    key={col.accessor}
-                    onClick={() => col.sortable && handleSort(col)}
-                    className={`px-3 sm:px-4 py-3 text-center align-middle text-xs sm:text-sm font-semibold ${
-                      col.sortable ? "cursor-pointer" : ""
-                    }`}
-                  >
-                    {col.label}
-                    {col.sortable &&
-                      sortKey === col.accessor &&
-                      (sortOrder === "asc" ? " ▲" : " ▼")}
-                  </th>
-                ))}
-                {actions.length > 0 && (
-                  <th className="px-3 sm:px-4 py-3 text-center align-middle text-xs sm:text-sm font-semibold">
-                    Actions
-                  </th>
-                )}
-              </tr>
-            </thead>
+        <>
+          {/* Mobile cards */}
+          <div className="sm:hidden space-y-3 p-4">
+            {data.map((row, idx) => {
+              const numberValue = (currentPage - 1) * itemsPerPage + idx + 1;
+              const displayColumns = columns.filter(
+                (col) => col.accessor !== "No"
+              );
 
-            <tbody className="divide-y">
-              {data.map((row, idx) => (
-                <tr key={idx} className="hover:bg-gray-50">
-                  {columns.map((col) => {
-                    let value =
-                      col.accessor === "No"
-                        ? (currentPage - 1) * itemsPerPage + idx + 1
-                        : row[col.accessor];
+              const getValue = (col) => {
+                if (!col) return "";
+                let value = row[col.accessor];
+                if (col.label === "Date" && value) {
+                  return new Date(value).toLocaleDateString();
+                }
+                return value;
+              };
 
-                    // Format date if accessor is 'date'
-                    if (col.label === "Date" && value) {
-                      value = new Date(value).toLocaleDateString();
-                    }
-
-                    return (
-                      <td key={col.accessor}>
+              return (
+                <div
+                  key={idx}
+                  className="border rounded-xl bg-white p-4 shadow-sm space-y-3"
+                >
+                  <div className="space-y-2">
+                    {displayColumns.map((col) => {
+                      const value =
+                        col.accessor === "No" ? numberValue : getValue(col);
+                      return (
                         <div
-                          className={`text-center align-middle text-xs sm:text-sm ${
-                            col.colorMap?.[value] || ""
-                          }`}
+                          key={col.accessor}
+                          className="flex items-start gap-2 text-sm"
                         >
-                          {value}
+                          <span className="min-w-[90px] text-gray-500">
+                            {col.label}:
+                          </span>
+                          <span
+                            className={`text-gray-900 ${
+                              col.colorMap?.[value] || ""
+                            }`}
+                          >
+                            {value || "—"}
+                          </span>
                         </div>
-                      </td>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
 
                   {actions.length > 0 && (
-                    <td className="px-3 sm:px-4 py-3 flex flex-wrap justify-center items-center gap-2">
+                    <div
+                      className={`grid gap-2 pt-1 ${
+                        actions.length === 1
+                          ? "grid-cols-1"
+                          : actions.length === 2
+                            ? "grid-cols-2"
+                            : "grid-cols-3"
+                      }`}
+                    >
                       {actions.map((action, i) => (
                         <button
                           key={i}
                           onClick={() => handleAction(action, row)}
-                          className={
+                          className={`w-full ${
                             action.className ||
                             "px-2 py-1 bg-blue-500 text-white rounded"
-                          }
+                          }`}
                         >
                           {action.label}
                         </button>
                       ))}
-                    </td>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <table className="min-w-full divide-y">
+              <thead className="bg-gray-50">
+                <tr>
+                  {columns.map((col) => (
+                    <th
+                      key={col.accessor}
+                      onClick={() => col.sortable && handleSort(col)}
+                      className={`px-3 sm:px-4 py-3 text-center align-middle text-xs sm:text-sm font-semibold ${
+                        col.sortable ? "cursor-pointer" : ""
+                      }`}
+                    >
+                      {col.label}
+                      {col.sortable &&
+                        sortKey === col.accessor &&
+                        (sortOrder === "asc" ? " ▲" : " ▼")}
+                    </th>
+                  ))}
+                  {actions.length > 0 && (
+                    <th className="px-3 sm:px-4 py-3 text-center align-middle text-xs sm:text-sm font-semibold">
+                      Actions
+                    </th>
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+
+              <tbody className="divide-y">
+                {data.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50">
+                    {columns.map((col) => {
+                      let value =
+                        col.accessor === "No"
+                          ? (currentPage - 1) * itemsPerPage + idx + 1
+                          : row[col.accessor];
+
+                      // Format date if accessor is 'date'
+                      if (col.label === "Date" && value) {
+                        value = new Date(value).toLocaleDateString();
+                      }
+
+                      return (
+                        <td key={col.accessor}>
+                          <div
+                            className={`text-center align-middle text-xs sm:text-sm ${
+                              col.colorMap?.[value] || ""
+                            }`}
+                          >
+                            {value}
+                          </div>
+                        </td>
+                      );
+                    })}
+
+                    {actions.length > 0 && (
+                      <td className="px-3 sm:px-4 py-3 flex flex-wrap justify-center items-center gap-2">
+                        {actions.map((action, i) => (
+                          <button
+                            key={i}
+                            onClick={() => handleAction(action, row)}
+                            className={
+                              action.className ||
+                              "px-2 py-1 bg-blue-500 text-white rounded"
+                            }
+                          >
+                            {action.label}
+                          </button>
+                        ))}
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       {/* Pagination */}

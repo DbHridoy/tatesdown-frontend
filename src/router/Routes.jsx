@@ -12,7 +12,6 @@ import Successful from "../Pages/Auth/Successful";
 
 // Admin Pages
 import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
-import AdminClients from "../z/Jobs/AdminClients";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
 import Reports from "../Pages/Admin/Reports/Reports";
 import RepDetails from "../Pages/Admin/Reports/RepDetails";
@@ -37,7 +36,6 @@ import SalesReports from "../Pages/Sales-rep/Reports/SalesRepReports";
 // Production Manager Pages
 import ProductionHome from "../Pages/Production-Manager/ProductionHome/ProductionHome";
 import JobScheduling from "../Pages/Production-Manager/JobScheduling/JobScheduling";
-import JobOverview from "../Pages/Production-Manager/JobScheduling/JobOverview";
 import ProductionSettings from "../Pages/Common/ProductionSettings";
 
 // Common
@@ -53,6 +51,7 @@ import AdminJobs from "../Pages/Admin/Jobs/AdminJobs";
 import AdminJobDetailsPage from "../Pages/Admin/Jobs/AdminJobDetailsPage";
 import ViewUser from "../Pages/Admin/UserManagement/ViewUser";
 import PmJobDetailsPage from "../Pages/Production-Manager/MyJobs/PmJobDetailsPage";
+import AdminClients from "../Pages/Admin/Clients/AdminClients";
 
 export const router = createBrowserRouter([
   // Public Routes

@@ -26,14 +26,14 @@ const CardData = ({ stats, isLoading, isError }) => {
   { title: "Pending Close", value: stats?.pendingCloseCount ?? 0 },
   { title: "Closed Jobs", value: stats?.closedCount ?? 0 },
   { title: "Cancelled Jobs", value: stats?.cancelledCount ?? 0 },
-  // {
-  //   title: "Revenue Earned",
-  //   value: formatCurrency(stats?.totalRevenueEarned),
-  // },
-  // {
-  //   title: "Revenue Pending",
-  //   value: formatCurrency(stats?.totalRevenuePending),
-  // },
+    // {
+    //   title: "Revenue Earned",
+    //   value: formatCurrency(stats?.totalRevenueSold),
+    // },
+    // {
+    //   title: "Revenue Pending",
+    //   value: formatCurrency(stats?.totalRevenuePending),
+    // },
 
   ];
 

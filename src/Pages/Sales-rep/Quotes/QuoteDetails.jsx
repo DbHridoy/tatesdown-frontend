@@ -214,7 +214,7 @@ const QuoteDetails = () => {
 
 
           <div className="mb-4">
-            <p className="text-sm text-gray-500">Booked on Spot</p>
+            <p className="text-sm text-gray-500">Booked on the spot</p>
             <p>{bookedOnSpot ? "Yes" : "No"}</p>
           </div>
 

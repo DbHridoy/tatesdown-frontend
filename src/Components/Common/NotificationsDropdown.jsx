@@ -31,7 +31,7 @@ const NotificationsDropdown = ({
   return (
     <div
       ref={containerRef}
-      className="absolute right-0 mt-3 w-96 max-w-[90vw] rounded-lg border border-gray-200 bg-white shadow-lg"
+      className="absolute right-0 top-full mt-3 w-96 max-w-[90vw] rounded-lg border border-gray-200 bg-white shadow-lg z-20"
     >
       <div className="border-b px-4 py-3">
         <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>

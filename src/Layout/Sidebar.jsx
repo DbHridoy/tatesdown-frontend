@@ -66,11 +66,11 @@ export const menuConfig = {
       label: "My Jobs",
       Link: "/production-manager/my-jobs",
     },
-    {
-      icon: <CiHome className="w-5 h-5" />,
-      label: "Reports",
-      Link: "/production-manager/reports",
-    },
+    // {
+    //   icon: <CiHome className="w-5 h-5" />,
+    //   label: "Reports",
+    //   Link: "/production-manager/reports",
+    // },
     {
       icon: <CiSettings className="w-5 h-5" />,
       label: "Settings",

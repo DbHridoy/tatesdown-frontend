@@ -129,10 +129,10 @@ const AddNewQuote = () => {
           </label>
         </div>
 
-        {/* Booked on the Spot */}
+        {/* Booked on the spot */}
         <div>
           <label className="block text-base sm:text-lg font-semibold mb-3">
-            Booked on the Spot?
+            Booked on the spot?
           </label>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <label className="flex items-center gap-2 text-sm sm:text-base">

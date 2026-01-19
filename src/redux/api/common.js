@@ -38,6 +38,40 @@ const commonApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+
+    createPayment: builder.mutation({
+      query: (payload) => ({
+        url: "/common/payments",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Payment", "User"],
+    }),
+
+    getPayments: builder.query({
+      query: (salesRepId) => ({
+        url: "/common/payments",
+        params: { salesRepId },
+      }),
+      providesTags: ["Payment"],
+    }),
+
+    updatePayment: builder.mutation({
+      query: ({ paymentId, ...body }) => ({
+        url: `/payments/${paymentId}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Payment"],
+    }),
+
+    deletePayment: builder.mutation({
+      query: (paymentId) => ({
+        url: `/payments/${paymentId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Payment"],
+    }),
   }),
 });
 
@@ -50,5 +84,9 @@ export const {
   useGetMyStatsQuery,
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
+  useCreatePaymentMutation,
+  useGetPaymentsQuery,
+  useUpdatePaymentMutation,
+  useDeletePaymentMutation,
 } = commonApi;
 export default commonApi;

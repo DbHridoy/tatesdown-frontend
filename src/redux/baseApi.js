@@ -15,6 +15,7 @@ export const baseApi = createApi({
     "User",
     "FiscalYear",
     "MyStats",
+    "Payment",
   ],
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),

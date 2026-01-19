@@ -44,7 +44,7 @@ function DownpaymentRequest() {
         label: "Accept",
         className: "bg-green-500 text-white p-2 rounded-lg",
         modal: true,
-        modalTitle: "Accept Downpayment Request",
+        modalTitle: "Accept Down Payment Request",
         modalMessage: (item) =>
           `Are you sure you want to accept ${item.clientName}?`,
         onConfirm: (item) => {
@@ -56,7 +56,7 @@ function DownpaymentRequest() {
         label: "Reject",
         className: "bg-red-500 text-white p-2 rounded-lg",
         modal: true,
-        modalTitle: "Reject Downpayment Request",
+        modalTitle: "Reject Down Payment Request",
         modalMessage: (item) =>
           `Are you sure you want to reject ${item.clientName}?`,
         onConfirm: (item) => {
@@ -80,7 +80,7 @@ function DownpaymentRequest() {
 
   return (
     <DataTable
-      title="Downpayment Request"
+      title="Down Payment Request"
       data={formattedData}
       config={tableConfig}
       loading={isLoading}
