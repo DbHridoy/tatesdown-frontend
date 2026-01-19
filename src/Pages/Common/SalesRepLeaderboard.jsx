@@ -19,10 +19,13 @@ function SalesRepLeaderboard() {
   }
 
   return (
-    <div className="p-6 bg-white rounded-md shadow-md">
-      <h2 className="text-2xl font-semibold">Sales Rep Leaderboard</h2>
-      <p className="text-lg text-gray-500 mb-4">Top 5 Sales Reps</p>
-      <table className="min-w-full border border-gray-200">
+    <div className="p-5 sm:p-6 bg-white rounded-md shadow-md">
+      <h2 className="text-xl sm:text-2xl font-semibold">
+        Sales Rep Leaderboard
+      </h2>
+      <p className="text-sm sm:text-lg text-gray-500 mb-4">Top 5 Sales Reps</p>
+      <div className="overflow-x-auto">
+        <table className="min-w-max w-full border border-gray-200 text-sm sm:text-base">
         <thead>
           <tr className="bg-gray-100">
             <th className="border px-4 py-2 text-left">#</th>
@@ -53,7 +56,8 @@ function SalesRepLeaderboard() {
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 }

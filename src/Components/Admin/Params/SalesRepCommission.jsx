@@ -56,9 +56,9 @@ function SalesRepCommission() {
     
   return (
     <div className="p-4 bg-white rounded-lg shadow-sm">
-      <div className="flex items-center gap-4">
-        <h2 className=" font-semibold text-gray-900">Sales Rep Commission</h2>
-        <div className="relative w-40">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <h2 className="font-semibold text-gray-900">Sales Rep Commission</h2>
+        <div className="relative w-full sm:w-40">
           <span className="absolute text-gray-500 -translate-y-1/2 left-3 top-1/2">
             $
           </span>
@@ -68,7 +68,7 @@ function SalesRepCommission() {
             value={commissionRate}
             disabled={!isEditable}
             onChange={(e) => setCommissionRate(e.target.value)}
-            className="w-full py-2 pr-3 border border-gray-300 rounded-md pl-7 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            className="w-full py-2 pr-3 border border-gray-300 rounded-md pl-7 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
             placeholder="0.50"
           />
         </div>
@@ -76,21 +76,21 @@ function SalesRepCommission() {
         {!isEditable ? (
           <button
             onClick={() => setIsEditable(true)}
-            className="ml-2 px-3 py-1.5 bg-blue-600 text-white rounded-md"
+            className="w-full sm:w-auto sm:ml-2 px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm sm:text-base"
           >
             Edit
           </button>
         ) : (
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={handleSave}
-              className="ml-2 px-3 py-1.5 bg-green-600 text-white rounded-md"
+              className="w-full sm:w-auto sm:ml-2 px-3 py-1.5 bg-green-600 text-white rounded-md text-sm sm:text-base"
             >
               Save
             </button>
             <button
               onClick={handleCancel}
-              className="ml-2 px-3 py-1.5 bg-red-600 text-white rounded-md"
+              className="w-full sm:w-auto sm:ml-2 px-3 py-1.5 bg-red-600 text-white rounded-md text-sm sm:text-base"
             >
               Cancel
             </button>

@@ -3,7 +3,7 @@ import React from "react";
 function ClientNote({ note, file, onNoteChange, onFileChange }) {
   return (
     <div className="bg-white rounded-lg border p-4 space-y-4">
-      <h3 className="text-lg font-semibold text-gray-800">
+      <h3 className="text-base sm:text-lg font-semibold text-gray-800">
         Notes & Attachments
       </h3>
 
@@ -13,7 +13,7 @@ function ClientNote({ note, file, onNoteChange, onFileChange }) {
           value={note}
           onChange={(e) => onNoteChange(e.target.value)}
           placeholder="Write a note..."
-          className="w-full h-24 px-3 py-2 border rounded-lg resize-none"
+          className="w-full h-24 px-3 py-2 border rounded-lg resize-none text-sm sm:text-base"
         />
       </div>
 
@@ -22,7 +22,7 @@ function ClientNote({ note, file, onNoteChange, onFileChange }) {
         <input
           type="file"
           onChange={(e) => onFileChange(e.target.files[0])}
-          className="w-full text-sm"
+          className="w-full text-sm sm:text-base"
         />
       </div>
 

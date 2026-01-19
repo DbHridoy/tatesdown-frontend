@@ -68,8 +68,8 @@ const AddMileageLog = ({ closeModal }) => {
   };
 
   return (
-    <div className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-lg">
-      <h2 className="mb-4 text-2xl font-bold text-gray-800">
+    <div className="mx-auto max-w-lg rounded-lg bg-white p-4 sm:p-6 shadow-lg">
+      <h2 className="mb-4 text-xl sm:text-2xl font-bold text-gray-800">
         Add Mileage Log
       </h2>
 
@@ -81,7 +81,7 @@ const AddMileageLog = ({ closeModal }) => {
         <select
           value={month}
           onChange={(e) => setMonth(e.target.value)}
-          className="w-full rounded-md border p-2"
+          className="w-full rounded-md border p-2 text-sm sm:text-base"
         >
           <option value="">Select month...</option>
           {months.map((m) => (
@@ -98,7 +98,7 @@ const AddMileageLog = ({ closeModal }) => {
         <select
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          className="w-full rounded-md border p-2"
+          className="w-full rounded-md border p-2 text-sm sm:text-base"
         >
           <option value="">Select year...</option>
           {years.map((y) => (
@@ -118,7 +118,7 @@ const AddMileageLog = ({ closeModal }) => {
           inputMode="numeric"
           value={totalMilesDriven}
           onChange={(e) => setTotalMilesDriven(e.target.value)}
-          className="w-full rounded-md border p-2"
+          className="w-full rounded-md border p-2 text-sm sm:text-base"
         />
       </div>
 
@@ -131,7 +131,7 @@ const AddMileageLog = ({ closeModal }) => {
           type="file"
           accept=".pdf"
           onChange={handleFileChange}
-          className="w-full rounded-md border p-2"
+          className="w-full rounded-md border p-2 text-sm sm:text-base"
         />
       </div>
 
@@ -143,24 +143,24 @@ const AddMileageLog = ({ closeModal }) => {
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          className="w-full rounded-md border p-2"
+          className="w-full rounded-md border p-2 text-sm sm:text-base"
           rows={3}
         />
       </div>
 
       {/* Actions */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <button
           onClick={closeModal}
           disabled={isLoading}
-          className="flex-1 rounded-md bg-gray-300 py-2"
+          className="w-full sm:flex-1 rounded-md bg-gray-300 py-2 text-sm sm:text-base"
         >
           Cancel
         </button>
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="flex-1 rounded-md bg-blue-500 py-2 text-white disabled:opacity-50"
+          className="w-full sm:flex-1 rounded-md bg-blue-500 py-2 text-white text-sm sm:text-base disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save Mileage Log"}
         </button>

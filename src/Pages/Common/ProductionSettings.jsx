@@ -84,14 +84,14 @@ const Settings = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50">
-      <div className="p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="p-4 sm:p-6 bg-gray-50">
+      <div className="p-5 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-1 text-xl font-semibold text-gray-900">
+          <h1 className="mb-1 text-xl sm:text-2xl font-semibold text-gray-900">
             Profile & Settings
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm sm:text-base text-gray-500">
             Manage your account settings and preferences
           </p>
         </div>
@@ -130,15 +130,17 @@ const Settings = () => {
             </div>
           </div>
 
-          <h2 className="text-lg font-semibold text-gray-900 mb-0.5">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-0.5">
             {formData.name}
           </h2>
-          <p className="mb-3 text-sm text-gray-500">{formData.role}</p>
+          <p className="mb-3 text-sm sm:text-base text-gray-500">
+            {formData.role}
+          </p>
 
           {!isEditing && (
             <button
               onClick={handleEditClick}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors border border-gray-300 rounded hover:bg-gray-50"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm sm:text-base font-medium text-gray-700 transition-colors border border-gray-300 rounded hover:bg-gray-50"
             >
               <Edit className="w-4 h-4" /> Edit Profile
             </button>
@@ -157,7 +159,7 @@ const Settings = () => {
                 value={formData.name}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`w-full px-3 py-2 text-sm border rounded ${isEditing
+                className={`w-full px-3 py-2 text-sm sm:text-base border rounded ${isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
                   }`}
@@ -172,7 +174,7 @@ const Settings = () => {
                 type="email"
                 value={formData.email}
                 readOnly
-                className="w-full px-3 py-2 text-sm text-gray-900 border border-gray-200 rounded bg-gray-100 cursor-not-allowed"
+                className="w-full px-3 py-2 text-sm sm:text-base text-gray-900 border border-gray-200 rounded bg-gray-100 cursor-not-allowed"
               />
             </div>
           </div>
@@ -189,7 +191,7 @@ const Settings = () => {
                 onChange={(e) =>
                   handleInputChange("phoneNumber", e.target.value)
                 }
-                className={`w-full px-3 py-2 text-sm border rounded ${isEditing
+                className={`w-full px-3 py-2 text-sm sm:text-base border rounded ${isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
                   }`}
@@ -205,7 +207,7 @@ const Settings = () => {
                 value={formData.address}
                 readOnly={!isEditing}
                 onChange={(e) => handleInputChange("address", e.target.value)}
-                className={`w-full px-3 py-2 text-sm border rounded ${isEditing
+                className={`w-full px-3 py-2 text-sm sm:text-base border rounded ${isEditing
                     ? "border-gray-300 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     : "border-gray-200 bg-gray-100 cursor-not-allowed"
                   }`}
@@ -216,11 +218,11 @@ const Settings = () => {
 
         {/* Save / Cancel Buttons */}
         {isEditing && (
-          <div className="flex justify-center gap-4 mt-8">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-8">
             <button
               onClick={handleSaveChanges}
               disabled={isUpdating}
-              className={`px-6 py-2.5 text-white rounded text-sm font-medium transition-colors ${isUpdating
+              className={`w-full sm:w-auto px-6 py-2.5 text-white rounded text-sm sm:text-base font-medium transition-colors ${isUpdating
                   ? "bg-blue-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
                 }`}
@@ -231,7 +233,7 @@ const Settings = () => {
               type="button"
               onClick={handleCancel}
               disabled={isUpdating}
-              className={`px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded text-sm font-medium hover:bg-gray-50 ${isUpdating ? "cursor-not-allowed" : ""
+              className={`w-full sm:w-auto px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded text-sm sm:text-base font-medium hover:bg-gray-50 ${isUpdating ? "cursor-not-allowed" : ""
                 }`}
             >
               Cancel

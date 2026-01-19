@@ -121,9 +121,11 @@ const AddNewJob = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center">Add New Job</h1>
+    <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:px-6">
+      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-4 sm:p-6">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
+          Add New Job
+        </h1>
 
         {/* Select Quote */}
         <div className="mb-4">
@@ -131,7 +133,7 @@ const AddNewJob = () => {
           <select
             value={selectedQuoteId}
             onChange={(e) => setSelectedQuoteId(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
             disabled={!!quoteIdFromUrl}
           >
             {quotes.map((quote) => (
@@ -149,7 +151,7 @@ const AddNewJob = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
 
@@ -160,7 +162,7 @@ const AddNewJob = () => {
             type="number"
             value={totalHours}
             onChange={(e) => setTotalHours(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
 
@@ -171,7 +173,7 @@ const AddNewJob = () => {
             type="number"
             value={setupCleanup}
             onChange={(e) => setSetupCleanup(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
 
@@ -182,7 +184,7 @@ const AddNewJob = () => {
             type="number"
             value={powerwash}
             onChange={(e) => setPowerwash(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
 
@@ -193,17 +195,17 @@ const AddNewJob = () => {
             type="number"
             value={labourHours}
             readOnly
-            className="w-full border px-3 py-2 rounded bg-gray-100"
+            className="w-full border px-3 py-2 rounded bg-gray-100 text-sm sm:text-base"
           />
         </div>
 
         {/* Prices */}
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
           <div className="flex-1">
             <label className="block font-semibold mb-1">Price</label>
             <input
               value={price}
-              className="w-full border px-3 py-2 rounded bg-gray-100"
+              className="w-full border px-3 py-2 rounded bg-gray-100 text-sm sm:text-base"
               readOnly
             />
           </div>
@@ -214,26 +216,28 @@ const AddNewJob = () => {
               type="number"
               value={downPayment}
               onChange={(e) => setDownPayment(e.target.value)}
-              className="w-full border px-3 py-2 rounded"
+              className="w-full border px-3 py-2 rounded text-sm sm:text-base"
             />
           </div>
         </div>
 
         {/* Start Date */}
         <div className="mb-4">
-          <label className="block font-semibold mb-1">Preferred Start Date *</label>
+          <label className="block font-semibold mb-1">
+            Preferred Start Date *
+          </label>
           <input
             type="date"
             value={estimatedStartDate}
             onChange={(e) => setEstimatedStartDate(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
 
         {!!description.trim() && (
           <div className="mb-6">
             <label className="block font-semibold mb-1">Existing Client Note</label>
-            <div className="w-full border px-3 py-2 rounded bg-gray-50 text-gray-700">
+            <div className="w-full border px-3 py-2 rounded bg-gray-50 text-gray-700 text-sm sm:text-base">
               {description}
             </div>
           </div>
@@ -245,22 +249,22 @@ const AddNewJob = () => {
             value={additionalNote}
             onChange={(e) => setAdditionalNote(e.target.value)}
             rows={4}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded text-sm sm:text-base"
           />
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-4">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-2 border rounded"
+            className="w-full sm:w-auto px-6 py-2 border rounded text-sm sm:text-base"
           >
             Cancel
           </button>
           <button
             onClick={handleCreateJob}
             disabled={isCreating}
-            className="px-6 py-2 bg-blue-600 text-white rounded"
+            className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded text-sm sm:text-base"
           >
             {isCreating ? "Creating..." : "Create Job"}
           </button>

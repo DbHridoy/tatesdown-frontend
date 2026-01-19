@@ -56,21 +56,21 @@ const DashboardOverview = ({
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">{title}</h1>
-        <p className="text-gray-600">{subtitle}</p>
+        <h1 className="mb-2 text-2xl sm:text-3xl font-bold text-gray-900">
+          {title}
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600">{subtitle}</p>
       </div>
 
       {/* Stats */}
-      <div className="flex flex-wrap gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         {overviewStats.map((stat, index) => {
           const Icon = stat.icon || Briefcase;
 
           return (
             <div
               key={stat.id ?? index}
-              className="flex-1 
-                         p-6 bg-white border border-gray-200 rounded-lg
-                         shadow-sm hover:shadow-md transition-shadow"
+              className="p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
               <div
                 className={`w-12 h-12 ${stat.bgColor || "bg-gray-50"
@@ -89,7 +89,7 @@ const DashboardOverview = ({
               {isLoading ? (
                 <div className="h-8 w-20 bg-gray-100 rounded animate-pulse" />
               ) : (
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900">
                   {stat.value ?? 0}
                 </p>
               )}

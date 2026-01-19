@@ -35,17 +35,18 @@ const Approvals = () => {
 
 
   return (
-    <div className="w-full min-h-screen p-6 mx-auto ">
+    <div className="w-full min-h-screen p-4 sm:p-6 mx-auto">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto border-b border-gray-200">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors ${activeTab === tab.id
+            className={`flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm sm:text-base transition-colors ${
+              activeTab === tab.id
                 ? "border-b-2 border-blue-500 text-blue-600 font-medium"
                 : "text-gray-600 hover:text-gray-800"
-              }`}
+            }`}
           >
             {tab.label}
             {/* <span className="bg-gray-300 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded-full">

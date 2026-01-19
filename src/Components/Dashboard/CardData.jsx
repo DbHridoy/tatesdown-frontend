@@ -38,7 +38,7 @@ const CardData = ({ stats, isLoading, isError }) => {
   ];
 
   return (
-    <div className="p-6">
+    <div className="p-0">
       {/* Filter Bar */}
       {/* <div className="flex items-center gap-4 mb-6">
         {filters.map((filter) => (
@@ -57,7 +57,7 @@ const CardData = ({ stats, isLoading, isError }) => {
       </div> */}
 
       {/* Cards Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {isError && (
           <div className="col-span-full rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
             Failed to load stats.
@@ -66,15 +66,15 @@ const CardData = ({ stats, isLoading, isError }) => {
         {data.map((item, index) => (
           <div
             key={index}
-            className={`flex justify-between rounded-lg p-6 shadow-md ${index === 0 ? "bg-[#B0D6F0]" : "bg-white"
+            className={`flex justify-between rounded-lg p-4 sm:p-6 shadow-md ${index === 0 ? "bg-[#B0D6F0]" : "bg-white"
               }`}
           >
             <div>
-              <div className="w-[52px] h-[52px] flex items-center justify-center bg-blue-100 rounded-lg mb-4">
+              <div className="w-12 h-12 sm:w-[52px] sm:h-[52px] flex items-center justify-center bg-blue-100 rounded-lg mb-4">
                 <User />
               </div>
               <div className="text-sm text-gray-500">{item.title}</div>
-              <div className="mt-2 text-xl font-bold">
+              <div className="mt-2 text-lg sm:text-xl font-bold">
                 {isLoading ? "..." : item.value}
               </div>
             </div>

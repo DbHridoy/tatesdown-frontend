@@ -121,11 +121,15 @@ function Quotes() {
   };
 
   return (
-    <div>
-      <div className="flex justify-between flex-row ">
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Quotes</h1>
-          <p>Manage your quotes here</p>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+            Quotes
+          </h1>
+          <p className="text-sm sm:text-base text-gray-500">
+            Manage your quotes here
+          </p>
         </div>
       </div>
       <DataTable title="Quotes" data={formattedQuote} config={tableConfig} />;

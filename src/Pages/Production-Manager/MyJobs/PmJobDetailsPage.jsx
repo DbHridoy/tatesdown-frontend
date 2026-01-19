@@ -109,21 +109,21 @@ const PmJobDetailsPage = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Edit/Save Buttons */}
-      <div className="flex justify-end space-x-2">
+      <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
         {isEditing ? (
           <>
             <button
               onClick={handleCancel}
-              className="bg-red-500 text-white px-4 py-2 rounded-md disabled:opacity-60"
+              className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
               disabled={isSaving}
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="bg-green-500 text-white px-4 py-2 rounded-md disabled:opacity-60"
+              className="w-full sm:w-auto bg-green-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
               disabled={isSaving}
             >
               Save
@@ -132,7 +132,7 @@ const PmJobDetailsPage = () => {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-md text-sm sm:text-base"
           >
             Edit
           </button>
@@ -142,8 +142,8 @@ const PmJobDetailsPage = () => {
       {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Job Details
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -244,11 +244,11 @@ const PmJobDetailsPage = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Sales Rep Information
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Name" value={salesRep?.fullName} />
               <InfoLine label="Email" value={salesRep?.email} />
               <InfoLine label="Phone" value={salesRep?.phoneNumber} />
@@ -256,11 +256,11 @@ const PmJobDetailsPage = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Quote Summary
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
               <InfoLine label="Status" value={quote?.status} />
               <InfoLine
@@ -269,49 +269,49 @@ const PmJobDetailsPage = () => {
               />
             </div>
           </div>
-          <div className="p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Client Information
-          </h2>
-          <div className="space-y-2 text-gray-700">
-            <p>
-              <span className="font-semibold">Name:</span>{" "}
-              {client?.clientName || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Partner:</span>{" "}
-              {client?.partnerName || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Email:</span>{" "}
-              {client?.email || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Phone:</span>{" "}
-              {client?.phoneNumber || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Address:</span>{" "}
-              {client?.address || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Lead Source:</span>{" "}
-              {client?.leadSource || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Lead Status:</span>{" "}
-              {client?.leadStatus || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Rating:</span>{" "}
-              {client?.rating || "N/A"}
-            </p>
-            <p>
-              <span className="font-semibold">Custom Client ID:</span>{" "}
-              {client?.customClientId || "N/A"}
-            </p>
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+              Client Information
+            </h2>
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
+              <p>
+                <span className="font-semibold">Name:</span>{" "}
+                {client?.clientName || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Partner:</span>{" "}
+                {client?.partnerName || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Email:</span>{" "}
+                {client?.email || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Phone:</span>{" "}
+                {client?.phoneNumber || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Address:</span>{" "}
+                {client?.address || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Lead Source:</span>{" "}
+                {client?.leadSource || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Lead Status:</span>{" "}
+                {client?.leadStatus || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Rating:</span>{" "}
+                {client?.rating || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">Custom Client ID:</span>{" "}
+                {client?.customClientId || "N/A"}
+              </p>
+            </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -329,7 +329,7 @@ const PmJobDetailsPage = () => {
 };
 
 const InfoLine = ({ label, value }) => (
-  <p>
+  <p className="text-sm sm:text-base">
     <span className="font-semibold">{label}:</span> {value || "N/A"}
   </p>
 );
@@ -349,7 +349,7 @@ const InfoField = ({
     {isEditing && !readOnly ? (
       asSelect ? (
         <select
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
         >
@@ -362,13 +362,13 @@ const InfoField = ({
       ) : (
         <input
           type={type}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
         />
       )
     ) : (
-      <div className="rounded-md border px-3 py-2 text-sm text-gray-800">
+      <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
         {value !== undefined && value !== null && value !== ""
           ? value
           : "N/A"}

@@ -113,14 +113,18 @@ const DesignConsultationCreate = ({
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-6">
-        {mode === "edit" ? "Edit Design Consultation" : "Create Design Consultation"}
+    <div className="p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-xl sm:text-2xl font-semibold mb-6">
+        {mode === "edit"
+          ? "Edit Design Consultation"
+          : "Create Design Consultation"}
       </h2>
 
       {/* Product Details */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4">Product Details</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-4">
+          Product Details
+        </h3>
 
         <label className="block text-sm font-medium text-gray-700">
           Product
@@ -131,7 +135,7 @@ const DesignConsultationCreate = ({
           onChange={(e) =>
             setProductDetails({ ...productDetails, product: e.target.value })
           }
-          className="mt-1 p-3 w-full border rounded-md"
+          className="mt-1 p-3 w-full border rounded-md text-sm sm:text-base"
         />
 
         <div className="mt-4">
@@ -147,7 +151,7 @@ const DesignConsultationCreate = ({
                 colorCode: e.target.value,
               })
             }
-            className="mt-1 p-3 w-full border rounded-md"
+            className="mt-1 p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>
 
@@ -164,14 +168,14 @@ const DesignConsultationCreate = ({
                 estimatedGallons: e.target.value,
               })
             }
-            className="mt-1 p-3 w-full border rounded-md"
+            className="mt-1 p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>
       </div>
 
       {/* Upsell */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4">Upsell</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-4">Upsell</h3>
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Upsell Description
@@ -186,7 +190,7 @@ const DesignConsultationCreate = ({
                 upsellDescription: e.target.value,
               })
             }
-            className="mt-1 mb-3 p-3 w-full border rounded-md"
+            className="mt-1 mb-3 p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>
         <div>
@@ -203,7 +207,7 @@ const DesignConsultationCreate = ({
                 upsellValue: e.target.value,
               })
             }
-            className="mt-1 mb-3 p-3 w-full border rounded-md"
+            className="mt-1 mb-3 p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>
         <div>
@@ -220,7 +224,7 @@ const DesignConsultationCreate = ({
                 addedHours: e.target.value,
               })
             }
-            className="mt-1 mb-3 p-3 w-full border rounded-md"
+            className="mt-1 mb-3 p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>{" "}
       </div>
@@ -239,7 +243,7 @@ const DesignConsultationCreate = ({
               estimatedStartDate: e.target.value,
             })
           }
-          className="mt-1 p-3 w-full border rounded-md"
+          className="mt-1 p-3 w-full border rounded-md text-sm sm:text-base"
         />
       </div>
 
@@ -258,20 +262,21 @@ const DesignConsultationCreate = ({
         <input
           type="file"
           accept=".pdf,.docx,.xlsx"
+          className="w-full text-sm sm:text-base"
           onChange={handleFileChange}
         />
       </div>
 
-      <div className="flex justify-end gap-4">
+      <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4">
         <button
           onClick={onCancel ? onCancel : () => navigate(-1)}
-          className="bg-gray-400 px-6 py-2 rounded text-white"
+          className="w-full sm:w-auto bg-gray-400 px-6 py-2 rounded text-white text-sm sm:text-base"
         >
           Cancel
         </button>
         <button
           onClick={handleSave}
-          className="bg-blue-600 px-6 py-2 rounded text-white"
+          className="w-full sm:w-auto bg-blue-600 px-6 py-2 rounded text-white text-sm sm:text-base"
         >
           {mode === "edit" ? "Update DC" : "Create DC"}
         </button>

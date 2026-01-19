@@ -78,12 +78,16 @@ function PmJobs() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Jobs</h1>
-          <p className="text-gray-600">Manage your jobs and track progress</p>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
+            Jobs
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600">
+            Manage your jobs and track progress
+          </p>
         </div>
         {/* <button
           className="bg-primarycolor text-white flex items-center gap-2 px-4 py-2 rounded"

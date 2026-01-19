@@ -163,11 +163,11 @@ const UserManagement = () => {
 
   /* ================= UI ================= */
   return (
-    <div className="p-6">
-      <div className="flex justify-between mb-6">
-        <h2 className="text-2xl font-semibold">User Management</h2>
+    <div className="p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h2 className="text-xl sm:text-2xl font-semibold">User Management</h2>
         <button
-          className="px-5 py-2 bg-blue-600 text-white rounded-lg"
+          className="w-full sm:w-auto px-5 py-2 bg-blue-600 text-white rounded-lg text-sm sm:text-base"
           onClick={() => setIsAddModal(true)}
         >
           + Add User
@@ -194,10 +194,10 @@ const UserManagement = () => {
 /* ================= REUSABLE COMPONENTS ================= */
 
 const Modal = ({ title, children, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
-    <div className="bg-white w-[450px] p-6 rounded-lg">
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+    <div className="bg-white w-full max-w-md p-5 sm:p-6 rounded-lg">
       <div className="flex justify-between mb-4">
-        <h3 className="font-semibold">{title}</h3>
+        <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
         <IoClose className="cursor-pointer" onClick={onClose} />
       </div>
       {children}
@@ -206,13 +206,16 @@ const Modal = ({ title, children, onClose }) => (
 );
 
 const ModalActions = ({ onCancel, onSave }) => (
-  <div className="flex justify-end gap-3 mt-5">
-    <button onClick={onCancel} className="border px-4 py-2 rounded">
+  <div className="flex flex-col sm:flex-row sm:justify-end gap-3 mt-5">
+    <button
+      onClick={onCancel}
+      className="w-full sm:w-auto border px-4 py-2 rounded text-sm sm:text-base"
+    >
       Cancel
     </button>
     <button
       onClick={onSave}
-      className="bg-blue-600 text-white px-4 py-2 rounded"
+      className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded text-sm sm:text-base"
     >
       Save
     </button>

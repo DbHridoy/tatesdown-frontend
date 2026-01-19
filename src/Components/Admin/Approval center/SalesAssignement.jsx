@@ -25,10 +25,10 @@ function SalesAssignement() {
 
   return (
     <div className="bg-white rounded-lg shadow">
-      <div className="flex items-center justify-between p-6 border-b border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div>
-            <h2 className="text-xl font-semibold text-gray-800">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
               Lead Assignment Approvals
             </h2>
           </div>
@@ -36,19 +36,19 @@ function SalesAssignement() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="min-w-max w-full">
           <thead className="bg-gray-100 border-b border-gray-200">
             <tr>
-              <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
+              <th className="px-4 sm:px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
                 Lead ID
               </th>
-              <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
+              <th className="px-4 sm:px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
                 Client Name
               </th>
-              <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
+              <th className="px-4 sm:px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
                 Phone Number
               </th>
-              <th className="px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
+              <th className="px-4 sm:px-6 py-3 text-xs font-semibold text-left text-gray-700 uppercase">
                 Actions
               </th>
             </tr>
@@ -56,10 +56,10 @@ function SalesAssignement() {
           <tbody className="divide-y divide-gray-200">
             {leadAssignmentData.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-800">
+                <td className="px-4 sm:px-6 py-4 text-sm text-gray-800">
                   {item.customClientId}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 sm:px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                     <span className="text-sm text-gray-800">
@@ -67,7 +67,7 @@ function SalesAssignement() {
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 sm:px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
                     <span className="text-sm text-gray-800">
@@ -82,7 +82,7 @@ function SalesAssignement() {
                     {item.status}
                   </span>
                 </td> */}
-                <td className="px-6 py-4">
+                <td className="px-4 sm:px-6 py-4">
                   <div className="flex gap-2">
                     {item.salesRepId ? (
                       // Show the sales rep name

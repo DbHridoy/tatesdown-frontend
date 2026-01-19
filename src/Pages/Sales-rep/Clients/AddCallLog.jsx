@@ -46,7 +46,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
       >
         {/* Header */}
         <div className="px-6 py-4 border-b">
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
             Add Call Log
           </h2>
         </div>
@@ -61,7 +61,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
+              className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base"
             >
               <option value="">Select outcome...</option>
               {CALL_STATUS_OPTIONS.map((opt) => (
@@ -83,7 +83,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Enter reason..."
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base"
               />
             </div>
           )}
@@ -96,28 +96,28 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Enter details about the call..."
-              className="w-full px-3 py-2 border rounded-lg resize-none"
+              className="w-full px-3 py-2 border rounded-lg resize-none text-sm sm:text-base"
             />
           </div>
 
           {/* Timestamp Preview */}
-          <div className="text-sm text-gray-500">
+          <div className="text-xs sm:text-sm text-gray-500">
             Call Time: {new Date().toLocaleString()}
           </div>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t flex gap-3 bg-gray-50">
+        <div className="px-6 py-4 border-t flex flex-col sm:flex-row gap-3 bg-gray-50">
           <button
             type="button"
             onClick={closeModal}
-            className="flex-1 py-2 border rounded-lg"
+            className="w-full sm:flex-1 py-2 border rounded-lg text-sm sm:text-base"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="flex-1 py-2 bg-blue-600 text-white rounded-lg"
+            className="w-full sm:flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm sm:text-base"
           >
             Save Call Log
           </button>

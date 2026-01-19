@@ -67,12 +67,14 @@ const AddClient = () => {
   /* ================= UI ================= */
 
   return (
-    <div className="py-8 px-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Add Client</h1>
+    <div className="py-8 px-4 sm:px-6 max-w-5xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
+        Add Client
+      </h1>
 
       <form
         onSubmit={handleCreateClient}
-        className="space-y-6 bg-white p-6 border rounded-lg"
+        className="space-y-6 bg-white p-4 sm:p-6 border rounded-lg"
       >
         {/* Client Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -81,7 +83,7 @@ const AddClient = () => {
             <input
               value={formData.clientName}
               onChange={(e) => handleInputChange("clientName", e.target.value)}
-              className="w-full border px-3 py-2 rounded-lg"
+              className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
               required
             />
           </div>
@@ -91,7 +93,7 @@ const AddClient = () => {
             <input
               value={formData.partnerName}
               onChange={(e) => handleInputChange("partnerName", e.target.value)}
-              className="w-full border px-3 py-2 rounded-lg"
+              className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
             />
           </div>
         </div>
@@ -104,7 +106,7 @@ const AddClient = () => {
               type="tel"
               value={formData.phoneNumber}
               onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
-              className="w-full border px-3 py-2 rounded-lg"
+              className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
               required
             />
           </div>
@@ -115,7 +117,7 @@ const AddClient = () => {
               type="email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
-              className="w-full border px-3 py-2 rounded-lg"
+              className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
             />
           </div>
         </div>
@@ -126,7 +128,7 @@ const AddClient = () => {
           <input
             value={formData.address}
             onChange={(e) => handleInputChange("address", e.target.value)}
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
             required
           />
         </div>
@@ -137,7 +139,7 @@ const AddClient = () => {
           <select
             value={formData.leadSource}
             onChange={(e) => handleInputChange("leadSource", e.target.value)}
-            className="w-full border px-3 py-2 rounded-lg"
+            className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
             required
           >
             {leadSources.map((s) => (
@@ -151,13 +153,13 @@ const AddClient = () => {
         {/* Lead Rating */}
         <div>
           <label className="block text-sm font-medium mb-2">Lead Rating</label>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
                 onClick={() => handleInputChange("rating", star)}
-                className="text-2xl"
+                className="text-xl sm:text-2xl"
               >
                 {star <= formData.rating ? "★" : "☆"}
               </button>
@@ -175,18 +177,18 @@ const AddClient = () => {
         />
 
         {/* Actions */}
-        <div className="flex gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
           <button
             type="button"
             onClick={() => navigate("/s/sales-rep/clients")}
-            className="flex-1 border py-2 rounded-lg"
+            className="w-full sm:flex-1 border py-2 rounded-lg text-sm sm:text-base"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="flex-1 bg-blue-600 text-white py-2 rounded-lg"
+            className="w-full sm:flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm sm:text-base"
           >
             {isLoading ? "Saving..." : "Save Client"}
           </button>

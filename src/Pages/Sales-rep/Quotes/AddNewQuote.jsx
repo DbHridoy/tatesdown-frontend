@@ -55,24 +55,24 @@ const AddNewQuote = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+    <div className="min-h-screen px-4 py-6 sm:px-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
         Add New Quote
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="mx-auto bg-white border rounded-lg shadow-sm p-6 space-y-8"
+        className="mx-auto w-full max-w-3xl bg-white border rounded-lg shadow-sm p-5 sm:p-6 space-y-6 sm:space-y-8"
       >
         {/* Client Selection */}
         <div>
-          <label className="block text-lg font-semibold mb-3">
+          <label className="block text-base sm:text-lg font-semibold mb-3">
             Client Selection *
           </label>
           <select
             value={selectedClient}
             onChange={(e) => setSelectedClient(e.target.value)}
-            className="w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 sm:py-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
             disabled={isLoading}
           >
             <option value="">Select a client</option>
@@ -86,7 +86,7 @@ const AddNewQuote = () => {
 
         {/* Estimated Price */}
         <div>
-          <label className="block text-lg font-semibold mb-3">
+          <label className="block text-base sm:text-lg font-semibold mb-3">
             Estimated Price *
           </label>
           <div className="relative">
@@ -102,22 +102,24 @@ const AddNewQuote = () => {
                   e.target.value === "" ? "" : Number(e.target.value)
                 )
               }
-              className="w-full rounded-lg border py-3 pl-8 pr-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full rounded-lg border py-2.5 sm:py-3 pl-8 pr-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Bid Sheet */}
         <div>
-          <label className="block text-lg font-semibold mb-3">Bid Sheet</label>
-          <label className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer block hover:border-gray-400">
+          <label className="block text-base sm:text-lg font-semibold mb-3">
+            Bid Sheet
+          </label>
+          <label className="border-2 border-dashed border-gray-300 rounded-lg p-6 sm:p-8 text-center cursor-pointer block hover:border-gray-400">
             <input
               type="file"
               hidden
               accept="image/*,.pdf"
               onChange={(e) => setFile(e.target.files[0])}
             />
-            <p className="font-medium text-gray-700">
+            <p className="font-medium text-gray-700 text-sm sm:text-base">
               Click to upload or drag and drop
             </p>
             <p className="text-sm text-gray-500 mt-1">
@@ -129,11 +131,11 @@ const AddNewQuote = () => {
 
         {/* Booked on the Spot */}
         <div>
-          <label className="block text-lg font-semibold mb-3">
+          <label className="block text-base sm:text-lg font-semibold mb-3">
             Booked on the Spot?
           </label>
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <label className="flex items-center gap-2 text-sm sm:text-base">
               <input
                 type="radio"
                 checked={bookedOnSpot === true}
@@ -141,7 +143,7 @@ const AddNewQuote = () => {
               />
               Yes
             </label>
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-sm sm:text-base">
               <input
                 type="radio"
                 checked={bookedOnSpot === false}
@@ -154,23 +156,23 @@ const AddNewQuote = () => {
 
         {/* Additional Notes */}
         <div>
-          <label className="block text-lg font-semibold mb-3">
+          <label className="block text-base sm:text-lg font-semibold mb-3">
             Additional Details
           </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows="4"
-            className="w-full px-3 py-3 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 sm:py-3 border rounded-lg resize-none text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
             placeholder="Add any additional details..."
           />
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
           <button
             type="button"
-            className="flex-1 border py-3 rounded-lg hover:bg-gray-50"
+            className="w-full sm:flex-1 border py-2.5 sm:py-3 rounded-lg text-sm sm:text-base hover:bg-gray-50"
             onClick={() => navigate(-1)}
           >
             Cancel
@@ -178,7 +180,7 @@ const AddNewQuote = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-60"
+            className="w-full sm:flex-1 bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg text-sm sm:text-base hover:bg-blue-700 disabled:opacity-60"
           >
             {isSubmitting ? "Saving..." : "Save Quote"}
           </button>

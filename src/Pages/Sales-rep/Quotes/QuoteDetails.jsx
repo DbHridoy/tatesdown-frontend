@@ -147,18 +147,20 @@ const QuoteDetails = () => {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen p-6">
-      <div className="mx-auto">
+    <div className="min-h-screen p-4 sm:p-6">
+      <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Quote Details</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+            Quote Details
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600">
             <strong>Quote ID:</strong> {customQuoteId}
           </p>
         </div>
 
         {/* Summary */}
-        <div className="bg-white border rounded-lg p-6 mb-6">
+        <div className="bg-white border rounded-lg p-4 sm:p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500">Client</p>
@@ -173,7 +175,7 @@ const QuoteDetails = () => {
                   name="estimatedPrice"
                   value={formData.estimatedPrice}
                   onChange={handleChange}
-                  className="border rounded px-3 py-2 w-full"
+                  className="border rounded px-3 py-2 w-full text-sm sm:text-base"
                 />
               ) : (
                 <p className="font-semibold text-green-600">
@@ -194,7 +196,7 @@ const QuoteDetails = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="border rounded px-3 py-2"
+                  className="border rounded px-3 py-2 text-sm sm:text-base"
                 >
                   <option value="Pending">Pending</option>
                   <option value="Approved">Approved</option>
@@ -208,7 +210,7 @@ const QuoteDetails = () => {
         </div>
 
         {/* Info */}
-        <div className="bg-white border rounded-lg p-6 mb-6">
+        <div className="bg-white border rounded-lg p-4 sm:p-6 mb-6">
 
 
           <div className="mb-4">
@@ -224,7 +226,7 @@ const QuoteDetails = () => {
                 value={formData.notes}
                 onChange={handleChange}
                 rows={4}
-                className="border rounded p-3 w-full"
+                className="border rounded p-3 w-full text-sm sm:text-base"
               />
             </div>
           ) : null}
@@ -259,7 +261,7 @@ const QuoteDetails = () => {
         </div>
 
         {/* Bid Sheet */}
-        <div className="bg-white border rounded-lg p-6 mb-6">
+        <div className="bg-white border rounded-lg p-4 sm:p-6 mb-6">
           <h3 className="font-semibold mb-3">Bid Sheet</h3>
 
           {bidSheets.length > 0 && !isEditing && (
@@ -289,6 +291,7 @@ const QuoteDetails = () => {
               <input
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
+                className="w-full text-sm sm:text-base"
                 onChange={handleBidSheetChange}
               />
 
@@ -302,19 +305,19 @@ const QuoteDetails = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           {isEditing ? (
             <>
               <button
                 onClick={handleSave}
                 disabled={isUpdating}
-                className="flex-1 bg-blue-600 text-white py-3 rounded"
+                className="w-full sm:flex-1 bg-blue-600 text-white py-2.5 sm:py-3 rounded text-sm sm:text-base"
               >
                 {isUpdating ? "Saving..." : "Save"}
               </button>
               <button
                 onClick={handleCancel}
-                className="flex-1 border py-3 rounded"
+                className="w-full sm:flex-1 border py-2.5 sm:py-3 rounded text-sm sm:text-base"
               >
                 Cancel
               </button>
@@ -329,11 +332,11 @@ const QuoteDetails = () => {
               </button> */}
               <button
                 onClick={() => setIsEditing(true)}
-                className="flex-1 border py-3 rounded"
+                className="w-full sm:flex-1 border py-2.5 sm:py-3 rounded text-sm sm:text-base"
               >
                 Edit Quote
               </button>
-              <button className="flex-1 bg-red-600 text-white py-3 rounded">
+              <button className="w-full sm:flex-1 bg-red-600 text-white py-2.5 sm:py-3 rounded text-sm sm:text-base">
                 Delete
               </button>
             </>

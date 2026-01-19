@@ -65,20 +65,22 @@ export default function SalesRepReports() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 sm:p-6">
       <div className="mb-4">
-        <h1 className="text-xl font-semibold">Reports</h1>
-        <p className="text-sm text-gray-500">Overall business stats</p>
+        <h1 className="text-xl sm:text-2xl font-semibold">Reports</h1>
+        <p className="text-sm sm:text-base text-gray-500">
+          Overall business stats
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((item) => (
           <div
             key={item.key}
-            className="rounded-xl border bg-white p-4 shadow-sm"
+            className="rounded-xl border bg-white p-4 sm:p-5 shadow-sm"
           >
             <div className="text-sm text-gray-500">{item.label}</div>
-            <div className="mt-1 text-2xl font-semibold text-gray-900">
+            <div className="mt-1 text-xl sm:text-2xl font-semibold text-gray-900">
               {formatValue(item)}
             </div>
 

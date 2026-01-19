@@ -189,9 +189,9 @@ const AdminJobDetailsPage = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Edit/Save Buttons */}
-      <div className="flex justify-end space-x-2">
+      <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
         {/* {isEditing ? (
           <>
             <button
@@ -222,8 +222,8 @@ const AdminJobDetailsPage = () => {
       {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Job Details
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -338,22 +338,22 @@ const AdminJobDetailsPage = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Sales Rep Information
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Name" value={salesRep?.fullName} />
               <InfoLine label="Email" value={salesRep?.email} />
               <InfoLine label="Phone" value={salesRep?.phoneNumber} />
               <InfoLine label="Address" value={salesRep?.address} />
             </div>
           </div>
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Production Manager Information
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Name" value={productionManager?.fullName} />
               <InfoLine label="Email" value={productionManager?.email} />
               <InfoLine label="Phone" value={productionManager?.phoneNumber} />
@@ -361,11 +361,11 @@ const AdminJobDetailsPage = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Quote Summary
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
               <InfoLine label="Status" value={quote?.status} />
               <InfoLine
@@ -374,11 +374,11 @@ const AdminJobDetailsPage = () => {
               />
             </div>
           </div>
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Client Information
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <p>
                 <span className="font-semibold">Name:</span>{" "}
                 {client?.clientName || "N/A"}
@@ -420,11 +420,13 @@ const AdminJobDetailsPage = () => {
         </div>
       </div>
 
-      <div className="p-6 bg-white shadow-md rounded-md border">
-        <div className="flex items-center justify-between gap-4 mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Assignment</h2>
+      <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+            Assignment
+          </h2>
           {isEditingAssignment ? (
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <button
                 onClick={() => {
                   setAssignedSalesRepId(
@@ -439,14 +441,14 @@ const AdminJobDetailsPage = () => {
                   );
                   setIsEditingAssignment(false);
                 }}
-                className="border px-4 py-2 rounded-md disabled:opacity-60"
+                className="w-full sm:w-auto border px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
                 disabled={isSaving}
               >
                 Cancel
               </button>
               <button
                 onClick={handleAssignmentSave}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-60"
+                className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
                 disabled={isSaving}
               >
                 Save Assignment
@@ -455,7 +457,7 @@ const AdminJobDetailsPage = () => {
           ) : (
             <button
               onClick={() => setIsEditingAssignment(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-md text-sm sm:text-base"
             >
               Edit Assignment
             </button>
@@ -467,7 +469,7 @@ const AdminJobDetailsPage = () => {
               Sales Rep
             </label>
             <select
-              className="w-full rounded-md border px-3 py-2 text-sm"
+              className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
               value={assignedSalesRepId}
               onChange={(e) => setAssignedSalesRepId(e.target.value)}
               disabled={!isEditingAssignment}
@@ -485,7 +487,7 @@ const AdminJobDetailsPage = () => {
               Production Manager
             </label>
             <select
-              className="w-full rounded-md border px-3 py-2 text-sm"
+              className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
               value={assignedProductionManagerId}
               onChange={(e) => setAssignedProductionManagerId(e.target.value)}
               disabled={!isEditingAssignment}
@@ -501,8 +503,8 @@ const AdminJobDetailsPage = () => {
         </div>
       </div>
 
-      <div className="p-6 bg-white shadow-md rounded-md border">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+      <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
           Design Consultation
         </h2>
         {job.designConsultation?.length ? (
@@ -579,7 +581,7 @@ const AdminJobDetailsPage = () => {
 };
 
 const InfoLine = ({ label, value }) => (
-  <p>
+  <p className="text-sm sm:text-base">
     <span className="font-semibold">{label}:</span>{" "}
     {value !== undefined && value !== null && value !== "" ? value : "N/A"}
   </p>
@@ -600,7 +602,7 @@ const InfoField = ({
     {isEditing && !readOnly ? (
       asSelect ? (
         <select
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
         >
@@ -613,13 +615,13 @@ const InfoField = ({
       ) : (
         <input
           type={type}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
         />
       )
     ) : (
-      <div className="rounded-md border px-3 py-2 text-sm text-gray-800">
+      <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
         {value !== undefined && value !== null && value !== ""
           ? value
           : "N/A"}

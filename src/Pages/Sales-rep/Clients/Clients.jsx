@@ -111,8 +111,12 @@ function Clients() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6">
         <div className="mb-3 md:mb-0">
-          <h1 className="text-2xl font-semibold">My Clients</h1>
-          <p className="text-gray-500">Overview of your clients</p>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
+            My Clients
+          </h1>
+          <p className="text-sm sm:text-base text-gray-500">
+            Overview of your clients
+          </p>
         </div>
       </div>
       <DataTable title="Clients" data={clients || []} config={tableConfig} />

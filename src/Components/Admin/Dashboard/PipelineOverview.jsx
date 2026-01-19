@@ -28,14 +28,16 @@ export default function PipelineOverview() {
   ];
 
   return (
-    <div className="w-full p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="w-full p-4 sm:p-6 lg:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
       <div>
-        <h1 className="mb-1 text-2xl font-semibold text-gray-900">
+        <h1 className="mb-1 text-xl sm:text-2xl font-semibold text-gray-900">
           Pipeline Overview
         </h1>
-        <p className="mb-2 text-sm text-gray-600">Job status progression</p>
+        <p className="mb-2 text-sm sm:text-base text-gray-600">
+          Job status progression
+        </p>
 
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height={320}>
           <BarChart
             data={data}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}

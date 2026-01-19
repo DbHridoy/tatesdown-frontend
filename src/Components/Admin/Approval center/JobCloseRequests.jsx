@@ -44,7 +44,7 @@ function JobCloseRequests() {
         modalMessage: (item) =>
           `Are you sure you want to approve ${item.fullName}?`,
         onConfirm: (item) =>
-          changeJobStatus({ id: item.id, status: "Approved" }),
+          changeJobStatus({ id: item._id, status: "Closed" }),
       },
       {
         label: "Reject",

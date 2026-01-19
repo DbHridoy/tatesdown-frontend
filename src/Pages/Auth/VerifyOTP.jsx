@@ -77,18 +77,22 @@ const VerifyOtp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10 sm:px-6">
       <div className="w-full max-w-md mx-auto">
         <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8">
           {/* Header */}
           <div className="mb-8">
             <div className="flex justify-center mb-6">
-              <img src={brandLogo} alt="Brand Logo" className="w-24 h-24" />
+              <img
+                src={brandLogo}
+                alt="Brand Logo"
+                className="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32"
+              />
             </div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-2 text-center">
               Verify Code
             </h2>
-            <p className="text-center text-gray-600">
+            <p className="text-center text-sm sm:text-base text-gray-600">
               Enter the verification code sent to {email}
             </p>
           </div>
@@ -96,7 +100,7 @@ const VerifyOtp = () => {
           {/* OTP Inputs */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div
-              className="flex flex-row gap-2 items-center justify-center"
+              className="flex flex-row gap-2 sm:gap-3 items-center justify-center"
               onPaste={handlePaste}
             >
               {otp.map((digit, index) => (
@@ -108,7 +112,7 @@ const VerifyOtp = () => {
                   value={digit}
                   onChange={(e) => handleChange(e.target, index)}
                   onKeyDown={(e) => handleKeyDown(e)}
-                  className="w-12 h-12 text-center text-lg px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-[#FFD1E8] focus:border-[#FFD1E8]"
+                  className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 text-center text-base sm:text-lg px-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-[#FFD1E8] focus:border-[#FFD1E8]"
                   required
                 />
               ))}
@@ -122,7 +126,7 @@ const VerifyOtp = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer font-medium transition-colors disabled:opacity-50"
+              className="w-full h-11 sm:h-12 bg-[#007CCD] text-white px-4 rounded-lg cursor-pointer text-sm sm:text-base font-medium transition-colors disabled:opacity-50"
             >
               {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
@@ -131,7 +135,7 @@ const VerifyOtp = () => {
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="w-full h-12 px-4 rounded-lg border border-gray-300 flex items-center justify-center gap-2 cursor-pointer text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full h-11 sm:h-12 px-4 rounded-lg border border-gray-300 flex items-center justify-center gap-2 cursor-pointer text-gray-700 text-sm sm:text-base hover:bg-gray-50 transition-colors"
             >
               <HugeiconsIcon icon={ArrowLeft02Icon} />
               <span className="font-medium">Back to Login</span>

@@ -107,42 +107,46 @@ const ViewUser = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">User Details</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+            User Details
+          </h2>
+          <p className="text-sm sm:text-base text-gray-500">
             Manage basic account information.
           </p>
         </div>
         <button
           onClick={() => navigate(-1)}
-          className="px-3 py-2 border rounded-md text-sm"
+          className="w-full sm:w-auto px-3 py-2 border rounded-md text-sm sm:text-base"
         >
           Back
         </button>
       </div>
 
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Personal Info</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+            Personal Info
+          </h3>
+          <p className="text-sm sm:text-base text-gray-500">
             Review and update core contact details.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           {isEditing ? (
             <>
               <button
                 onClick={handleCancel}
-                className="px-3 py-2 border rounded-md text-sm"
+                className="w-full sm:w-auto px-3 py-2 border rounded-md text-sm sm:text-base"
                 disabled={isSaving}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm disabled:opacity-60"
+                className="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded-md text-sm sm:text-base disabled:opacity-60"
                 disabled={isSaving}
               >
                 Save
@@ -151,7 +155,7 @@ const ViewUser = () => {
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm"
+              className="w-full sm:w-auto px-3 py-2 bg-blue-600 text-white rounded-md text-sm sm:text-base"
             >
               Edit
             </button>
@@ -205,8 +209,10 @@ const ViewUser = () => {
 
       <div className="border-t pt-6">
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Role Stats</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+            Role Stats
+          </h3>
+          <p className="text-sm sm:text-base text-gray-500">
             Performance metrics for {user?.role ?? "this role"}.
           </p>
         </div>
@@ -226,7 +232,7 @@ const ViewUser = () => {
                 className="rounded-xl border bg-white p-4 shadow-sm"
               >
                 <div className="text-sm text-gray-500">{item.label}</div>
-                <div className="mt-1 text-xl font-semibold text-gray-900">
+                <div className="mt-1 text-lg sm:text-xl font-semibold text-gray-900">
                   {formatValue(item)}
                 </div>
               </div>
@@ -252,7 +258,7 @@ const InfoField = ({
     {isEditing ? (
       asSelect ? (
         <select
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value)}
         >
@@ -266,13 +272,13 @@ const InfoField = ({
       ) : (
         <input
           type={type}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
       )
     ) : (
-      <div className="rounded-md border px-3 py-2 text-sm text-gray-800">
+      <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
         {value || "N/A"}
       </div>
     )}
@@ -282,7 +288,7 @@ const InfoField = ({
 const DisplayField = ({ label, value }) => (
   <div className="space-y-1">
     <div className="text-sm font-medium text-gray-700">{label}</div>
-    <div className="rounded-md border px-3 py-2 text-sm text-gray-800">
+    <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
       {value || "N/A"}
     </div>
   </div>

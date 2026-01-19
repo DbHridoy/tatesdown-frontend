@@ -68,7 +68,7 @@ export default function JobOverview() {
   return (
     <div className="bg-white">
       {/* Header */}
-      <div className="px-6 py-3 border-b border-gray-200 flex items-center gap-2">
+      <div className="px-4 sm:px-6 py-3 border-b border-gray-200 flex items-center gap-2">
         <button
           className="text-gray-600 hover:text-gray-900"
           onClick={() => navigate(-1)}
@@ -76,24 +76,24 @@ export default function JobOverview() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-lg font-semibold text-gray-900">
+          <h1 className="text-base sm:text-lg font-semibold text-gray-900">
             Job Overview - {job?.customJobId}
           </h1>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs sm:text-sm text-gray-500">
             View and edit updates here only.
           </p>
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Job Overview & Status */}
         <div className="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
           {/* Job Overview */}
-          <div className="p-5 bg-white border border-gray-300 rounded lg:col-span-2">
+          <div className="p-4 sm:p-5 bg-white border border-gray-300 rounded lg:col-span-2">
             <h2 className="mb-4 text-base font-semibold text-gray-900">
               Job Overview
             </h2>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
               <div>
                 <p className="mb-1 text-xs text-gray-500">Job ID</p>
                 <p className="text-sm font-medium text-gray-900">
@@ -134,7 +134,7 @@ export default function JobOverview() {
           </div>
 
           {/* Job Status */}
-          <div className="p-5 bg-white border border-gray-300 rounded">
+          <div className="p-4 sm:p-5 bg-white border border-gray-300 rounded">
             <h2 className="mb-4 text-base font-semibold text-gray-900">
               Job Status
             </h2>
@@ -143,7 +143,7 @@ export default function JobOverview() {
                 <select
                   value={currentStatus || job?.status}
                   onChange={(e) => setCurrentStatus(e.target.value)}
-                  className="w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 text-sm sm:text-base text-gray-900 bg-white border border-gray-300 rounded appearance-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option>{job?.status}</option>
                   <option>Scheduled</option>
@@ -157,14 +157,14 @@ export default function JobOverview() {
 
               <button
                 onClick={() => changeStatusHandler(currentStatus)}
-                className="w-full flex justify-center items-center gap-x-2 bg-blue-400 hover:bg-blue-500 font-medium py-2.5 rounded text-sm transition-colors"
+                className="w-full flex justify-center items-center gap-x-2 bg-blue-400 hover:bg-blue-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
               >
                 Change Status
               </button>
 
               <button
                 onClick={() => changeStatusHandler("Pending Close")}
-                className="w-full flex justify-center items-center gap-x-2 bg-yellow-400 hover:bg-yellow-500 font-medium py-2.5 rounded text-sm transition-colors"
+                className="w-full flex justify-center items-center gap-x-2 bg-yellow-400 hover:bg-yellow-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
               >
                 <FaHourglass /> Mark as Pending Close
               </button>
@@ -175,7 +175,7 @@ export default function JobOverview() {
         {/* Notes & Design Consultation */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Notes */}
-          <div className="p-5 bg-white border border-gray-300 rounded lg:col-span-2">
+          <div className="p-4 sm:p-5 bg-white border border-gray-300 rounded lg:col-span-2">
             <h2 className="mb-4 text-base font-semibold text-gray-900">
               Notes & Progress Updates
             </h2>
@@ -188,19 +188,19 @@ export default function JobOverview() {
                 value={noteText}
                 onChange={(e) => setNoteText(e.target.value)}
                 placeholder="Enter note"
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded resize-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded resize-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 rows="2"
               />
               <input
                 type="file"
                 onChange={(e) => setFile(e.target.files[0])}
-                className="mt-2 text-sm"
+                className="mt-2 text-sm sm:text-base"
               />
             </div>
 
             <button
               onClick={addNoteHandler}
-              className="flex items-center gap-2 px-3 py-2 bg-[#B0D6F0] rounded text-sm font-medium mb-5"
+              className="flex items-center gap-2 px-3 py-2 bg-[#B0D6F0] rounded text-sm sm:text-base font-medium mb-5"
             >
               <Plus className="w-4 h-4" /> Add Note
             </button>
@@ -269,7 +269,7 @@ export default function JobOverview() {
           </div>
 
           {/* Design Consultation Section */}
-          <div className="p-5 bg-white border border-gray-300 rounded">
+          <div className="p-4 sm:p-5 bg-white border border-gray-300 rounded">
             <h2 className="mb-4 text-base font-semibold text-gray-900">
               Design Consultation
             </h2>

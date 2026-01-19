@@ -80,24 +80,24 @@ const DataTable = ({ title, data = [], config = {} }) => {
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
       {title && (
-        <div className="px-6 py-4 border-b flex justify-between items-center">
-          <h2 className="text-xl font-bold">{title}</h2>
+        <div className="px-4 sm:px-6 py-4 border-b flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+          <h2 className="text-lg sm:text-xl font-bold">{title}</h2>
           <input
             type="text"
             placeholder="Search..."
             onChange={(e) => onSearch?.(e.target.value)}
-            className="px-3 py-2 border rounded-lg"
+            className="w-full sm:w-64 px-3 py-2 border rounded-lg text-sm sm:text-base"
           />
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 p-4 border-b">
+      <div className="flex flex-wrap gap-3 px-4 sm:px-6 py-4 border-b">
         {filters.map((f) => (
           <select
             key={f.accessor}
             onChange={(e) => onFilterChange?.(f.accessor, e.target.value)}
-            className="px-3 py-2 border rounded-lg"
+            className="w-full sm:w-auto px-3 py-2 border rounded-lg text-sm sm:text-base"
           >
             <option value="">{f.label}</option>
             {Object.entries(f.options).map(([label, value]) => (
@@ -123,8 +123,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
                   <th
                     key={col.accessor}
                     onClick={() => col.sortable && handleSort(col)}
-                    className={`px-4 py-3 text-center align-middle text-sm font-semibold ${col.sortable ? "cursor-pointer" : ""
-                      }`}
+                    className={`px-3 sm:px-4 py-3 text-center align-middle text-xs sm:text-sm font-semibold ${
+                      col.sortable ? "cursor-pointer" : ""
+                    }`}
                   >
                     {col.label}
                     {col.sortable &&
@@ -133,7 +134,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                   </th>
                 ))}
                 {actions.length > 0 && (
-                  <th className="px-4 py-3 text-center align-middle text-sm font-semibold">
+                  <th className="px-3 sm:px-4 py-3 text-center align-middle text-xs sm:text-sm font-semibold">
                     Actions
                   </th>
                 )}
@@ -157,8 +158,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
                     return (
                       <td key={col.accessor}>
                         <div
-                          className={`text-center align-middle text-sm ${col.colorMap?.[value] || ""
-                            }`}
+                          className={`text-center align-middle text-xs sm:text-sm ${
+                            col.colorMap?.[value] || ""
+                          }`}
                         >
                           {value}
                         </div>
@@ -167,7 +169,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                   })}
 
                   {actions.length > 0 && (
-                    <td className="px-4 py-3 flex justify-center items-center space-x-2">
+                    <td className="px-3 sm:px-4 py-3 flex flex-wrap justify-center items-center gap-2">
                       {actions.map((action, i) => (
                         <button
                           key={i}
@@ -190,23 +192,23 @@ const DataTable = ({ title, data = [], config = {} }) => {
       )}
 
       {/* Pagination */}
-      <div className="px-6 py-4 border-t flex justify-between items-center">
-        <span className="text-sm text-gray-600">
+      <div className="px-4 sm:px-6 py-4 border-t flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+        <span className="text-xs sm:text-sm text-gray-600">
           Page {currentPage} of {totalPages || 0}
         </span>
 
-        <div className="space-x-2">
+        <div className="flex w-full sm:w-auto gap-2 justify-between sm:justify-end">
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-2 border rounded text-xs sm:text-sm disabled:opacity-50"
           >
             Prev
           </button>
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="px-3 py-2 border rounded text-xs sm:text-sm disabled:opacity-50"
           >
             Next
           </button>

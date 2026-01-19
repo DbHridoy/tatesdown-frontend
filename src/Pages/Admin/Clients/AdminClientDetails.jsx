@@ -131,15 +131,17 @@ const AdminClientDetails = () => {
 
   /* -------------------- Render -------------------- */
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold">{client.clientName}</h1>
-          <p className="text-gray-500">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+            {client.clientName}
+          </h1>
+          <p className="text-sm sm:text-base text-gray-500">
             Client ID: {client.customClientId || "—"}
           </p>
-          <p className="text-gray-500">
+          <p className="text-sm sm:text-base text-gray-500">
             Created At:{" "}
             {client.createdAt
               ? new Date(client.createdAt).toLocaleDateString()
@@ -150,21 +152,21 @@ const AdminClientDetails = () => {
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded"
           >
             Edit
           </button>
         ) : (
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={handleSaveClient}
-              className="px-4 py-2 bg-green-600 text-white rounded"
+              className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded"
             >
               Save
             </button>
             <button
               onClick={handleCancelEdit}
-              className="px-4 py-2 bg-gray-500 text-white rounded"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-500 text-white rounded"
             >
               Cancel
             </button>
@@ -173,28 +175,30 @@ const AdminClientDetails = () => {
       </div>
 
       {/* Client Information */}
-      <div className="bg-white p-6 rounded shadow space-y-4">
+      <div className="bg-white p-4 sm:p-6 rounded shadow space-y-4">
         <h3 className="font-semibold">Client Information</h3>
 
-        {[
-          ["Name", "clientName"],
-          ["Email", "email"],
-          ["Phone", "phoneNumber"],
-          ["Address", "address"],
-        ].map(([label, field]) => (
-          <div key={field}>
-            <label className="block text-sm font-medium mb-1">{label}</label>
-            <input
-              type="text"
-              value={form[field]}
-              disabled={!isEditing}
-              onChange={(e) => handleChange(field, e.target.value)}
-              className={`w-full p-2 border rounded ${
-                !isEditing ? "bg-gray-100" : ""
-              }`}
-            />
-          </div>
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ["Name", "clientName"],
+            ["Email", "email"],
+            ["Phone", "phoneNumber"],
+            ["Address", "address"],
+          ].map(([label, field]) => (
+            <div key={field} className="sm:col-span-1">
+              <label className="block text-sm font-medium mb-1">{label}</label>
+              <input
+                type="text"
+                value={form[field]}
+                disabled={!isEditing}
+                onChange={(e) => handleChange(field, e.target.value)}
+                className={`w-full p-2 border rounded text-sm sm:text-base ${
+                  !isEditing ? "bg-gray-100" : ""
+                }`}
+              />
+            </div>
+          ))}
+        </div>
 
         {/* Lead Source */}
         <div>
@@ -203,7 +207,7 @@ const AdminClientDetails = () => {
             value={form.leadSource}
             disabled={!isEditing}
             onChange={(e) => handleChange("leadSource", e.target.value)}
-            className={`w-full border px-3 py-2 rounded ${
+            className={`w-full border px-3 py-2 rounded text-sm sm:text-base ${
               !isEditing ? "bg-gray-100" : ""
             }`}
           >
@@ -219,14 +223,16 @@ const AdminClientDetails = () => {
         {/* Rating */}
         <div>
           <label className="block text-sm font-medium mb-2">Lead Rating</label>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
                 disabled={!isEditing}
                 onClick={() => handleChange("rating", star)}
-                className={`text-2xl ${!isEditing ? "cursor-not-allowed" : ""}`}
+                className={`text-xl sm:text-2xl ${
+                  !isEditing ? "cursor-not-allowed" : ""
+                }`}
               >
                 {star <= form.rating ? "★" : "☆"}
               </button>
@@ -237,7 +243,7 @@ const AdminClientDetails = () => {
       </div>
 
       {/* Call History */}
-      <div className="bg-white p-6 rounded shadow space-y-3">
+      <div className="bg-white p-4 sm:p-6 rounded shadow space-y-3">
         <h3 className="font-semibold">Call History</h3>
 
         {client.callLogs?.length === 0 && (
@@ -246,7 +252,7 @@ const AdminClientDetails = () => {
 
         {client.callLogs?.map((log) => (
           <div key={log._id} className="border-b pb-2">
-            <div className="flex justify-between">
+            <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
               <span>{log.status}</span>
               <span className="text-sm text-gray-500">
                 {new Date(log.callAt).toLocaleDateString()}
@@ -265,31 +271,32 @@ const AdminClientDetails = () => {
 
         <button
           onClick={() => setShowCallModal(true)}
-          className="w-full border-dashed border p-2 rounded text-gray-600"
+          className="w-full border-dashed border p-2 rounded text-sm sm:text-base text-gray-600"
         >
           Add Call Log
         </button>
       </div>
 
       {/* Notes */}
-      <div className="bg-white p-6 rounded shadow space-y-4">
+      <div className="bg-white p-4 sm:p-6 rounded shadow space-y-4">
         <h3 className="font-semibold">Notes & Attachments</h3>
 
         <textarea
           value={noteText}
           onChange={(e) => setNoteText(e.target.value)}
           placeholder="Add note..."
-          className="w-full border p-2 rounded"
+          className="w-full border p-2 rounded text-sm sm:text-base"
         />
 
         <input
           type="file"
+          className="w-full text-sm sm:text-base"
           onChange={(e) => setNoteFile(e.target.files?.[0] || null)}
         />
 
         <button
           onClick={handleAddNote}
-          className="w-full bg-gray-100 p-2 rounded"
+          className="w-full bg-gray-100 p-2 rounded text-sm sm:text-base"
         >
           Add Note
         </button>
@@ -309,7 +316,7 @@ const AdminClientDetails = () => {
                       <img
                         src={note.file}
                         alt="Attachment"
-                        className="max-w-xs rounded border"
+                        className="max-w-full sm:max-w-xs rounded border"
                       />
                     ) : (
                       <a

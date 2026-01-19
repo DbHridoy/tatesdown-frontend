@@ -32,17 +32,21 @@ const RepDetails = () => {
   const totalDeductions = deductionData?.data || 0;
 
   return (
-    <div className="min-h-screen p-6 text-gray-800 bg-gray-100">
+    <div className="min-h-screen p-4 sm:p-6 text-gray-800 bg-gray-100">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold">View Details - Rep A</h1>
+        <h1 className="text-lg sm:text-xl font-semibold">
+          View Details - Rep A
+        </h1>
       </div>
 
       {/* Summary */}
       <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3">
         <div className="p-4 bg-white rounded-lg shadow">
           <p>Total Earned</p>
-          <h2 className="text-2xl font-bold">${totalEarnings}</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">
+            ${totalEarnings}
+          </h2>
         </div>
         {/* <div className="p-4 bg-white rounded-lg shadow">
           <p>Total Deductions</p>
@@ -50,7 +54,7 @@ const RepDetails = () => {
         </div> */}
         <div className="p-4 bg-white rounded-lg shadow">
           <p>Mileage Deductions</p>
-          <h2 className="text-2xl font-bold text-blue-500">
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-500">
             ${totalDeductions}
           </h2>
         </div>
@@ -61,44 +65,50 @@ const RepDetails = () => {
 
       {/* Payment History */}
       <div className="p-4 mb-6 bg-white rounded-lg shadow">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold">Payment History</h3>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+          <h3 className="text-base sm:text-lg font-semibold">
+            Payment History
+          </h3>
           <button
             onClick={() => setAddPaymentModal(true)}
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg"
+            className="w-full sm:w-auto px-4 py-2 text-white bg-blue-600 rounded-lg text-sm sm:text-base"
           >
             + Add Payment
           </button>
         </div>
 
-        <table className="w-full mb-3 text-left">
-          <thead>
-            <tr className="border-b">
-              <th className="py-2">Payment Amount</th>
-              <th>Date Paid</th>
-              <th>Remaining Owed</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              { amount: "$300.00", date: "12/05/2025", owed: "$450.00" },
-              { amount: "$300.00", date: "12/05/2025", owed: "$450.00" },
-            ].map((p, i) => (
-              <tr key={i} className="border-b last:border-none">
-                <td className="py-2 font-semibold text-blue-600">{p.amount}</td>
-                <td>{p.date}</td>
-                <td>{p.owed}</td>
-                <td className="flex gap-2 text-red-500">
-                  <button>✎</button>
-                  <button>🗑</button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-max w-full mb-3 text-left text-sm sm:text-base">
+            <thead>
+              <tr className="border-b">
+                <th className="py-2">Payment Amount</th>
+                <th>Date Paid</th>
+                <th>Remaining Owed</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {[
+                { amount: "$300.00", date: "12/05/2025", owed: "$450.00" },
+                { amount: "$300.00", date: "12/05/2025", owed: "$450.00" },
+              ].map((p, i) => (
+                <tr key={i} className="border-b last:border-none">
+                  <td className="py-2 font-semibold text-blue-600">
+                    {p.amount}
+                  </td>
+                  <td>{p.date}</td>
+                  <td>{p.owed}</td>
+                  <td className="flex gap-2 text-red-500">
+                    <button>✎</button>
+                    <button>🗑</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        <div className="flex justify-between text-sm">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm">
           <p>
             Total Payments Made:{" "}
             <span className="font-semibold text-green-600">$400.00</span>

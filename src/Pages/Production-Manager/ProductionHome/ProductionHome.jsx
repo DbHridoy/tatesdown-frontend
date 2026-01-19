@@ -7,7 +7,7 @@ const ProductionHome = () => {
   const stats = data?.data;
 
   return (
-    <div>
+    <div className="p-4 sm:p-6 space-y-6">
       <DashboardOverview
         isLoading={isLoading}
         error={isError ? "Failed to load stats" : ""}

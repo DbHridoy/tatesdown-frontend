@@ -11,7 +11,7 @@ const Dashboard = () => {
   const stats = data?.data;
 
   return (
-    <div>
+    <div className="p-4 sm:p-6 space-y-6">
       <CardData stats={stats} isLoading={isLoading} isError={isError} />
       <SalesRepLeaderboard/>
       <PipelineOverview/>

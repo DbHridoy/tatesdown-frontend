@@ -40,8 +40,12 @@ const SalesRepHome = () => {
   return (
     <>
       <div>
-        <h1 className="text-2xl font-semibold">Sales Dashboard</h1>
-        <p className="text-gray-500">Overview of your sales performance</p>
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
+          Sales Dashboard
+        </h1>
+        <p className="text-sm sm:text-base text-gray-500">
+          Overview of your sales performance
+        </p>
       </div>
       {/* Cards overview */}
       <SalesRepHomeCards cards={cards} />

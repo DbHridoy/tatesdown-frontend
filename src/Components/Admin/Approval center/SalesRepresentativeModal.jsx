@@ -64,12 +64,14 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-md rounded-xl p-6 shadow-lg">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white w-full max-w-md rounded-xl p-5 sm:p-6 shadow-lg">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Sales Representative</h2>
+          <h2 className="text-lg sm:text-xl font-semibold">
+            Sales Representative
+          </h2>
           <button onClick={onClose} className="text-gray-500 hover:text-black">
             ✕
           </button>
@@ -80,7 +82,7 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
           <select
             value={selectedCluster}
             onChange={(e) => setSelectedCluster(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg bg-gray-100"
+            className="w-full px-3 py-2 border rounded-lg bg-gray-100 text-sm sm:text-base"
           >
             <option value="All Clusters">All Clusters</option>
             {clusters.map((cluster) => (
@@ -95,7 +97,7 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
             placeholder="Search sales rep..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg bg-gray-100"
+            className="w-full px-3 py-2 border rounded-lg bg-gray-100 text-sm sm:text-base"
           />
         </div>
 
@@ -108,12 +110,14 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
                 onClick={() => handleAssignSalesRep(rep)}
                 className="p-3 rounded-md border hover:bg-gray-100 cursor-pointer"
               >
-                <p className="font-medium">{rep.fullName}</p>
+                <p className="font-medium text-sm sm:text-base">
+                  {rep.fullName}
+                </p>
                 <p className="text-sm text-gray-500">{rep.email}</p>
               </div>
             ))
           ) : (
-            <p className="text-gray-500 text-center py-4">
+            <p className="text-gray-500 text-center py-4 text-sm sm:text-base">
               No representatives found.
             </p>
           )}

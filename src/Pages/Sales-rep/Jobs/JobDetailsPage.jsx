@@ -115,7 +115,7 @@ const JobDetailsPage = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex justify-end space-x-2">
         {/* {isEditing ? (
@@ -148,8 +148,8 @@ const JobDetailsPage = () => {
       {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Job Details
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -250,11 +250,11 @@ const JobDetailsPage = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Sales Rep Information
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Name" value={salesRep?.fullName} />
               <InfoLine label="Email" value={salesRep?.email} />
               <InfoLine label="Phone" value={salesRep?.phoneNumber} />
@@ -262,11 +262,11 @@ const JobDetailsPage = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Quote Summary
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
               <InfoLine label="Status" value={quote?.status} />
               <InfoLine
@@ -275,11 +275,11 @@ const JobDetailsPage = () => {
               />
             </div>
           </div>
-          <div className="p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Client Information
             </h2>
-            <div className="space-y-2 text-gray-700">
+            <div className="space-y-2 text-sm sm:text-base text-gray-700">
               <p>
                 <span className="font-semibold">Name:</span>{" "}
                 {client?.clientName || "N/A"}
@@ -350,7 +350,7 @@ const JobDetailsPage = () => {
 };
 
 const InfoLine = ({ label, value }) => (
-  <p>
+  <p className="text-sm sm:text-base">
     <span className="font-semibold">{label}:</span> {value || "N/A"}
   </p>
 );
@@ -370,7 +370,7 @@ const InfoField = ({
     {isEditing && !readOnly ? (
       asSelect ? (
         <select
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
         >
@@ -383,13 +383,13 @@ const InfoField = ({
       ) : (
         <input
           type={type}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
           value={value ?? ""}
           onChange={(e) => onChange?.(e.target.value)}
         />
       )
     ) : (
-      <div className="rounded-md border px-3 py-2 text-sm text-gray-800">
+      <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
         {value !== undefined && value !== null && value !== ""
           ? value
           : "N/A"}

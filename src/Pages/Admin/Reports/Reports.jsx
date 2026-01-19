@@ -80,7 +80,7 @@ const Reports = () => {
     navigate(`/s/admin/reports-details/${id}`);
   };
   return (
-    <div>
+    <div className="p-4 sm:p-6">
       <DataTable title="Sales Reps" data={salesRep} config={tableConfig} />
     </div>
   );

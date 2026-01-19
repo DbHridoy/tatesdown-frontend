@@ -41,7 +41,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
   return (
     <div className="space-y-3">
       <input
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded text-sm sm:text-base"
         placeholder="Full Name"
         value={formUser.fullName}
         onChange={(e) =>
@@ -50,7 +50,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
       />
 
       <input
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded text-sm sm:text-base"
         placeholder="Email"
         type="email"
         value={formUser.email}
@@ -60,7 +60,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
       />
 
       <select
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded text-sm sm:text-base"
         value={formUser.role}
         onChange={(e) =>
           setFormUser({ ...formUser, role: e.target.value, cluster: "" })
@@ -76,7 +76,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
         <div className="space-y-2">
           <div className="flex gap-2">
             <select
-              className="flex-1 p-2 border rounded"
+              className="flex-1 p-2 border rounded text-sm sm:text-base"
               value={formUser.cluster}
               onChange={(e) =>
                 setFormUser({ ...formUser, cluster: e.target.value })
@@ -94,7 +94,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
             <button
               type="button"
               onClick={() => setShowAddCluster((prev) => !prev)}
-              className="px-3 border rounded bg-gray-100 hover:bg-gray-200"
+              className="px-3 border rounded bg-gray-100 hover:bg-gray-200 text-sm sm:text-base"
             >
               + Add
             </button>
@@ -103,7 +103,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
           {showAddCluster && (
             <div className="flex gap-2">
               <input
-                className="flex-1 p-2 border rounded"
+                className="flex-1 p-2 border rounded text-sm sm:text-base"
                 placeholder="New cluster name"
                 value={newCluster}
                 onChange={(e) => setNewCluster(e.target.value)}
@@ -112,7 +112,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
                 type="button"
                 onClick={handleAddCluster}
                 disabled={isCreating}
-                className="px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                className="px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm sm:text-base"
               >
                 Save
               </button>
@@ -124,7 +124,7 @@ const UserForm = ({ formUser, setFormUser, isAdd }) => {
       {isAdd && (
         <input
           type="password"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded text-sm sm:text-base"
           placeholder="Password"
           value={formUser.password}
           onChange={(e) =>
