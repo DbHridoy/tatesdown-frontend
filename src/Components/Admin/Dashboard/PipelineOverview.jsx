@@ -8,35 +8,60 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import PeriodFilter from "../../Common/PeriodFilter";
+import { useGetSummaryStatsQuery } from "../../../redux/api/common";
+import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
+import { useState } from "react";
 
 export default function PipelineOverview() {
+  const [periodType, setPeriodType] = useState("month");
+  const [dateInput, setDateInput] = useState(getDefaultPeriodInput("month"));
+  const { data: summaryStatsData, isLoading } = useGetSummaryStatsQuery({
+    periodType,
+    date: normalizePeriodDate(periodType, dateInput),
+  });
+  const summaryStats = summaryStatsData?.data || {};
   const data = [
-    { name: "New Leads", value:0, color: "#0EA5E9" },
-    { name: "Quotes", value:0 , color: "#7DD3FC" },
-    { name: "Dc Pending", value:  0, color: "#F59E0B" },
+    { name: "Clients", value: summaryStats.totalClients ?? 0, color: "#0EA5E9" },
+    { name: "Quotes", value: summaryStats.totalQuotes ?? 0, color: "#7DD3FC" },
+    { name: "Jobs", value: summaryStats.totalJobs ?? 0, color: "#F59E0B" },
     {
-      name: "Ready",
-      value:  0,
+      name: "Scheduled",
+      value: summaryStats.scheduledJobs ?? 0,
       color: "#FCD34D",
     },
     {
-      name: "Scheduled",
-      value: 0,
+      name: "Pending Close",
+      value: summaryStats.pendingCloseJobs ?? 0,
       color: "#8B5CF6",
     },
-    { name: "Closed", value: 0, color: "#6B7280" },
+    { name: "Closed", value: summaryStats.closedJobs ?? 0, color: "#6B7280" },
   ];
 
   return (
     <div className="w-full p-4 sm:p-6 lg:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
-      <div>
-        <h1 className="mb-1 text-xl sm:text-2xl font-semibold text-gray-900">
-          Pipeline Overview
-        </h1>
-        <p className="mb-2 text-sm sm:text-base text-gray-600">
-          Job status progression
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div>
+          <h1 className="mb-1 text-xl sm:text-2xl font-semibold text-gray-900">
+            Pipeline Overview
+          </h1>
+          <p className="mb-2 text-sm sm:text-base text-gray-600">
+            Job status progression
+          </p>
+        </div>
+        <PeriodFilter
+          label="Summary"
+          periodType={periodType}
+          dateValue={dateInput}
+          onPeriodTypeChange={(value) => {
+            setPeriodType(value);
+            setDateInput(getDefaultPeriodInput(value));
+          }}
+          onDateChange={setDateInput}
+        />
+      </div>
 
+      <div className="mt-4">
         <ResponsiveContainer width="100%" height={320}>
           <BarChart
             data={data}

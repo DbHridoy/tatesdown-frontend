@@ -39,6 +39,19 @@ const commonApi = baseApi.injectEndpoints({
       providesTags: ["LeaderBoard"],
     }),
 
+    getSummaryStats: builder.query({
+      query: ({ periodType, date } = {}) => {
+        const params = new URLSearchParams();
+        if (periodType) params.set("periodType", periodType);
+        if (date) params.set("date", date);
+        const query = params.toString();
+        return query
+          ? `/common/summary-stats?${query}`
+          : "/common/summary-stats";
+      },
+      providesTags: ["Stats"],
+    }),
+
     getNotifications: builder.query({
       query: () => "/common/my-notifications",
       providesTags: ["User"],
@@ -92,6 +105,7 @@ export const {
   useUpsertVariableMutation,
   useGetVariablesQuery,
   useGetLeaderBoardQuery,
+  useGetSummaryStatsQuery,
   useCreateFiscalYearMutation,
   useGetFiscalYearQuery,
   useGetMyStatsQuery,
