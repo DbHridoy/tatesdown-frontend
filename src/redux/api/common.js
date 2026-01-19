@@ -84,7 +84,7 @@ const commonApi = baseApi.injectEndpoints({
 
     updatePayment: builder.mutation({
       query: ({ paymentId, ...body }) => ({
-        url: `/payments/${paymentId}`,
+        url: `/common/payments/${paymentId}`,
         method: "PATCH",
         body,
       }),
@@ -93,7 +93,7 @@ const commonApi = baseApi.injectEndpoints({
 
     deletePayment: builder.mutation({
       query: (paymentId) => ({
-        url: `/payments/${paymentId}`,
+        url: `/common/payments/${paymentId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Payment"],

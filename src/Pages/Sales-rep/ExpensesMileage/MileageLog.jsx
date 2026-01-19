@@ -1,23 +1,32 @@
 import { useState } from "react";
 import AddExpense from "../../../Components/Sales-rep/Expenses/AddExpense";
 import ExpenseCard from "../../../Components/Sales-rep/Expenses/ExpenseCard";
-import { useGetMyMileageLogsQuery } from "../../../redux/api/expenseApi";
+import { useGetAllMileageLogsQuery } from "../../../redux/api/expenseApi";
 import DataTable from "../../../Components/Common/DataTable";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 function UserExpenses() {
+  const user = useSelector(selectCurrentUser);
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
     search: "",
     sortKey: "fullName",
     sortOrder: "asc",
-    filters: { role: "" },
+    filters: { salesRepId: user?._id },
   });
-  const { data: mileageLogs } = useGetMyMileageLogsQuery(params);
+  const { data: mileageLogs } = useGetAllMileageLogsQuery(params);
 
   const mileageLogsData = mileageLogs?.data ?? [];
-  const totalMiles = mileageLogs?.totalMilesDriven ?? 0;
-  const totalDeduction = mileageLogs?.totalDeduction ?? 0;
+  const totalMiles = mileageLogsData.reduce(
+    (sum, log) => sum + (Number(log.totalMilesDriven) || 0),
+    0
+  );
+  const totalDeduction = mileageLogsData.reduce(
+    (sum, log) => sum + (Number(log.deduction) || 0),
+    0
+  );
 
   const totalItems = mileageLogs?.total ?? 0;
 
@@ -35,6 +44,7 @@ function UserExpenses() {
     itemsPerPage: params.limit,
     sortKey: params.sortKey,
     sortOrder: params.sortOrder,
+    showSearch: false,
     onPageChange: (page) => setParams((p) => ({ ...p, page })),
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
     onFilterChange: (key, value) =>
@@ -48,7 +58,7 @@ function UserExpenses() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-4 sm:p-6">
       <AddExpense />
       <ExpenseCard totalMiles={totalMiles} totalDeduction={totalDeduction} />
       <DataTable

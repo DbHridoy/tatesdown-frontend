@@ -88,10 +88,11 @@ const ViewUser = () => {
       { key: "totalClients", label: "Total Clients", value: statsData.totalClients ?? 0 },
       { key: "totalQuotes", label: "Total Quotes", value: statsData.totalQuotes ?? 0 },
       { key: "totalJobs", label: "Total Jobs", value: statsData.totalJobs ?? 0 },
-      { key: "totalRevenueSold", label: "Revenue Earned", value: statsData.totalRevenueSold ?? 0, prefix: "$" },
+      { key: "totalRevenueSold", label: "Revenue Sold", value: statsData.totalRevenueSold ?? 0, prefix: "$" },
       { key: "totalRevenueProduced", label: "Revenue Produced", value: statsData.totalRevenueProduced ?? 0, prefix: "$" },
       { key: "totalCommissionEarned", label: "Commission Earned", value: statsData.totalCommissionEarned ?? 0, prefix: "$" },
       { key: "totalCommissionPaid", label: "Commission Paid", value: statsData.totalCommissionPaid ?? 0, prefix: "$" },
+      { key: "totalCommissionRemaining", label: "Commission Remaining", value: statsData.totalCommissionRemaining ?? 0, prefix: "$" },
       { key: "totalCommissionPending", label: "Commission Pending", value: statsData.totalCommissionPending ?? 0, prefix: "$" },
     ];
   }, [userStats]);

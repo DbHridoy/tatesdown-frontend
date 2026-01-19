@@ -18,8 +18,8 @@ function UserExpenses() {
   });
   const { data: mileageLogs } = useGetAllMileageLogsQuery(params);
 
-  const mileageLogsData = mileageLogs?.data?.data ?? [];
-  const totalItems = mileageLogs?.data?.total ?? 0;
+  const mileageLogsData = mileageLogs?.data ?? [];
+  const totalItems = mileageLogs?.total ?? 0;
 
   const totalMiles = mileageLogsData.reduce(
     (sum, log) => sum + (Number(log.totalMilesDriven) || 0),
