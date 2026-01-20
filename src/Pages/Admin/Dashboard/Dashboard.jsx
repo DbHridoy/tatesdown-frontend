@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import CardData from "../../../Components/Dashboard/CardData";
 import PipelineOverview from "../../../Components/Admin/Dashboard/PipelineOverview";
 import PendingApprovals from "../../../Components/Dashboard/PendingApprovals";
@@ -14,6 +14,8 @@ const Dashboard = () => {
     getDefaultPeriodInput("month")
   );
   const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("day");
+  const [leaderboardSortKey, setLeaderboardSortKey] = useState("");
+  const [leaderboardSortOrder, setLeaderboardSortOrder] = useState("asc");
   const { data, isLoading, isError } = useGetMyStatsQuery({
     periodType: statsPeriodType,
     date: normalizePeriodDate(statsPeriodType, statsDateInput),
@@ -32,6 +34,24 @@ const Dashboard = () => {
     revenueEarned: rep.totalRevenueSold,
     revenueProduced: rep.totalRevenueProduced,
   }));
+  const sortedLeaderboardRows = useMemo(() => {
+    if (!leaderboardSortKey) return leaderboardRows;
+
+    const sorted = [...leaderboardRows].sort((a, b) => {
+      const left = a[leaderboardSortKey];
+      const right = b[leaderboardSortKey];
+
+      if (leaderboardSortKey === "name") {
+        return String(left || "").localeCompare(String(right || ""));
+      }
+
+      const leftNum = Number(left) || 0;
+      const rightNum = Number(right) || 0;
+      return leftNum - rightNum;
+    });
+
+    return leaderboardSortOrder === "desc" ? sorted.reverse() : sorted;
+  }, [leaderboardRows, leaderboardSortKey, leaderboardSortOrder]);
   const formatCurrency = (value) => {
     const amount = Number(value) || 0;
     return new Intl.NumberFormat("en-US", {
@@ -43,19 +63,28 @@ const Dashboard = () => {
   const leaderboardConfig = {
     columns: [
       { label: "No", accessor: "No" },
-      { label: "Name", accessor: "name" },
-      { label: "Total Clients", accessor: "totalClients" },
-      { label: "Total Quotes", accessor: "totalQuotes" },
-      { label: "Total Jobs", accessor: "totalJobs" },
-      { label: "Revenue Earned", accessor: "revenueEarned" },
-      { label: "Revenue Produced", accessor: "revenueProduced" },
+      { label: "Name", accessor: "name", sortable: true },
+      { label: "Total Clients", accessor: "totalClients", sortable: true },
+      { label: "Total Quotes", accessor: "totalQuotes", sortable: true },
+      { label: "Total Jobs", accessor: "totalJobs", sortable: true },
+      { label: "Revenue Earned", accessor: "revenueEarned", sortable: true },
+      { label: "Revenue Produced", accessor: "revenueProduced", sortable: true },
     ],
-    totalItems: leaderboardRows.length,
+    totalItems: sortedLeaderboardRows.length,
     currentPage: 1,
-    itemsPerPage: Math.max(leaderboardRows.length, 1),
-    sortKey: "",
-    sortOrder: "asc",
+    itemsPerPage: Math.max(sortedLeaderboardRows.length, 1),
+    sortKey: leaderboardSortKey,
+    sortOrder: leaderboardSortOrder,
     onPageChange: () => { },
+    onSortChange: (sortKey) => {
+      if (sortKey === leaderboardSortKey) {
+        setLeaderboardSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+        return;
+      }
+
+      setLeaderboardSortKey(sortKey);
+      setLeaderboardSortOrder("asc");
+    },
   };
 
   return (
@@ -86,7 +115,7 @@ const Dashboard = () => {
       </div>
       <DataTable
         title=""
-        data={leaderboardRows.map((row) => ({
+        data={sortedLeaderboardRows.map((row) => ({
           ...row,
           revenueEarned: formatCurrency(row.revenueEarned),
           revenueProduced: formatCurrency(row.revenueProduced),
