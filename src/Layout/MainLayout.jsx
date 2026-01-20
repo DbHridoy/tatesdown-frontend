@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ConfigProvider, Drawer } from "antd";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -35,6 +35,27 @@ const MainLayout = () => {
   };
 
   const [activeLabel, setActiveLabel] = useState(getDefaultLabel(role));
+
+  const getActiveLabelFromPath = (role, pathname) => {
+    const menuItems = menuConfig?.[role] || [];
+    const normalizedPath = pathname.replace(/\/+$/, "");
+    let bestMatch = null;
+
+    menuItems.forEach((item) => {
+      const link = item.Link.replace(/\/+$/, "");
+      if (normalizedPath === link || normalizedPath.startsWith(`${link}/`)) {
+        if (!bestMatch || link.length > bestMatch.link.length) {
+          bestMatch = { label: item.label, link };
+        }
+      }
+    });
+
+    return bestMatch?.label || getDefaultLabel(role);
+  };
+
+  useEffect(() => {
+    setActiveLabel(getActiveLabelFromPath(role, location.pathname));
+  }, [role, location.pathname]);
 
   const toggleDrawer = () => setOpen((prev) => !prev);
 
