@@ -56,9 +56,8 @@ const DataTable = ({ title, data = [], config = {} }) => {
   });
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  console.log("line:58-totalItems", totalItems);
-  console.log("line:59-itemsPerPage", itemsPerPage);
-  console.log("line:60-totalPages", totalPages);
+  const emptyMessage = config.emptyMessage || "No data found";
+  const sortableColumns = columns.filter((col) => col.sortable);
   const handleSort = (col) => {
     if (!col.sortable) return;
     onSortChange?.(col.accessor);
@@ -117,14 +116,41 @@ const DataTable = ({ title, data = [], config = {} }) => {
       )}
 
       {/* Table */}
-      {totalPages === 0 ? (
+      {data.length === 0 ? (
         <div className="flex justify-center items-center h-64">
-          <p className="text-gray-500">No clients found</p>
+          <p className="text-gray-500">{emptyMessage}</p>
         </div>
       ) : (
         <>
           {/* Mobile cards */}
           <div className="sm:hidden space-y-3 p-4">
+            {sortableColumns.length > 0 && (
+              <div className="flex items-center gap-3">
+                <select
+                  value={sortKey || ""}
+                  onChange={(e) => {
+                    const nextKey = e.target.value;
+                    if (nextKey) onSortChange?.(nextKey);
+                  }}
+                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                >
+                  <option value="">Sort by</option>
+                  {sortableColumns.map((col) => (
+                    <option key={col.accessor} value={col.accessor}>
+                      {col.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => sortKey && onSortChange?.(sortKey)}
+                  disabled={!sortKey}
+                  className="px-3 py-2 border rounded-lg text-sm disabled:opacity-50"
+                >
+                  {sortOrder === "desc" ? "Desc" : "Asc"}
+                </button>
+              </div>
+            )}
             {data.map((row, idx) => {
               const numberValue = (currentPage - 1) * itemsPerPage + idx + 1;
               const displayColumns = columns.filter(

@@ -1,7 +1,6 @@
-import JobDetailsHeader from "../../../Components/Sales-rep/Jobs/JobDetailsHeader";
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
-import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
 import DC from "../../../Components/Sales-rep/Jobs/DC";
+import JobDetailsOverview from "../../../Components/Common/JobDetailsOverview";
 import { useEffect, useMemo, useState } from "react";
 import {
   useGetJobByIdQuery,
@@ -10,6 +9,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import DesignConsultationCreate from "./DesignConsultation";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -21,7 +21,6 @@ const formatDateInput = (value) => {
 const statusOptions = [
   "Ready to Schedule",
   "Scheduled and Open",
-  "Scheduled",
   "Pending Close",
   "Cancelled",
 ];
@@ -30,6 +29,7 @@ const PmJobDetailsPage = () => {
   const { jobId } = useParams();
   const user = useSelector(selectCurrentUser);
   const [isEditing, setIsEditing] = useState(false);
+  const [showDcForm, setShowDcForm] = useState(false);
   const [formJob, setFormJob] = useState({
     title: "",
     status: "",
@@ -53,6 +53,10 @@ const PmJobDetailsPage = () => {
     () => [...new Set([formJob.status, ...statusOptions])].filter(Boolean),
     [formJob.status]
   );
+  const designConsultation = useMemo(() => {
+    if (!job?.designConsultation?.length) return null;
+    return job.designConsultation[job.designConsultation.length - 1];
+  }, [job?.designConsultation]);
 
   useEffect(() => {
     if (!job) return;
@@ -72,10 +76,6 @@ const PmJobDetailsPage = () => {
 
   if (isLoading) return <p className="p-6">Loading job details...</p>;
   if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
-
-  const client = job.clientId;
-  const quote = job.quoteId;
-  const salesRep = job.salesRepId;
 
   const handleCancel = () => {
     setFormJob({
@@ -116,11 +116,27 @@ const PmJobDetailsPage = () => {
     setIsEditing(false);
   };
 
-  const handleMarkPendingClose = async () => {
-    if (!jobId) return;
+  const getStatusAction = () => {
+    if (job?.status === "Ready to Schedule") {
+      return {
+        label: "Mark as Scheduled and Open",
+        nextStatus: "Scheduled and Open",
+      };
+    }
+    if (job?.status === "Scheduled and Open") {
+      return {
+        label: "Mark as Pending Close",
+        nextStatus: "Pending Close",
+      };
+    }
+    return null;
+  };
+
+  const handleStatusUpdate = async (nextStatus) => {
+    if (!jobId || !nextStatus) return;
     await updateJob({
       id: jobId,
-      data: { status: "Pending Close" },
+      data: { status: nextStatus },
     }).unwrap();
   };
 
@@ -144,13 +160,24 @@ const PmJobDetailsPage = () => {
             >
               Save
             </button>
-            <button
-              onClick={handleMarkPendingClose}
-              className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
-              disabled={isSaving}
-            >
-              Mark as Pending Close
-            </button>
+            {getStatusAction() && (
+              <button
+                onClick={() => handleStatusUpdate(getStatusAction().nextStatus)}
+                className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+                disabled={isSaving}
+              >
+                {getStatusAction().label}
+              </button>
+            )}
+            {job?.status !== "Cancelled" && (
+              <button
+                onClick={() => handleStatusUpdate("Cancelled")}
+                className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+                disabled={isSaving}
+              >
+                Mark as Cancelled
+              </button>
+            )}
           </>
         ) : (
           <>
@@ -160,189 +187,74 @@ const PmJobDetailsPage = () => {
             >
               Edit
             </button>
-            <button
-              onClick={handleMarkPendingClose}
-              className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
-            >
-              Mark as Pending Close
-            </button>
+            {getStatusAction() && (
+              <button
+                onClick={() => handleStatusUpdate(getStatusAction().nextStatus)}
+                className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
+              >
+                {getStatusAction().label}
+              </button>
+            )}
+            {job?.status !== "Cancelled" && (
+              <button
+                onClick={() => handleStatusUpdate("Cancelled")}
+                className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base"
+              >
+                Mark as Cancelled
+              </button>
+            )}
           </>
         )}
       </div>
       {/* Job Header */}
       {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-            Job Details
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <InfoField
-              label="Title"
-              value={formJob.title}
-              isEditing={isEditing}
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, title: value }))
-              }
-            />
-            <InfoField
-              label="Status"
-              value={formJob.status}
-              isEditing={isEditing}
-              asSelect
-              options={statusOptionsForEdit}
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, status: value }))
-              }
-            />
-            <InfoField
-              label="Start Date"
-              value={formJob.startDate}
-              isEditing={isEditing}
-              type="date"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, startDate: value }))
-              }
-            />
-            <InfoField label="Job ID" value={job.customJobId} readOnly />
-            <InfoField
-              label="Price"
-              value={formJob.price}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, price: value }))
-              }
-            />
-            <InfoField
-              label="Down Payment"
-              value={formJob.downPayment}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, downPayment: value }))
-              }
-            />
-            <InfoField
-              label="Budget Spent"
-              value={formJob.budgetSpent}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, budgetSpent: value }))
-              }
-            />
-            <InfoField
-              label="Total Hours"
-              value={formJob.totalHours}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, totalHours: value }))
-              }
-            />
-            <InfoField
-              label="Setup/Cleanup"
-              value={formJob.setupCleanup}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, setupCleanup: value }))
-              }
-            />
-            <InfoField
-              label="Powerwash"
-              value={formJob.powerwash}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, powerwash: value }))
-              }
-            />
-            <InfoField
-              label="Labor Hours"
-              value={formJob.laborHours}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, laborHours: value }))
-              }
-            />
-          </div>
-        </div>
+      <JobDetailsOverview
+        job={job}
+        formJob={formJob}
+        isEditing={isEditing}
+        statusOptions={statusOptionsForEdit}
+        onFieldChange={(field, value) =>
+          setFormJob((prev) => ({ ...prev, [field]: value }))
+        }
+        readOnlyFields={[
+          {
+            label: "Estimated Start Date",
+            value: job.estimatedStartDate
+              ? new Date(job.estimatedStartDate).toLocaleDateString()
+              : null,
+          },
+          { label: "Down Payment Status", value: job.downPaymentStatus },
+          { label: "Estimated Gallons", value: job.estimatedGallons },
+        ]}
+        readOnlyFieldsPosition="afterStartDate"
+        readOnlyFieldKeys={[
+          "status",
+          "price",
+          "downPayment",
+          "budgetSpent",
+          "totalHours",
+          "setupCleanup",
+          "powerwash",
+          "laborHours",
+        ]}
+      />
 
-        <div className="space-y-6">
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Sales Rep Information
-            </h2>
-            <div className="space-y-2 text-sm sm:text-base text-gray-700">
-              <InfoLine label="Name" value={salesRep?.fullName} />
-              <InfoLine label="Email" value={salesRep?.email} />
-              <InfoLine label="Phone" value={salesRep?.phoneNumber} />
-              <InfoLine label="Address" value={salesRep?.address} />
-            </div>
-          </div>
+      <DC
+        jobId={jobId}
+        actionLabel={designConsultation ? "Edit DC" : "Add DC"}
+        onAction={() => setShowDcForm((prev) => !prev)}
+      />
 
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Quote Summary
-            </h2>
-            <div className="space-y-2 text-sm sm:text-base text-gray-700">
-              <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
-              <InfoLine label="Status" value={quote?.status} />
-              <InfoLine
-                label="Booked on the spot"
-                value={quote?.bookedOnSpot ? "Yes" : "No"}
-              />
-            </div>
-          </div>
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Client Information
-            </h2>
-            <div className="space-y-2 text-sm sm:text-base text-gray-700">
-              <p>
-                <span className="font-semibold">Name:</span>{" "}
-                {client?.clientName || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Partner:</span>{" "}
-                {client?.partnerName || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Email:</span>{" "}
-                {client?.email || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Phone:</span>{" "}
-                {client?.phoneNumber || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Address:</span>{" "}
-                {client?.address || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Lead Source:</span>{" "}
-                {client?.leadSource || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Lead Status:</span>{" "}
-                {client?.leadStatus || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Rating:</span>{" "}
-                {client?.rating || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Custom Client ID:</span>{" "}
-                {client?.customClientId || "N/A"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {showDcForm && (
+        <DesignConsultationCreate
+          jobId={jobId}
+          initialData={designConsultation}
+          mode={designConsultation ? "edit" : "create"}
+          onCancel={() => setShowDcForm(false)}
+          onSaved={() => setShowDcForm(false)}
+        />
+      )}
 
       {/* Top Section: Client Info + Financials */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -356,54 +268,5 @@ const PmJobDetailsPage = () => {
     </div>
   );
 };
-
-const InfoLine = ({ label, value }) => (
-  <p className="text-sm sm:text-base">
-    <span className="font-semibold">{label}:</span> {value || "N/A"}
-  </p>
-);
-
-const InfoField = ({
-  label,
-  value,
-  isEditing,
-  type = "text",
-  onChange,
-  readOnly = false,
-  asSelect = false,
-  options = [],
-}) => (
-  <div className="space-y-1">
-    <label className="text-sm font-medium text-gray-700">{label}</label>
-    {isEditing && !readOnly ? (
-      asSelect ? (
-        <select
-          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
-        >
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
-        />
-      )
-    ) : (
-      <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
-        {value !== undefined && value !== null && value !== ""
-          ? value
-          : "N/A"}
-      </div>
-    )}
-  </div>
-);
 
 export default PmJobDetailsPage;

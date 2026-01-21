@@ -9,7 +9,11 @@ const quoteApi = baseApi.injectEndpoints({
         method: "POST",
         body: newQuote,
       }),
-      invalidatesTags: ["Quote", "User", "Client"],
+      invalidatesTags: [
+        { type: "Quote", id: "LIST" },
+        { type: "User", id: "LIST" },
+        { type: "Client", id: "LIST" },
+      ],
     }),
 
     getAllQuotes: builder.query({
@@ -33,12 +37,18 @@ const quoteApi = baseApi.injectEndpoints({
 
         return `/quotes?${params.toString()}`;
       },
-      providesTags: ["Quote"],
+      providesTags: (result) => {
+        const quotes = result?.data || [];
+        return [
+          { type: "Quote", id: "LIST" },
+          ...quotes.map((quote) => ({ type: "Quote", id: quote._id || quote.id })),
+        ];
+      },
     }),
 
     getQuoteById: builder.query({
       query: (id) => `/quotes/${id}`,
-      providesTags: ["Quote"],
+      providesTags: (result, error, id) => [{ type: "Quote", id }],
     }),
 
     updateQuote: builder.mutation({
@@ -47,7 +57,10 @@ const quoteApi = baseApi.injectEndpoints({
         method: "PATCH",
         body, // send FormData directly, no wrapping
       }),
-      invalidatesTags: ["Quote"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Quote", id },
+        { type: "Quote", id: "LIST" },
+      ],
     }),
 
     deleteQuote: builder.mutation({
@@ -55,7 +68,10 @@ const quoteApi = baseApi.injectEndpoints({
         url: `/quotes/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Quote"],
+      invalidatesTags: (result, error, id) => [
+        { type: "Quote", id },
+        { type: "Quote", id: "LIST" },
+      ],
     }),
   }),
 });

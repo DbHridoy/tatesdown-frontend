@@ -8,7 +8,11 @@ const clientApi = baseApi.injectEndpoints({
         method: "POST",
         body: newClient,
       }),
-      invalidatesTags: ["Client","User","MyStats"],
+      invalidatesTags: [
+        { type: "Client", id: "LIST" },
+        { type: "User", id: "LIST" },
+        { type: "MyStats", id: "LIST" },
+      ],
     }),
 
     addCallLog: builder.mutation({
@@ -17,7 +21,10 @@ const clientApi = baseApi.injectEndpoints({
         method: "POST",
         body: { callAt, status, reason, note },
       }),
-      invalidatesTags: ["Client"],
+      invalidatesTags: (result, error, { clientId }) => [
+        { type: "Client", id: clientId },
+        { type: "Client", id: "LIST" },
+      ],
     }),
 
     addNote: builder.mutation({
@@ -26,7 +33,18 @@ const clientApi = baseApi.injectEndpoints({
         method: "POST",
         body: formData, // ✅ FormData
       }),
-      invalidatesTags: ["Client"],
+      invalidatesTags: (result, error, { clientId, formData }) => {
+        const jobId =
+          typeof formData?.get === "function" ? formData.get("jobId") : null;
+        const tags = [
+          { type: "Client", id: clientId },
+          { type: "Client", id: "LIST" },
+        ];
+        if (jobId) {
+          tags.push({ type: "Job", id: jobId }, { type: "Job", id: "LIST" });
+        }
+        return tags;
+      },
     }),
 
     getAllClients: builder.query({
@@ -52,12 +70,21 @@ const clientApi = baseApi.injectEndpoints({
 
         return `/clients?${params.toString()}`;
       },
-      providesTags: ["Client"],
+      providesTags: (result) => {
+        const clients = result?.data || [];
+        return [
+          { type: "Client", id: "LIST" },
+          ...clients.map((client) => ({
+            type: "Client",
+            id: client._id || client.id,
+          })),
+        ];
+      },
     }),
 
     getClientById: builder.query({
       query: (id) => `/clients/${id}`,
-      providesTags: ["Client"],
+      providesTags: (result, error, id) => [{ type: "Client", id }],
     }),
 
     updateClient: builder.mutation({
@@ -66,7 +93,10 @@ const clientApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: updateData,
       }),
-      invalidatesTags: ["Client"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Client", id },
+        { type: "Client", id: "LIST" },
+      ],
     }),
 
     deleteClient: builder.mutation({
@@ -74,7 +104,10 @@ const clientApi = baseApi.injectEndpoints({
         url: `/clients/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Client"],
+      invalidatesTags: (result, error, id) => [
+        { type: "Client", id },
+        { type: "Client", id: "LIST" },
+      ],
     }),
   }),
 });

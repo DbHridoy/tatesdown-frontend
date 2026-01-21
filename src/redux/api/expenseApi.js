@@ -4,7 +4,7 @@ const expenseApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getExpenseSettings: builder.query({
       query: () => "/common/get-variable",
-      providesTags: ["Variable"],
+      providesTags: [{ type: "Variable", id: "LIST" }],
     }),
 
     updateExpenseSettings: builder.mutation({
@@ -13,7 +13,7 @@ const expenseApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Variable"],
+      invalidatesTags: [{ type: "Variable", id: "LIST" }],
     }),
 
     createMileageLog: builder.mutation({
@@ -22,7 +22,7 @@ const expenseApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Expense"],
+      invalidatesTags: [{ type: "Expense", id: "LIST" }],
     }),
 
     getAllMileageLogs: builder.query({
@@ -46,7 +46,13 @@ const expenseApi = baseApi.injectEndpoints({
 
         return `/expenses/all-mileage?${params.toString()}`;
       },
-      providesTags: ["Expense"],
+      providesTags: (result) => {
+        const logs = result?.data || [];
+        return [
+          { type: "Expense", id: "LIST" },
+          ...logs.map((log) => ({ type: "Expense", id: log._id || log.id })),
+        ];
+      },
     }),
 
     updateMileageLogStatus: builder.mutation({
@@ -55,7 +61,10 @@ const expenseApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: { status },
       }),
-      invalidatesTags: ["Expense"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Expense", id },
+        { type: "Expense", id: "LIST" },
+      ],
     }),
   }),
 });

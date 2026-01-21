@@ -13,12 +13,18 @@ function ClientsList() {
     page: 1,
     limit: 10,
     search: "",
-    sortKey: "clientName",
+    sortKey: "",
     sortOrder: "asc",
     filters: { role: "" },
   });
 
-  const { data: clientsData } = useGetAllClientsQuery(params);
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
+  const { data: clientsData } = useGetAllClientsQuery({
+    ...params,
+    sort: sortValue,
+  });
   const [deleteClient] = useDeleteClientMutation();
 
   const clients = clientsData?.data;
@@ -28,10 +34,11 @@ function ClientsList() {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Phone", accessor: "phoneNumber" },
+      { label: "Phone", accessor: "phoneNumber", sortable: true },
       {
         label: "Call Status",
         accessor: "callStatus",
+        sortable: true,
         colorMap: {
           "Not Called": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
           "Picked-Up: Appointment Booked":
@@ -45,6 +52,7 @@ function ClientsList() {
       {
         label: "Lead Status",
         accessor: "leadStatus",
+        sortable: true,
         colorMap: {
           "Not quoted": "bg-gray-100 text-gray-700 rounded-2xl text-center p-2",
           Quoted: "bg-blue-100 text-blue-800 rounded-2xl text-center p-2",
@@ -96,8 +104,12 @@ function ClientsList() {
         page: 1,
         filters: { ...p.filters, [key]: value },
       })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   return (

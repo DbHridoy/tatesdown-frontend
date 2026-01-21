@@ -2,22 +2,47 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
 
-const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
+const getFileName = (url = "") => decodeURIComponent(url.split("/").pop() || "");
 
-const DC = ({ jobId, actionLabel = "Add Document", onAction, hideAction = false }) => {
+const InfoLine = ({ label, value }) => (
+  <p className="text-sm sm:text-base">
+    <span className="font-semibold">{label}:</span>{" "}
+    {value !== undefined && value !== null && value !== "" ? value : "N/A"}
+  </p>
+);
+
+const DC = ({
+  jobId,
+  actionLabel = "Add Document",
+  onAction,
+  hideAction = false,
+  actionUrl,
+}) => {
   const navigate = useNavigate();
-  const { data: jobDetails } = useGetJobByIdQuery(jobId);
+  const { data: jobDetails } = useGetJobByIdQuery(jobId, { skip: !jobId });
   const job = jobDetails?.data;
 
-  const handleDownload = (fileName) => {
-    //console.log(`Downloading ${fileName}`);
-  };
+  const designConsultations = job?.designConsultation ?? [];
+  const hasDocs = designConsultations.length > 0;
 
-  const handleDelete = (fileName) => {
-    //console.log(`Deleting ${fileName}`);
-  };
-
-  const hasDocs = job?.designConsultation && job.designConsultation.length > 0;
+  const renderFileLinks = (files = []) =>
+    files.length ? (
+      <div className="mt-2 space-y-1">
+        {files.map((fileUrl) => (
+          <a
+            key={fileUrl}
+            href={fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-blue-600 underline text-sm"
+          >
+            📎 {getFileName(fileUrl)}
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p className="text-sm text-gray-500">No files attached.</p>
+    );
 
   return (
     <div className="p-6 bg-white shadow-md rounded-md border mb-6">
@@ -31,7 +56,11 @@ const DC = ({ jobId, actionLabel = "Add Document", onAction, hideAction = false 
             onClick={
               onAction
                 ? onAction
-                : () => navigate(`/sales-rep/jobs/${jobId}/design-consultation`)
+                : () =>
+                    navigate(
+                      actionUrl ||
+                        `/sales-rep/jobs/${jobId}/design-consultation`
+                    )
             }
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
@@ -41,40 +70,48 @@ const DC = ({ jobId, actionLabel = "Add Document", onAction, hideAction = false 
       </div>
 
       {hasDocs ? (
-        <table className="w-full table-auto">
-          <thead className="text-sm text-gray-600">
-            <tr>
-              <th className="px-4 py-2 text-left">Document Name</th>
-              <th className="px-4 py-2 text-left">Date</th>
-              <th className="px-4 py-2 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {job.designConsultation.map((doc, index) => (
-              <tr key={index} className="border-t">
-                <td className="px-4 py-2 flex items-center">
-                  <span className="mr-2 text-red-500">📄</span>
-                  {getFileName(doc.file)}
-                </td>
-                <td className="px-4 py-2">
-                  {new Date(doc.createdAt).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-2 flex space-x-2">
-                  <a
-                    href={doc.file}
-                    download
-                    className="text-blue-500 hover:underline"
-                    onClick={() => handleDownload(doc.file)}
-                  >
-                    Download
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="space-y-4">
+          {designConsultations.map((dc) => {
+            const contractFiles =
+              dc?.contract?.map((contract) => contract.contractUrl).filter(Boolean) ||
+              [];
+            const fileLinks = [
+              dc.file,
+              dc.contractUrl,
+              ...contractFiles,
+            ].filter(Boolean);
+
+            return (
+              <div key={dc._id} className="rounded-md border p-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <InfoLine label="Product" value={dc.product} />
+                  <InfoLine label="Color Code" value={dc.colorCode} />
+                  <InfoLine
+                    label="Estimated Gallons"
+                    value={dc.estimatedGallons}
+                  />
+                  <InfoLine
+                    label="Estimated Start Date"
+                    value={
+                      dc.estimatedStartDate
+                        ? new Date(dc.estimatedStartDate).toLocaleDateString()
+                        : null
+                    }
+                  />
+                  <InfoLine label="Added Hours" value={dc.addedHours} />
+                  <InfoLine label="Upsell Description" value={dc.upsellDescription} />
+                  <InfoLine label="Upsell Value" value={dc.upsellValue} />
+                </div>
+                <div className="mt-3">
+                  <p className="text-sm font-semibold text-gray-700">Files</p>
+                  {renderFileLinks(fileLinks)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       ) : (
-        <p className="text-gray-500">No documents available.</p>
+        <p className="text-gray-500">No design consultation data.</p>
       )}
     </div>
   );

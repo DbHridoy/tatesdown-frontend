@@ -8,22 +8,22 @@ export const userApi = baseApi.injectEndpoints({
         method: "POST",
         body: { clusterName },
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: [{ type: "User", id: "LIST" }],
     }),
 
     getAllClusters: builder.query({
       query: () => `/common/cluster`,
-      providesTags: ["User"],
+      providesTags: [{ type: "User", id: "LIST" }],
     }),
 
     getMe: builder.query({
       query: () => `/users/me`,
-      providesTags: ["User"],
+      providesTags: [{ type: "User", id: "ME" }],
     }),
 
     getUser: builder.query({
       query: (id) => `/users/${id}`,
-      providesTags: ["User"],
+      providesTags: (result, error, id) => [{ type: "User", id }],
     }),
 
     getAllUsers: builder.query({
@@ -47,7 +47,13 @@ export const userApi = baseApi.injectEndpoints({
 
         return `/users/?${params.toString()}`;
       },
-      providesTags: ["User"],
+      providesTags: (result) => {
+        const users = result?.data || [];
+        return [
+          { type: "User", id: "LIST" },
+          ...users.map((user) => ({ type: "User", id: user._id || user.id })),
+        ];
+      },
     }),
 
     getUserStats: builder.query({
@@ -60,7 +66,8 @@ export const userApi = baseApi.injectEndpoints({
           ? `/common/admin/users-stats/${userId}?${query}`
           : `/common/admin/users-stats/${userId}`;
       },
-      providesTags: ["User"],
+      providesTags: (result, error, { userId } = {}) =>
+        userId ? [{ type: "User", id: userId }] : [{ type: "User", id: "LIST" }],
     }),
 
     updateUser: builder.mutation({
@@ -69,7 +76,10 @@ export const userApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "User", id },
+        { type: "User", id: "LIST" },
+      ],
     }),
 
     updateMe: builder.mutation({
@@ -78,7 +88,7 @@ export const userApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: [{ type: "User", id: "ME" }, { type: "User", id: "LIST" }],
     }),
 
     creatUser: builder.mutation({
@@ -87,7 +97,7 @@ export const userApi = baseApi.injectEndpoints({
         method: "POST",
         body: userData,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: [{ type: "User", id: "LIST" }],
     }),
 
     deleteUser: builder.mutation({
@@ -95,7 +105,10 @@ export const userApi = baseApi.injectEndpoints({
         url: `/users/${userId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, userId) => [
+        { type: "User", id: userId },
+        { type: "User", id: "LIST" },
+      ],
     }),
 
   }),

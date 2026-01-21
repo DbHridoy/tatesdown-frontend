@@ -8,7 +8,7 @@ const jobApi = baseApi.injectEndpoints({
         method: "POST",
         body: newJob,
       }),
-      invalidatesTags: ["Job", "User"],
+      invalidatesTags: [{ type: "Job", id: "LIST" }, { type: "User", id: "LIST" }],
     }),
 
     createDesignConsultation: builder.mutation({
@@ -17,7 +17,13 @@ const jobApi = baseApi.injectEndpoints({
         body: dc,
         method: "POST",
       }),
-      invalidatesTags: ["Job"],
+      invalidatesTags: (result, error, dc) => {
+        const jobId =
+          typeof dc?.get === "function" ? dc.get("jobId") : dc?.jobId;
+        return jobId
+          ? [{ type: "Job", id: jobId }, { type: "Job", id: "LIST" }]
+          : [{ type: "Job", id: "LIST" }];
+      },
     }),
 
     getAllJobs: builder.query({
@@ -41,12 +47,18 @@ const jobApi = baseApi.injectEndpoints({
 
         return `/jobs?${params.toString()}`;
       },
-      providesTags: ["Job"],
+      providesTags: (result) => {
+        const jobs = result?.data || [];
+        return [
+          { type: "Job", id: "LIST" },
+          ...jobs.map((job) => ({ type: "Job", id: job._id || job.id })),
+        ];
+      },
     }),
 
     getJobById: builder.query({
       query: (id) => `/jobs/${id}`,
-      providesTags: ["Job"],
+      providesTags: (result, error, id) => [{ type: "Job", id }],
     }),
 
     updateJob: builder.mutation({
@@ -63,7 +75,10 @@ const jobApi = baseApi.injectEndpoints({
         url: `/jobs/${id}`,
         method: "DELETE"
       }),
-      invalidatesTags: ["Job"]
+      invalidatesTags: (result, error, id) => [
+        { type: "Job", id },
+        { type: "Job", id: "LIST" },
+      ],
     })
   }),
 });

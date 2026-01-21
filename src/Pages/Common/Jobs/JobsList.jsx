@@ -13,7 +13,10 @@ function JobsList() {
     sortOrder: "asc",
   });
 
-  const { data, isLoading } = useGetAllJobsQuery(params);
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
+  const { data, isLoading } = useGetAllJobsQuery({ ...params, sort: sortValue });
   const [deleteJob] = useDeleteJobMutation();
 
   const jobs = data?.data || [];
@@ -32,10 +35,10 @@ function JobsList() {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Job Title", accessor: "jobTitle" },
-      { label: "Price", accessor: "price" },
-      { label: "Status", accessor: "jobStatus" },
-      { label: "Start Date", accessor: "startDate" },
+      { label: "Job Title", accessor: "jobTitle", sortable: true },
+      { label: "Price", accessor: "price", sortable: true },
+      { label: "Status", accessor: "jobStatus", sortable: true },
+      { label: "Start Date", accessor: "startDate", sortable: true },
     ],
     actions: [
       {
@@ -62,8 +65,12 @@ function JobsList() {
     sortOrder: params.sortOrder,
     onPageChange: (page) => setParams((p) => ({ ...p, page })),
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   return (

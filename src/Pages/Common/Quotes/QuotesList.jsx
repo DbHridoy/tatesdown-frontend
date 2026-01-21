@@ -14,7 +14,10 @@ function QuotesList() {
     filters: { status: "Pending" },
   });
 
-  const { data } = useGetAllQuotesQuery(params);
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
+  const { data } = useGetAllQuotesQuery({ ...params, sort: sortValue });
   const quotes = data?.data ?? [];
   const totalItems = data?.total;
 
@@ -66,8 +69,12 @@ function QuotesList() {
         page: 1,
         filters: { ...p.filters, [key]: value },
       })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   return (

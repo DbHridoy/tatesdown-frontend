@@ -8,7 +8,7 @@ const commonApi = baseApi.injectEndpoints({
         method: "POST",
         body: newVariable,
       }),
-      invalidatesTags: ["Variable"],
+      invalidatesTags: [{ type: "Variable", id: "LIST" }],
     }),
 
     getMyStats: builder.query({
@@ -19,12 +19,12 @@ const commonApi = baseApi.injectEndpoints({
         const query = params.toString();
         return query ? `/common/my-stats?${query}` : "/common/my-stats";
       },
-      providesTags: ["MyStats", "User"],
+      providesTags: [{ type: "MyStats", id: "ME" }, { type: "User", id: "ME" }],
     }),
 
     getVariables: builder.query({
       query: () => "/common/get-variable",
-      providesTags: ["Variable"],
+      providesTags: [{ type: "Variable", id: "LIST" }],
     }),
 
     getLeaderBoard: builder.query({
@@ -36,7 +36,7 @@ const commonApi = baseApi.injectEndpoints({
           ? `/common/salesrep-leaderboard?${query}`
           : "/common/salesrep-leaderboard";
       },
-      providesTags: ["LeaderBoard"],
+      providesTags: [{ type: "LeaderBoard", id: "LIST" }],
     }),
 
     getSummaryStats: builder.query({
@@ -49,12 +49,12 @@ const commonApi = baseApi.injectEndpoints({
           ? `/common/summary-stats?${query}`
           : "/common/summary-stats";
       },
-      providesTags: ["Stats"],
+      providesTags: [{ type: "Stats", id: "LIST" }],
     }),
 
     getNotifications: builder.query({
       query: () => "/common/my-notifications",
-      providesTags: ["User"],
+      providesTags: [{ type: "User", id: "ME" }],
     }),
 
     markNotificationRead: builder.mutation({
@@ -62,7 +62,7 @@ const commonApi = baseApi.injectEndpoints({
         url: `/common/notification/${id}/read`,
         method: "PATCH",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: [{ type: "User", id: "ME" }],
     }),
 
     createPayment: builder.mutation({
@@ -71,7 +71,10 @@ const commonApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["Payment", "User"],
+      invalidatesTags: [
+        { type: "Payment", id: "LIST" },
+        { type: "User", id: "LIST" },
+      ],
     }),
 
     getPayments: builder.query({
@@ -79,7 +82,16 @@ const commonApi = baseApi.injectEndpoints({
         url: "/common/payments",
         params: { salesRepId },
       }),
-      providesTags: ["Payment"],
+      providesTags: (result) => {
+        const payments = result?.data || [];
+        return [
+          { type: "Payment", id: "LIST" },
+          ...payments.map((payment) => ({
+            type: "Payment",
+            id: payment._id || payment.id,
+          })),
+        ];
+      },
     }),
 
     updatePayment: builder.mutation({
@@ -88,7 +100,10 @@ const commonApi = baseApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["Payment"],
+      invalidatesTags: (result, error, { paymentId }) => [
+        { type: "Payment", id: paymentId },
+        { type: "Payment", id: "LIST" },
+      ],
     }),
 
     deletePayment: builder.mutation({
@@ -96,7 +111,10 @@ const commonApi = baseApi.injectEndpoints({
         url: `/common/payments/${paymentId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Payment"],
+      invalidatesTags: (result, error, paymentId) => [
+        { type: "Payment", id: paymentId },
+        { type: "Payment", id: "LIST" },
+      ],
     }),
   }),
 });

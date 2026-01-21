@@ -198,7 +198,7 @@ const DesignConsultationCreate = ({
             Upsell Value
           </label>
           <input
-            type="text"
+            type="number"
             placeholder="Upsell Value"
             value={upsellDetails.upsellValue}
             onChange={(e) =>

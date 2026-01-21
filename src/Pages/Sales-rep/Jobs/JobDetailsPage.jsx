@@ -1,7 +1,6 @@
-import JobDetailsHeader from "../../../Components/Sales-rep/Jobs/JobDetailsHeader";
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
-import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
 import DC from "../../../Components/Sales-rep/Jobs/DC";
+import JobDetailsOverview from "../../../Components/Common/JobDetailsOverview";
 import { useEffect, useMemo, useState } from "react";
 import {
   useGetJobByIdQuery,
@@ -45,7 +44,7 @@ const JobDetailsPage = () => {
   });
 
   const { data, isLoading, isError } = useGetJobByIdQuery(jobId, { skip: !jobId });
-  const [updateJob, { isLoading: isSaving }] = useUpdateJobMutation();
+  const [updateJob] = useUpdateJobMutation();
 
   const job = data?.data;
   const designConsultation = useMemo(() => {
@@ -72,10 +71,6 @@ const JobDetailsPage = () => {
 
   if (isLoading) return <p className="p-6">Loading job details...</p>;
   if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
-
-  const client = job.clientId;
-  const quote = job.quoteId;
-  const salesRep = job.salesRepId;
 
   const handleCancel = () => {
     setFormJob({
@@ -125,190 +120,24 @@ const JobDetailsPage = () => {
 
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-            Job Details
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <InfoField
-              label="Title"
-              value={formJob.title}
-              isEditing={isEditing}
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, title: value }))
-              }
-            />
-            <InfoField
-              label="Status"
-              value={formJob.status}
-              isEditing={isEditing}
-              asSelect
-              options={[...new Set([formJob.status, ...statusOptions])].filter(
-                Boolean
-              )}
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, status: value }))
-              }
-            />
-
-
-            <InfoField label="Job ID" value={job.customJobId} readOnly />
-            <InfoField
-              label="Price"
-              value={formJob.price}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, price: value }))
-              }
-            />
-            <InfoField
-              label="Estimated Start Date"
-              value={formJob.estimatedStartDate}
-              isEditing={isEditing}
-              type="date"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, estimatedStartDate: value }))
-              }
-            />
-            <InfoField
-              label="Start Date"
-              value={formJob.startDate}
-              isEditing={isEditing}
-              type="date"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, startDate: value }))
-              }
-            />
-            <InfoField
-              label="Down Payment"
-              value={formJob.downPayment}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, downPayment: value }))
-              }
-            />
-            <InfoField
-              label="Budget Spent"
-              value={formJob.budgetSpent}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, budgetSpent: value }))
-              }
-            />
-            <InfoField
-              label="Total Hours"
-              value={formJob.totalHours}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, totalHours: value }))
-              }
-            />
-            <InfoField
-              label="Setup/Cleanup"
-              value={formJob.setupCleanup}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, setupCleanup: value }))
-              }
-            />
-            <InfoField
-              label="Powerwash"
-              value={formJob.powerwash}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, powerwash: value }))
-              }
-            />
-            <InfoField
-              label="Labor Hours"
-              value={formJob.laborHours}
-              isEditing={isEditing}
-              type="number"
-              onChange={(value) =>
-                setFormJob((prev) => ({ ...prev, laborHours: value }))
-              }
-            />
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Sales Rep Information
-            </h2>
-            <div className="space-y-2 text-sm sm:text-base text-gray-700">
-              <InfoLine label="Name" value={salesRep?.fullName} />
-              <InfoLine label="Email" value={salesRep?.email} />
-              <InfoLine label="Phone" value={salesRep?.phoneNumber} />
-              <InfoLine label="Address" value={salesRep?.address} />
-            </div>
-          </div>
-
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Quote Summary
-            </h2>
-            <div className="space-y-2 text-sm sm:text-base text-gray-700">
-              <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
-              <InfoLine label="Status" value={quote?.status} />
-              <InfoLine
-                label="Booked on the spot"
-                value={quote?.bookedOnSpot ? "Yes" : "No"}
-              />
-            </div>
-          </div>
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Client Information
-            </h2>
-            <div className="space-y-2 text-sm sm:text-base text-gray-700">
-              <p>
-                <span className="font-semibold">Name:</span>{" "}
-                {client?.clientName || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Partner:</span>{" "}
-                {client?.partnerName || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Email:</span>{" "}
-                {client?.email || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Phone:</span>{" "}
-                {client?.phoneNumber || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Address:</span>{" "}
-                {client?.address || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Lead Source:</span>{" "}
-                {client?.leadSource || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Lead Status:</span>{" "}
-                {client?.leadStatus || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Rating:</span>{" "}
-                {client?.rating || "N/A"}
-              </p>
-              <p>
-                <span className="font-semibold">Custom Client ID:</span>{" "}
-                {client?.customClientId || "N/A"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <JobDetailsOverview
+        job={job}
+        formJob={formJob}
+        isEditing={isEditing}
+        statusOptions={[...new Set([formJob.status, ...statusOptions])].filter(
+          Boolean
+        )}
+        onFieldChange={(field, value) =>
+          setFormJob((prev) => ({ ...prev, [field]: value }))
+        }
+        showEstimatedStartDate
+        jobIdPosition="afterStatus"
+        estimatedStartDatePosition="afterPrice"
+        readOnlyFields={[
+          { label: "Down Payment Status", value: job.downPaymentStatus },
+          { label: "Estimated Gallons", value: job.estimatedGallons },
+        ]}
+      />
 
       {/* Top Section: Client Info + Financials */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -337,54 +166,5 @@ const JobDetailsPage = () => {
     </div>
   );
 };
-
-const InfoLine = ({ label, value }) => (
-  <p className="text-sm sm:text-base">
-    <span className="font-semibold">{label}:</span> {value || "N/A"}
-  </p>
-);
-
-const InfoField = ({
-  label,
-  value,
-  isEditing,
-  type = "text",
-  onChange,
-  readOnly = false,
-  asSelect = false,
-  options = [],
-}) => (
-  <div className="space-y-1">
-    <label className="text-sm font-medium text-gray-700">{label}</label>
-    {isEditing && !readOnly ? (
-      asSelect ? (
-        <select
-          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
-        >
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          className="w-full rounded-md border px-3 py-2 text-sm sm:text-base"
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
-        />
-      )
-    ) : (
-      <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
-        {value !== undefined && value !== null && value !== ""
-          ? value
-          : "N/A"}
-      </div>
-    )}
-  </div>
-);
 
 export default JobDetailsPage;
