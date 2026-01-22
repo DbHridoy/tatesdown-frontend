@@ -68,7 +68,7 @@ const AddMileageLog = ({ closeModal }) => {
   };
 
   return (
-    <div className="mx-auto max-w-lg rounded-lg bg-white p-4 sm:p-6 shadow-lg">
+    <div className="mx-auto max-w-lg rounded-lg bg-white section-pad shadow-lg">
       <h2 className="mb-4 text-xl sm:text-2xl font-bold text-gray-800">
         Add Mileage Log
       </h2>

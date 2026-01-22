@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useGetMyStatsQuery } from "../../../redux/api/common";
+import { useSelector } from "react-redux";
+import { useGetMyStatsQuery, useGetPaymentsQuery } from "../../../redux/api/common";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import PeriodFilter from "../../../Components/Common/PeriodFilter";
 import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
 
@@ -12,10 +14,14 @@ export default function SalesRepReports() {
 
   const [periodType, setPeriodType] = useState("month");
   const [dateInput, setDateInput] = useState(getDefaultPeriodInput("month"));
+  const user = useSelector(selectCurrentUser);
   const { data: myStats } = useGetMyStatsQuery({
     periodType,
     date: normalizePeriodDate(periodType, dateInput),
   });
+  const { data: paymentsData, isLoading: isPaymentsLoading } =
+    useGetPaymentsQuery(user?._id, { skip: !user?._id });
+  const payments = paymentsData?.data ?? [];
   const statsData = myStats?.data;
   const stats = [
     {
@@ -70,9 +76,19 @@ export default function SalesRepReports() {
 
     return `${item.prefix ?? ""}${formatted}${item.suffix ?? ""}`;
   };
+  const formatCurrency = (value) =>
+    Number(value || 0).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    });
+  const totalPaymentAmount = payments.reduce(
+    (sum, payment) => sum + (Number(payment.amount) || 0),
+    0
+  );
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="page-container">
       <div className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold">Reports</h1>
@@ -107,6 +123,102 @@ export default function SalesRepReports() {
             ) : null}
           </div>
         ))}
+      </div>
+
+      <div className="mt-8 border-t pt-6">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+          Payment History
+        </h2>
+        <div className="mt-4">
+          {isPaymentsLoading ? (
+            <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+              Loading payments...
+            </div>
+          ) : payments.length === 0 ? (
+            <div className="rounded-lg border border-dashed p-4 text-sm text-gray-500">
+              No payments yet.
+            </div>
+          ) : (
+            <>
+              <div className="sm:hidden space-y-3">
+                {payments.map((payment) => (
+                  <div
+                    key={payment.id || payment._id}
+                    className="border rounded-lg p-4 bg-white shadow-sm space-y-2"
+                  >
+                    <div className="text-sm">
+                      <span className="text-gray-500">Payment Date:</span>{" "}
+                      <span className="text-gray-900">
+                        {payment.paymentDate
+                          ? new Date(payment.paymentDate).toLocaleDateString()
+                          : "—"}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-500">Tax Status:</span>{" "}
+                      <span className="text-gray-900 capitalize">
+                        {payment.taxStatus || "—"}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-500">Amount:</span>{" "}
+                      <span className="text-gray-900 font-medium">
+                        {formatCurrency(payment.amount)}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+                <div className="border-t pt-3 text-sm text-gray-700 flex justify-between">
+                  <span className="font-semibold">Total</span>
+                  <span className="font-semibold">
+                    {formatCurrency(totalPaymentAmount)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="min-w-max w-full text-left text-sm sm:text-base border border-gray-200 rounded-lg">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 border-b">Payment Date</th>
+                      <th className="px-4 py-2 border-b">Tax Status</th>
+                      <th className="px-4 py-2 border-b">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.map((payment) => (
+                      <tr
+                        key={payment.id || payment._id}
+                        className="border-b last:border-b-0"
+                      >
+                        <td className="px-4 py-2">
+                          {payment.paymentDate
+                            ? new Date(payment.paymentDate).toLocaleDateString()
+                            : "—"}
+                        </td>
+                        <td className="px-4 py-2 capitalize">
+                          {payment.taxStatus || "—"}
+                        </td>
+                        <td className="px-4 py-2">
+                          {formatCurrency(payment.amount)}
+                        </td>
+                      </tr>
+                    ))}
+                    <tr className="border-t bg-gray-50">
+                      <td className="px-4 py-2 font-semibold text-gray-700">
+                        Total
+                      </td>
+                      <td className="px-4 py-2" />
+                      <td className="px-4 py-2 font-semibold text-gray-700">
+                        {formatCurrency(totalPaymentAmount)}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

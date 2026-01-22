@@ -147,7 +147,7 @@ const QuoteDetails = () => {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen p-4 sm:p-6">
+    <div className="min-h-screen page-container">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-8">
@@ -160,7 +160,7 @@ const QuoteDetails = () => {
         </div>
 
         {/* Summary */}
-        <div className="bg-white border rounded-lg p-4 sm:p-6 mb-6">
+        <div className="bg-white border rounded-lg section-pad mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500">Client</p>
@@ -210,7 +210,7 @@ const QuoteDetails = () => {
         </div>
 
         {/* Info */}
-        <div className="bg-white border rounded-lg p-4 sm:p-6 mb-6">
+        <div className="bg-white border rounded-lg section-pad mb-6">
 
 
           <div className="mb-4">
@@ -261,7 +261,7 @@ const QuoteDetails = () => {
         </div>
 
         {/* Bid Sheet */}
-        <div className="bg-white border rounded-lg p-4 sm:p-6 mb-6">
+        <div className="bg-white border rounded-lg section-pad mb-6">
           <h3 className="font-semibold mb-3">Bid Sheet</h3>
 
           {bidSheets.length > 0 && !isEditing && (

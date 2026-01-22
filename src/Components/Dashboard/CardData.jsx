@@ -1,4 +1,14 @@
-import { User } from "lucide-react";
+import {
+  FiAlertCircle,
+  FiBriefcase,
+  FiCheckCircle,
+  FiClock,
+  FiDollarSign,
+  FiFileText,
+  FiUsers,
+  FiXCircle,
+  FiCalendar,
+} from "react-icons/fi";
 
 const formatCurrency = (value) => {
   const amount = Number(value) || 0;
@@ -10,22 +20,45 @@ const formatCurrency = (value) => {
 };
 
 const CardData = ({ stats, isLoading, isError }) => {
-  const data = [{
-    title: "Revenue Produced",
-    value: formatCurrency(stats?.totalRevenueProduced),
-  },
-  {
-    title: "Total Revenue",
-    value: formatCurrency(stats?.totalRevenue),
-  },
-  { title: "Total Clients", value: stats?.totalClients ?? 0 },
-  { title: "Total Quotes", value: stats?.totalQuotes ?? 0 },
-  { title: "Total Jobs", value: stats?.totalJobs ?? 0 },
-  { title: "Ready to Schedule", value: stats?.readyToScheduleCount ?? 0 },
-  { title: "Scheduled & Open", value: stats?.scheduledAndOpenCount ?? 0 },
-  { title: "Pending Close", value: stats?.pendingCloseCount ?? 0 },
-  { title: "Closed Jobs", value: stats?.closedCount ?? 0 },
-  { title: "Cancelled Jobs", value: stats?.cancelledCount ?? 0 },
+  const data = [
+    {
+      title: "Revenue Produced",
+      value: formatCurrency(stats?.totalRevenueProduced),
+      icon: FiDollarSign,
+    },
+    {
+      title: "Total Revenue",
+      value: formatCurrency(stats?.totalRevenue),
+      icon: FiDollarSign,
+    },
+    { title: "Total Clients", value: stats?.totalClients ?? 0, icon: FiUsers },
+    { title: "Total Quotes", value: stats?.totalQuotes ?? 0, icon: FiFileText },
+    { title: "Total Jobs", value: stats?.totalJobs ?? 0, icon: FiBriefcase },
+    {
+      title: "Ready to Schedule",
+      value: stats?.readyToScheduleCount ?? 0,
+      icon: FiClock,
+    },
+    {
+      title: "Scheduled & Open",
+      value: stats?.scheduledAndOpenCount ?? 0,
+      icon: FiCalendar,
+    },
+    {
+      title: "Pending Close",
+      value: stats?.pendingCloseCount ?? 0,
+      icon: FiAlertCircle,
+    },
+    {
+      title: "Closed Jobs",
+      value: stats?.closedCount ?? 0,
+      icon: FiCheckCircle,
+    },
+    {
+      title: "Cancelled Jobs",
+      value: stats?.cancelledCount ?? 0,
+      icon: FiXCircle,
+    },
     // {
     //   title: "Revenue Earned",
     //   value: formatCurrency(stats?.totalRevenueSold),
@@ -66,12 +99,14 @@ const CardData = ({ stats, isLoading, isError }) => {
         {data.map((item, index) => (
           <div
             key={index}
-            className={`flex justify-between rounded-lg p-4 sm:p-6 shadow-md ${index === 0 ? "bg-[#B0D6F0]" : "bg-white"
+            className={`flex justify-between rounded-lg section-pad shadow-md ${index === 0 ? "bg-[#B0D6F0]" : "bg-white"
               }`}
           >
             <div>
               <div className="w-12 h-12 sm:w-[52px] sm:h-[52px] flex items-center justify-center bg-blue-100 rounded-lg mb-4">
-                <User />
+                {item.icon ? (
+                  <item.icon className="w-6 h-6 text-blue-600" />
+                ) : null}
               </div>
               <div className="text-sm text-gray-500">{item.title}</div>
               <div className="mt-2 text-lg sm:text-xl font-bold">

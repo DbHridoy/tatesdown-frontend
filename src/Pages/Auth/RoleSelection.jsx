@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { GoogleIcon } from "@hugeicons/core-free-icons";
 import mobile from "../../assets/images/mobile.png";
 import glfLogo from "../../assets/logos/glfLogo.svg";
 import bgImage from "../../assets/images/bg-image.jpg";

@@ -35,7 +35,7 @@ const Approvals = () => {
 
 
   return (
-    <div className="w-full min-h-screen p-4 sm:p-6 mx-auto">
+    <div className="w-full min-h-screen page-container mx-auto">
       {/* Tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto border-b border-gray-200">
         {tabs.map((tab) => (

@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import { MdDashboard } from "react-icons/md";
-import { PiUsers } from "react-icons/pi";
-import { IoNewspaper } from "react-icons/io5";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import {
+  FiBarChart2,
+  FiBriefcase,
+  FiFileText,
+  FiHome,
+  FiTruck,
+  FiUsers,
+} from "react-icons/fi";
 import brandlogo from "../../../assets/Logo.svg";
 
 const SalesRepSidebar = () => {
@@ -12,13 +16,13 @@ const SalesRepSidebar = () => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { icon: <MdDashboard className="w-5 h-5" />, label: "Home", Link: "/s/sales-rep/home" },
-    { icon: <PiUsers className="w-5 h-5" />, label: "Clients / Leads", Link: "/s/sales-rep/clients" },
-    { icon: <IoNewspaper className="w-5 h-5" />, label: "Quotes", Link: "/s/sales-rep/quotes" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Jobs", Link: "/s/sales-rep/jobs" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Design Consultation", Link: "/s/sales-rep/design-consultation" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Stats / Reports", Link: "/s/sales-rep/stats-reports" },
-    { icon: <RiMoneyDollarCircleLine className="w-5 h-5" />, label: "Expenses", Link: "/s/sales-rep/expense" },
+    { icon: <FiHome className="w-5 h-5" />, label: "Home", Link: "/s/sales-rep/home" },
+    { icon: <FiUsers className="w-5 h-5" />, label: "Clients / Leads", Link: "/s/sales-rep/clients" },
+    { icon: <FiFileText className="w-5 h-5" />, label: "Quotes", Link: "/s/sales-rep/quotes" },
+    { icon: <FiBriefcase className="w-5 h-5" />, label: "Jobs", Link: "/s/sales-rep/jobs" },
+    { icon: <FiFileText className="w-5 h-5" />, label: "Design Consultation", Link: "/s/sales-rep/design-consultation" },
+    { icon: <FiBarChart2 className="w-5 h-5" />, label: "Stats / Reports", Link: "/s/sales-rep/stats-reports" },
+    { icon: <FiTruck className="w-5 h-5" />, label: "Expenses", Link: "/s/sales-rep/expense" },
   ];
 
   const handleLogout = () => navigate("/login");

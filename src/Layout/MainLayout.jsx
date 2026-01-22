@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ConfigProvider, Drawer } from "antd";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { IoMdClose } from "react-icons/io";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiMenu, FiX } from "react-icons/fi";
 
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
@@ -97,7 +95,7 @@ const MainLayout = () => {
           width="80%"
           onClose={toggleDrawer}
           open={open}
-          closeIcon={<IoMdClose className="text-2xl" />}
+          closeIcon={<FiX className="text-2xl" />}
         >
           <Sidebar
             activeLabel={activeLabel}
@@ -113,7 +111,7 @@ const MainLayout = () => {
         <header className="fixed top-0 left-0 lg:left-72 w-full lg:w-[calc(100%-18rem)] bg-white shadow-sm z-10 px-5 py-4 flex justify-between items-center">
           {/* Hamburger (mobile only) */}
           <button className="lg:hidden" onClick={toggleDrawer}>
-            <RxHamburgerMenu className="text-2xl" />
+            <FiMenu className="text-2xl" />
           </button>
 
           {/* Topbar */}

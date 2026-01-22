@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { ArrowLeft, Plus, Upload, ChevronDown, Edit } from "lucide-react";
-import { FaHourglass } from "react-icons/fa";
+import {
+  FiArrowLeft,
+  FiChevronDown,
+  FiClock,
+  FiPlus,
+} from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetJobByIdQuery,
@@ -79,7 +83,7 @@ export default function JobOverview() {
           className="text-gray-600 hover:text-gray-900"
           onClick={() => navigate(-1)}
         >
-          <ArrowLeft className="w-5 h-5" />
+          <FiArrowLeft className="w-5 h-5" />
         </button>
         <div>
           <h1 className="text-base sm:text-lg font-semibold text-gray-900">
@@ -91,7 +95,7 @@ export default function JobOverview() {
         </div>
       </div>
 
-      <div className="p-4 sm:p-6">
+      <div className="page-container">
         {/* Job Overview & Status */}
         <div className="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
           {/* Job Overview */}
@@ -162,7 +166,7 @@ export default function JobOverview() {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 pointer-events-none right-2 top-1/2" />
+                  <FiChevronDown className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 pointer-events-none right-2 top-1/2" />
                 </div>
 
                 <button
@@ -176,7 +180,7 @@ export default function JobOverview() {
                   onClick={() => changeStatusHandler("Pending Close")}
                   className="w-full flex justify-center items-center gap-x-2 bg-yellow-400 hover:bg-yellow-500 font-medium py-2.5 rounded text-sm sm:text-base transition-colors"
                 >
-                  <FaHourglass /> Mark as Pending Close
+                  <FiClock className="w-4 h-4" /> Mark as Pending Close
                 </button>
               </div>
             )}
@@ -213,7 +217,7 @@ export default function JobOverview() {
               onClick={addNoteHandler}
               className="flex items-center gap-2 px-3 py-2 bg-[#B0D6F0] rounded text-sm sm:text-base font-medium mb-5"
             >
-              <Plus className="w-4 h-4" /> Add Note
+              <FiPlus className="w-4 h-4" /> Add Note
             </button>
 
             <div className="mb-5">

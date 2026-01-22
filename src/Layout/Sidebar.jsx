@@ -1,8 +1,17 @@
-import { CiHome, CiSettings } from "react-icons/ci";
-import { IoBagHandleOutline, IoNewspaper } from "react-icons/io5";
-import { MdDashboard } from "react-icons/md";
-import { PiUsers } from "react-icons/pi";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import {
+  FiBarChart2,
+  FiBriefcase,
+  FiCalendar,
+  FiCheckSquare,
+  FiFileText,
+  FiGrid,
+  FiHome,
+  FiSettings,
+  FiSliders,
+  FiTruck,
+  FiUserCheck,
+  FiUsers,
+} from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../redux/api/authApi";
@@ -14,37 +23,37 @@ import { userApi } from "../redux/api/userApi";
 export const menuConfig = {
   "Sales Rep": [
     {
-      icon: <MdDashboard className="w-5 h-5" />,
+      icon: <FiGrid className="w-5 h-5" />,
       label: "Home",
       Link: "/sales-rep/home",
     },
     {
-      icon: <PiUsers className="w-5 h-5" />,
+      icon: <FiUsers className="w-5 h-5" />,
       label: "Clients",
       Link: "/sales-rep/clients",
     },
     {
-      icon: <IoNewspaper className="w-5 h-5" />,
+      icon: <FiFileText className="w-5 h-5" />,
       label: "Quotes",
       Link: "/sales-rep/quotes",
     },
     {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      icon: <FiBriefcase className="w-5 h-5" />,
       label: "Jobs",
       Link: "/sales-rep/jobs",
     },
     {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      icon: <FiBarChart2 className="w-5 h-5" />,
       label: "Reports",
       Link: "/sales-rep/reports",
     },
     {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      icon: <FiTruck className="w-5 h-5" />,
       label: "Mileage Log",
       Link: "/sales-rep/mileage-log",
     },
     {
-      icon: <CiSettings className="w-5 h-5" />,
+      icon: <FiSettings className="w-5 h-5" />,
       label: "Settings",
       Link: "/sales-rep/settings",
     },
@@ -52,17 +61,17 @@ export const menuConfig = {
 
   "Production Manager": [
     {
-      icon: <CiHome className="w-5 h-5" />,
+      icon: <FiHome className="w-5 h-5" />,
       label: "Home",
       Link: "/production-manager/home",
     },
     {
-      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      icon: <FiCalendar className="w-5 h-5" />,
       label: "Jobs",
       Link: "/production-manager/jobs",
     },
     {
-      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      icon: <FiBriefcase className="w-5 h-5" />,
       label: "My Jobs",
       Link: "/production-manager/my-jobs",
     },
@@ -72,7 +81,7 @@ export const menuConfig = {
     //   Link: "/production-manager/reports",
     // },
     {
-      icon: <CiSettings className="w-5 h-5" />,
+      icon: <FiSettings className="w-5 h-5" />,
       label: "Settings",
       Link: "/production-manager/settings",
     },
@@ -80,27 +89,27 @@ export const menuConfig = {
 
   Admin: [
     {
-      icon: <MdDashboard className="w-5 h-5" />,
+      icon: <FiGrid className="w-5 h-5" />,
       label: "Dashboard",
       Link: "/admin/dashboard",
     },
     {
-      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      icon: <FiUsers className="w-5 h-5" />,
       label: "Clients",
       Link: "/admin/clients",
     },
     {
-      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      icon: <FiFileText className="w-5 h-5" />,
       label: "Quotes",
       Link: "/admin/quotes",
     },
     {
-      icon: <PiUsers className="w-5 h-5" />,
+      icon: <FiBriefcase className="w-5 h-5" />,
       label: "Jobs",
       Link: "/admin/jobs",
     },
     {
-      icon: <IoNewspaper className="w-5 h-5" />,
+      icon: <FiCheckSquare className="w-5 h-5" />,
       label: "Approvals Center",
       Link: "/admin/approvals-center",
     },
@@ -110,17 +119,17 @@ export const menuConfig = {
     //   Link: "/admin/reports",
     // },
     {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      icon: <FiUserCheck className="w-5 h-5" />,
       label: "User Management",
       Link: "/admin/user-management",
     },
     {
-      icon: <RiMoneyDollarCircleLine className="w-5 h-5" />,
+      icon: <FiSliders className="w-5 h-5" />,
       label: "Parameters",
       Link: "/admin/parameters",
     },
     {
-      icon: <CiSettings className="w-5 h-5" />,
+      icon: <FiSettings className="w-5 h-5" />,
       label: "Settings",
       Link: "/admin/settings",
     },

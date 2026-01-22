@@ -1,7 +1,6 @@
 import SharedNotes from "../../../Components/Sales-rep/Jobs/SharedNotes";
 import JobDetailsOverview from "../../../Components/Common/JobDetailsOverview";
-// import FinancialDetails from "../../../Components/Sales-rep/Jobs/FinancialDetails";
-// import DC from "../../../Components/Sales-rep/Jobs/DC";
+import DC from "../../../Components/Sales-rep/Jobs/DC";
 import { useEffect, useMemo, useState } from "react";
 import {
   useGetJobByIdQuery,
@@ -9,7 +8,7 @@ import {
 } from "../../../redux/api/jobApi";
 import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 import { useParams } from "react-router-dom";
-// import DesignConsultationCreate from "./DesignConsultation";
+import DesignConsultationCreate from "../../Sales-rep/Jobs/DesignConsultation";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -171,6 +170,9 @@ const AdminJobDetailsPage = () => {
         title: formJob.title,
         status: formJob.status,
         startDate: formJob.startDate ? new Date(formJob.startDate) : undefined,
+        estimatedStartDate: formJob.estimatedStartDate
+          ? new Date(formJob.estimatedStartDate)
+          : undefined,
         price: Number(formJob.price) || 0,
         downPayment: Number(formJob.downPayment) || 0,
         budgetSpent: Number(formJob.budgetSpent) || 0,
@@ -184,10 +186,10 @@ const AdminJobDetailsPage = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="page-container space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
-        {/* {isEditing ? (
+        {isEditing ? (
           <>
             <button
               onClick={handleCancel}
@@ -211,7 +213,7 @@ const AdminJobDetailsPage = () => {
           >
             Edit
           </button>
-        )} */}
+        )}
       </div>
       {/* Job Header */}
       {/* <JobDetailsHeader job={job} isEditing={isEditing} /> */}
@@ -234,7 +236,7 @@ const AdminJobDetailsPage = () => {
         ]}
       />
 
-      <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+      <div className="section-pad bg-white shadow-md rounded-md border">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
             Assignment
@@ -317,62 +319,7 @@ const AdminJobDetailsPage = () => {
         </div>
       </div>
 
-      <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-          Design Consultation
-        </h2>
-        {job.designConsultation?.length ? (
-          <div className="space-y-4">
-            {job.designConsultation.map((dc) => (
-              <div key={dc._id} className="rounded-md border p-4">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <InfoLine label="Product" value={dc.product} />
-                  <InfoLine label="Color Code" value={dc.colorCode} />
-                  <InfoLine
-                    label="Estimated Gallons"
-                    value={dc.estimatedGallons}
-                  />
-                  <InfoLine
-                    label="Upsell Description"
-                    value={dc.upsellDescription}
-                  />
-                  <InfoLine label="Upsell Value" value={dc.upsellValue} />
-                  <InfoLine label="Added Hours" value={dc.addedHours} />
-                  <InfoLine
-                    label="Estimated Start Date"
-                    value={
-                      dc.estimatedStartDate
-                        ? new Date(dc.estimatedStartDate).toLocaleDateString()
-                        : "N/A"
-                    }
-                  />
-                  <InfoLine
-                    label="File"
-                    value={
-                      dc.file ? (
-                        <a
-                          href={dc.file}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View file
-                        </a>
-                      ) : (
-                        "N/A"
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">No design consultation data.</p>
-        )}
-      </div>
-
-      {/* <DC
+      <DC
         jobId={jobId}
         actionLabel={designConsultation ? "Edit DC" : "Add DC"}
         onAction={() => setShowDcForm((prev) => !prev)}
@@ -386,7 +333,7 @@ const AdminJobDetailsPage = () => {
           onCancel={() => setShowDcForm(false)}
           onSaved={() => setShowDcForm(false)}
         />
-      )} */}
+      )}
 
       {/* Notes Section */}
       <SharedNotes notes={job.notes} />

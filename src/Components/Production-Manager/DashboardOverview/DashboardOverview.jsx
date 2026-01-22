@@ -1,5 +1,4 @@
-import { Briefcase, Clock, Calendar, Hourglass } from "lucide-react";
-import { useGetMyStatsQuery } from "../../../redux/api/common";
+import { FiBriefcase, FiCalendar, FiClock, FiXCircle } from "react-icons/fi";
 
 const DashboardOverview = ({
   title = "Dashboard Overview",
@@ -13,7 +12,7 @@ const DashboardOverview = ({
       id: 2,
       title: "Ready to Schedule",
       value: stats?.readyToScheduleCount ?? 0,
-      icon: Clock,
+      icon: FiClock,
       bgColor: "bg-blue-50",
       iconColor: "text-blue-600",
     },
@@ -21,7 +20,7 @@ const DashboardOverview = ({
       id: 3,
       title: "Scheduled & Open",
       value: stats?.scheduledAndOpenCount ?? 0,
-      icon: Calendar,
+      icon: FiCalendar,
       bgColor: "bg-blue-50",
       iconColor: "text-blue-600",
     },
@@ -29,7 +28,7 @@ const DashboardOverview = ({
       id: 4,
       title: "Pending Close",
       value: stats?.pendingCloseCount ?? 0,
-      icon: Hourglass,
+      icon: FiClock,
       bgColor: "bg-blue-50",
       iconColor: "text-blue-600",
     },
@@ -37,7 +36,7 @@ const DashboardOverview = ({
       id: 5,
       title: "Cancelled",
       value: stats?.cancelledCount ?? 0,
-      icon: Briefcase,
+      icon: FiXCircle,
       bgColor: "bg-blue-50",
       iconColor: "text-blue-600",
     },
@@ -65,12 +64,12 @@ const DashboardOverview = ({
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         {overviewStats.map((stat, index) => {
-          const Icon = stat.icon || Briefcase;
+          const Icon = stat.icon || FiBriefcase;
 
           return (
             <div
               key={stat.id ?? index}
-              className="p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="section-pad bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
               <div
                 className={`w-12 h-12 ${stat.bgColor || "bg-gray-50"

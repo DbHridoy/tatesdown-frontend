@@ -39,7 +39,7 @@ export default function PipelineOverview() {
   ];
 
   return (
-    <div className="w-full p-4 sm:p-6 lg:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="w-full section-pad lg:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h1 className="mb-1 text-xl sm:text-2xl font-semibold text-gray-900">

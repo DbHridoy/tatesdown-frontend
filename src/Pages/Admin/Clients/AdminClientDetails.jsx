@@ -131,7 +131,7 @@ const AdminClientDetails = () => {
 
   /* -------------------- Render -------------------- */
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="page-container space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
@@ -175,7 +175,7 @@ const AdminClientDetails = () => {
       </div>
 
       {/* Client Information */}
-      <div className="bg-white p-4 sm:p-6 rounded shadow space-y-4">
+      <div className="bg-white section-pad rounded shadow space-y-4">
         <h3 className="font-semibold">Client Information</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -243,7 +243,7 @@ const AdminClientDetails = () => {
       </div>
 
       {/* Call History */}
-      <div className="bg-white p-4 sm:p-6 rounded shadow space-y-3">
+      <div className="bg-white section-pad rounded shadow space-y-3">
         <h3 className="font-semibold">Call History</h3>
 
         {client.callLogs?.length === 0 && (
@@ -278,7 +278,7 @@ const AdminClientDetails = () => {
       </div>
 
       {/* Notes */}
-      <div className="bg-white p-4 sm:p-6 rounded shadow space-y-4">
+      <div className="bg-white section-pad rounded shadow space-y-4">
         <h3 className="font-semibold">Notes & Attachments</h3>
 
         <textarea

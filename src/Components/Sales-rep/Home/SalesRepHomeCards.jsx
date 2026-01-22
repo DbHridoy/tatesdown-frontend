@@ -1,5 +1,3 @@
-import { HugeiconsIcon } from "@hugeicons/react";
-
 function SalesRepHomeCards({ cards }) {
 
 
@@ -12,7 +10,7 @@ function SalesRepHomeCards({ cards }) {
           className="bg-white shadow-md rounded-xl flex flex-col p-5 sm:p-6 items-center space-y-4"
         >
           <div className="bg-blue-100 p-3 flex items-center justify-center rounded-full">
-            <HugeiconsIcon icon={card.icon} />
+            {card.icon}
           </div>
 
           <div className="text-center space-y-1">

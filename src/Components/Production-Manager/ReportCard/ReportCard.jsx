@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClipboardList, Clock, CheckCircle } from 'lucide-react';
+import { FiCheckCircle, FiClipboard, FiClock } from 'react-icons/fi';
 
 const ReportCard = () => {
   const stats = [
@@ -8,7 +8,7 @@ const ReportCard = () => {
       title: 'Total Jobs Assigned',
       value: '150',
       subtitle: 'Active assignments',
-      icon: ClipboardList,
+      icon: FiClipboard,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-600'
     },
@@ -17,7 +17,7 @@ const ReportCard = () => {
       title: 'Pending Close',
       value: '150',
       subtitle: '60% of total jobs',
-      icon: Clock,
+      icon: FiClock,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-600'
     },
@@ -26,7 +26,7 @@ const ReportCard = () => {
       title: 'Jobs Completed',
       value: '$87',
       subtitle: '40% completion rate',
-      icon: CheckCircle,
+      icon: FiCheckCircle,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-600'
     }

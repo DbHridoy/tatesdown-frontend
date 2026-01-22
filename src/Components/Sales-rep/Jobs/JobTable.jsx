@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  AddToListIcon,
-  Delete02Icon,
-  ViewIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { FiEdit2, FiEye, FiTrash2 } from "react-icons/fi";
 
 const JobTable = () => {
   const navigate = useNavigate();
@@ -153,15 +148,15 @@ const JobTable = () => {
           onClick={() => navigate("/s/sales-rep/jobs-details")}
           className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
         >
-          <HugeiconsIcon icon={ViewIcon} className="w-4 h-4" />
+          <FiEye className="w-4 h-4" />
           <span>View Details</span>
         </button>
         <div className="flex space-x-2">
           <button className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors">
-            <HugeiconsIcon icon={AddToListIcon} className="w-5 h-5" />
+            <FiEdit2 className="w-5 h-5" />
           </button>
           <button className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors">
-            <HugeiconsIcon icon={Delete02Icon} className="w-5 h-5" />
+            <FiTrash2 className="w-5 h-5" />
           </button>
         </div>
       </div>
@@ -183,7 +178,7 @@ const JobTable = () => {
           </div>
           <div className="mt-3 sm:mt-0">
             <button className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-              <HugeiconsIcon icon={AddToListIcon} className="w-5 h-5" />
+              <FiEdit2 className="w-5 h-5" />
               <span>Create New Job</span>
             </button>
           </div>
@@ -292,13 +287,13 @@ const JobTable = () => {
                       onClick={() => navigate("/s/sales-rep/jobs-details")}
                       className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
                     >
-                      <HugeiconsIcon icon={ViewIcon} className="w-5 h-5" />
+                      <FiEye className="w-5 h-5" />
                     </button>
                     <button className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors">
-                      <HugeiconsIcon icon={AddToListIcon} className="w-5 h-5" />
+                      <FiEdit2 className="w-5 h-5" />
                     </button>
                     <button className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors">
-                      <HugeiconsIcon icon={Delete02Icon} className="w-5 h-5" />
+                      <FiTrash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </td>
@@ -404,7 +399,7 @@ const JobTable = () => {
               <option value="Closed">Closed</option>
             </select>
             <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center space-x-2">
-              <HugeiconsIcon icon={AddToListIcon} className="w-4 h-4" />
+              <FiEdit2 className="w-4 h-4" />
               <span className="hidden sm:inline">Filter</span>
             </button>
           </div>

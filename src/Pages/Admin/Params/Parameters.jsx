@@ -7,7 +7,7 @@ import SalesRepCommission from "../../../Components/Admin/Params/SalesRepCommiss
 const Parameters = () => {
   const [activeTab, setActiveTab] = useState("mileage");
   return (
-    <div className="min-h-screen p-4 sm:p-6 bg-gray-50 space-y-6">
+    <div className="min-h-screen section-pad bg-gray-50 space-y-6">
       <MileageRate />
       <SalesRepCommission />
     </div>

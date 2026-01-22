@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { FiLogOut } from "react-icons/fi";
-import { BiChevronDown } from "react-icons/bi";
+import {
+  FiBarChart2,
+  FiCalendar,
+  FiChevronDown,
+  FiHome,
+  FiLogOut,
+  FiSettings,
+} from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import { MdAutoGraph } from "react-icons/md";
 import brandlogo from "../../../assets/Logo.svg";
-import { IoBagHandleOutline } from "react-icons/io5";
-import { CiHome, CiSettings } from "react-icons/ci";
 
 const ProductionSidebar = () => {
   const [active, setActive] = useState("Home");
@@ -14,22 +17,22 @@ const ProductionSidebar = () => {
 
   const menuItems = [
     {
-      icon: <CiHome className="w-5 h-5" />,
+      icon: <FiHome className="w-5 h-5" />,
       label: "Home",
       Link: "/s/production-manager/production-home",
     },
     {
-      icon: <IoBagHandleOutline className="w-5 h-5" />,
+      icon: <FiCalendar className="w-5 h-5" />,
       label: "Job Scheduling",
       Link: "/s/production-manager/jobs",
     },
     {
-      icon: <MdAutoGraph className="w-5 h-5" />,
+      icon: <FiBarChart2 className="w-5 h-5" />,
       label: "Reports",
       Link: "/s/production-manager/production-report",
     },
     {
-      icon: <CiSettings className="w-5 h-5" />,
+      icon: <FiSettings className="w-5 h-5" />,
       label: "Settings",
       Link: "/s/production-manager/production-settings",
     },
@@ -66,7 +69,7 @@ const ProductionSidebar = () => {
                   {item.icon}
                   <p>{item.label}</p>
                 </div>
-                <BiChevronDown
+                <FiChevronDown
                   className={`${active === item.label ? "rotate-180" : ""}`}
                 />
               </div>

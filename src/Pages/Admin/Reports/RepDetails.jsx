@@ -32,7 +32,7 @@ const RepDetails = () => {
   const totalDeductions = deductionData?.data || 0;
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 text-gray-800 bg-gray-100">
+    <div className="min-h-screen page-container text-gray-800 bg-gray-100">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-lg sm:text-xl font-semibold">

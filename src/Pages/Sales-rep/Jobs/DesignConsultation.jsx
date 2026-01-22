@@ -113,7 +113,7 @@ const DesignConsultationCreate = ({
   };
 
   return (
-    <div className="p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+    <div className="section-pad bg-white rounded-lg shadow-lg">
       <h2 className="text-xl sm:text-2xl font-semibold mb-6">
         {mode === "edit"
           ? "Edit Design Consultation"

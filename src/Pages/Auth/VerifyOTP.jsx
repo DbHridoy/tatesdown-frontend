@@ -2,8 +2,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import brandLogo from "../../assets/Logo.svg";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
+import { FiArrowLeft } from "react-icons/fi";
 import { useVerifyOtpMutation } from "../../redux/api/authApi";
 
 const VerifyOtp = () => {
@@ -137,7 +136,7 @@ const VerifyOtp = () => {
               onClick={() => navigate("/login")}
               className="w-full h-11 sm:h-12 px-4 rounded-lg border border-gray-300 flex items-center justify-center gap-2 cursor-pointer text-gray-700 text-sm sm:text-base hover:bg-gray-50 transition-colors"
             >
-              <HugeiconsIcon icon={ArrowLeft02Icon} />
+              <FiArrowLeft className="h-4 w-4" />
               <span className="font-medium">Back to Login</span>
             </button>
           </form>

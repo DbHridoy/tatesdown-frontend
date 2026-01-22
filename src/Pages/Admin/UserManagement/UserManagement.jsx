@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { IoClose } from "react-icons/io5";
+import { FiX } from "react-icons/fi";
 import DataTable from "../../../Components/Common/DataTable";
 import {
   useCreatUserMutation,
@@ -163,7 +163,7 @@ const UserManagement = () => {
 
   /* ================= UI ================= */
   return (
-    <div className="p-4 sm:p-6">
+    <div className="page-container">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <h2 className="text-xl sm:text-2xl font-semibold">User Management</h2>
         <button
@@ -198,7 +198,7 @@ const Modal = ({ title, children, onClose }) => (
     <div className="bg-white w-full max-w-md p-5 sm:p-6 rounded-lg">
       <div className="flex justify-between mb-4">
         <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
-        <IoClose className="cursor-pointer" onClick={onClose} />
+        <FiX className="cursor-pointer" onClick={onClose} />
       </div>
       {children}
     </div>

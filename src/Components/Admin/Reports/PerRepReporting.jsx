@@ -1,8 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { FaRegEdit, FaUser } from "react-icons/fa";
-import { IoClose, IoPersonSharp } from "react-icons/io5";
-import { LuEye, LuPhone } from "react-icons/lu";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
 const PerRepReporting = () => {

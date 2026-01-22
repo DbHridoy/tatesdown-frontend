@@ -114,7 +114,7 @@ const JobDetailsPage = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="page-container space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex justify-end space-x-2">
 

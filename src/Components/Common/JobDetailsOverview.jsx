@@ -95,7 +95,7 @@ const JobDetailsOverview = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+      <div className="section-pad bg-white shadow-md rounded-md border">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
           Job Details
         </h2>
@@ -244,7 +244,7 @@ const JobDetailsOverview = ({
       </div>
 
       <div className="space-y-6">
-        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+        <div className="section-pad bg-white shadow-md rounded-md border">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Sales Rep Information
           </h2>
@@ -257,7 +257,7 @@ const JobDetailsOverview = ({
         </div>
 
         {showProductionManager && (
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+          <div className="section-pad bg-white shadow-md rounded-md border">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Production Manager Information
             </h2>
@@ -270,7 +270,7 @@ const JobDetailsOverview = ({
           </div>
         )}
 
-        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+        <div className="section-pad bg-white shadow-md rounded-md border">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Quote Summary
           </h2>
@@ -289,7 +289,7 @@ const JobDetailsOverview = ({
         </div>
 
         {(contractUrl || bidSheetUrl || designConsultationDoc) && (
-          <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+          <div className="section-pad bg-white shadow-md rounded-md border">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               Documents
             </h2>
@@ -310,7 +310,7 @@ const JobDetailsOverview = ({
           </div>
         )}
 
-        <div className="p-4 sm:p-6 bg-white shadow-md rounded-md border">
+        <div className="section-pad bg-white shadow-md rounded-md border">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
             Client Information
           </h2>

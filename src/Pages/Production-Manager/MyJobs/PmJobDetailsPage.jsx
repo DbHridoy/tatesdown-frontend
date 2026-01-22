@@ -141,7 +141,7 @@ const PmJobDetailsPage = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="page-container space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
         {!canManageJob ? null : isEditing ? (

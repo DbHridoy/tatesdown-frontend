@@ -42,7 +42,7 @@ export default function ProductionManagerReports() {
   };
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="page-container">
       <div className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold">Reports</h1>

@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import brandLogo from "../../assets/Logo.svg";
 import tick from "../../assets/tick.svg";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
+import { FiArrowLeft } from "react-icons/fi";
 
 function Successful() {
   const navigate = useNavigate();
@@ -46,7 +45,7 @@ function Successful() {
             onClick={handleBackToLogin}
             className="w-full h-11 sm:h-12 flex justify-center items-center gap-2 text-white mt-8 px-4 rounded-lg bg-[#007CCD] cursor-pointer text-sm sm:text-base font-medium transition-colors"
           >
-            <HugeiconsIcon icon={ArrowLeft02Icon} />
+            <FiArrowLeft className="h-4 w-4" />
             <span>Back to Login</span>
           </button>
         </div>

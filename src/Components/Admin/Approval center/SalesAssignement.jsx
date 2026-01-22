@@ -1,4 +1,3 @@
-import { Users } from "lucide-react";
 import React, { useState } from "react";
 import SalesRepresentativeModal from "./SalesRepresentativeModal";
 import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
@@ -25,7 +24,7 @@ function SalesAssignement() {
 
   return (
     <div className="bg-white rounded-lg shadow">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-6 border-b border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 section-pad border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800">

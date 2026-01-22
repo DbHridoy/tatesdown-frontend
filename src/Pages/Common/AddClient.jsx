@@ -80,7 +80,7 @@ const AddClient = () => {
 
       <form
         onSubmit={handleCreateClient}
-        className="space-y-6 bg-white p-4 sm:p-6 border rounded-lg"
+        className="space-y-6 bg-white section-pad border rounded-lg"
       >
         {/* Client Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

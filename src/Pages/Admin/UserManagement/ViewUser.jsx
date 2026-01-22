@@ -185,6 +185,16 @@ const ViewUser = () => {
   };
 
   const payments = paymentsData?.data || [];
+  const totalPaymentAmount = payments.reduce(
+    (sum, payment) => sum + (Number(payment.amount) || 0),
+    0
+  );
+  const formatCurrency = (value) =>
+    Number(value || 0).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    });
 
   if (isLoading) {
     return <div className="p-6">Loading user...</div>;
@@ -195,7 +205,7 @@ const ViewUser = () => {
   }
 
   return (
-    <div className="space-y-6 p-4 sm:p-6">
+    <div className="page-container space-y-6">
       {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
@@ -376,11 +386,7 @@ const ViewUser = () => {
                       <div className="text-sm">
                         <span className="text-gray-500">Amount:</span>{" "}
                         <span className="text-gray-900 font-medium">
-                          {Number(payment.amount || 0).toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            maximumFractionDigits: 0,
-                          })}
+                          {formatCurrency(payment.amount)}
                         </span>
                       </div>
                       <div className="text-sm">
@@ -418,6 +424,12 @@ const ViewUser = () => {
                       </div>
                     </div>
                   ))}
+                  <div className="border-t pt-3 text-sm text-gray-700 flex justify-between">
+                    <span className="font-semibold">Total</span>
+                    <span className="font-semibold">
+                      {formatCurrency(totalPaymentAmount)}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Desktop table */}
@@ -425,9 +437,9 @@ const ViewUser = () => {
                   <table className="min-w-max w-full text-left text-sm sm:text-base border border-gray-200 rounded-lg">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-4 py-2 border-b">Amount</th>
                         <th className="px-4 py-2 border-b">Payment Date</th>
                         <th className="px-4 py-2 border-b">Tax Status</th>
+                        <th className="px-4 py-2 border-b">Amount</th>
                         <th className="px-4 py-2 border-b">Actions</th>
                       </tr>
                     </thead>
@@ -435,19 +447,15 @@ const ViewUser = () => {
                       {payments.map((payment) => (
                         <tr key={payment.id || payment._id} className="border-b last:border-b-0">
                           <td className="px-4 py-2">
-                            {Number(payment.amount || 0).toLocaleString("en-US", {
-                              style: "currency",
-                              currency: "USD",
-                              maximumFractionDigits: 0,
-                            })}
-                          </td>
-                          <td className="px-4 py-2">
                             {payment.paymentDate
                               ? new Date(payment.paymentDate).toLocaleDateString()
                               : "—"}
                           </td>
                           <td className="px-4 py-2 capitalize">
                             {payment.taxStatus || "—"}
+                          </td>
+                          <td className="px-4 py-2">
+                            {formatCurrency(payment.amount)}
                           </td>
                           <td className="px-4 py-2">
                             <div className="flex flex-wrap gap-2">
@@ -472,6 +480,16 @@ const ViewUser = () => {
                           </td>
                         </tr>
                       ))}
+                      <tr className="border-t bg-gray-50">
+                        <td className="px-4 py-2 font-semibold text-gray-700">
+                          Total
+                        </td>
+                        <td className="px-4 py-2" />
+                        <td className="px-4 py-2 font-semibold text-gray-700">
+                          {formatCurrency(totalPaymentAmount)}
+                        </td>
+                        <td className="px-4 py-2" />
+                      </tr>
                     </tbody>
                   </table>
                 </div>

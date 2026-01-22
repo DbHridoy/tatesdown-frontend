@@ -74,7 +74,7 @@ function JobsList() {
   };
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="page-container">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">

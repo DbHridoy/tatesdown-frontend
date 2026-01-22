@@ -15,7 +15,7 @@ const ProductionHome = () => {
   const stats = data?.data;
 
   return (
-    <div className="p-4 sm:p-6 space-y-6">
+    <div className="page-container space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div className="text-sm text-gray-500">Filter stats by period</div>
         <PeriodFilter

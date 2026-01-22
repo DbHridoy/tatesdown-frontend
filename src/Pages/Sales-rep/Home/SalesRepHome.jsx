@@ -5,11 +5,11 @@ import PeriodFilter from "../../../Components/Common/PeriodFilter";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import {
-  Dollar01Icon,
-  UserGroup02Icon,
-  ChampionIcon,
-  Briefcase03Icon,
-} from "@hugeicons/core-free-icons";
+  FiBriefcase,
+  FiDollarSign,
+  FiFileText,
+  FiUsers,
+} from "react-icons/fi";
 import { useGetMeQuery } from "../../../redux/api/userApi";
 import { useGetLeaderBoardQuery, useGetMyStatsQuery } from "../../../redux/api/common";
 import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
@@ -35,22 +35,22 @@ const SalesRepHome = () => {
     {
       title: "Total sold",
       count: myStats?.data?.totalSold || 0,
-      icon: Dollar01Icon,
+      icon: <FiDollarSign className="h-6 w-6 text-blue-700" />,
     },
     {
       title: "Total clients",
       count: myStats?.data?.totalClients || 0,
-      icon: UserGroup02Icon,
+      icon: <FiUsers className="h-6 w-6 text-blue-700" />,
     },
     {
       title: "Total quotes",
       count: myStats?.data?.totalQuotes || 0,
-      icon: ChampionIcon,
+      icon: <FiFileText className="h-6 w-6 text-blue-700" />,
     },
     {
       title: "Total jobs",
       count: myStats?.data?.totalJobs || 0,
-      icon: Briefcase03Icon,
+      icon: <FiBriefcase className="h-6 w-6 text-blue-700" />,
     },
   ];
   const leaderBoard = leaderBoardData?.data || [];

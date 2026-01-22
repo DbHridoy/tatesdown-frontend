@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Edit, Briefcase, Camera, Check } from "lucide-react";
+import { FiBriefcase, FiCamera, FiEdit2 } from "react-icons/fi";
 import { useGetMeQuery, useUpdateMeMutation } from "../../redux/api/userApi";
 import toast from "react-hot-toast";
 
@@ -84,7 +84,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 bg-gray-50">
+    <div className="section-pad bg-gray-50">
       <div className="p-5 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
         {/* Header */}
         <div className="mb-8">
@@ -115,7 +115,7 @@ const Settings = () => {
 
             {isEditing && (
               <label className="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 rounded-full opacity-0 cursor-pointer group-hover:opacity-100">
-                <Camera className="w-6 h-6 text-white" />
+                <FiCamera className="w-6 h-6 text-white" />
                 <input
                   type="file"
                   accept="image/*"
@@ -126,7 +126,7 @@ const Settings = () => {
             )}
 
             <div className="absolute bottom-0 right-0 flex items-center justify-center w-6 h-6 bg-white border-2 border-gray-200 rounded-full">
-              <Briefcase className="w-3 h-3 text-gray-600" />
+              <FiBriefcase className="w-3 h-3 text-gray-600" />
             </div>
           </div>
 
@@ -142,7 +142,7 @@ const Settings = () => {
               onClick={handleEditClick}
               className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 text-sm sm:text-base font-medium text-gray-700 transition-colors border border-gray-300 rounded hover:bg-gray-50"
             >
-              <Edit className="w-4 h-4" /> Edit Profile
+              <FiEdit2 className="w-4 h-4" /> Edit Profile
             </button>
           )}
         </div>

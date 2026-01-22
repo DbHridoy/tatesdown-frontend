@@ -134,7 +134,7 @@ const AddNewJob = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:px-6">
-      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full p-4 sm:p-6">
+      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full section-pad">
         <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
           Add New Job
         </h1>
