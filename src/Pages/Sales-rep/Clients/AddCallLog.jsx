@@ -42,7 +42,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden"
+        className="bg-white rounded-xl shadow-xl w-full overflow-hidden"
       >
         {/* Header */}
         <div className="px-6 py-4 border-b">

@@ -73,19 +73,22 @@ const AddClient = () => {
   /* ================= UI ================= */
 
   return (
-    <div className="py-8 px-4 sm:px-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
-        Add Client
-      </h1>
+    <div className="page-container">
+      <div className="space-y-6">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 text-center">
+          Add Client
+        </h1>
 
-      <form
-        onSubmit={handleCreateClient}
-        className="space-y-6 bg-white section-pad border rounded-lg"
-      >
+        <form
+          onSubmit={handleCreateClient}
+          className="space-y-6 bg-white section-pad border rounded-lg"
+        >
         {/* Client Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium">Client Name *</label>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Client Name *
+            </label>
             <input
               value={formData.clientName}
               onChange={(e) => handleInputChange("clientName", e.target.value)}
@@ -95,7 +98,9 @@ const AddClient = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Partner Name</label>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Partner Name
+            </label>
             <input
               value={formData.partnerName}
               onChange={(e) => handleInputChange("partnerName", e.target.value)}
@@ -107,7 +112,9 @@ const AddClient = () => {
         {/* Contact */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium">Phone *</label>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Phone *
+            </label>
             <input
               type="tel"
               value={formData.phoneNumber}
@@ -118,7 +125,9 @@ const AddClient = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Email
+            </label>
             <input
               type="email"
               value={formData.email}
@@ -130,7 +139,9 @@ const AddClient = () => {
 
         {/* Address */}
         <div>
-          <label className="block text-sm font-medium">Address *</label>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Address *
+          </label>
           <input
             value={formData.address}
             onChange={(e) => handleInputChange("address", e.target.value)}
@@ -141,7 +152,9 @@ const AddClient = () => {
 
         {/* Lead Source */}
         <div>
-          <label className="block text-sm font-medium">Lead Source *</label>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Lead Source *
+          </label>
           <select
             value={formData.leadSource}
             onChange={(e) => handleInputChange("leadSource", e.target.value)}
@@ -158,7 +171,9 @@ const AddClient = () => {
 
         {/* Lead Rating */}
         <div>
-          <label className="block text-sm font-medium mb-2">Lead Rating</label>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Lead Rating
+          </label>
           <div className="flex flex-wrap items-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -183,7 +198,7 @@ const AddClient = () => {
         />
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
           <button
             type="button"
             onClick={() => navigate("/s/sales-rep/clients")}
@@ -199,7 +214,8 @@ const AddClient = () => {
             {isLoading ? "Saving..." : "Save Client"}
           </button>
         </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

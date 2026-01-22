@@ -58,7 +58,7 @@ function UserExpenses() {
   };
 
   return (
-    <div className="page-container space-y-8">
+    <div className="page-container space-y-6">
       <AddExpense />
       <ExpenseCard totalMiles={totalMiles} totalDeduction={totalDeduction} />
       <DataTable

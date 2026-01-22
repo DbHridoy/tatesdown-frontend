@@ -32,19 +32,19 @@ const RepDetails = () => {
   const totalDeductions = deductionData?.data || 0;
 
   return (
-    <div className="min-h-screen page-container text-gray-800 bg-gray-100">
+    <div className="min-h-screen page-container text-gray-800 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-lg sm:text-xl font-semibold">
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
           View Details - Rep A
         </h1>
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3">
-        <div className="p-4 bg-white rounded-lg shadow">
-          <p>Total Earned</p>
-          <h2 className="text-xl sm:text-2xl font-bold">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="section-pad bg-white rounded-lg shadow">
+          <p className="text-sm text-gray-500">Total Earned</p>
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
             ${totalEarnings}
           </h2>
         </div>
@@ -52,9 +52,9 @@ const RepDetails = () => {
           <p>Total Deductions</p>
           <h2 className="text-2xl font-bold text-red-500">${totalDeductions}</h2>
         </div> */}
-        <div className="p-4 bg-white rounded-lg shadow">
-          <p>Mileage Deductions</p>
-          <h2 className="text-xl sm:text-2xl font-bold text-blue-500">
+        <div className="section-pad bg-white rounded-lg shadow">
+          <p className="text-sm text-gray-500">Mileage Deductions</p>
+          <h2 className="text-xl sm:text-2xl font-semibold text-blue-600">
             ${totalDeductions}
           </h2>
         </div>
@@ -64,9 +64,9 @@ const RepDetails = () => {
       {/* <EarningBreakdown id={id}/> */}
 
       {/* Payment History */}
-      <div className="p-4 mb-6 bg-white rounded-lg shadow">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
-          <h3 className="text-base sm:text-lg font-semibold">
+      <div className="section-pad bg-white rounded-lg shadow space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
             Payment History
           </h3>
           <button
@@ -78,7 +78,7 @@ const RepDetails = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-max w-full mb-3 text-left text-sm sm:text-base">
+          <table className="min-w-max w-full text-left text-sm sm:text-base">
             <thead>
               <tr className="border-b">
                 <th className="py-2">Payment Amount</th>
@@ -108,7 +108,7 @@ const RepDetails = () => {
           </table>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm sm:text-base">
           <p>
             Total Payments Made:{" "}
             <span className="font-semibold text-green-600">$400.00</span>

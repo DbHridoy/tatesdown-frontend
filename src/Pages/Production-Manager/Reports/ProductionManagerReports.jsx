@@ -42,10 +42,12 @@ export default function ProductionManagerReports() {
   };
 
   return (
-    <div className="page-container">
-      <div className="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold">Reports</h1>
+    <div className="page-container space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+            Reports
+          </h1>
           <p className="text-sm sm:text-base text-gray-500">
             Overall business stats
           </p>
@@ -65,7 +67,7 @@ export default function ProductionManagerReports() {
         {stats.map((item) => (
           <div
             key={item.key}
-            className="rounded-xl border bg-white p-4 sm:p-5 shadow-sm"
+            className="rounded-xl border bg-white section-pad shadow-sm"
           >
             <div className="text-sm text-gray-500">{item.label}</div>
             <div className="mt-1 text-xl sm:text-2xl font-semibold text-gray-900">

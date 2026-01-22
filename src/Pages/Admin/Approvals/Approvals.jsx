@@ -35,9 +35,9 @@ const Approvals = () => {
 
 
   return (
-    <div className="w-full min-h-screen page-container mx-auto">
+    <div className="min-h-screen page-container space-y-6">
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto border-b border-gray-200">
+      <div className="flex gap-2 overflow-x-auto border-b border-gray-200">
         {tabs.map((tab) => (
           <button
             key={tab.id}

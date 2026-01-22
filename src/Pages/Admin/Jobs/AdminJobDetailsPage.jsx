@@ -193,14 +193,14 @@ const AdminJobDetailsPage = () => {
           <>
             <button
               onClick={handleCancel}
-              className="bg-red-500 text-white px-4 py-2 rounded-md disabled:opacity-60"
+              className="bg-red-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
               disabled={isSaving}
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="bg-green-500 text-white px-4 py-2 rounded-md disabled:opacity-60"
+              className="bg-green-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
               disabled={isSaving}
             >
               Save
@@ -209,7 +209,7 @@ const AdminJobDetailsPage = () => {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md text-sm sm:text-base"
           >
             Edit
           </button>
@@ -238,7 +238,7 @@ const AdminJobDetailsPage = () => {
 
       <div className="section-pad bg-white shadow-md rounded-md border">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
             Assignment
           </h2>
           {isEditingAssignment ? (

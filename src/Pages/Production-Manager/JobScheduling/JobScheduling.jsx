@@ -103,24 +103,22 @@ console.log("line:52-me", me)
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
-            Job Scheduling
-          </h1>
-          <p className="text-sm sm:text-base text-gray-600">
-            Manage your jobs and track progress
-          </p>
-        </div>
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+          Job Scheduling
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600">
+          Manage your jobs and track progress
+        </p>
       </div>
 
       <DataTable title="Jobs" data={formattedJobs} config={tableConfig} />
 
       {isScheduleModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+          <div className="bg-white rounded-lg shadow-xl w-full">
             <div className="p-6">
               <h3 className="text-lg font-semibold mb-3">
                 Mark as scheduled

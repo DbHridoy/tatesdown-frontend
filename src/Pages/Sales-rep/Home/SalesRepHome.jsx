@@ -116,19 +116,19 @@ const SalesRepHome = () => {
     },
   };
   return (
-    <>
-      <div>
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
+    <div className="page-container space-y-6">
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
           Sales Dashboard
         </h1>
         <p className="text-sm sm:text-base text-gray-500">
           Overview of your sales performance
         </p>
       </div>
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mt-2">
-        <div className="text-sm text-gray-500">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <p className="text-sm sm:text-base text-gray-500">
           Filter stats by period
-        </div>
+        </p>
         <PeriodFilter
           periodType={statsPeriodType}
           dateValue={statsDateInput}
@@ -143,7 +143,7 @@ const SalesRepHome = () => {
       {/* Cards overview */}
       <SalesRepHomeCards cards={cards} />
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           Sales Rep Leaderboard
         </h2>
         <PeriodFilter
@@ -163,12 +163,12 @@ const SalesRepHome = () => {
         config={{ ...leaderboardConfig, showSearch: false, filters: [] }}
       />
 
-      <div className="py-4">
+      <div className="pt-2">
         <div className="flex flex-col lg:flex-row gap-4">
           <Pipeline data={cards} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

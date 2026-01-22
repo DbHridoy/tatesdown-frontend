@@ -7,15 +7,15 @@ function SalesRepHomeCards({ cards }) {
       {cards.map((card, index) => (
         <div
           key={index}
-          className="bg-white shadow-md rounded-xl flex flex-col p-5 sm:p-6 items-center space-y-4"
+          className="bg-white shadow-md rounded-xl flex flex-col items-center px-5 py-6 space-y-3"
         >
-          <div className="bg-blue-100 p-3 flex items-center justify-center rounded-full">
+          <div className="bg-blue-100 p-2.5 flex items-center justify-center rounded-full">
             {card.icon}
           </div>
 
           <div className="text-center space-y-1">
-            <p className="text-gray-500 text-sm">{card.title}</p>
-            <p className="text-lg sm:text-xl font-semibold text-gray-800">
+            <p className="text-xs sm:text-sm text-gray-500">{card.title}</p>
+            <p className="text-xl sm:text-2xl font-semibold text-gray-800">
               {card.count}
             </p>
           </div>

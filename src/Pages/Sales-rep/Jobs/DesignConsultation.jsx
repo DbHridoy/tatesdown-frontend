@@ -113,16 +113,17 @@ const DesignConsultationCreate = ({
   };
 
   return (
-    <div className="section-pad bg-white rounded-lg shadow-lg">
-      <h2 className="text-xl sm:text-2xl font-semibold mb-6">
+    <div className="page-container">
+      <div className="section-pad bg-white rounded-lg shadow-lg space-y-5">
+      <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
         {mode === "edit"
           ? "Edit Design Consultation"
           : "Create Design Consultation"}
       </h2>
 
       {/* Product Details */}
-      <div className="mb-6">
-        <h3 className="text-base sm:text-lg font-semibold mb-4">
+      <div className="space-y-4">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
           Product Details
         </h3>
 
@@ -138,7 +139,7 @@ const DesignConsultationCreate = ({
           className="mt-1 p-3 w-full border rounded-md text-sm sm:text-base"
         />
 
-        <div className="mt-4">
+        <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Color Code
           </label>
@@ -155,7 +156,7 @@ const DesignConsultationCreate = ({
           />
         </div>
 
-        <div className="mt-4">
+        <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Estimated Gallons
           </label>
@@ -174,9 +175,9 @@ const DesignConsultationCreate = ({
       </div>
 
       {/* Upsell */}
-      <div className="mb-6">
-        <h3 className="text-base sm:text-lg font-semibold mb-4">Upsell</h3>
-        <div>
+      <div className="space-y-4">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Upsell</h3>
+        <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Upsell Description
           </label>
@@ -190,10 +191,10 @@ const DesignConsultationCreate = ({
                 upsellDescription: e.target.value,
               })
             }
-            className="mt-1 mb-3 p-3 w-full border rounded-md text-sm sm:text-base"
+            className="p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Upsell Value
           </label>
@@ -207,10 +208,10 @@ const DesignConsultationCreate = ({
                 upsellValue: e.target.value,
               })
             }
-            className="mt-1 mb-3 p-3 w-full border rounded-md text-sm sm:text-base"
+            className="p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Added Hours
           </label>
@@ -224,13 +225,13 @@ const DesignConsultationCreate = ({
                 addedHours: e.target.value,
               })
             }
-            className="mt-1 mb-3 p-3 w-full border rounded-md text-sm sm:text-base"
+            className="p-3 w-full border rounded-md text-sm sm:text-base"
           />
         </div>{" "}
       </div>
 
       {/* Scheduling */}
-      <div className="mb-6">
+      <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700">
           Estimated Start Date
         </label>
@@ -243,12 +244,12 @@ const DesignConsultationCreate = ({
               estimatedStartDate: e.target.value,
             })
           }
-          className="mt-1 p-3 w-full border rounded-md text-sm sm:text-base"
+          className="p-3 w-full border rounded-md text-sm sm:text-base"
         />
       </div>
 
       {/* File Upload */}
-      <div className="mb-6">
+      <div className="space-y-2">
         {existingFileUrl && (
           <a
             href={existingFileUrl}
@@ -283,6 +284,7 @@ const DesignConsultationCreate = ({
         >
           {mode === "edit" ? "Update DC" : "Create DC"}
         </button>
+      </div>
       </div>
     </div>
   );

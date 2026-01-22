@@ -14,12 +14,12 @@ import {
 function Pipeline({ data }) {
   //console.log("data from pipeline:", data);
   return (
-    <div className="flex-1 bg-white shadow-md rounded-xl p-5 sm:p-6">
-      <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-4">
+    <div className="flex-1 bg-white shadow-md rounded-xl px-5 py-6">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
         Pipeline Overview
       </h2>
 
-      <div className="bg-white rounded-xl p-2 w-full h-64 sm:h-72 lg:h-80">
+      <div className="bg-white rounded-xl p-3 w-full h-60 sm:h-72 lg:h-80">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}

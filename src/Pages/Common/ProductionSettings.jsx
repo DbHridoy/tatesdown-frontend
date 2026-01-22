@@ -84,8 +84,8 @@ const Settings = () => {
   };
 
   return (
-    <div className="section-pad bg-gray-50">
-      <div className="p-5 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="page-container">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm section-pad">
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-1 text-xl sm:text-2xl font-semibold text-gray-900">

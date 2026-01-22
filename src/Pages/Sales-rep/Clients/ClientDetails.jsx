@@ -135,7 +135,7 @@ const ClientDetails = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
             {client.clientName}
           </h1>
           <p className="text-sm sm:text-base text-gray-500">
@@ -152,7 +152,7 @@ const ClientDetails = () => {
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded"
+            className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded text-sm sm:text-base"
           >
             Edit
           </button>
@@ -160,13 +160,13 @@ const ClientDetails = () => {
           <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={handleSaveClient}
-              className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded"
+              className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded text-sm sm:text-base"
             >
               Save
             </button>
             <button
               onClick={handleCancelEdit}
-              className="w-full sm:w-auto px-4 py-2 bg-gray-500 text-white rounded"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-500 text-white rounded text-sm sm:text-base"
             >
               Cancel
             </button>
@@ -316,7 +316,7 @@ const ClientDetails = () => {
                       <img
                         src={note.file}
                         alt="Attachment"
-                        className="max-w-full sm:max-w-xs rounded border"
+                        className="w-full rounded border"
                       />
                     ) : (
                       <a

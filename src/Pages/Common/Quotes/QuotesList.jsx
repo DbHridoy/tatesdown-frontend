@@ -78,16 +78,14 @@ function QuotesList() {
   };
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-        <div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
-            Quotes
-          </h1>
-          <p className="text-sm sm:text-base text-gray-500">
-            Manage your quotes here
-          </p>
-        </div>
+    <div className="page-container space-y-6">
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+          Quotes
+        </h1>
+        <p className="text-sm sm:text-base text-gray-500">
+          Manage your quotes here
+        </p>
       </div>
       <DataTable title="Quotes" data={formattedQuote} config={tableConfig} />
     </div>

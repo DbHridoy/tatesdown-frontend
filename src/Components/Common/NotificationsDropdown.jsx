@@ -31,12 +31,12 @@ const NotificationsDropdown = ({
   return (
     <div
       ref={containerRef}
-      className="absolute right-0 top-full mt-3 w-96 max-w-[90vw] rounded-lg border border-gray-200 bg-white shadow-lg z-20"
+      className="fixed left-4 right-4 top-16 z-20 rounded-lg border border-gray-200 bg-white shadow-lg sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:w-[min(28rem,calc(100vw-2rem))]"
     >
       <div className="border-b px-4 py-3">
         <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
       </div>
-      <div className="max-h-80 overflow-y-auto">
+      <div className="max-h-[70vh] overflow-y-auto sm:max-h-80">
         {notifications.length === 0 ? (
           <div className="px-4 py-6 text-center text-sm text-gray-500">
             No notifications yet.

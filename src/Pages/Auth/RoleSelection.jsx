@@ -61,7 +61,7 @@ const RoleSelection = () => {
     <div className="min-h-screen bg-white flex overflow-hidden text-[#5C526D]">
       {/* Right side - Login form */}
       <div className="flex-1 flex items-center justify-center px-4 md:px-8 bg-[url('/bgfill.png')] min-h-full bg-cover bg-center">
-        <div className="w-full max-w-md mx-auto">
+        <div className="w-full mx-auto">
           <div className=" shadow-lg rounded-lg p-6 sm:p-8">
             {/* Header */}
             <div className="mb-8">

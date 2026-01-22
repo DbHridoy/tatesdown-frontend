@@ -5,7 +5,7 @@ const Modal = ({ show, title, message, onCancel, onConfirm }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+      <div className="bg-white rounded-lg shadow-xl w-full">
         <div className="p-6">
           <h3 className="text-lg font-semibold mb-3">{title}</h3>
           <p className="text-gray-600 mb-6">{message}</p>
@@ -83,7 +83,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
       {/* Header */}
       {title && (
         <div className="px-4 sm:px-6 py-4 border-b flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-          <h2 className="text-lg sm:text-xl font-bold">{title}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+            {title}
+          </h2>
           {shouldShowSearch && (
             <input
               type="text"
@@ -132,7 +134,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                     const nextKey = e.target.value;
                     if (nextKey) onSortChange?.(nextKey);
                   }}
-                  className="w-full px-3 py-2 border rounded-lg text-sm"
+                  className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base"
                 >
                   <option value="">Sort by</option>
                   {sortableColumns.map((col) => (
@@ -145,7 +147,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                   type="button"
                   onClick={() => sortKey && onSortChange?.(sortKey)}
                   disabled={!sortKey}
-                  className="px-3 py-2 border rounded-lg text-sm disabled:opacity-50"
+                  className="px-3 py-2 border rounded-lg text-sm sm:text-base disabled:opacity-50"
                 >
                   {sortOrder === "desc" ? "Desc" : "Asc"}
                 </button>
@@ -178,7 +180,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                       return (
                         <div
                           key={col.accessor}
-                          className="flex items-start gap-2 text-sm"
+                          className="flex items-start gap-2 text-sm sm:text-base"
                         >
                           <span className="min-w-[90px] text-gray-500">
                             {col.label}:
@@ -211,7 +213,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                           onClick={() => handleAction(action, row)}
                           className={`w-full ${
                             action.className ||
-                            "px-2 py-1 bg-blue-500 text-white rounded"
+                            "px-2 py-1 text-sm sm:text-base bg-blue-500 text-white rounded"
                           }`}
                         >
                           {action.label}
@@ -268,7 +270,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                       return (
                         <td key={col.accessor}>
                           <div
-                            className={`text-center align-middle text-xs sm:text-sm ${
+                            className={`text-center align-middle text-sm sm:text-base ${
                               col.colorMap?.[value] || ""
                             }`}
                           >
@@ -286,7 +288,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                             onClick={() => handleAction(action, row)}
                             className={
                               action.className ||
-                              "px-2 py-1 bg-blue-500 text-white rounded"
+                              "px-2 py-1 text-sm sm:text-base bg-blue-500 text-white rounded"
                             }
                           >
                             {action.label}
@@ -304,7 +306,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
 
       {/* Pagination */}
       <div className="px-4 sm:px-6 py-4 border-t flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-        <span className="text-xs sm:text-sm text-gray-600">
+        <span className="text-sm sm:text-base text-gray-600">
           Page {currentPage} of {totalPages || 0}
         </span>
 
@@ -312,14 +314,14 @@ const DataTable = ({ title, data = [], config = {} }) => {
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-3 py-2 border rounded text-xs sm:text-sm disabled:opacity-50"
+            className="px-3 py-2 border rounded text-sm sm:text-base disabled:opacity-50"
           >
             Prev
           </button>
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-3 py-2 border rounded text-xs sm:text-sm disabled:opacity-50"
+            className="px-3 py-2 border rounded text-sm sm:text-base disabled:opacity-50"
           >
             Next
           </button>

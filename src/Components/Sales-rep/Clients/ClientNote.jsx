@@ -2,13 +2,15 @@ import React from "react";
 
 function ClientNote({ note, file, onNoteChange, onFileChange }) {
   return (
-    <div className="bg-white rounded-lg border p-4 space-y-4">
-      <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+    <div className="rounded-lg border section-pad space-y-4">
+      <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
         Notes & Attachments
       </h3>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Note</label>
+        <label className="block text-sm sm:text-base font-semibold mb-2">
+          Note
+        </label>
         <textarea
           value={note}
           onChange={(e) => onNoteChange(e.target.value)}
@@ -18,7 +20,9 @@ function ClientNote({ note, file, onNoteChange, onFileChange }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Attachment</label>
+        <label className="block text-sm sm:text-base font-semibold mb-2">
+          Attachment
+        </label>
         <input
           type="file"
           onChange={(e) => onFileChange(e.target.files[0])}

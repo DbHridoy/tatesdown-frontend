@@ -96,7 +96,7 @@ const JobDetailsOverview = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="section-pad bg-white shadow-md rounded-md border">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
           Job Details
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -245,7 +245,7 @@ const JobDetailsOverview = ({
 
       <div className="space-y-6">
         <div className="section-pad bg-white shadow-md rounded-md border">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
             Sales Rep Information
           </h2>
           <div className="space-y-2 text-sm sm:text-base text-gray-700">

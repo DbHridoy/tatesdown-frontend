@@ -45,9 +45,9 @@ const DC = ({
     );
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-md border mb-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">
+    <div className="bg-white shadow-md rounded-xl border px-5 py-6 space-y-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           DC (Design Consultation)
         </h2>
 
@@ -62,7 +62,7 @@ const DC = ({
                         `/sales-rep/jobs/${jobId}/design-consultation`
                     )
             }
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 text-sm sm:text-base rounded hover:bg-blue-600"
           >
             {actionLabel}
           </button>
@@ -82,7 +82,7 @@ const DC = ({
             ].filter(Boolean);
 
             return (
-              <div key={dc._id} className="rounded-md border p-4">
+              <div key={dc._id} className="rounded-lg border p-4 sm:p-5">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <InfoLine label="Product" value={dc.product} />
                   <InfoLine label="Color Code" value={dc.colorCode} />
@@ -103,7 +103,9 @@ const DC = ({
                   <InfoLine label="Upsell Value" value={dc.upsellValue} />
                 </div>
                 <div className="mt-3">
-                  <p className="text-sm font-semibold text-gray-700">Files</p>
+                  <p className="text-sm sm:text-base font-semibold text-gray-700">
+                    Files
+                  </p>
                   {renderFileLinks(fileLinks)}
                 </div>
               </div>

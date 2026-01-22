@@ -59,7 +59,7 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-md">
+      <div className="mx-auto w-full">
         <div className="flex justify-center mb-6 sm:mb-8">
           <img
             src={brandlogo}
@@ -73,7 +73,7 @@ function Login() {
         </p>
       </div>
 
-      <div className="mt-6 sm:mt-8 mx-auto w-full max-w-md">
+      <div className="mt-6 sm:mt-8 mx-auto w-full">
         <div className="bg-white py-6 px-4 shadow sm:rounded-lg sm:px-10 sm:py-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (

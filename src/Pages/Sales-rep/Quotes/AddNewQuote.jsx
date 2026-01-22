@@ -55,24 +55,25 @@ const AddNewQuote = () => {
   };
 
   return (
-    <div className="min-h-screen px-4 py-6 sm:px-6">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
-        Add New Quote
-      </h1>
+    <div className="min-h-screen page-container">
+      <div className="w-full space-y-6">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 text-center">
+          Add New Quote
+        </h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="mx-auto w-full max-w-3xl bg-white border rounded-lg shadow-sm p-5 sm:p-6 space-y-6 sm:space-y-8"
-      >
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white border rounded-lg shadow-sm section-pad space-y-6"
+        >
         {/* Client Selection */}
         <div>
-          <label className="block text-base sm:text-lg font-semibold mb-3">
+          <label className="block text-sm sm:text-base font-semibold mb-2">
             Client Selection *
           </label>
           <select
             value={selectedClient}
             onChange={(e) => setSelectedClient(e.target.value)}
-            className="w-full px-3 py-2.5 sm:py-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
             disabled={isLoading}
           >
             <option value="">Select a client</option>
@@ -86,7 +87,7 @@ const AddNewQuote = () => {
 
         {/* Estimated Price */}
         <div>
-          <label className="block text-base sm:text-lg font-semibold mb-3">
+          <label className="block text-sm sm:text-base font-semibold mb-2">
             Estimated Price *
           </label>
           <div className="relative">
@@ -102,17 +103,17 @@ const AddNewQuote = () => {
                   e.target.value === "" ? "" : Number(e.target.value)
                 )
               }
-              className="w-full rounded-lg border py-2.5 sm:py-3 pl-8 pr-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Bid Sheet */}
         <div>
-          <label className="block text-base sm:text-lg font-semibold mb-3">
+          <label className="block text-sm sm:text-base font-semibold mb-2">
             Bid Sheet
           </label>
-          <label className="border-2 border-dashed border-gray-300 rounded-lg p-6 sm:p-8 text-center cursor-pointer block hover:border-gray-400">
+          <label className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer block hover:border-gray-400">
             <input
               type="file"
               hidden
@@ -131,7 +132,7 @@ const AddNewQuote = () => {
 
         {/* Booked on the spot */}
         <div>
-          <label className="block text-base sm:text-lg font-semibold mb-3">
+          <label className="block text-sm sm:text-base font-semibold mb-2">
             Booked on the spot?
           </label>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
@@ -156,23 +157,23 @@ const AddNewQuote = () => {
 
         {/* Additional Notes */}
         <div>
-          <label className="block text-base sm:text-lg font-semibold mb-3">
+          <label className="block text-sm sm:text-base font-semibold mb-2">
             Additional Details
           </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows="4"
-            className="w-full px-3 py-2.5 sm:py-3 border rounded-lg resize-none text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg resize-none text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
             placeholder="Add any additional details..."
           />
         </div>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
           <button
             type="button"
-            className="w-full sm:flex-1 border py-2.5 sm:py-3 rounded-lg text-sm sm:text-base hover:bg-gray-50"
+            className="w-full sm:flex-1 border py-2 rounded-lg text-sm sm:text-base hover:bg-gray-50"
             onClick={() => navigate(-1)}
           >
             Cancel
@@ -180,7 +181,7 @@ const AddNewQuote = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full sm:flex-1 bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg text-sm sm:text-base hover:bg-blue-700 disabled:opacity-60"
+            className="w-full sm:flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm sm:text-base hover:bg-blue-700 disabled:opacity-60"
           >
             {isSubmitting ? "Saving..." : "Save Quote"}
           </button>
@@ -191,7 +192,8 @@ const AddNewQuote = () => {
             Failed to create quote
           </p>
         )}
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

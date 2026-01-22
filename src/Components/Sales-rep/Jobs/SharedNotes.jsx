@@ -50,12 +50,12 @@ const SharedNotes = () => {
   };
 
   return (
-    <div className="mb-6 p-6 bg-white shadow-md rounded-md border">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+    <div className="bg-white shadow-md rounded-md border section-pad space-y-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
         Notes and Attachments
       </h2>
 
-      <div className="space-y-4 mb-6">
+      <div className="space-y-4">
         {notes.length === 0 && (
           <p className="text-gray-500 text-sm">No notes yet.</p>
         )}
@@ -108,7 +108,7 @@ const SharedNotes = () => {
           onChange={(e) => setNewNote(e.target.value)}
           rows="3"
           placeholder="Add a note for the team..."
-          className="w-full p-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border rounded-md text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         <div className="flex items-center gap-3">
@@ -122,7 +122,7 @@ const SharedNotes = () => {
           </label>
 
           {selectedFile && (
-            <span className="text-sm text-gray-600 truncate max-w-xs">
+            <span className="text-sm text-gray-600 truncate">
               {selectedFile.name}
             </span>
           )}
@@ -131,7 +131,7 @@ const SharedNotes = () => {
         <button
           onClick={handlePostNote}
           disabled={!newNote.trim() && !selectedFile}
-          className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+          className="px-6 py-2 bg-blue-500 text-white rounded-md text-sm sm:text-base hover:bg-blue-600 disabled:opacity-50"
         >
           Post Note
         </button>

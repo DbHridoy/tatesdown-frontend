@@ -12,7 +12,7 @@ const PaymentModal = ({ isOpen, onClose, onSave }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-lg p-5 sm:p-6 bg-white rounded-lg shadow-lg">
+      <div className="relative w-full p-5 sm:p-6 bg-white rounded-lg shadow-lg">
         <h3 className="mb-4 text-base sm:text-lg font-semibold">
           Add Manual Payment
         </h3>

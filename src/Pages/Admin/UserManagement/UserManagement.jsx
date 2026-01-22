@@ -163,9 +163,11 @@ const UserManagement = () => {
 
   /* ================= UI ================= */
   return (
-    <div className="page-container">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-        <h2 className="text-xl sm:text-2xl font-semibold">User Management</h2>
+    <div className="page-container space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+          User Management
+        </h2>
         <button
           className="w-full sm:w-auto px-5 py-2 bg-blue-600 text-white rounded-lg text-sm sm:text-base"
           onClick={() => setIsAddModal(true)}
@@ -195,7 +197,7 @@ const UserManagement = () => {
 
 const Modal = ({ title, children, onClose }) => (
   <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
-    <div className="bg-white w-full max-w-md p-5 sm:p-6 rounded-lg">
+    <div className="bg-white w-full p-5 sm:p-6 rounded-lg">
       <div className="flex justify-between mb-4">
         <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
         <FiX className="cursor-pointer" onClick={onClose} />

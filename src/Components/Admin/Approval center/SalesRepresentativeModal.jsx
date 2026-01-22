@@ -65,7 +65,7 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white w-full max-w-md rounded-xl p-5 sm:p-6 shadow-lg">
+      <div className="bg-white w-full rounded-xl p-5 sm:p-6 shadow-lg">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-4">

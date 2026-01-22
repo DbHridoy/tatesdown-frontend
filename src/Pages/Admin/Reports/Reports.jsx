@@ -80,7 +80,15 @@ const Reports = () => {
     navigate(`/s/admin/reports-details/${id}`);
   };
   return (
-    <div className="page-container">
+    <div className="page-container space-y-6">
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+          Reports
+        </h1>
+        <p className="text-sm sm:text-base text-gray-500">
+          Sales representative performance overview
+        </p>
+      </div>
       <DataTable title="Sales Reps" data={salesRep} config={tableConfig} />
     </div>
   );

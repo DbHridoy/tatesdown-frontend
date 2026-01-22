@@ -74,16 +74,14 @@ function JobsList() {
   };
 
   return (
-    <div className="page-container">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
-            Jobs
-          </h1>
-          <p className="text-sm sm:text-base text-gray-600">
-            Manage your jobs and track progress
-          </p>
-        </div>
+    <div className="page-container space-y-6">
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+          Jobs
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600">
+          Manage your jobs and track progress
+        </p>
       </div>
 
       <DataTable

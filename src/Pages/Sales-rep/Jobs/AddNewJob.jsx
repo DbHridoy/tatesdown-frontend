@@ -133,15 +133,17 @@ const AddNewJob = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:px-6">
-      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full section-pad">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
+    <div className="min-h-screen page-container flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-lg w-full section-pad space-y-4">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 text-center">
           Add New Job
         </h1>
 
         {/* Select Quote */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Quote *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Quote *
+          </label>
           <select
             value={selectedQuoteId}
             onChange={(e) => setSelectedQuoteId(e.target.value)}
@@ -157,8 +159,10 @@ const AddNewJob = () => {
         </div>
 
         {/* Job Title */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Job Title *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Job Title *
+          </label>
           <input
             type="text"
             value={title}
@@ -168,8 +172,10 @@ const AddNewJob = () => {
         </div>
 
         {/* Total Hours */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Total Hours *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Total Hours *
+          </label>
           <input
             type="number"
             value={totalHours}
@@ -179,8 +185,10 @@ const AddNewJob = () => {
         </div>
 
         {/* Setup/Cleanup */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Setup/Cleanup *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Setup/Cleanup *
+          </label>
           <input
             type="number"
             value={setupCleanup}
@@ -190,8 +198,10 @@ const AddNewJob = () => {
         </div>
 
         {/* Powerwash */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Powerwash *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Powerwash *
+          </label>
           <input
             type="number"
             value={powerwash}
@@ -201,8 +211,10 @@ const AddNewJob = () => {
         </div>
 
         {/* Labour Hours (auto-calculated) */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Labour Hours</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Labour Hours
+          </label>
           <input
             type="number"
             value={labourHours}
@@ -212,9 +224,11 @@ const AddNewJob = () => {
         </div>
 
         {/* Prices */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
-            <label className="block font-semibold mb-1">Price</label>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Price
+            </label>
             <input
               value={price}
               className="w-full border px-3 py-2 rounded bg-gray-100 text-sm sm:text-base"
@@ -223,7 +237,9 @@ const AddNewJob = () => {
           </div>
 
           <div className="flex-1">
-            <label className="block font-semibold mb-1">Down Payment *</label>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Down Payment *
+            </label>
             <input
               type="number"
               value={downPayment}
@@ -233,8 +249,10 @@ const AddNewJob = () => {
           </div>
         </div>
 
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">Estimated Gallons *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Estimated Gallons *
+          </label>
           <input
             type="number"
             value={estimatedGallons}
@@ -244,8 +262,8 @@ const AddNewJob = () => {
         </div>
 
         {/* Start Date */}
-        <div className="mb-4">
-          <label className="block font-semibold mb-1">
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
             Preferred Start Date *
           </label>
           <input
@@ -260,16 +278,20 @@ const AddNewJob = () => {
 
 
         {!!description.trim() && (
-          <div className="mb-6">
-            <label className="block font-semibold mb-1">Existing Client Note</label>
+          <div className="space-y-2">
+            <label className="block text-sm sm:text-base font-semibold">
+              Existing Client Note
+            </label>
             <div className="w-full border px-3 py-2 rounded bg-gray-50 text-gray-700 text-sm sm:text-base">
               {description}
             </div>
           </div>
         )}
 
-        <div className="mb-6">
-          <label className="block font-semibold mb-1">Add New Note</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Add New Note
+          </label>
           <textarea
             value={additionalNote}
             onChange={(e) => setAdditionalNote(e.target.value)}
@@ -278,8 +300,10 @@ const AddNewJob = () => {
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block font-semibold mb-1">Contract *</label>
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Contract *
+          </label>
           <input
             type="file"
             onChange={(e) => setContractFile(e.target.files?.[0] || null)}
@@ -289,7 +313,7 @@ const AddNewJob = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4 pt-2">
           <button
             onClick={() => navigate(-1)}
             className="w-full sm:w-auto px-6 py-2 border rounded text-sm sm:text-base"
