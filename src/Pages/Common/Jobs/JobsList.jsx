@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import DataTable from "../../../Components/Common/DataTable";
 import { useDeleteJobMutation, useGetAllJobsQuery } from "../../../redux/api/jobApi";
+import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 
 function JobsList() {
   const navigate = useNavigate();
@@ -11,16 +12,33 @@ function JobsList() {
     search: "",
     sortKey: "",
     sortOrder: "asc",
+    filters: {
+      salesRepId: "",
+      productionManagerId: "",
+      status: "",
+    },
   });
 
   const sortValue = params.sortKey
     ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
     : "";
   const { data, isLoading } = useGetAllJobsQuery({ ...params, sort: sortValue });
+  const { data: salesRepsData } = useGetAllUsersQuery({
+    page: 1,
+    limit: 0,
+    filters: { role: "Sales Rep" },
+  });
+  const { data: productionManagersData } = useGetAllUsersQuery({
+    page: 1,
+    limit: 0,
+    filters: { role: "Production Manager" },
+  });
   const [deleteJob] = useDeleteJobMutation();
 
   const jobs = data?.data || [];
   const totalItems = data?.total || 0;
+  const salesReps = salesRepsData?.data ?? [];
+  const productionManagers = productionManagersData?.data ?? [];
 
   const formattedJobs = jobs.map((job) => ({
     _id: job._id,
@@ -58,6 +76,35 @@ function JobsList() {
         onConfirm: (item) => deleteJob(item._id),
       },
     ],
+    filters: [
+      {
+        label: "Sales Rep",
+        accessor: "salesRepId",
+        options: salesReps.reduce((acc, rep) => {
+          acc[rep.fullName || rep.email || rep._id] = rep._id;
+          return acc;
+        }, {}),
+      },
+      {
+        label: "Production Manager",
+        accessor: "productionManagerId",
+        options: productionManagers.reduce((acc, pm) => {
+          acc[pm.fullName || pm.email || pm._id] = pm._id;
+          return acc;
+        }, {}),
+      },
+      {
+        label: "Status",
+        accessor: "status",
+        options: {
+          "Ready to Schedule": "Ready to Schedule",
+          "Scheduled and Open": "Scheduled and Open",
+          "Pending Close": "Pending Close",
+          "Closed": "Closed",
+          "Cancelled": "Cancelled",
+        },
+      },
+    ],
     totalItems,
     currentPage: params.page,
     itemsPerPage: params.limit,
@@ -65,6 +112,12 @@ function JobsList() {
     sortOrder: params.sortOrder,
     onPageChange: (page) => setParams((p) => ({ ...p, page })),
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
+    onFilterChange: (key, value) =>
+      setParams((p) => ({
+        ...p,
+        page: 1,
+        filters: { ...p.filters, [key]: value },
+      })),
     onSortChange: (sortKey) =>
       setParams((p) => {
         const isSameKey = p.sortKey === sortKey;

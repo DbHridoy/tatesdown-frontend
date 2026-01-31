@@ -8,6 +8,8 @@ import {
 } from "../../../redux/api/jobApi";
 import { useLocation, useParams } from "react-router-dom";
 import DesignConsultationCreate from "./DesignConsultation";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -26,8 +28,11 @@ const statusOptions = [
 const PmJobDetailsPage = () => {
   const { jobId } = useParams();
   const { pathname } = useLocation();
+  const currentUser = useSelector(selectCurrentUser);
   const [isEditing, setIsEditing] = useState(false);
   const [showDcForm, setShowDcForm] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
   const [formJob, setFormJob] = useState({
     title: "",
     status: "",
@@ -140,6 +145,25 @@ const PmJobDetailsPage = () => {
     }).unwrap();
   };
 
+  const handleScheduleOpen = () => {
+    setScheduleDate("");
+    setShowScheduleModal(true);
+  };
+
+  const handleScheduleConfirm = async () => {
+    if (!jobId || !scheduleDate) return;
+    await updateJob({
+      id: jobId,
+      data: {
+        status: "Scheduled and Open",
+        productionManagerId: currentUser?._id,
+        startDate: new Date(`${scheduleDate}T00:00:00`).toISOString(),
+      },
+    }).unwrap();
+    setShowScheduleModal(false);
+    setScheduleDate("");
+  };
+
   return (
     <div className="page-container space-y-6">
       {/* Edit/Save Buttons */}
@@ -209,7 +233,7 @@ const PmJobDetailsPage = () => {
         ) : (
           job?.status === "Ready to Schedule" && (
             <button
-              onClick={() => handleStatusUpdate("Scheduled and Open")}
+              onClick={handleScheduleOpen}
               className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
               disabled={isSaving}
             >
@@ -278,6 +302,45 @@ const PmJobDetailsPage = () => {
 
       {/* Notes Section */}
       <SharedNotes notes={job.notes} />
+
+      {showScheduleModal && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-3">
+                Mark as scheduled
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-4">
+                Select a start date for {job?.title}.
+              </p>
+              <input
+                type="date"
+                value={scheduleDate}
+                onChange={(e) => setScheduleDate(e.target.value)}
+                className="w-full px-3 py-2 border rounded-lg mb-6 text-sm sm:text-base"
+              />
+              <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setShowScheduleModal(false);
+                    setScheduleDate("");
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 bg-gray-100 rounded text-sm sm:text-base"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleScheduleConfirm}
+                  disabled={!scheduleDate || isSaving}
+                  className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded text-sm sm:text-base disabled:opacity-50"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
