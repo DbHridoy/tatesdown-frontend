@@ -6,8 +6,8 @@ import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/perio
 import { useState } from "react";
 
 const ProductionHome = () => {
-  const [periodType, setPeriodType] = useState("month");
-  const [dateInput, setDateInput] = useState(getDefaultPeriodInput("month"));
+  const [periodType, setPeriodType] = useState("year");
+  const [dateInput, setDateInput] = useState(getDefaultPeriodInput("year"));
   const { data, isLoading, isError } = useGetMyStatsQuery({
     periodType,
     date: normalizePeriodDate(periodType, dateInput),

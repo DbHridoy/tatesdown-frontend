@@ -7,6 +7,7 @@ import {
   useUpdateUserMutation,
 } from "../../../redux/api/userApi";
 import PeriodFilter from "../../../Components/Common/PeriodFilter";
+import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
 import {
   useCreatePaymentMutation,
   useGetPaymentsQuery,
@@ -27,7 +28,10 @@ const ViewUser = () => {
   const { userId } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [formUser, setFormUser] = useState(emptyForm);
-  const [statsPeriodType, setStatsPeriodType] = useState("week");
+  const [statsPeriodType, setStatsPeriodType] = useState("year");
+  const [statsDateInput, setStatsDateInput] = useState(
+    getDefaultPeriodInput("year")
+  );
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentForm, setPaymentForm] = useState({
     amount: "",
@@ -51,7 +55,11 @@ const ViewUser = () => {
   });
   const { data: userStatsData, isLoading: isStatsLoading } =
     useGetUserStatsQuery(
-      { userId, periodType: statsPeriodType },
+      {
+        userId,
+        periodType: statsPeriodType,
+        date: normalizePeriodDate(statsPeriodType, statsDateInput),
+      },
       { skip: !userId }
     );
   const { data: clustersData } = useGetAllClustersQuery();
@@ -322,8 +330,12 @@ const ViewUser = () => {
           <PeriodFilter
             label="Stats"
             periodType={statsPeriodType}
-            showDate={false}
-            onPeriodTypeChange={setStatsPeriodType}
+            dateValue={statsDateInput}
+            onPeriodTypeChange={(value) => {
+              setStatsPeriodType(value);
+              setStatsDateInput(getDefaultPeriodInput(value));
+            }}
+            onDateChange={setStatsDateInput}
           />
         </div>
         {isStatsLoading ? (

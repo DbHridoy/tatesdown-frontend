@@ -57,10 +57,11 @@ export const userApi = baseApi.injectEndpoints({
     }),
 
     getUserStats: builder.query({
-      query: ({ userId, periodType } = {}) => {
+      query: ({ userId, periodType, date } = {}) => {
         if (!userId) return "";
         const params = new URLSearchParams();
         if (periodType) params.set("periodType", periodType);
+        if (date) params.set("date", date);
         const query = params.toString();
         return query
           ? `/common/admin/users-stats/${userId}?${query}`

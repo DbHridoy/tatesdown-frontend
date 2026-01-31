@@ -16,17 +16,21 @@ import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/perio
 import { useMemo, useState } from "react";
 const SalesRepHome = () => {
   const { data: userData, isLoading } = useGetMeQuery();
-  const [statsPeriodType, setStatsPeriodType] = useState("month");
+  const [statsPeriodType, setStatsPeriodType] = useState("year");
   const [statsDateInput, setStatsDateInput] = useState(
-    getDefaultPeriodInput("month")
+    getDefaultPeriodInput("year")
   );
-  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("day");
+  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("year");
+  const [leaderboardDateInput, setLeaderboardDateInput] = useState(
+    getDefaultPeriodInput("year")
+  );
   const { data: myStats } = useGetMyStatsQuery({
     periodType: statsPeriodType,
     date: normalizePeriodDate(statsPeriodType, statsDateInput),
   });
   const { data: leaderBoardData } = useGetLeaderBoardQuery({
     periodType: leaderboardPeriodType,
+    date: normalizePeriodDate(leaderboardPeriodType, leaderboardDateInput),
   });
   const [leaderboardSortKey, setLeaderboardSortKey] = useState("");
   const [leaderboardSortOrder, setLeaderboardSortOrder] = useState("asc");
@@ -149,8 +153,12 @@ const SalesRepHome = () => {
         <PeriodFilter
           label="Leaderboard"
           periodType={leaderboardPeriodType}
-          showDate={false}
-          onPeriodTypeChange={setLeaderboardPeriodType}
+          dateValue={leaderboardDateInput}
+          onPeriodTypeChange={(value) => {
+            setLeaderboardPeriodType(value);
+            setLeaderboardDateInput(getDefaultPeriodInput(value));
+          }}
+          onDateChange={setLeaderboardDateInput}
         />
       </div>
       <DataTable

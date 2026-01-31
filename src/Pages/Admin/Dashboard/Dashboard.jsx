@@ -9,13 +9,13 @@ import CardData from "../../../Components/Admin/Dashboard/CardData";
 
 
 const Dashboard = () => {
-  const [statsPeriodType, setStatsPeriodType] = useState("month");
+  const [statsPeriodType, setStatsPeriodType] = useState("year");
   const [statsDateInput, setStatsDateInput] = useState(
-    getDefaultPeriodInput("month")
+    getDefaultPeriodInput("year")
   );
-  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("current");
+  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("year");
   const [leaderboardDateInput, setLeaderboardDateInput] = useState(
-    getDefaultPeriodInput("day")
+    getDefaultPeriodInput("year")
   );
   const [leaderboardSortKey, setLeaderboardSortKey] = useState("");
   const [leaderboardSortOrder, setLeaderboardSortOrder] = useState("asc");
@@ -23,19 +23,15 @@ const Dashboard = () => {
     periodType: statsPeriodType,
     date: normalizePeriodDate(statsPeriodType, statsDateInput),
   });
-  const normalizedLeaderboardPeriod =
-    leaderboardPeriodType === "current"
-      ? ""
-      : String(leaderboardPeriodType || "").toLowerCase();
-  const leaderboardDate =
-    normalizedLeaderboardPeriod
-      ? normalizePeriodDate(normalizedLeaderboardPeriod, leaderboardDateInput)
-      : "";
-  const { data: leaderBoardData } = useGetLeaderBoardQuery(
-    normalizedLeaderboardPeriod
-      ? { periodType: normalizedLeaderboardPeriod, date: leaderboardDate }
-      : {}
+  const normalizedLeaderboardPeriod = String(leaderboardPeriodType || "").toLowerCase();
+  const leaderboardDate = normalizePeriodDate(
+    normalizedLeaderboardPeriod,
+    leaderboardDateInput
   );
+  const { data: leaderBoardData } = useGetLeaderBoardQuery({
+    periodType: normalizedLeaderboardPeriod,
+    date: leaderboardDate,
+  });
   const stats = data?.data;
   const leaderBoard = leaderBoardData?.data || [];
   const leaderboardRows = leaderBoard.map((rep) => ({
@@ -122,15 +118,10 @@ const Dashboard = () => {
         <PeriodFilter
           label="Leaderboard"
           periodType={leaderboardPeriodType}
-          includeCurrent
-          showDate={leaderboardPeriodType !== "current"}
           dateValue={leaderboardDateInput}
           onPeriodTypeChange={(value) => {
-            const nextValue = value || "current";
-            setLeaderboardPeriodType(nextValue);
-            if (nextValue !== "current") {
-              setLeaderboardDateInput(getDefaultPeriodInput(nextValue));
-            }
+            setLeaderboardPeriodType(value);
+            setLeaderboardDateInput(getDefaultPeriodInput(value));
           }}
           onDateChange={setLeaderboardDateInput}
         />

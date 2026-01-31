@@ -12,8 +12,8 @@ import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/perio
 export default function SalesRepReports() {
   // ✅ Replace these with real values from your API (or props if you want)
 
-  const [periodType, setPeriodType] = useState("month");
-  const [dateInput, setDateInput] = useState(getDefaultPeriodInput("month"));
+  const [periodType, setPeriodType] = useState("year");
+  const [dateInput, setDateInput] = useState(getDefaultPeriodInput("year"));
   const user = useSelector(selectCurrentUser);
   const { data: myStats } = useGetMyStatsQuery({
     periodType,
