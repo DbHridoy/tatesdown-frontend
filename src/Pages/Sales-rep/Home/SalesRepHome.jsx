@@ -28,6 +28,7 @@ const SalesRepHome = () => {
     periodType: statsPeriodType,
     date: normalizePeriodDate(statsPeriodType, statsDateInput),
   });
+  console.log(myStats);
   const { data: leaderBoardData } = useGetLeaderBoardQuery({
     periodType: leaderboardPeriodType,
     date: normalizePeriodDate(leaderboardPeriodType, leaderboardDateInput),
@@ -38,7 +39,7 @@ const SalesRepHome = () => {
   const cards = [
     {
       title: "Total sold",
-      count: myStats?.data?.totalSold || 0,
+      count: myStats?.data?.totalRevenueSold || 0,
       icon: <FiDollarSign className="h-6 w-6 text-blue-700" />,
     },
     {
