@@ -4,7 +4,7 @@ import DataTable from "../../../Components/Common/DataTable";
 import { useDeleteJobMutation, useGetAllJobsQuery } from "../../../redux/api/jobApi";
 import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 
-function JobsList() {
+function JobsList({ showFilters = true } = {}) {
   const navigate = useNavigate();
   const [params, setParams] = useState({
     page: 1,
@@ -76,35 +76,37 @@ function JobsList() {
         onConfirm: (item) => deleteJob(item._id),
       },
     ],
-    filters: [
-      {
-        label: "Sales Rep",
-        accessor: "salesRepId",
-        options: salesReps.reduce((acc, rep) => {
-          acc[rep.fullName || rep.email || rep._id] = rep._id;
-          return acc;
-        }, {}),
-      },
-      {
-        label: "Production Manager",
-        accessor: "productionManagerId",
-        options: productionManagers.reduce((acc, pm) => {
-          acc[pm.fullName || pm.email || pm._id] = pm._id;
-          return acc;
-        }, {}),
-      },
-      {
-        label: "Status",
-        accessor: "status",
-        options: {
-          "Ready to Schedule": "Ready to Schedule",
-          "Scheduled and Open": "Scheduled and Open",
-          "Pending Close": "Pending Close",
-          "Closed": "Closed",
-          "Cancelled": "Cancelled",
-        },
-      },
-    ],
+    filters: showFilters
+      ? [
+          {
+            label: "Sales Rep",
+            accessor: "salesRepId",
+            options: salesReps.reduce((acc, rep) => {
+              acc[rep.fullName || rep.email || rep._id] = rep._id;
+              return acc;
+            }, {}),
+          },
+          {
+            label: "Production Manager",
+            accessor: "productionManagerId",
+            options: productionManagers.reduce((acc, pm) => {
+              acc[pm.fullName || pm.email || pm._id] = pm._id;
+              return acc;
+            }, {}),
+          },
+          {
+            label: "Status",
+            accessor: "status",
+            options: {
+              "Ready to Schedule": "Ready to Schedule",
+              "Scheduled and Open": "Scheduled and Open",
+              "Pending Close": "Pending Close",
+              "Closed": "Closed",
+              "Cancelled": "Cancelled",
+            },
+          },
+        ]
+      : [],
     totalItems,
     currentPage: params.page,
     itemsPerPage: params.limit,

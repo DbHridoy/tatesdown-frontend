@@ -1,3 +1,5 @@
 import JobsList from "../../Common/Jobs/JobsList";
 
-export default JobsList;
+const Jobs = () => <JobsList showFilters={false} />;
+
+export default Jobs;
