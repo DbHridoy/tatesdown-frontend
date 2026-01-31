@@ -5,6 +5,7 @@ import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import RequiredMark from "../../../Components/Common/RequiredMark";
 
 const AddNewQuote = () => {
   const [selectedClient, setSelectedClient] = useState("");
@@ -12,6 +13,7 @@ const AddNewQuote = () => {
   const [bookedOnSpot, setBookedOnSpot] = useState(null);
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState(null);
+  const [bidSheetError, setBidSheetError] = useState("");
 
   const currentUser = useSelector(selectCurrentUser);
   const { data, isLoading } = useGetAllClientsQuery({ filters: { leadStatus: "Not quoted" } });
@@ -26,8 +28,13 @@ const AddNewQuote = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedClient || !estimatedPrice) {
-      alert("Client and estimated price are required");
+    const form = e.currentTarget;
+    const isValid = form.checkValidity();
+    if (!file) {
+      setBidSheetError("Bid sheet is required.");
+    }
+    if (!isValid || !file) {
+      if (!isValid) form.reportValidity();
       return;
     }
 
@@ -63,18 +70,20 @@ const AddNewQuote = () => {
 
         <form
           onSubmit={handleSubmit}
+          noValidate
           className="bg-white border rounded-lg shadow-sm section-pad space-y-6"
         >
         {/* Client Selection */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Client Selection *
+            Client Selection <RequiredMark />
           </label>
           <select
             value={selectedClient}
             onChange={(e) => setSelectedClient(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-blue-500"
             disabled={isLoading}
+            required
           >
             <option value="">Select a client</option>
             {clients.map((client) => (
@@ -88,7 +97,7 @@ const AddNewQuote = () => {
         {/* Estimated Price */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Estimated Price *
+            Estimated Price <RequiredMark />
           </label>
           <div className="relative">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
@@ -104,6 +113,7 @@ const AddNewQuote = () => {
                 )
               }
               className="w-full rounded-lg border py-2 pl-8 pr-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
             />
           </div>
         </div>
@@ -111,14 +121,17 @@ const AddNewQuote = () => {
         {/* Bid Sheet */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Bid Sheet
+            Bid Sheet <RequiredMark />
           </label>
           <label className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer block hover:border-gray-400">
             <input
               type="file"
               hidden
               accept="image/*,.pdf"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+                setBidSheetError("");
+              }}
             />
             <p className="font-medium text-gray-700 text-sm sm:text-base">
               Click to upload or drag and drop
@@ -128,6 +141,9 @@ const AddNewQuote = () => {
             </p>
             {file && <p className="text-sm text-green-600 mt-2">{file.name}</p>}
           </label>
+          {bidSheetError && (
+            <p className="mt-2 text-sm text-red-600">{bidSheetError}</p>
+          )}
         </div>
 
         {/* Booked on the spot */}

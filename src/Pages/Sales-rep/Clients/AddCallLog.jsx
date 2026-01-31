@@ -1,4 +1,5 @@
 import { useState } from "react";
+import RequiredMark from "../../../Components/Common/RequiredMark";
 
 const CALL_STATUS_OPTIONS = [
   "Not Called",
@@ -15,13 +16,8 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!status) {
-      alert("Please select a call outcome");
-      return;
-    }
-
-    if (status === "Picked-Up: No Appointment" && !reason.trim()) {
-      alert("Please provide a reason for 'No Appointment'");
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
       return;
     }
 
@@ -42,7 +38,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl shadow-xl w-full overflow-hidden"
+        className="bg-white rounded-xl shadow-xl w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl overflow-hidden"
       >
         {/* Header */}
         <div className="px-6 py-4 border-b">
@@ -56,12 +52,13 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
           {/* Call Outcome */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              Call Outcome <span className="text-red-500">*</span>
+              Call Outcome <RequiredMark />
             </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base"
+              required
             >
               <option value="">Select outcome...</option>
               {CALL_STATUS_OPTIONS.map((opt) => (
@@ -76,7 +73,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
           {status === "Picked-Up: No Appointment" && (
             <div>
               <label className="block text-sm font-medium mb-1">
-                Reason <span className="text-red-500">*</span>
+                Reason <RequiredMark />
               </label>
               <input
                 type="text"
@@ -84,6 +81,7 @@ const AddCallLog = ({ closeModal, clientId, onSubmit }) => {
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Enter reason..."
                 className="w-full px-3 py-2 border rounded-lg text-sm sm:text-base"
+                required={status === "Picked-Up: No Appointment"}
               />
             </div>
           )}

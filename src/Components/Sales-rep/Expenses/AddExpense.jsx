@@ -30,7 +30,7 @@ const AddExpense = () => {
       {/* Other content here */}
       {showModal && (
         <div className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-lg w-full">
+          <div className="bg-white rounded-lg shadow-lg w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl">
             <AddMileageLog closeModal={closeModal} />
           </div>
         </div>

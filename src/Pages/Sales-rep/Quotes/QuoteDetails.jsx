@@ -130,6 +130,7 @@ const QuoteDetails = () => {
     status,
     bookedOnSpot,
     bidSheet,
+    bidSheetUrl,
     createdAt,
     customQuoteId,
   } = quote;
@@ -139,10 +140,11 @@ const QuoteDetails = () => {
     : quoteNotes
       ? [{ note: quoteNotes }]
       : [];
-  const bidSheets = Array.isArray(bidSheet)
-    ? bidSheet
-    : bidSheet
-      ? [{ bidSheetUrl: bidSheet }]
+  const bidSheetSource = bidSheetUrl ?? bidSheet;
+  const bidSheets = Array.isArray(bidSheetSource)
+    ? bidSheetSource
+    : bidSheetSource
+      ? [{ bidSheetUrl: bidSheetSource }]
       : [];
 
   /* ---------------- UI ---------------- */

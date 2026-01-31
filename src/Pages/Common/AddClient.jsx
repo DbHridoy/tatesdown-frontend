@@ -8,6 +8,7 @@ import { selectCurrentUser } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ClientNote from "../../Components/Sales-rep/Clients/ClientNote";
+import RequiredMark from "../../Components/Common/RequiredMark";
 
 const AddClient = () => {
   const navigate = useNavigate();
@@ -39,6 +40,10 @@ const AddClient = () => {
 
   const handleCreateClient = async (e) => {
     e.preventDefault();
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
+      return;
+    }
 
     const noteValue = note.trim();
     if (!noteValue && noteFile) {
@@ -87,7 +92,7 @@ const AddClient = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold mb-2">
-              Client Name *
+              Client Name <RequiredMark />
             </label>
             <input
               value={formData.clientName}
@@ -113,7 +118,7 @@ const AddClient = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold mb-2">
-              Phone *
+              Phone <RequiredMark />
             </label>
             <input
               type="tel"
@@ -140,7 +145,7 @@ const AddClient = () => {
         {/* Address */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Address *
+            Address <RequiredMark />
           </label>
           <input
             value={formData.address}
@@ -153,7 +158,7 @@ const AddClient = () => {
         {/* Lead Source */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Lead Source *
+            Lead Source <RequiredMark />
           </label>
           <select
             value={formData.leadSource}

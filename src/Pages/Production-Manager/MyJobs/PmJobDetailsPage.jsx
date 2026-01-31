@@ -6,9 +6,7 @@ import {
   useGetJobByIdQuery,
   useUpdateJobMutation,
 } from "../../../redux/api/jobApi";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import { useLocation, useParams } from "react-router-dom";
 import DesignConsultationCreate from "./DesignConsultation";
 
 const formatDateInput = (value) => {
@@ -27,7 +25,7 @@ const statusOptions = [
 
 const PmJobDetailsPage = () => {
   const { jobId } = useParams();
-  const user = useSelector(selectCurrentUser);
+  const { pathname } = useLocation();
   const [isEditing, setIsEditing] = useState(false);
   const [showDcForm, setShowDcForm] = useState(false);
   const [formJob, setFormJob] = useState({
@@ -47,8 +45,10 @@ const PmJobDetailsPage = () => {
   const [updateJob, { isLoading: isSaving }] = useUpdateJobMutation();
 
   const job = data?.data;
-  const productionManagerId = job?.productionManagerId?._id ?? job?.productionManagerId;
-  const canManageJob = Boolean(productionManagerId && user?._id && productionManagerId === user._id);
+  const isJobsRoute =
+    pathname.startsWith("/production-manager/jobs/") &&
+    !pathname.includes("/production-manager/my-jobs/");
+  const allowFullActions = !isJobsRoute;
   const statusOptionsForEdit = useMemo(
     () => [...new Set([formJob.status, ...statusOptions])].filter(Boolean),
     [formJob.status]
@@ -144,66 +144,78 @@ const PmJobDetailsPage = () => {
     <div className="page-container space-y-6">
       {/* Edit/Save Buttons */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
-        {!canManageJob ? null : isEditing ? (
-          <>
-            <button
-              onClick={handleCancel}
-              className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
-              disabled={isSaving}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="w-full sm:w-auto bg-green-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
-              disabled={isSaving}
-            >
-              Save
-            </button>
-            {getStatusAction() && (
+        {allowFullActions ? (
+          isEditing ? (
+            <>
               <button
-                onClick={() => handleStatusUpdate(getStatusAction().nextStatus)}
-                className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+                onClick={handleCancel}
+                className="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
                 disabled={isSaving}
               >
-                {getStatusAction().label}
+                Cancel
               </button>
-            )}
-            {job?.status !== "Cancelled" && (
               <button
-                onClick={() => handleStatusUpdate("Cancelled")}
-                className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+                onClick={handleSave}
+                className="w-full sm:w-auto bg-green-500 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
                 disabled={isSaving}
               >
-                Mark as Cancelled
+                Save
               </button>
-            )}
-          </>
+              {getStatusAction() && (
+                <button
+                  onClick={() => handleStatusUpdate(getStatusAction().nextStatus)}
+                  className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+                  disabled={isSaving}
+                >
+                  {getStatusAction().label}
+                </button>
+              )}
+              {job?.status !== "Cancelled" && (
+                <button
+                  onClick={() => handleStatusUpdate("Cancelled")}
+                  className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+                  disabled={isSaving}
+                >
+                  Mark as Cancelled
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-md text-sm sm:text-base"
+              >
+                Edit
+              </button>
+              {getStatusAction() && (
+                <button
+                  onClick={() => handleStatusUpdate(getStatusAction().nextStatus)}
+                  className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
+                >
+                  {getStatusAction().label}
+                </button>
+              )}
+              {job?.status !== "Cancelled" && (
+                <button
+                  onClick={() => handleStatusUpdate("Cancelled")}
+                  className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base"
+                >
+                  Mark as Cancelled
+                </button>
+              )}
+            </>
+          )
         ) : (
-          <>
+          job?.status === "Ready to Schedule" && (
             <button
-              onClick={() => setIsEditing(true)}
-              className="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-md text-sm sm:text-base"
+              onClick={() => handleStatusUpdate("Scheduled and Open")}
+              className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
+              disabled={isSaving}
             >
-              Edit
+              Mark as Scheduled and Open
             </button>
-            {getStatusAction() && (
-              <button
-                onClick={() => handleStatusUpdate(getStatusAction().nextStatus)}
-                className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-md text-sm sm:text-base"
-              >
-                {getStatusAction().label}
-              </button>
-            )}
-            {job?.status !== "Cancelled" && (
-              <button
-                onClick={() => handleStatusUpdate("Cancelled")}
-                className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base"
-              >
-                Mark as Cancelled
-              </button>
-            )}
-          </>
+          )
         )}
       </div>
       {/* Job Header */}
@@ -212,7 +224,7 @@ const PmJobDetailsPage = () => {
       <JobDetailsOverview
         job={job}
         formJob={formJob}
-        isEditing={isEditing}
+        isEditing={allowFullActions ? isEditing : false}
         statusOptions={statusOptionsForEdit}
         onFieldChange={(field, value) =>
           setFormJob((prev) => ({ ...prev, [field]: value }))
@@ -244,9 +256,10 @@ const PmJobDetailsPage = () => {
         jobId={jobId}
         actionLabel={designConsultation ? "Edit DC" : "Add DC"}
         onAction={() => setShowDcForm((prev) => !prev)}
+        hideAction={!allowFullActions}
       />
 
-      {showDcForm && (
+      {allowFullActions && showDcForm && (
         <DesignConsultationCreate
           jobId={jobId}
           initialData={designConsultation}

@@ -1,4 +1,5 @@
 import { FiBriefcase, FiCalendar, FiClock, FiXCircle } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
 
 const DashboardOverview = ({
   title = "Dashboard Overview",
@@ -34,6 +35,14 @@ const DashboardOverview = ({
     },
     {
       id: 5,
+      title: "Closed",
+      value: stats?.closedCount ?? 0,
+      icon: FiCheckCircle,
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      id: 6,
       title: "Cancelled",
       value: stats?.cancelledCount ?? 0,
       icon: FiXCircle,
@@ -62,7 +71,7 @@ const DashboardOverview = ({
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
         {overviewStats.map((stat, index) => {
           const Icon = stat.icon || FiBriefcase;
 

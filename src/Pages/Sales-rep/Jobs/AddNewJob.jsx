@@ -4,6 +4,7 @@ import { useGetAllQuotesQuery, useGetQuoteByIdQuery } from "../../../redux/api/q
 import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAddNoteMutation } from "../../../redux/api/clientApi";
+import RequiredMark from "../../../Components/Common/RequiredMark";
 
 const AddNewJob = () => {
   // Read quoteId from URL
@@ -72,17 +73,10 @@ const AddNewJob = () => {
     setLabourHours(total - setup - power);
   }, [totalHours, setupCleanup, powerwash]);
 
-  const handleCreateJob = async () => {
-    if (
-      !selectedQuoteId ||
-      !estimatedStartDate ||
-      !downPayment ||
-      !estimatedGallons ||
-      !contractFile
-    ) {
-      alert(
-        "Please fill required fields: Quote, Start Date, Down Payment, Estimated Gallons, Contract"
-      );
+  const handleCreateJob = async (e) => {
+    e.preventDefault();
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
       return;
     }
 
@@ -134,7 +128,10 @@ const AddNewJob = () => {
 
   return (
     <div className="min-h-screen page-container flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg w-full section-pad space-y-4">
+      <form
+        onSubmit={handleCreateJob}
+        className="bg-white rounded-lg shadow-lg w-full section-pad space-y-4"
+      >
         <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 text-center">
           Add New Job
         </h1>
@@ -142,13 +139,14 @@ const AddNewJob = () => {
         {/* Select Quote */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Quote *
+            Quote <RequiredMark />
           </label>
           <select
             value={selectedQuoteId}
             onChange={(e) => setSelectedQuoteId(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
             disabled={!!quoteIdFromUrl}
+            required
           >
             {quotes.map((quote) => (
               <option key={quote._id} value={quote._id}>
@@ -161,52 +159,56 @@ const AddNewJob = () => {
         {/* Job Title */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Job Title *
+            Job Title <RequiredMark />
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+            required
           />
         </div>
 
         {/* Total Hours */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Total Hours *
+            Total Hours <RequiredMark />
           </label>
           <input
             type="number"
             value={totalHours}
             onChange={(e) => setTotalHours(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+            required
           />
         </div>
 
         {/* Setup/Cleanup */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Setup/Cleanup *
+            Setup/Cleanup <RequiredMark />
           </label>
           <input
             type="number"
             value={setupCleanup}
             onChange={(e) => setSetupCleanup(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+            required
           />
         </div>
 
         {/* Powerwash */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Powerwash *
+            Powerwash <RequiredMark />
           </label>
           <input
             type="number"
             value={powerwash}
             onChange={(e) => setPowerwash(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+            required
           />
         </div>
 
@@ -238,39 +240,42 @@ const AddNewJob = () => {
 
           <div className="flex-1">
             <label className="block text-sm sm:text-base font-semibold mb-2">
-              Down Payment *
+              Down Payment <RequiredMark />
             </label>
             <input
               type="number"
               value={downPayment}
               onChange={(e) => setDownPayment(e.target.value)}
               className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+              required
             />
           </div>
         </div>
 
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Estimated Gallons *
+            Estimated Gallons <RequiredMark />
           </label>
           <input
             type="number"
             value={estimatedGallons}
             onChange={(e) => setEstimatedGallons(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+            required
           />
         </div>
 
         {/* Start Date */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Preferred Start Date *
+            Preferred Start Date <RequiredMark />
           </label>
           <input
             type="date"
             value={estimatedStartDate}
             onChange={(e) => setEstimatedStartDate(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
+            required
           />
         </div>
 
@@ -302,7 +307,7 @@ const AddNewJob = () => {
 
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Contract *
+            Contract <RequiredMark />
           </label>
           <input
             type="file"
@@ -315,20 +320,21 @@ const AddNewJob = () => {
         {/* Actions */}
         <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4 pt-2">
           <button
+            type="button"
             onClick={() => navigate(-1)}
             className="w-full sm:w-auto px-6 py-2 border rounded text-sm sm:text-base"
           >
             Cancel
           </button>
           <button
-            onClick={handleCreateJob}
+            type="submit"
             disabled={isCreating}
             className="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded text-sm sm:text-base"
           >
             {isCreating ? "Creating..." : "Create Job"}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

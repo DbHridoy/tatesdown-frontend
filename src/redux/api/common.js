@@ -28,9 +28,10 @@ const commonApi = baseApi.injectEndpoints({
     }),
 
     getLeaderBoard: builder.query({
-      query: ({ periodType } = {}) => {
+      query: ({ periodType, date } = {}) => {
         const params = new URLSearchParams();
         if (periodType) params.set("periodType", periodType);
+        if (date) params.set("date", date);
         const query = params.toString();
         return query
           ? `/common/salesrep-leaderboard?${query}`

@@ -197,7 +197,7 @@ const UserManagement = () => {
 
 const Modal = ({ title, children, onClose }) => (
   <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
-    <div className="bg-white w-full p-5 sm:p-6 rounded-lg">
+    <div className="bg-white w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl p-5 sm:p-6 rounded-lg">
       <div className="flex justify-between mb-4">
         <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
         <FiX className="cursor-pointer" onClick={onClose} />

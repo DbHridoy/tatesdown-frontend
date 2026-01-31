@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCreateDesignConsultationMutation } from "../../../redux/api/jobApi";
 import toast from "react-hot-toast";
+import RequiredMark from "../../../Components/Common/RequiredMark";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -66,7 +67,12 @@ const DesignConsultationCreate = ({
     setContractFile(e.target.files[0]);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
+      return;
+    }
     try {
       const formData = new FormData();
 
@@ -113,7 +119,7 @@ const DesignConsultationCreate = ({
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <form onSubmit={handleSave} className="p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold mb-6">
         {mode === "edit"
           ? "Edit Design Consultation"
@@ -247,10 +253,14 @@ const DesignConsultationCreate = ({
 
       {/* File Upload */}
       <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Contract <RequiredMark />
+        </label>
         <input
           type="file"
           accept=".pdf,.docx,.xlsx"
           onChange={handleFileChange}
+          required={!existingFileUrl}
         />
         {existingFileUrl && !contractFile && (
           <p className="mt-2 text-sm text-gray-600">
@@ -261,19 +271,20 @@ const DesignConsultationCreate = ({
 
       <div className="flex justify-end gap-4">
         <button
+          type="button"
           onClick={() => (onCancel ? onCancel() : navigate(-1))}
           className="bg-gray-400 px-6 py-2 rounded text-white"
         >
           Cancel
         </button>
         <button
-          onClick={handleSave}
+          type="submit"
           className="bg-blue-600 px-6 py-2 rounded text-white"
         >
           {mode === "edit" ? "Update DC" : "Create DC"}
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

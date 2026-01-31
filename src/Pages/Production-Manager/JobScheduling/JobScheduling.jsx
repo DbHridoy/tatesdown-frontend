@@ -118,7 +118,7 @@ console.log("line:52-me", me)
 
       {isScheduleModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full">
+          <div className="bg-white rounded-lg shadow-xl w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl">
             <div className="p-6">
               <h3 className="text-lg font-semibold mb-3">
                 Mark as scheduled

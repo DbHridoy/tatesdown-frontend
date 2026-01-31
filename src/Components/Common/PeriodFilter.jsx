@@ -3,6 +3,7 @@ const PeriodFilter = ({
   periodType,
   dateValue,
   showDate = true,
+  includeCurrent = false,
   onPeriodTypeChange,
   onDateChange,
 }) => {
@@ -26,6 +27,7 @@ const PeriodFilter = ({
           onChange={(e) => onPeriodTypeChange(e.target.value)}
           className="w-full sm:w-40 rounded-md border px-3 py-2 text-sm sm:text-base"
         >
+          {includeCurrent && <option value="current">Current</option>}
           <option value="day">Day</option>
           <option value="week">Week</option>
           <option value="month">Month</option>

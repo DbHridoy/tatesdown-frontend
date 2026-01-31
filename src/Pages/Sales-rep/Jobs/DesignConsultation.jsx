@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCreateDesignConsultationMutation } from "../../../redux/api/jobApi";
 import toast from "react-hot-toast";
+import RequiredMark from "../../../Components/Common/RequiredMark";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -59,14 +60,21 @@ const DesignConsultationCreate = ({
         initialData.estimatedStartDate || initialData.startDate
       ),
     });
-    setExistingFileUrl(initialData.contract || "");
+    setExistingFileUrl(
+      initialData.contractUrl || initialData.file || initialData.contract || ""
+    );
   }, [initialData]);
 
   const handleFileChange = (e) => {
     setContractFile(e.target.files[0]);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
+      return;
+    }
     try {
       const formData = new FormData();
 
@@ -114,7 +122,10 @@ const DesignConsultationCreate = ({
 
   return (
     <div className="page-container">
-      <div className="section-pad bg-white rounded-lg shadow-lg space-y-5">
+      <form
+        onSubmit={handleSave}
+        className="section-pad bg-white rounded-lg shadow-lg space-y-5"
+      >
       <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
         {mode === "edit"
           ? "Edit Design Consultation"
@@ -261,31 +272,33 @@ const DesignConsultationCreate = ({
           </a>
         )}
         <label className="block text-sm font-medium text-gray-700">
-          Contract
+          Contract <RequiredMark />
         </label>
         <input
           type="file"
           accept=".pdf,.docx,.xlsx"
           className="w-full text-sm sm:text-base"
           onChange={handleFileChange}
+          required={!existingFileUrl}
         />
       </div>
 
       <div className="flex flex-col sm:flex-row sm:justify-end gap-3 sm:gap-4">
         <button
+          type="button"
           onClick={onCancel ? onCancel : () => navigate(-1)}
           className="w-full sm:w-auto bg-gray-400 px-6 py-2 rounded text-white text-sm sm:text-base"
         >
           Cancel
         </button>
         <button
-          onClick={handleSave}
+          type="submit"
           className="w-full sm:w-auto bg-blue-600 px-6 py-2 rounded text-white text-sm sm:text-base"
         >
           {mode === "edit" ? "Update DC" : "Create DC"}
         </button>
       </div>
-      </div>
+      </form>
     </div>
   );
 };

@@ -55,8 +55,8 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl p-6">
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-xl p-6 w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl">
           <p className="text-gray-500">Loading...</p>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function SalesRepresentativeModal({ isOpen, onClose, lead }) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white w-full rounded-xl p-5 sm:p-6 shadow-lg">
+      <div className="bg-white w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl rounded-xl p-5 sm:p-6 shadow-lg">
 
         {/* Header */}
         <div className="flex justify-between items-center mb-4">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCreateMileageLogMutation } from "../../../redux/api/expenseApi";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import RequiredMark from "../../Common/RequiredMark";
 
 const AddMileageLog = ({ closeModal }) => {
   const currentUser = useSelector(selectCurrentUser);
@@ -31,14 +32,14 @@ const AddMileageLog = ({ closeModal }) => {
     if (selectedFile) setFile(selectedFile);
   };
 
-  const handleSave = async () => {
-    if (!currentUser?._id) {
-      alert("User not authenticated");
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!e.currentTarget.checkValidity()) {
+      e.currentTarget.reportValidity();
       return;
     }
-
-    if (!month || !year || !totalMilesDriven) {
-      alert("Please fill in all required fields");
+    if (!currentUser?._id) {
+      alert("User not authenticated");
       return;
     }
 
@@ -68,7 +69,10 @@ const AddMileageLog = ({ closeModal }) => {
   };
 
   return (
-    <div className="mx-auto w-full rounded-lg bg-white section-pad shadow-lg">
+    <form
+      onSubmit={handleSave}
+      className="mx-auto w-full rounded-lg bg-white section-pad shadow-lg"
+    >
       <h2 className="mb-4 text-xl sm:text-2xl font-bold text-gray-800">
         Add Mileage Log
       </h2>
@@ -76,12 +80,13 @@ const AddMileageLog = ({ closeModal }) => {
       {/* Month */}
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-gray-700">
-          Month *
+          Month <RequiredMark />
         </label>
         <select
           value={month}
           onChange={(e) => setMonth(e.target.value)}
           className="w-full rounded-md border p-2 text-sm sm:text-base"
+          required
         >
           <option value="">Select month...</option>
           {months.map((m) => (
@@ -93,12 +98,13 @@ const AddMileageLog = ({ closeModal }) => {
       {/* Year */}
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-gray-700">
-          Year *
+          Year <RequiredMark />
         </label>
         <select
           value={year}
           onChange={(e) => setYear(e.target.value)}
           className="w-full rounded-md border p-2 text-sm sm:text-base"
+          required
         >
           <option value="">Select year...</option>
           {years.map((y) => (
@@ -110,7 +116,7 @@ const AddMileageLog = ({ closeModal }) => {
       {/* Miles */}
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-gray-700">
-          Total Miles Driven *
+          Total Miles Driven <RequiredMark />
         </label>
         <input
           type="number"
@@ -119,6 +125,7 @@ const AddMileageLog = ({ closeModal }) => {
           value={totalMilesDriven}
           onChange={(e) => setTotalMilesDriven(e.target.value)}
           className="w-full rounded-md border p-2 text-sm sm:text-base"
+          required
         />
       </div>
 
@@ -151,6 +158,7 @@ const AddMileageLog = ({ closeModal }) => {
       {/* Actions */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <button
+          type="button"
           onClick={closeModal}
           disabled={isLoading}
           className="w-full sm:flex-1 rounded-md bg-gray-300 py-2 text-sm sm:text-base"
@@ -158,14 +166,14 @@ const AddMileageLog = ({ closeModal }) => {
           Cancel
         </button>
         <button
-          onClick={handleSave}
+          type="submit"
           disabled={isLoading}
           className="w-full sm:flex-1 rounded-md bg-blue-500 py-2 text-white text-sm sm:text-base disabled:opacity-50"
         >
           {isLoading ? "Saving..." : "Save Mileage Log"}
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

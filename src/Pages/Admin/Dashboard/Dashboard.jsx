@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
-import CardData from "../../../Components/Dashboard/CardData";
 import PipelineOverview from "../../../Components/Admin/Dashboard/PipelineOverview";
 import PendingApprovals from "../../../Components/Dashboard/PendingApprovals";
 import DataTable from "../../../Components/Common/DataTable";
 import PeriodFilter from "../../../Components/Common/PeriodFilter";
 import { useGetLeaderBoardQuery, useGetMyStatsQuery } from "../../../redux/api/common";
 import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
+import CardData from "../../../Components/Admin/Dashboard/CardData";
 
 
 const Dashboard = () => {
@@ -13,16 +13,29 @@ const Dashboard = () => {
   const [statsDateInput, setStatsDateInput] = useState(
     getDefaultPeriodInput("month")
   );
-  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("day");
+  const [leaderboardPeriodType, setLeaderboardPeriodType] = useState("current");
+  const [leaderboardDateInput, setLeaderboardDateInput] = useState(
+    getDefaultPeriodInput("day")
+  );
   const [leaderboardSortKey, setLeaderboardSortKey] = useState("");
   const [leaderboardSortOrder, setLeaderboardSortOrder] = useState("asc");
   const { data, isLoading, isError } = useGetMyStatsQuery({
     periodType: statsPeriodType,
     date: normalizePeriodDate(statsPeriodType, statsDateInput),
   });
-  const { data: leaderBoardData } = useGetLeaderBoardQuery({
-    periodType: leaderboardPeriodType,
-  });
+  const normalizedLeaderboardPeriod =
+    leaderboardPeriodType === "current"
+      ? ""
+      : String(leaderboardPeriodType || "").toLowerCase();
+  const leaderboardDate =
+    normalizedLeaderboardPeriod
+      ? normalizePeriodDate(normalizedLeaderboardPeriod, leaderboardDateInput)
+      : "";
+  const { data: leaderBoardData } = useGetLeaderBoardQuery(
+    normalizedLeaderboardPeriod
+      ? { periodType: normalizedLeaderboardPeriod, date: leaderboardDate }
+      : {}
+  );
   const stats = data?.data;
   const leaderBoard = leaderBoardData?.data || [];
   const leaderboardRows = leaderBoard.map((rep) => ({
@@ -109,8 +122,17 @@ const Dashboard = () => {
         <PeriodFilter
           label="Leaderboard"
           periodType={leaderboardPeriodType}
-          showDate={false}
-          onPeriodTypeChange={setLeaderboardPeriodType}
+          includeCurrent
+          showDate={leaderboardPeriodType !== "current"}
+          dateValue={leaderboardDateInput}
+          onPeriodTypeChange={(value) => {
+            const nextValue = value || "current";
+            setLeaderboardPeriodType(nextValue);
+            if (nextValue !== "current") {
+              setLeaderboardDateInput(getDefaultPeriodInput(nextValue));
+            }
+          }}
+          onDateChange={setLeaderboardDateInput}
         />
       </div>
       <DataTable

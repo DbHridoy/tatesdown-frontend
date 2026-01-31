@@ -33,7 +33,7 @@ const ProductionHome = () => {
         error={isError ? "Failed to load stats" : ""}
         stats={stats}
       />
-      <PipelineOverview />
+      <PipelineOverview stats={stats} showFilter={false} />
     </div>
   );
 };
