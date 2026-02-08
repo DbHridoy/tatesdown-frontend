@@ -5,7 +5,7 @@ import { useDeleteJobMutation, useGetAllJobsQuery } from "../../../redux/api/job
 import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 import formatCurrency from "../../../utils/formatCurrency";
 
-function JobsList({ showFilters = true } = {}) {
+function JobsList({ showFilters = true, salesRepId } = {}) {
   const navigate = useNavigate();
   const [params, setParams] = useState({
     page: 1,
@@ -23,7 +23,14 @@ function JobsList({ showFilters = true } = {}) {
   const sortValue = params.sortKey
     ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
     : "";
-  const { data, isLoading } = useGetAllJobsQuery({ ...params, sort: sortValue });
+  const { data, isLoading } = useGetAllJobsQuery({
+    ...params,
+    sort: sortValue,
+    filters: {
+      ...params.filters,
+      ...(salesRepId ? { salesRepId } : {}),
+    },
+  });
   const { data: salesRepsData } = useGetAllUsersQuery({
     page: 1,
     limit: 0,

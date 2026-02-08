@@ -46,9 +46,13 @@ const AdminClientDetails = () => {
 
   const [form, setForm] = useState({
     clientName: "",
+    partnerName: "",
     email: "",
     phoneNumber: "",
     address: "",
+    city: "",
+    state: "",
+    zipCode: "",
     leadSource: "",
     rating: 0,
   });
@@ -64,9 +68,13 @@ const AdminClientDetails = () => {
 
     setForm({
       clientName: client.clientName || "",
+      partnerName: client.partnerName || "",
       email: client.email || "",
       phoneNumber: client.phoneNumber || "",
       address: client.address || "",
+      city: client.city || "",
+      state: client.state || "",
+      zipCode: client.zipCode || "",
       leadSource: client.leadSource || "",
       rating: client.rating || 0,
     });
@@ -94,9 +102,13 @@ const AdminClientDetails = () => {
 
     setForm({
       clientName: client.clientName || "",
+      partnerName: client.partnerName || "",
       email: client.email || "",
       phoneNumber: client.phoneNumber || "",
       address: client.address || "",
+      city: client.city || "",
+      state: client.state || "",
+      zipCode: client.zipCode || "",
       leadSource: client.leadSource || "",
       rating: client.rating || 0,
     });
@@ -181,9 +193,9 @@ const AdminClientDetails = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             ["Name", "clientName"],
+            ["Partner Name", "partnerName"],
             ["Email", "email"],
             ["Phone", "phoneNumber"],
-            ["Address", "address"],
           ].map(([label, field]) => (
             <div key={field} className="sm:col-span-1">
               <label className="block text-sm font-medium mb-1">{label}</label>
@@ -198,6 +210,49 @@ const AdminClientDetails = () => {
               />
             </div>
           ))}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ["Street Address", "address"],
+            ["City", "city"],
+            ["State", "state"],
+            ["Zip Code", "zipCode"],
+          ].map(([label, field]) => (
+            <div key={field} className="sm:col-span-1">
+              <label className="block text-sm font-medium mb-1">{label}</label>
+              <input
+                type="text"
+                value={form[field]}
+                disabled={!isEditing}
+                onChange={(e) => handleChange(field, e.target.value)}
+                className={`w-full p-2 border rounded text-sm sm:text-base ${
+                  !isEditing ? "bg-gray-100" : ""
+                }`}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Lead Status</label>
+            <input
+              type="text"
+              value={client.leadStatus || "—"}
+              disabled
+              className="w-full p-2 border rounded text-sm sm:text-base bg-gray-100"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Call Status</label>
+            <input
+              type="text"
+              value={client.callStatus || "—"}
+              disabled
+              className="w-full p-2 border rounded text-sm sm:text-base bg-gray-100"
+            />
+          </div>
         </div>
 
         {/* Lead Source */}

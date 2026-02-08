@@ -4,7 +4,7 @@ import DataTable from "../../../Components/Common/DataTable";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
 import formatCurrency from "../../../utils/formatCurrency";
 
-function QuotesList() {
+function QuotesList({ salesRepId } = {}) {
   const navigate = useNavigate();
   const [params, setParams] = useState({
     page: 1,
@@ -18,7 +18,14 @@ function QuotesList() {
   const sortValue = params.sortKey
     ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
     : "";
-  const { data } = useGetAllQuotesQuery({ ...params, sort: sortValue });
+  const { data } = useGetAllQuotesQuery({
+    ...params,
+    sort: sortValue,
+    filters: {
+      ...params.filters,
+      ...(salesRepId ? { salesRepId } : {}),
+    },
+  });
   const quotes = data?.data ?? [];
   const totalItems = data?.total;
 

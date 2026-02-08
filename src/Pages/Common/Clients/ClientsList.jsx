@@ -7,7 +7,7 @@ import {
   useGetAllClientsQuery,
 } from "../../../redux/api/clientApi";
 
-function ClientsList() {
+function ClientsList({ salesRepId } = {}) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -48,6 +48,10 @@ function ClientsList() {
   const { data: clientsData } = useGetAllClientsQuery({
     ...params,
     sort: sortValue,
+    filters: {
+      ...params.filters,
+      ...(salesRepId ? { salesRepId } : {}),
+    },
   });
   const [deleteClient] = useDeleteClientMutation();
 

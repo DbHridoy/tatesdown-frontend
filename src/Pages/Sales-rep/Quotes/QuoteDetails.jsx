@@ -95,7 +95,7 @@ const QuoteDetails = () => {
       setIsEditing(false);
       setBidSheetFile(null);
       if (normalizeStatus(formData.status) === "Approved") {
-        navigate(`/sales-rep/add-job?quoteId=${quote._id}`);
+        navigate(`/sales-rep/jobs/add-job?quoteId=${quote._id}`);
       }
     } catch (err) {
       console.error("Update failed", err);
@@ -116,7 +116,7 @@ const QuoteDetails = () => {
   };
 
   const handleConvertToJob = () => {
-    navigate(`/s/sales-rep/jobs/create-job/${quote._id}`);
+    navigate(`/sales-rep/jobs/add-job?quoteId=${quote._id}`);
   };
 
   if (isLoading || !quote) {

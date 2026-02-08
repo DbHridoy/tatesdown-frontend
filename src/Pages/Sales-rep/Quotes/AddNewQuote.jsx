@@ -54,7 +54,7 @@ const AddNewQuote = () => {
 
       // Redirect to Add Job if booked on spot
       if (bookedOnSpot === true) {
-        navigate(`/sales-rep/add-job?quoteId=${res.data._id}`);
+        navigate(`/sales-rep/jobs/add-job?quoteId=${res.data._id}`);
       } else {
         navigate(-1);
       }

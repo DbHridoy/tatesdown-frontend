@@ -92,7 +92,7 @@ const AdminQuoteDetails = () => {
   };
 
   const handleConvertToJob = () => {
-    navigate(`/s/sales-rep/jobs/create-job/${quote._id}`);
+    navigate(`/sales-rep/jobs/add-job?quoteId=${quote._id}`);
   };
 
   if (isLoading || !quote) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCreateNewJobMutation } from "../../../redux/api/jobApi";
-import { useGetAllQuotesQuery, useGetQuoteByIdQuery } from "../../../redux/api/quoteApi";
+import { useGetAllQuotesQuery, useGetQuoteByIdQuery, useUpdateQuoteMutation } from "../../../redux/api/quoteApi";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAddNoteMutation } from "../../../redux/api/clientApi";
@@ -25,6 +25,7 @@ const AddNewJob = () => {
 
   const [createNewJob, { isLoading: isCreating }] = useCreateNewJobMutation();
   const [createJobNote, { isLoading: isCreatingJobNote }] = useAddNoteMutation();
+  const [updateQuote] = useUpdateQuoteMutation();
 
   // Form state
   const [selectedQuoteId, setSelectedQuoteId] = useState("");
@@ -104,6 +105,11 @@ const AddNewJob = () => {
       const createdJobId = createdJob?.data?._id || createdJob?._id;
       if (!createdJobId) {
         throw new Error("Job creation did not return an id");
+      }
+      if (selectedQuote?.status !== "Approved") {
+        const quoteUpdate = new FormData();
+        quoteUpdate.append("status", "Approved");
+        await updateQuote({ id: selectedQuote._id, body: quoteUpdate }).unwrap();
       }
       const notesToCreate = [description, additionalNote]
         .map((note) => note.trim())

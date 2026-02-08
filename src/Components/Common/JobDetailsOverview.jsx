@@ -5,9 +5,12 @@ const InfoLine = ({ label, value }) => (
   </p>
 );
 
+import formatCurrency from "../../utils/formatCurrency";
+
 const InfoField = ({
   label,
   value,
+  displayValue,
   isEditing,
   type = "text",
   onChange,
@@ -40,9 +43,11 @@ const InfoField = ({
       )
     ) : (
       <div className="rounded-md border px-3 py-2 text-sm sm:text-base text-gray-800">
-        {value !== undefined && value !== null && value !== ""
-          ? value
-          : "N/A"}
+        {displayValue !== undefined && displayValue !== null && displayValue !== ""
+          ? displayValue
+          : value !== undefined && value !== null && value !== ""
+            ? value
+            : "N/A"}
       </div>
     )}
   </div>
@@ -168,6 +173,7 @@ const JobDetailsOverview = ({
           <InfoField
             label="Price"
             value={formJob.price}
+            displayValue={formatCurrency(formJob.price)}
             isEditing={isEditing}
             type="number"
             readOnly={isFieldReadOnly("price")}
@@ -195,6 +201,7 @@ const JobDetailsOverview = ({
           <InfoField
             label="Down Payment"
             value={formJob.downPayment}
+            displayValue={formatCurrency(formJob.downPayment)}
             isEditing={isEditing}
             type="number"
             readOnly={isFieldReadOnly("downPayment")}
@@ -203,6 +210,7 @@ const JobDetailsOverview = ({
           <InfoField
             label="Budget Spent"
             value={formJob.budgetSpent}
+            displayValue={formatCurrency(formJob.budgetSpent)}
             isEditing={isEditing}
             type="number"
             readOnly={isFieldReadOnly("budgetSpent")}
@@ -275,16 +283,15 @@ const JobDetailsOverview = ({
             Quote Summary
           </h2>
           <div className="space-y-2 text-sm sm:text-base text-gray-700">
-            <InfoLine label="Estimated Price" value={quote?.estimatedPrice} />
+            <InfoLine
+              label="Estimated Price"
+              value={formatCurrency(quote?.estimatedPrice)}
+            />
             <InfoLine label="Status" value={quote?.status} />
             <InfoLine
               label="Booked on the spot"
               value={quote?.bookedOnSpot ? "Yes" : "No"}
             />
-            <div className="text-sm sm:text-base">
-              <span className="font-semibold">Bid Sheet:</span>{" "}
-              {renderLink("View bid sheet", bidSheetUrl)}
-            </div>
           </div>
         </div>
 
@@ -301,10 +308,6 @@ const JobDetailsOverview = ({
               <div className="text-sm sm:text-base">
                 <span className="font-semibold">Bid Sheet:</span>{" "}
                 {renderLink("View bid sheet", bidSheetUrl)}
-              </div>
-              <div className="text-sm sm:text-base">
-                <span className="font-semibold">Design Consultation:</span>{" "}
-                {renderLink("View design consultation", designConsultationDoc)}
               </div>
             </div>
           </div>
