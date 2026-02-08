@@ -2,6 +2,7 @@ import React from "react";
 import DataTable from "../../Common/DataTable";
 import { useGetAllJobsQuery, useUpdateJobMutation } from "../../../redux/api/jobApi";
 import { useState } from "react";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function JobCloseRequests() {
   const [params, setParams] = useState({
@@ -32,7 +33,7 @@ function JobCloseRequests() {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Total Amount", accessor: "totalAmount" },
+      { label: "Total Amount", accessor: "totalAmount", format: formatCurrency },
       { label: "Status", accessor: "status" },
     ],
     actions: [

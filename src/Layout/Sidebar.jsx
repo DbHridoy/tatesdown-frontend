@@ -29,8 +29,8 @@ export const menuConfig = {
     },
     {
       icon: <FiUsers className="w-5 h-5" />,
-      label: "Clients",
-      Link: "/sales-rep/clients",
+      label: "Leads",
+      Link: "/sales-rep/leads",
     },
     {
       icon: <FiFileText className="w-5 h-5" />,
@@ -95,8 +95,8 @@ export const menuConfig = {
     },
     {
       icon: <FiUsers className="w-5 h-5" />,
-      label: "Clients",
-      Link: "/admin/clients",
+      label: "Leads",
+      Link: "/admin/leads",
     },
     {
       icon: <FiFileText className="w-5 h-5" />,

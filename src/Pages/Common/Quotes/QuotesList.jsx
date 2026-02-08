@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import DataTable from "../../../Components/Common/DataTable";
 import { useGetAllQuotesQuery } from "../../../redux/api/quoteApi";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function QuotesList() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ function QuotesList() {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client name", accessor: "clientName", sortable: true },
-      { label: "Estimated price", accessor: "estimatedPrice", sortable: true },
+      { label: "Estimated price", accessor: "estimatedPrice", sortable: true, format: formatCurrency },
       { label: "Creation date", accessor: "createdAt", sortable: true },
     ],
     actions: [

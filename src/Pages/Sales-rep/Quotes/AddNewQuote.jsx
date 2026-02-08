@@ -16,9 +16,11 @@ const AddNewQuote = () => {
   const [bidSheetError, setBidSheetError] = useState("");
 
   const currentUser = useSelector(selectCurrentUser);
-  const { data, isLoading } = useGetAllClientsQuery({ filters: { leadStatus: "Not quoted" } });
+  const { data, isLoading } = useGetAllClientsQuery();
   console.log(data);
-  const clients = data?.data || [];
+  const clients = (data?.data || []).filter(
+    (client) => client?.leadStatus === "Not quoted"
+  );
   console.log(clients);
   const navigate = useNavigate();
 

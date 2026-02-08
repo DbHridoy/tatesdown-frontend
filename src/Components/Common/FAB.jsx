@@ -32,7 +32,7 @@ function FAB() {
             <button
               onClick={() =>
                 handleClick(
-                  role === "Admin" ? `/admin/add-clients` : `/sales-rep/add-client`
+                  role === "Admin" ? `/admin/add-leads` : `/sales-rep/add-lead`
                 )
               }
               className="flex items-center justify-center w-48 p-2 h-12 rounded-2xl bg-blue-500 text-white shadow-lg hover:bg-blue-600 transition"

@@ -10,7 +10,9 @@ function SalesAssignement() {
   const { data: clientData, isLoading: clientsLoading } = useGetAllClientsQuery(
     { filters: { salesRepId: null } }
   );
-  const leadAssignmentData = clientData?.data || [];
+  const leadAssignmentData = (clientData?.data || []).filter(
+    (client) => client?.leadStatus === "Not quoted"
+  );
   //console.log("Salesassignment", leadAssignmentData);
   const isLoading = clientsLoading;
 

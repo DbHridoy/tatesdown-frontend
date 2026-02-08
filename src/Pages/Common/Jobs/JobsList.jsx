@@ -3,6 +3,7 @@ import { useState } from "react";
 import DataTable from "../../../Components/Common/DataTable";
 import { useDeleteJobMutation, useGetAllJobsQuery } from "../../../redux/api/jobApi";
 import { useGetAllUsersQuery } from "../../../redux/api/userApi";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function JobsList({ showFilters = true } = {}) {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ function JobsList({ showFilters = true } = {}) {
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
       { label: "Job Title", accessor: "jobTitle", sortable: true },
-      { label: "Price", accessor: "price", sortable: true },
+      { label: "Price", accessor: "price", sortable: true, format: formatCurrency },
       { label: "Status", accessor: "jobStatus", sortable: true },
       { label: "Start Date", accessor: "startDate", sortable: true },
     ],

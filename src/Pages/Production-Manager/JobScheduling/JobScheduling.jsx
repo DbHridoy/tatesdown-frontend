@@ -7,6 +7,7 @@ import {
 import DataTable from "../../../Components/Common/DataTable";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function JobScheduling() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function JobScheduling() {
   // ✅ Hook at top level
   const { data, isLoading } = useGetAllJobsQuery(params);
 
-  const jobs = data?.data || [];
+  const jobs = (data?.data || []).filter((j) => j.status !== "DC Pending");
   const totalItems = data?.total || 0;
 
   // ✅ Safe formatting
@@ -73,7 +74,7 @@ console.log("line:52-me", me)
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
       // { label: "Job Title", accessor: "jobTitle" },
-      { label: "Estimated Price", accessor: "estimatedPrice" },
+      { label: "Estimated Price", accessor: "estimatedPrice", format: formatCurrency },
       { label: "Job Status", accessor: "jobStatus" },
       { label: "Estimated Start Date", accessor: "estimatedStartDate" },
     ],

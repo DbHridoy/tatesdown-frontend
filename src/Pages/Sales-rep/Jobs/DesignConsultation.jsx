@@ -209,18 +209,23 @@ const DesignConsultationCreate = ({
           <label className="block text-sm font-medium text-gray-700">
             Upsell Value
           </label>
-          <input
-            type="number"
-            placeholder="Upsell Value"
-            value={upsellDetails.upsellValue}
-            onChange={(e) =>
-              setUpsellDetails({
-                ...upsellDetails,
-                upsellValue: e.target.value,
-              })
-            }
-            className="p-3 w-full border rounded-md text-sm sm:text-base"
-          />
+          <div className="relative">
+            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-gray-500">
+              $
+            </span>
+            <input
+              type="number"
+              placeholder="Upsell Value"
+              value={upsellDetails.upsellValue}
+              onChange={(e) =>
+                setUpsellDetails({
+                  ...upsellDetails,
+                  upsellValue: e.target.value,
+                })
+              }
+              className="p-3 w-full border rounded-md text-sm sm:text-base pl-7"
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">

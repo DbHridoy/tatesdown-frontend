@@ -4,6 +4,7 @@ import {
   useGetAllMileageLogsQuery,
   useUpdateMileageLogStatusMutation,
 } from "../../../redux/api/expenseApi";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function MileageApprovalRequests() {
   const [changeMileageLogStatus] = useUpdateMileageLogStatusMutation();
@@ -51,7 +52,7 @@ function MileageApprovalRequests() {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Sales Rep", accessor: "salesRep", sortable: true },
-      { label: "Requested Amount", accessor: "requestedAmount" },
+      { label: "Requested Amount", accessor: "requestedAmount", format: formatCurrency },
       { label: "Total Miles", accessor: "totalMilesDriven" },
       // { label: "Period", accessor: "period" },
       // { label: "Note", accessor: "note" },

@@ -103,6 +103,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
           {filters.map((f) => (
             <select
               key={f.accessor}
+              value={f.value ?? ""}
               onChange={(e) => onFilterChange?.(f.accessor, e.target.value)}
               className="w-full sm:w-auto px-3 py-2 border rounded-lg text-sm sm:text-base"
             >
@@ -165,6 +166,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
                 if (col.label === "Date" && value) {
                   return new Date(value).toLocaleDateString();
                 }
+                if (col.format) {
+                  return col.format(value, row);
+                }
                 return value;
               };
 
@@ -190,7 +194,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
                               col.colorMap?.[value] || ""
                             }`}
                           >
-                            {value || "—"}
+                            {value ?? "—"}
                           </span>
                         </div>
                       );
@@ -207,18 +211,22 @@ const DataTable = ({ title, data = [], config = {} }) => {
                             : "grid-cols-3"
                       }`}
                     >
-                      {actions.map((action, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleAction(action, row)}
-                          className={`w-full ${
-                            action.className ||
-                            "px-2 py-1 text-sm sm:text-base bg-blue-500 text-white rounded"
-                          }`}
-                        >
-                          {action.label}
-                        </button>
-                      ))}
+                      {actions.map((action, i) => {
+                        const isDisabled = action.disabled?.(row);
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => handleAction(action, row)}
+                            disabled={isDisabled}
+                            className={`w-full ${
+                              action.className ||
+                              "px-2 py-1 text-sm sm:text-base bg-blue-500 text-white rounded"
+                            } ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                          >
+                            {action.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -266,6 +274,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
                       if (col.label === "Date" && value) {
                         value = new Date(value).toLocaleDateString();
                       }
+                      if (col.format) {
+                        value = col.format(value, row);
+                      }
 
                       return (
                         <td key={col.accessor}>
@@ -282,18 +293,22 @@ const DataTable = ({ title, data = [], config = {} }) => {
 
                     {actions.length > 0 && (
                       <td className="px-3 sm:px-4 py-3 flex flex-wrap justify-center items-center gap-2">
-                        {actions.map((action, i) => (
-                          <button
-                            key={i}
-                            onClick={() => handleAction(action, row)}
-                            className={
-                              action.className ||
-                              "px-2 py-1 text-sm sm:text-base bg-blue-500 text-white rounded"
-                            }
-                          >
-                            {action.label}
-                          </button>
-                        ))}
+                        {actions.map((action, i) => {
+                          const isDisabled = action.disabled?.(row);
+                          return (
+                            <button
+                              key={i}
+                              onClick={() => handleAction(action, row)}
+                              disabled={isDisabled}
+                              className={`${
+                                action.className ||
+                                "px-2 py-1 text-sm sm:text-base bg-blue-500 text-white rounded"
+                              } ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                            >
+                              {action.label}
+                            </button>
+                          );
+                        })}
                       </td>
                     )}
                   </tr>

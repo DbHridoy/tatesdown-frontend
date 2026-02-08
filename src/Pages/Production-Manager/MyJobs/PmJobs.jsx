@@ -4,6 +4,7 @@ import { useGetAllJobsQuery, useDeleteJobMutation } from "../../../redux/api/job
 import DataTable from "../../../Components/Common/DataTable";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function PmJobs() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function PmJobs() {
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
       { label: "Job Title", accessor: "jobTitle" },
-      { label: "Estimated Price", accessor: "estimatedPrice" },
+      { label: "Estimated Price", accessor: "estimatedPrice", format: formatCurrency },
       { label: "Job Status", accessor: "jobStatus" },
       { label: "Start Date", accessor: "startDate" },
     ],

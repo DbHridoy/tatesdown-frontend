@@ -4,6 +4,7 @@ import {
   useUpdateJobMutation,
 } from "../../../redux/api/jobApi";
 import DataTable from "../../Common/DataTable";
+import formatCurrency from "../../../utils/formatCurrency";
 
 function DownpaymentRequest() {
   const [params, setParams] = useState({
@@ -36,7 +37,7 @@ function DownpaymentRequest() {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Amount", accessor: "amount" },
+      { label: "Amount", accessor: "amount", format: formatCurrency },
       { label: "Status", accessor: "status" },
     ],
     actions: [

@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import DataTable from "../../../Components/Common/DataTable";
 import {
@@ -9,14 +9,38 @@ import {
 
 function ClientsList() {
   const navigate = useNavigate();
-  const [params, setParams] = useState({
-    page: 1,
-    limit: 10,
-    search: "",
-    sortKey: "",
-    sortOrder: "asc",
-    filters: { role: "" },
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [params, setParams] = useState(() => {
+    const page = Number(searchParams.get("page") || 1);
+    const limit = Number(searchParams.get("limit") || 10);
+    const search = searchParams.get("search") || "";
+    const sortKey = searchParams.get("sortKey") || "";
+    const sortOrder = searchParams.get("sortOrder") || "asc";
+    const callStatus = searchParams.get("callStatus") || "";
+
+    return {
+      page: Number.isFinite(page) && page > 0 ? page : 1,
+      limit: Number.isFinite(limit) && limit > 0 ? limit : 10,
+      search,
+      sortKey,
+      sortOrder,
+      filters: { role: "", callStatus },
+    };
   });
+
+  useEffect(() => {
+    const nextParams = new URLSearchParams();
+    nextParams.set("page", String(params.page));
+    nextParams.set("limit", String(params.limit));
+    if (params.search) nextParams.set("search", params.search);
+    if (params.sortKey) nextParams.set("sortKey", params.sortKey);
+    if (params.sortOrder) nextParams.set("sortOrder", params.sortOrder);
+    if (params.filters?.callStatus) {
+      nextParams.set("callStatus", params.filters.callStatus);
+    }
+    setSearchParams(nextParams, { replace: true });
+  }, [params, setSearchParams]);
 
   const sortValue = params.sortKey
     ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
@@ -27,7 +51,9 @@ function ClientsList() {
   });
   const [deleteClient] = useDeleteClientMutation();
 
-  const clients = clientsData?.data;
+  const clients = (clientsData?.data || []).filter(
+    (client) => client?.leadStatus === "Not quoted"
+  );
   const totalItems = clientsData?.total;
 
   const tableConfig = {
@@ -64,6 +90,7 @@ function ClientsList() {
       {
         label: "Call Status",
         accessor: "callStatus",
+        value: params.filters.callStatus || "",
         options: {
           "Not Called": "Not Called",
           "Picked-Up: Appointment Booked": "Picked-Up: Appointment Booked",
@@ -77,6 +104,16 @@ function ClientsList() {
         label: "View",
         className: "bg-blue-500 text-white p-2 rounded-lg",
         onClick: (item) => navigate(`${item._id}`),
+      },
+      {
+        label: "Call",
+        className:
+          "bg-white text-blue-600 border border-blue-600 p-2 rounded-lg disabled:opacity-50",
+        onClick: (item) => {
+          if (!item.phoneNumber) return;
+          window.location.href = `tel:${item.phoneNumber}`;
+        },
+        disabled: (item) => !item.phoneNumber,
       },
       {
         label: "Delete",

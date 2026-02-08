@@ -26,6 +26,9 @@ const AddClient = () => {
     phoneNumber: "",
     email: "",
     address: "",
+    city: "",
+    state: "Illinois",
+    zipCode: "",
     leadSource: "",
     rating: 0,
   });
@@ -68,7 +71,7 @@ const AddClient = () => {
       }
 
       toast.success("Client added successfully");
-      navigate("/sales-rep/clients");
+      navigate("/sales-rep/leads");
     } catch (error) {
       console.error(error);
       toast.error("Failed to create client");
@@ -81,7 +84,7 @@ const AddClient = () => {
     <div className="page-container">
       <div className="space-y-6">
         <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 text-center">
-          Add Client
+          Add Lead
         </h1>
 
         <form
@@ -143,16 +146,54 @@ const AddClient = () => {
         </div>
 
         {/* Address */}
-        <div>
-          <label className="block text-sm sm:text-base font-semibold mb-2">
-            Address <RequiredMark />
-          </label>
-          <input
-            value={formData.address}
-            onChange={(e) => handleInputChange("address", e.target.value)}
-            className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
-            required
-          />
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm sm:text-base font-semibold mb-2">
+              Street Address <RequiredMark />
+            </label>
+            <input
+              value={formData.address}
+              onChange={(e) => handleInputChange("address", e.target.value)}
+              className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
+              required
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm sm:text-base font-semibold mb-2">
+                City <RequiredMark />
+              </label>
+              <input
+                value={formData.city}
+                onChange={(e) => handleInputChange("city", e.target.value)}
+                className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm sm:text-base font-semibold mb-2">
+                State <RequiredMark />
+              </label>
+              <input
+                value={formData.state}
+                onChange={(e) => handleInputChange("state", e.target.value)}
+                className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm sm:text-base font-semibold mb-2">
+                Zip Code <RequiredMark />
+              </label>
+              <input
+                value={formData.zipCode}
+                onChange={(e) => handleInputChange("zipCode", e.target.value)}
+                className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
+                required
+                inputMode="numeric"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Lead Source */}
@@ -206,7 +247,7 @@ const AddClient = () => {
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
           <button
             type="button"
-            onClick={() => navigate("/s/sales-rep/clients")}
+            onClick={() => navigate("/s/sales-rep/leads")}
             className="w-full sm:flex-1 border py-2 rounded-lg text-sm sm:text-base"
           >
             Cancel

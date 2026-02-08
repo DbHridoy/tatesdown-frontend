@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import {
   FiBriefcase,
-  FiDollarSign,
   FiFileText,
   FiUsers,
 } from "react-icons/fi";
@@ -38,23 +37,27 @@ const SalesRepHome = () => {
   const user = userData?.data;
   const cards = [
     {
-      title: "Total sold",
-      count: myStats?.data?.totalRevenueSold || 0,
-      icon: <FiDollarSign className="h-6 w-6 text-blue-700" />,
-    },
-    {
       title: "Total clients",
-      count: myStats?.data?.totalClients || 0,
+      value: myStats?.data?.totalClients || 0,
       icon: <FiUsers className="h-6 w-6 text-blue-700" />,
     },
     {
       title: "Total quotes",
-      count: myStats?.data?.totalQuotes || 0,
+      value: myStats?.data?.totalQuotes || 0,
       icon: <FiFileText className="h-6 w-6 text-blue-700" />,
     },
     {
       title: "Total jobs",
-      count: myStats?.data?.totalJobs || 0,
+      value: myStats?.data?.totalJobs || 0,
+      icon: <FiBriefcase className="h-6 w-6 text-blue-700" />,
+    },
+    {
+      title: "Jobs closed",
+      value:
+        myStats?.data?.totalJobsClosed ??
+        myStats?.data?.closedJobs ??
+        myStats?.data?.totalClosedJobs ??
+        0,
       icon: <FiBriefcase className="h-6 w-6 text-blue-700" />,
     },
   ];
