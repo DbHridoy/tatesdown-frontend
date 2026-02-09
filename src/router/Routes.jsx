@@ -13,6 +13,7 @@ import Successful from "../Pages/Auth/Successful";
 // Admin Pages
 import Dashboard from "../Pages/Admin/Dashboard/Dashboard";
 import Approvals from "../Pages/Admin/Approvals/Approvals";
+import MileageDetails from "../Pages/Admin/MileageLog/MileageDetails";
 import Reports from "../Pages/Admin/Reports/Reports";
 import RepDetails from "../Pages/Admin/Reports/RepDetails";
 import UserManagement from "../Pages/Admin/UserManagement/UserManagement";
@@ -146,6 +147,7 @@ export const router = createBrowserRouter([
           { path: "jobs", element: <AdminJobs /> },
           { path: "jobs/:jobId", element: <AdminJobDetailsPage /> },
           { path: "approvals-center", element: <Approvals /> },
+          { path: "mileage/:mileageId", element: <MileageDetails /> },
           { path: "reports", element: <Reports /> },
           { path: "reports-details/:id", element: <RepDetails /> },
           { path: "user-management", element: <UserManagement /> },

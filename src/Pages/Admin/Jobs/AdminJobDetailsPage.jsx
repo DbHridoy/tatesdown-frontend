@@ -63,6 +63,8 @@ const AdminJobDetailsPage = () => {
   });
 
   const job = data?.data;
+  const dcStatus = job?.dcStatus ?? "";
+  const downPaymentStatus = job?.downPaymentStatus ?? "";
   const salesReps = salesRepsData?.data ?? [];
   const productionManagers = productionManagersData?.data ?? [];
   const designConsultation = useMemo(() => {
@@ -188,7 +190,37 @@ const AdminJobDetailsPage = () => {
   return (
     <div className="page-container space-y-6">
       {/* Edit/Save Buttons */}
-      <div className="flex flex-col sm:flex-row sm:justify-end gap-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
+          {downPaymentStatus === "Pending" && (
+            <button
+              onClick={() =>
+                updateJob({
+                  id: jobId,
+                  data: { downPaymentStatus: "Approved" },
+                })
+              }
+              className="bg-green-600 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+              disabled={isSaving}
+            >
+              Approve Down Payment
+            </button>
+          )}
+          {dcStatus === "Pending" && (
+            <button
+              onClick={() =>
+                updateJob({
+                  id: jobId,
+                  data: { dcStatus: "Approved" },
+                })
+              }
+              className="bg-green-600 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
+              disabled={isSaving}
+            >
+              Approve DC
+            </button>
+          )}
+        </div>
         {isEditing ? (
           <>
             <button

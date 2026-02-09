@@ -4,7 +4,7 @@ import JobsList from "../../Common/Jobs/JobsList";
 
 const Jobs = () => {
   const user = useSelector(selectCurrentUser);
-  return <JobsList showFilters={false} salesRepId={user?._id} />;
+  return <JobsList showFilters salesRepId={user?._id} />;
 };
 
 export default Jobs;

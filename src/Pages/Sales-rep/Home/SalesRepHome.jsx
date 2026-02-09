@@ -68,8 +68,8 @@ const SalesRepHome = () => {
     totalClients: rep.totalClients,
     totalQuotes: rep.totalQuotes,
     totalJobs: rep.totalJobs,
-    revenueEarned: rep.totalRevenueSold,
-    revenueProduced: rep.totalRevenueProduced,
+    totalRevenueSold: rep.totalRevenueSold,
+    totalRevenueProduced: rep.totalRevenueProduced,
   }));
   const sortedLeaderboardRows = useMemo(() => {
     if (!leaderboardSortKey) return leaderboardRows;
@@ -97,15 +97,49 @@ const SalesRepHome = () => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+  const baseColumns = [
+    { label: "No", accessor: "No" },
+    { label: "Name", accessor: "name", sortable: true },
+    {
+      label: "Total Revenue Sold",
+      accessor: "totalRevenueSold",
+      sortable: true,
+      format: (value) => formatCurrency(value),
+    },
+  ];
+  const optionalColumns = {
+    totalClients: { label: "Total Clients", accessor: "totalClients", sortable: true },
+    totalQuotes: { label: "Total Quotes", accessor: "totalQuotes", sortable: true },
+    totalJobs: { label: "Total Jobs", accessor: "totalJobs", sortable: true },
+    totalRevenueProduced: {
+      label: "Total Revenue Produced",
+      accessor: "totalRevenueProduced",
+      sortable: true,
+      format: (value) => formatCurrency(value),
+    },
+  };
+  const leaderboardColumns = [
+    ...baseColumns,
+    ...(leaderboardSortKey && optionalColumns[leaderboardSortKey]
+      ? [optionalColumns[leaderboardSortKey]]
+      : []),
+  ];
   const leaderboardConfig = {
-    columns: [
-      { label: "No", accessor: "No" },
-      { label: "Name", accessor: "name", sortable: true },
-      { label: "Total Clients", accessor: "totalClients", sortable: true },
-      { label: "Total Quotes", accessor: "totalQuotes", sortable: true },
-      { label: "Total Jobs", accessor: "totalJobs", sortable: true },
-      { label: "Revenue Earned", accessor: "revenueEarned", sortable: true },
-      { label: "Revenue Produced", accessor: "revenueProduced", sortable: true },
+    columns: leaderboardColumns,
+    filters: [
+      {
+        label: "Sort By",
+        accessor: "leaderboardSort",
+        value: leaderboardSortKey || "",
+        options: {
+          Name: "name",
+          "Total Clients": "totalClients",
+          "Total Quotes": "totalQuotes",
+          "Total Jobs": "totalJobs",
+          "Total Revenue Sold": "totalRevenueSold",
+          "Total Revenue Produced": "totalRevenueProduced",
+        },
+      },
     ],
     totalItems: sortedLeaderboardRows.length,
     currentPage: 1,
@@ -120,6 +154,11 @@ const SalesRepHome = () => {
       }
 
       setLeaderboardSortKey(sortKey);
+      setLeaderboardSortOrder("asc");
+    },
+    onFilterChange: (key, value) => {
+      if (key !== "leaderboardSort") return;
+      setLeaderboardSortKey(value);
       setLeaderboardSortOrder("asc");
     },
   };
@@ -167,12 +206,8 @@ const SalesRepHome = () => {
       </div>
       <DataTable
         title=""
-        data={sortedLeaderboardRows.map((row) => ({
-          ...row,
-          revenueEarned: formatCurrency(row.revenueEarned),
-          revenueProduced: formatCurrency(row.revenueProduced),
-        }))}
-        config={{ ...leaderboardConfig, showSearch: false, filters: [] }}
+        data={sortedLeaderboardRows}
+        config={{ ...leaderboardConfig, showSearch: false }}
       />
 
       <div className="pt-2">

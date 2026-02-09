@@ -68,12 +68,24 @@ const QuoteDetails = () => {
 
   const handleSave = async () => {
     try {
+      if (normalizeStatus(quote?.status) === "Approved") {
+        toast.error("Approved quotes cannot be edited");
+        setIsEditing(false);
+        return;
+      }
       const payload = new FormData();
+      const currentStatus = normalizeStatus(quote?.status);
+      const lockedStatus =
+        currentStatus === "Approved" ? "Approved" : normalizeStatus(formData?.status);
 
       // append text fields
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          payload.append(key, value);
+          if (key === "status") {
+            payload.append("status", lockedStatus);
+          } else {
+            payload.append(key, value);
+          }
         }
       });
 
@@ -94,7 +106,7 @@ const QuoteDetails = () => {
       toast.success("Quote updated successfully")
       setIsEditing(false);
       setBidSheetFile(null);
-      if (normalizeStatus(formData.status) === "Approved") {
+      if (lockedStatus === "Approved") {
         navigate(`/sales-rep/jobs/add-job?quoteId=${quote._id}`);
       }
     } catch (err) {
@@ -135,6 +147,7 @@ const QuoteDetails = () => {
     customQuoteId,
   } = quote;
   const normalizedStatus = normalizeStatus(status);
+  const isApprovedStatus = normalizedStatus === "Approved";
   const notesList = Array.isArray(quoteNotes)
     ? quoteNotes
     : quoteNotes
@@ -198,6 +211,7 @@ const QuoteDetails = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
+                  disabled={isApprovedStatus}
                   className="border rounded px-3 py-2 text-sm sm:text-base"
                 >
                   <option value="Pending">Pending</option>
@@ -334,7 +348,10 @@ const QuoteDetails = () => {
               </button> */}
               <button
                 onClick={() => setIsEditing(true)}
-                className="w-full sm:flex-1 border py-2.5 sm:py-3 rounded text-sm sm:text-base"
+                disabled={isApprovedStatus}
+                className={`w-full sm:flex-1 border py-2.5 sm:py-3 rounded text-sm sm:text-base ${
+                  isApprovedStatus ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
                 Edit Quote
               </button>

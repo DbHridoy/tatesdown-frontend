@@ -4,6 +4,7 @@ import DownpaymentRequest from "../../../Components/Admin/Approval center/Downpa
 import MileageApprovalRequests from "../../../Components/Admin/Approval center/MileageApprovalRequests";
 import JobCloseRequests from "../../../Components/Admin/Approval center/JobCloseRequests";
 import SalesAssignement from "../../../Components/Admin/Approval center/SalesAssignement";
+import DcApprovalRequests from "../../../Components/Admin/Approval center/DcApprovalRequests";
 
 const Approvals = () => {
   const [activeTab, setActiveTab] = useState("downpayment");
@@ -23,6 +24,7 @@ const Approvals = () => {
     { id: "jobclose", label: "Job Close Approvals", count: 0 },
     { id: "mileage", label: "Mileage Log Approvals", count: 0 },
     { id: "leadassignment", label: "Lead Assignment", count: 0 },
+    { id: "dcapproval", label: "DC Approval", count: 0 },
   ];
 
 
@@ -71,6 +73,9 @@ const Approvals = () => {
       {activeTab === "leadassignment" && (
         <SalesAssignement />
       )}
+
+      {/* DC Approvals Section */}
+      {activeTab === "dcapproval" && <DcApprovalRequests />}
 
     </div>
   );

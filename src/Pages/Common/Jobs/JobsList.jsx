@@ -17,6 +17,7 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
       salesRepId: "",
       productionManagerId: "",
       status: "",
+      downPaymentStatus: "",
     },
   });
 
@@ -51,20 +52,31 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
   const formattedJobs = jobs.map((job) => ({
     _id: job._id,
     clientName: job.clientId?.clientName ?? "N/A",
-    jobTitle: job.title,
     price: job.price ?? job.estimatedPrice ?? 0,
-    jobStatus: job.status,
-    startDate: new Date(job.estimatedStartDate ?? job.startDate).toLocaleDateString(),
+    status: job.status,
+    downPaymentStatus: job.downPaymentStatus,
+    createdAt: job.createdAt,
+    startDate: job.estimatedStartDate ?? job.startDate,
   }));
 
   const tableConfig = {
     columns: [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
-      { label: "Job Title", accessor: "jobTitle", sortable: true },
       { label: "Price", accessor: "price", sortable: true, format: formatCurrency },
-      { label: "Status", accessor: "jobStatus", sortable: true },
-      { label: "Start Date", accessor: "startDate", sortable: true },
+      { label: "Status", accessor: "status", sortable: true },
+      {
+        label: "Creation Date",
+        accessor: "createdAt",
+        sortable: true,
+        format: (value) => (value ? new Date(value).toLocaleDateString() : "—"),
+      },
+      {
+        label: "Start Date",
+        accessor: "startDate",
+        sortable: true,
+        format: (value) => (value ? new Date(value).toLocaleDateString() : "—"),
+      },
     ],
     actions: [
       {
@@ -87,16 +99,9 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
     filters: showFilters
       ? [
           {
-            label: "Sales Rep",
-            accessor: "salesRepId",
-            options: salesReps.reduce((acc, rep) => {
-              acc[rep.fullName || rep.email || rep._id] = rep._id;
-              return acc;
-            }, {}),
-          },
-          {
             label: "Production Manager",
             accessor: "productionManagerId",
+            value: params.filters.productionManagerId || "",
             options: productionManagers.reduce((acc, pm) => {
               acc[pm.fullName || pm.email || pm._id] = pm._id;
               return acc;
@@ -105,12 +110,23 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
           {
             label: "Status",
             accessor: "status",
+            value: params.filters.status || "",
             options: {
               "Ready to Schedule": "Ready to Schedule",
               "Scheduled and Open": "Scheduled and Open",
               "Pending Close": "Pending Close",
               "Closed": "Closed",
               "Cancelled": "Cancelled",
+            },
+          },
+          {
+            label: "Down Payment Status",
+            accessor: "downPaymentStatus",
+            value: params.filters.downPaymentStatus || "",
+            options: {
+              Pending: "Pending",
+              Approved: "Approved",
+              Rejected: "Rejected",
             },
           },
         ]

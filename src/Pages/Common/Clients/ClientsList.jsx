@@ -18,6 +18,7 @@ function ClientsList({ salesRepId } = {}) {
     const sortKey = searchParams.get("sortKey") || "";
     const sortOrder = searchParams.get("sortOrder") || "asc";
     const callStatus = searchParams.get("callStatus") || "";
+    const leadStatus = searchParams.get("leadStatus") || "Not quoted";
 
     return {
       page: Number.isFinite(page) && page > 0 ? page : 1,
@@ -25,7 +26,7 @@ function ClientsList({ salesRepId } = {}) {
       search,
       sortKey,
       sortOrder,
-      filters: { role: "", callStatus },
+      filters: { role: "", callStatus, leadStatus },
     };
   });
 
@@ -38,6 +39,9 @@ function ClientsList({ salesRepId } = {}) {
     if (params.sortOrder) nextParams.set("sortOrder", params.sortOrder);
     if (params.filters?.callStatus) {
       nextParams.set("callStatus", params.filters.callStatus);
+    }
+    if (params.filters?.leadStatus) {
+      nextParams.set("leadStatus", params.filters.leadStatus);
     }
     setSearchParams(nextParams, { replace: true });
   }, [params, setSearchParams]);
@@ -55,13 +59,11 @@ function ClientsList({ salesRepId } = {}) {
   });
   const [deleteClient] = useDeleteClientMutation();
 
-  const clients = (clientsData?.data || []).filter(
-    (client) => client?.leadStatus === "Not quoted"
-  );
+  const clients = clientsData?.data || [];
   const totalItems = clientsData?.total;
+  const isSalesRepView = Boolean(salesRepId);
 
-  const tableConfig = {
-    columns: [
+  const baseColumns = [
       { label: "No", accessor: "No" },
       { label: "Client Name", accessor: "clientName", sortable: true },
       { label: "Phone", accessor: "phoneNumber", sortable: true },
@@ -89,7 +91,17 @@ function ClientsList({ salesRepId } = {}) {
           Job: "bg-green-100 text-green-800 rounded-2xl text-center p-2",
         },
       },
-    ],
+      {
+        label: "Created At",
+        accessor: "createdAt",
+        sortable: true,
+        format: (value) =>
+          value ? new Date(value).toLocaleDateString() : "—",
+      },
+    ];
+
+  const tableConfig = {
+    columns: baseColumns,
     filters: [
       {
         label: "Call Status",
@@ -100,6 +112,16 @@ function ClientsList({ salesRepId } = {}) {
           "Picked-Up: Appointment Booked": "Picked-Up: Appointment Booked",
           "Picked-Up: No Appointment": "Picked-Up: No Appointment",
           "No Pickup": "No Pickup",
+        },
+      },
+      {
+        label: "Lead Status",
+        accessor: "leadStatus",
+        value: params.filters.leadStatus || "",
+        options: {
+          "Not quoted": "Not quoted",
+          Quoted: "Quoted",
+          Job: "Job",
         },
       },
     ],

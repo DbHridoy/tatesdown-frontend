@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllJobsQuery, useDeleteJobMutation } from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
@@ -18,8 +18,16 @@ function PmJobs() {
     search: "",
     sortKey: "",
     sortOrder: "asc",
-    filters: { productionManagerId: me._id },
+    filters: { productionManagerId: "", status: "" },
   });
+
+  useEffect(() => {
+    if (!me?._id) return;
+    setParams((p) => ({
+      ...p,
+      filters: { ...p.filters, productionManagerId: me._id },
+    }));
+  }, [me?._id]);
 
   // ✅ Hook at top level
   const { data, isLoading } = useGetAllJobsQuery(params);
@@ -48,6 +56,20 @@ function PmJobs() {
       { label: "Job Status", accessor: "jobStatus" },
       { label: "Start Date", accessor: "startDate" },
     ],
+    filters: [
+      {
+        label: "Status",
+        accessor: "status",
+        value: params.filters.status || "",
+        options: {
+          "Ready to Schedule": "Ready to Schedule",
+          "Scheduled and Open": "Scheduled and Open",
+          "Pending Close": "Pending Close",
+          Closed: "Closed",
+          Cancelled: "Cancelled",
+        },
+      },
+    ],
     actions: [
       {
         label: "View",
@@ -74,6 +96,12 @@ function PmJobs() {
     sortOrder: params.sortOrder,
     onPageChange: (page) => setParams((p) => ({ ...p, page })),
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
+    onFilterChange: (key, value) =>
+      setParams((p) => ({
+        ...p,
+        page: 1,
+        filters: { ...p.filters, [key]: value },
+      })),
     onSortChange: (sortKey, sortOrder) =>
       setParams((p) => ({ ...p, sortKey, sortOrder })),
   };

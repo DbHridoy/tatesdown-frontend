@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useGetAllJobsQuery,
   useUpdateJobMutation,
@@ -7,6 +8,7 @@ import DataTable from "../../Common/DataTable";
 import formatCurrency from "../../../utils/formatCurrency";
 
 function DownpaymentRequest() {
+  const navigate = useNavigate();
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
@@ -41,6 +43,13 @@ function DownpaymentRequest() {
       { label: "Status", accessor: "status" },
     ],
     actions: [
+      {
+        label: "View",
+        className: "bg-blue-500 text-white p-2 rounded-lg",
+        onClick: (item) => {
+          navigate(`/admin/jobs/${item.id}`);
+        },
+      },
       {
         label: "Accept",
         className: "bg-green-500 text-white p-2 rounded-lg",

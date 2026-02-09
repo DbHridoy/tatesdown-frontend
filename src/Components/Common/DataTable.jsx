@@ -98,7 +98,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
       )}
 
       {/* Filters */}
-      {filters.length > 0 && data.length > 0 && (
+      {filters.length > 0 && (
         <div className="flex flex-wrap gap-3 px-4 sm:px-6 py-4 border-b">
           {filters.map((f) => (
             <select
