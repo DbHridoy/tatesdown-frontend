@@ -19,9 +19,13 @@ const formatDateInput = (value) => {
 };
 
 const statusOptions = [
+  "Downpayment Pending",
+  "DC Pending",
+  "DC Awaiting Approval",
   "Ready to Schedule",
   "Scheduled and Open",
   "Pending Close",
+  "Closed",
   "Cancelled",
 ];
 
@@ -54,6 +58,9 @@ const PmJobDetailsPage = () => {
     pathname.startsWith("/production-manager/jobs/") &&
     !pathname.includes("/production-manager/my-jobs/");
   const allowFullActions = !isJobsRoute;
+  const canCancelJob = !["Pending Close", "Closed", "Cancelled"].includes(
+    job?.status
+  );
   const statusOptionsForEdit = useMemo(
     () => [...new Set([formJob.status, ...statusOptions])].filter(Boolean),
     [formJob.status]
@@ -194,7 +201,7 @@ const PmJobDetailsPage = () => {
                   {getStatusAction().label}
                 </button>
               )}
-              {job?.status !== "Cancelled" && (
+              {canCancelJob && (
                 <button
                   onClick={() => handleStatusUpdate("Cancelled")}
                   className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
@@ -220,7 +227,7 @@ const PmJobDetailsPage = () => {
                   {getStatusAction().label}
                 </button>
               )}
-              {job?.status !== "Cancelled" && (
+              {canCancelJob && (
                 <button
                   onClick={() => handleStatusUpdate("Cancelled")}
                   className="w-full sm:w-auto bg-gray-800 text-white px-4 py-2 rounded-md text-sm sm:text-base"
@@ -260,7 +267,6 @@ const PmJobDetailsPage = () => {
               ? new Date(job.estimatedStartDate).toLocaleDateString()
               : null,
           },
-          { label: "Down Payment Status", value: job.downPaymentStatus },
           { label: "Estimated Gallons", value: job.estimatedGallons },
         ]}
         readOnlyFieldsPosition="afterStartDate"

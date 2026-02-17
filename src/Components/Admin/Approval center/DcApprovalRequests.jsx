@@ -10,13 +10,19 @@ function DcApprovalRequests() {
     page: 1,
     limit: 10,
     search: "",
-    sortKey: "fullName",
+    sortKey: "",
     sortOrder: "asc",
     filters: { status: "DC Awaiting Approval" },
   });
 
   const [updateJob] = useUpdateJobMutation();
-  const { data: jobsData } = useGetAllJobsQuery(params);
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
+  const { data: jobsData } = useGetAllJobsQuery({
+    ...params,
+    sort: sortValue,
+  });
   const jobs = jobsData?.data ?? [];
   const totalItems = jobsData?.total;
 

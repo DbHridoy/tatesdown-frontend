@@ -8,7 +8,6 @@ import { selectCurrentUser } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ClientNote from "../../Components/Sales-rep/Clients/ClientNote";
-import RequiredMark from "../../Components/Common/RequiredMark";
 
 const AddClient = () => {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ const AddClient = () => {
     rating: 0,
   });
 
-  const leadSources = ["Door to Door", "Inbound", "Social"];
+  const leadSources = ["", "Door to Door", "Inbound", "Social"];
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -199,17 +198,16 @@ const AddClient = () => {
         {/* Lead Source */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Lead Source <RequiredMark />
+            Lead Source
           </label>
           <select
             value={formData.leadSource}
             onChange={(e) => handleInputChange("leadSource", e.target.value)}
             className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
-            required
           >
             {leadSources.map((s) => (
               <option key={s} value={s}>
-                {s}
+                {s || "Select source"}
               </option>
             ))}
           </select>

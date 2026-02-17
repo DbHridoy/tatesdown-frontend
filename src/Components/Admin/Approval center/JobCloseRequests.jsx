@@ -9,15 +9,21 @@ function JobCloseRequests() {
     page: 1,
     limit: 10,
     search: "",
-    sortKey: "fullName",
+    sortKey: "",
     sortOrder: "asc",
     filters: { status: "Pending Close" },
   });
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
 
   const [changeJobStatus] = useUpdateJobMutation();
 
   const { data: getPendingMileageLogs, isLoading: isGetLoading } =
-    useGetAllJobsQuery(params);
+    useGetAllJobsQuery({
+      ...params,
+      sort: sortValue,
+    });
   //console.log(getPendingMileageLogs);
   const mileageData = getPendingMileageLogs?.data ?? [];
 
@@ -71,8 +77,12 @@ function JobCloseRequests() {
         page: 1,
         filters: { ...p.filters, [key]: value },
       })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
   return (
     <DataTable

@@ -15,12 +15,18 @@ function DownpaymentRequest() {
     search: "",
     sortKey: "",
     sortOrder: "asc",
-    filters: {downPaymentStatus:"Pending"},
+    filters: { status: "Downpayment Pending" },
   });
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
 
   // ✅ pass params to RTK Query
   const { data: downpaymentRequests, isLoading } =
-    useGetAllJobsQuery(params);
+    useGetAllJobsQuery({
+      ...params,
+      sort: sortValue,
+    });
 
   //console.log(downpaymentRequests);
 
@@ -32,7 +38,7 @@ function DownpaymentRequest() {
     id: item._id,
     clientName: item?.clientId?.clientName ?? "N/A",
     amount: item?.downPayment ?? 0,
-    status: item?.downPaymentStatus ?? "Pending",
+    status: item?.status ?? "Downpayment Pending",
   }));
   const [updateDownPaymentStatus] = useUpdateJobMutation();
   const tableConfig = {
@@ -61,7 +67,7 @@ function DownpaymentRequest() {
           //console.log("item",item)
           updateDownPaymentStatus({
             id: item.id,
-            data: { downPaymentStatus: "Approved" },
+            data: { status: "DC Pending" },
           });
         },
       },
@@ -75,7 +81,7 @@ function DownpaymentRequest() {
         onConfirm: (item) => {
           updateDownPaymentStatus({
             id: item.id,
-            data: { downPaymentStatus: "Rejected" },
+            data: { status: "Cancelled" },
           });
         },
       },
@@ -90,8 +96,12 @@ function DownpaymentRequest() {
 
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
 
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   return (

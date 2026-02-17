@@ -60,7 +60,6 @@ const JobDetailsOverview = ({
   statusOptions = [],
   onFieldChange,
   showEstimatedStartDate = false,
-  showDownPaymentStatus = false,
   showProductionManager = false,
   jobIdPosition = "afterStartDate",
   estimatedStartDatePosition = "afterStatus",
@@ -163,13 +162,6 @@ const JobDetailsOverview = ({
                 readOnly
               />
             ))}
-          {showDownPaymentStatus && (
-            <InfoField
-              label="Down Payment Status"
-              value={formJob.downPaymentStatus}
-              readOnly
-            />
-          )}
           <InfoField
             label="Price"
             value={formJob.price}

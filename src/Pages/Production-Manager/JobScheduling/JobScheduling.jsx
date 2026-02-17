@@ -26,8 +26,14 @@ function JobScheduling() {
     filters: { status: "Ready to Schedule" },
   });
 
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
   // ✅ Hook at top level
-  const { data, isLoading } = useGetAllJobsQuery(params);
+  const { data, isLoading } = useGetAllJobsQuery({
+    ...params,
+    sort: sortValue,
+  });
 
   const jobs = (data?.data || []).filter((j) => j.status !== "DC Pending");
   const totalItems = data?.total || 0;
@@ -99,8 +105,12 @@ console.log("line:52-me", me)
     sortOrder: params.sortOrder,
     onPageChange: (page) => setParams((p) => ({ ...p, page })),
     onSearch: (search) => setParams((p) => ({ ...p, search, page: 1 })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   return (

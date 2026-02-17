@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetAllJobsQuery, useDeleteJobMutation } from "../../../redux/api/jobApi";
+import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
 import DataTable from "../../../Components/Common/DataTable";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
@@ -29,13 +29,17 @@ function PmJobs() {
     }));
   }, [me?._id]);
 
+  const sortValue = params.sortKey
+    ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
+    : "";
   // ✅ Hook at top level
-  const { data, isLoading } = useGetAllJobsQuery(params);
+  const { data, isLoading } = useGetAllJobsQuery({
+    ...params,
+    sort: sortValue,
+  });
 
   const jobs = data?.data || [];
   const totalItems = data?.total || 0;
-
-  const [deleteJob] = useDeleteJobMutation();
 
   // ✅ Safe formatting
   const formattedJobs = jobs.map((j) => ({
@@ -62,6 +66,9 @@ function PmJobs() {
         accessor: "status",
         value: params.filters.status || "",
         options: {
+          "Downpayment Pending": "Downpayment Pending",
+          "DC Pending": "DC Pending",
+          "DC Awaiting Approval": "DC Awaiting Approval",
           "Ready to Schedule": "Ready to Schedule",
           "Scheduled and Open": "Scheduled and Open",
           "Pending Close": "Pending Close",
@@ -79,15 +86,6 @@ function PmJobs() {
           navigate(`/production-manager/my-jobs/${item._id}`);
         },
       },
-      {
-        label: "Delete",
-        className: "bg-red-500 text-white p-2 rounded-lg",
-        modal: true,
-        modalTitle: "Delete User",
-        modalMessage: (item) =>
-          `Are you sure you want to delete ${item.title}?`,
-        onConfirm: (item) => deleteJob(item._id),
-      },
     ],
     totalItems,
     currentPage: params.page,
@@ -102,8 +100,12 @@ function PmJobs() {
         page: 1,
         filters: { ...p.filters, [key]: value },
       })),
-    onSortChange: (sortKey, sortOrder) =>
-      setParams((p) => ({ ...p, sortKey, sortOrder })),
+    onSortChange: (sortKey) =>
+      setParams((p) => {
+        const isSameKey = p.sortKey === sortKey;
+        const nextOrder = isSameKey && p.sortOrder === "asc" ? "desc" : "asc";
+        return { ...p, sortKey, sortOrder: nextOrder };
+      }),
   };
 
   return (

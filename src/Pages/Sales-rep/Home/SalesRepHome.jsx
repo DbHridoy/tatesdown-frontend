@@ -32,12 +32,11 @@ const SalesRepHome = () => {
     periodType: leaderboardPeriodType,
     date: normalizePeriodDate(leaderboardPeriodType, leaderboardDateInput),
   });
-  const [leaderboardSortKey, setLeaderboardSortKey] = useState("");
-  const [leaderboardSortOrder, setLeaderboardSortOrder] = useState("asc");
+  const [leaderboardSortKey, setLeaderboardSortKey] = useState("totalRevenueSold");
   const user = userData?.data;
   const cards = [
     {
-      title: "Total clients",
+      title: "Total leads",
       value: myStats?.data?.totalClients || 0,
       icon: <FiUsers className="h-6 w-6 text-blue-700" />,
     },
@@ -72,23 +71,23 @@ const SalesRepHome = () => {
     totalRevenueProduced: rep.totalRevenueProduced,
   }));
   const sortedLeaderboardRows = useMemo(() => {
-    if (!leaderboardSortKey) return leaderboardRows;
+    if (!leaderboardSortKey) return leaderboardRows.slice(0, 5);
 
     const sorted = [...leaderboardRows].sort((a, b) => {
       const left = a[leaderboardSortKey];
       const right = b[leaderboardSortKey];
 
       if (leaderboardSortKey === "name") {
-        return String(left || "").localeCompare(String(right || ""));
+        return String(right || "").localeCompare(String(left || ""));
       }
 
       const leftNum = Number(left) || 0;
       const rightNum = Number(right) || 0;
-      return leftNum - rightNum;
+      return rightNum - leftNum;
     });
 
-    return leaderboardSortOrder === "desc" ? sorted.reverse() : sorted;
-  }, [leaderboardRows, leaderboardSortKey, leaderboardSortOrder]);
+    return sorted.slice(0, 5);
+  }, [leaderboardRows, leaderboardSortKey]);
   const formatCurrency = (value) => {
     const amount = Number(value) || 0;
     return new Intl.NumberFormat("en-US", {
@@ -132,7 +131,7 @@ const SalesRepHome = () => {
         accessor: "leaderboardSort",
         value: leaderboardSortKey || "",
         options: {
-          Name: "name",
+          // Name: "name",
           "Total Clients": "totalClients",
           "Total Quotes": "totalQuotes",
           "Total Jobs": "totalJobs",
@@ -145,32 +144,22 @@ const SalesRepHome = () => {
     currentPage: 1,
     itemsPerPage: Math.max(sortedLeaderboardRows.length, 1),
     sortKey: leaderboardSortKey,
-    sortOrder: leaderboardSortOrder,
+    sortOrder: "desc",
     onPageChange: () => { },
     onSortChange: (sortKey) => {
-      if (sortKey === leaderboardSortKey) {
-        setLeaderboardSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-        return;
-      }
-
       setLeaderboardSortKey(sortKey);
-      setLeaderboardSortOrder("asc");
     },
     onFilterChange: (key, value) => {
       if (key !== "leaderboardSort") return;
       setLeaderboardSortKey(value);
-      setLeaderboardSortOrder("asc");
     },
   };
   return (
     <div className="page-container space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
-          Sales Dashboard
+          Top 5 Sales Rep
         </h1>
-        <p className="text-sm sm:text-base text-gray-500">
-          Overview of your sales performance
-        </p>
       </div>
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <p className="text-sm sm:text-base text-gray-500">
@@ -191,7 +180,7 @@ const SalesRepHome = () => {
       <SalesRepHomeCards cards={cards} />
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-          Sales Rep Leaderboard
+          Top 5 Sales Rep
         </h2>
         <PeriodFilter
           label="Leaderboard"
@@ -207,7 +196,7 @@ const SalesRepHome = () => {
       <DataTable
         title=""
         data={sortedLeaderboardRows}
-        config={{ ...leaderboardConfig, showSearch: false }}
+        config={{ ...leaderboardConfig, showSearch: false, showPagination: false }}
       />
 
       <div className="pt-2">

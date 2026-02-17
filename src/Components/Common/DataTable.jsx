@@ -36,6 +36,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
     actions = [],
     filters = [],
     showSearch,
+    showPagination = true,
 
     // server controlled
     currentPage,
@@ -320,28 +321,30 @@ const DataTable = ({ title, data = [], config = {} }) => {
       )}
 
       {/* Pagination */}
-      <div className="px-4 sm:px-6 py-4 border-t flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
-        <span className="text-sm sm:text-base text-gray-600">
-          Page {currentPage} of {totalPages || 0}
-        </span>
+      {showPagination && (
+        <div className="px-4 sm:px-6 py-4 border-t flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+          <span className="text-sm sm:text-base text-gray-600">
+            Page {currentPage} of {totalPages || 0}
+          </span>
 
-        <div className="flex w-full sm:w-auto gap-2 justify-between sm:justify-end">
-          <button
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-3 py-2 border rounded text-sm sm:text-base disabled:opacity-50"
-          >
-            Prev
-          </button>
-          <button
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-3 py-2 border rounded text-sm sm:text-base disabled:opacity-50"
-          >
-            Next
-          </button>
+          <div className="flex w-full sm:w-auto gap-2 justify-between sm:justify-end">
+            <button
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-2 border rounded text-sm sm:text-base disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-2 border rounded text-sm sm:text-base disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Modal */}
       <Modal

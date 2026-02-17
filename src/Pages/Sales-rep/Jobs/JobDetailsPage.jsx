@@ -17,9 +17,11 @@ const formatDateInput = (value) => {
 };
 
 const statusOptions = [
+  "Downpayment Pending",
+  "DC Pending",
+  "DC Awaiting Approval",
   "Ready to Schedule",
   "Scheduled and Open",
-  "Scheduled",
   "Pending Close",
   "Closed",
   "Cancelled",
@@ -134,7 +136,6 @@ const JobDetailsPage = () => {
         jobIdPosition="afterStatus"
         estimatedStartDatePosition="afterPrice"
         readOnlyFields={[
-          { label: "Down Payment Status", value: job.downPaymentStatus },
           { label: "Estimated Gallons", value: job.estimatedGallons },
         ]}
       />

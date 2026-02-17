@@ -179,13 +179,13 @@ function ClientsList({ salesRepId } = {}) {
     <div className="page-container space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
-          My Clients
+          My Leads
         </h1>
         <p className="text-sm sm:text-base text-gray-500">
-          Overview of your clients
+          Overview of your leads
         </p>
       </div>
-      <DataTable title="Clients" data={clients || []} config={tableConfig} />
+      <DataTable title="Leads" data={clients || []} config={tableConfig} />
     </div>
   );
 }

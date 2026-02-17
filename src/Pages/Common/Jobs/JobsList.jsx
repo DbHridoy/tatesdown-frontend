@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import DataTable from "../../../Components/Common/DataTable";
-import { useDeleteJobMutation, useGetAllJobsQuery } from "../../../redux/api/jobApi";
+import { useGetAllJobsQuery } from "../../../redux/api/jobApi";
 import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 import formatCurrency from "../../../utils/formatCurrency";
 
@@ -17,7 +17,6 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
       salesRepId: "",
       productionManagerId: "",
       status: "",
-      downPaymentStatus: "",
     },
   });
 
@@ -42,7 +41,6 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
     limit: 0,
     filters: { role: "Production Manager" },
   });
-  const [deleteJob] = useDeleteJobMutation();
 
   const jobs = data?.data || [];
   const totalItems = data?.total || 0;
@@ -54,9 +52,10 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
     clientName: job.clientId?.clientName ?? "N/A",
     price: job.price ?? job.estimatedPrice ?? 0,
     status: job.status,
-    downPaymentStatus: job.downPaymentStatus,
     createdAt: job.createdAt,
-    startDate: job.estimatedStartDate ?? job.startDate,
+    // Keep display order consistent with backend sort fallback:
+    // backend sorts by startDate, then falls back to estimatedStartDate.
+    startDate: job.startDate ?? job.estimatedStartDate,
   }));
 
   const tableConfig = {
@@ -86,15 +85,6 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
           navigate(`${item._id}`);
         },
       },
-      {
-        label: "Delete",
-        className: "bg-red-500 text-white p-2 rounded-lg",
-        modal: true,
-        modalTitle: "Delete Job",
-        modalMessage: (item) =>
-          `Are you sure you want to delete ${item.jobTitle}?`,
-        onConfirm: (item) => deleteJob(item._id),
-      },
     ],
     filters: showFilters
       ? [
@@ -112,21 +102,14 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
             accessor: "status",
             value: params.filters.status || "",
             options: {
+              "Downpayment Pending": "Downpayment Pending",
+              "DC Pending": "DC Pending",
+              "DC Awaiting Approval": "DC Awaiting Approval",
               "Ready to Schedule": "Ready to Schedule",
               "Scheduled and Open": "Scheduled and Open",
               "Pending Close": "Pending Close",
               "Closed": "Closed",
               "Cancelled": "Cancelled",
-            },
-          },
-          {
-            label: "Down Payment Status",
-            accessor: "downPaymentStatus",
-            value: params.filters.downPaymentStatus || "",
-            options: {
-              Pending: "Pending",
-              Approved: "Approved",
-              Rejected: "Rejected",
             },
           },
         ]

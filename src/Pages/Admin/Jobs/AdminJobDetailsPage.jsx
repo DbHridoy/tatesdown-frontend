@@ -18,9 +18,11 @@ const formatDateInput = (value) => {
 };
 
 const statusOptions = [
+  "Downpayment Pending",
+  "DC Pending",
+  "DC Awaiting Approval",
   "Ready to Schedule",
   "Scheduled and Open",
-  "Scheduled",
   "Pending Close",
   "Closed",
   "Cancelled",
@@ -261,7 +263,6 @@ const AdminJobDetailsPage = () => {
           setFormJob((prev) => ({ ...prev, [field]: value }))
         }
         showEstimatedStartDate
-        showDownPaymentStatus
         showProductionManager
         readOnlyFields={[
           { label: "Estimated Gallons", value: job.estimatedGallons },
