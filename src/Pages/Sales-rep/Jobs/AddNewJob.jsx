@@ -96,7 +96,7 @@ const AddNewJob = () => {
     payload.append("totalHours", String(Number(totalHours)));
     payload.append("setupCleanup", String(Number(setupCleanup)));
     payload.append("powerwash", String(Number(powerwash)));
-    payload.append("labourHours", String(labourHours));
+    payload.append("laborHours", String(labourHours));
     payload.append("estimatedGallons", String(Number(estimatedGallons)));
     payload.append("contract", contractFile);
 
@@ -221,12 +221,13 @@ const AddNewJob = () => {
         {/* Labour Hours (auto-calculated) */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Labour Hours
+            Labour Hours <RequiredMark />
           </label>
           <input
             type="number"
             value={labourHours}
             readOnly
+            required
             className="w-full border px-3 py-2 rounded bg-gray-100 text-sm sm:text-base"
           />
         </div>
@@ -235,12 +236,13 @@ const AddNewJob = () => {
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <label className="block text-sm sm:text-base font-semibold mb-2">
-              Price
+              Price <RequiredMark />
             </label>
             <input
               value={price}
               className="w-full border px-3 py-2 rounded bg-gray-100 text-sm sm:text-base"
               readOnly
+              required
             />
           </div>
 

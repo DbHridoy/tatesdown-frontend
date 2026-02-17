@@ -56,7 +56,7 @@ function DcApprovalRequests() {
         modalMessage: (item) =>
           `Are you sure you want to approve DC for ${item.clientName}?`,
         onConfirm: (item) =>
-          updateJob({ id: item.id, data: { dcStatus: "Approved" } }),
+          updateJob({ id: item.id, data: { status: "Ready to Schedule" } }),
       },
       {
         label: "Reject",

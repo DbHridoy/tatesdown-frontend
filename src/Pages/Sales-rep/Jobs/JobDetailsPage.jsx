@@ -133,6 +133,7 @@ const JobDetailsPage = () => {
           setFormJob((prev) => ({ ...prev, [field]: value }))
         }
         showEstimatedStartDate
+        showProductionManager
         jobIdPosition="afterStatus"
         estimatedStartDatePosition="afterPrice"
         readOnlyFields={[

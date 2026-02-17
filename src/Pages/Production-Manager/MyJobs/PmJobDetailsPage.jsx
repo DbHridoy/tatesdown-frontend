@@ -41,6 +41,7 @@ const PmJobDetailsPage = () => {
     title: "",
     status: "",
     startDate: "",
+    estimatedStartDate: "",
     price: 0,
     downPayment: 0,
     budgetSpent: 0,
@@ -76,6 +77,7 @@ const PmJobDetailsPage = () => {
       title: job.title ?? "",
       status: job.status ?? "",
       startDate: formatDateInput(job.startDate),
+      estimatedStartDate: formatDateInput(job.estimatedStartDate),
       price: job.price ?? 0,
       downPayment: job.downPayment ?? 0,
       budgetSpent: job.budgetSpent ?? 0,
@@ -94,6 +96,7 @@ const PmJobDetailsPage = () => {
       title: job.title ?? "",
       status: job.status ?? "",
       startDate: formatDateInput(job.startDate),
+      estimatedStartDate: formatDateInput(job.estimatedStartDate),
       price: job.price ?? 0,
       downPayment: job.downPayment ?? 0,
       budgetSpent: job.budgetSpent ?? 0,
@@ -116,6 +119,9 @@ const PmJobDetailsPage = () => {
         title: formJob.title,
         status: formJob.status,
         startDate: formJob.startDate ? new Date(formJob.startDate) : undefined,
+        estimatedStartDate: formJob.estimatedStartDate
+          ? new Date(formJob.estimatedStartDate)
+          : undefined,
         price: Number(formJob.price) || 0,
         downPayment: Number(formJob.downPayment) || 0,
         budgetSpent: Number(formJob.budgetSpent) || 0,
@@ -260,25 +266,12 @@ const PmJobDetailsPage = () => {
         onFieldChange={(field, value) =>
           setFormJob((prev) => ({ ...prev, [field]: value }))
         }
+        showEstimatedStartDate
+        showProductionManager
+        jobIdPosition="afterStatus"
+        estimatedStartDatePosition="afterPrice"
         readOnlyFields={[
-          {
-            label: "Estimated Start Date",
-            value: job.estimatedStartDate
-              ? new Date(job.estimatedStartDate).toLocaleDateString()
-              : null,
-          },
           { label: "Estimated Gallons", value: job.estimatedGallons },
-        ]}
-        readOnlyFieldsPosition="afterStartDate"
-        readOnlyFieldKeys={[
-          "status",
-          "price",
-          "downPayment",
-          "budgetSpent",
-          "totalHours",
-          "setupCleanup",
-          "powerwash",
-          "laborHours",
         ]}
       />
 

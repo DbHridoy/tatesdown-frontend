@@ -3,15 +3,17 @@ import {
   useCreateClientMutation,
   useAddNoteMutation,
 } from "../../redux/api/clientApi";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../redux/slice/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import ClientNote from "../../Components/Sales-rep/Clients/ClientNote";
+import RequiredMark from "../../Components/Common/RequiredMark";
 
 const AddClient = () => {
   const navigate = useNavigate();
-  const user = useSelector(selectCurrentUser);
+  const location = useLocation();
+  const leadsPath = location.pathname.startsWith("/admin")
+    ? "/admin/leads"
+    : "/sales-rep/leads";
 
   const [createClient, { isLoading }] = useCreateClientMutation();
   const [addNote] = useAddNoteMutation();
@@ -28,11 +30,17 @@ const AddClient = () => {
     city: "",
     state: "Illinois",
     zipCode: "",
+    yearBuilt: "",
     leadSource: "",
     rating: 0,
   });
 
   const leadSources = ["", "Door to Door", "Inbound", "Social"];
+  const currentYear = new Date().getFullYear();
+  const yearBuiltOptions = Array.from(
+    { length: currentYear - 1899 },
+    (_, index) => currentYear - index
+  );
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -70,7 +78,7 @@ const AddClient = () => {
       }
 
       toast.success("Client added successfully");
-      navigate("/sales-rep/leads");
+      navigate(leadsPath);
     } catch (error) {
       console.error(error);
       toast.error("Failed to create client");
@@ -171,28 +179,46 @@ const AddClient = () => {
             </div>
             <div>
               <label className="block text-sm sm:text-base font-semibold mb-2">
-                State <RequiredMark />
+                State
               </label>
               <input
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
                 className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
-                required
               />
             </div>
             <div>
               <label className="block text-sm sm:text-base font-semibold mb-2">
-                Zip Code <RequiredMark />
+                Zip Code
               </label>
               <input
                 value={formData.zipCode}
                 onChange={(e) => handleInputChange("zipCode", e.target.value)}
                 className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
-                required
                 inputMode="numeric"
               />
             </div>
           </div>
+        </div>
+
+        {/* Lead Source */}
+        <div>
+          <label className="block text-sm sm:text-base font-semibold mb-2">
+            Year Built <RequiredMark />
+          </label>
+          <select
+            value={formData.yearBuilt}
+            onChange={(e) => handleInputChange("yearBuilt", e.target.value)}
+            className="w-full border px-3 py-2 rounded-lg text-sm sm:text-base"
+            required
+          >
+            <option value="">Select year</option>
+            {yearBuiltOptions.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Lead Source */}
@@ -245,7 +271,7 @@ const AddClient = () => {
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
           <button
             type="button"
-            onClick={() => navigate("/s/sales-rep/leads")}
+            onClick={() => navigate(leadsPath)}
             className="w-full sm:flex-1 border py-2 rounded-lg text-sm sm:text-base"
           >
             Cancel

@@ -108,6 +108,7 @@ const AddNewQuote = () => {
             <input
               type="number"
               inputMode="decimal"
+              min="0"
               value={estimatedPrice}
               onChange={(e) =>
                 setEstimatedPrice(
@@ -151,22 +152,26 @@ const AddNewQuote = () => {
         {/* Booked on the spot */}
         <div>
           <label className="block text-sm sm:text-base font-semibold mb-2">
-            Booked on the spot?
+            Booked on the spot? <RequiredMark />
           </label>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <label className="flex items-center gap-2 text-sm sm:text-base">
               <input
                 type="radio"
+                name="bookedOnSpot"
                 checked={bookedOnSpot === true}
                 onChange={() => setBookedOnSpot(true)}
+                required
               />
               Yes
             </label>
             <label className="flex items-center gap-2 text-sm sm:text-base">
               <input
                 type="radio"
+                name="bookedOnSpot"
                 checked={bookedOnSpot === false}
                 onChange={() => setBookedOnSpot(false)}
+                required
               />
               No
             </label>

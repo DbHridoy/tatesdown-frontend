@@ -39,7 +39,6 @@ const AdminJobDetailsPage = () => {
     estimatedStartDate: "",
     price: 0,
     downPayment: 0,
-    downPaymentStatus: "",
     budgetSpent: 0,
     totalHours: 0,
     setupCleanup: 0,
@@ -65,8 +64,6 @@ const AdminJobDetailsPage = () => {
   });
 
   const job = data?.data;
-  const dcStatus = job?.dcStatus ?? "";
-  const downPaymentStatus = job?.downPaymentStatus ?? "";
   const salesReps = salesRepsData?.data ?? [];
   const productionManagers = productionManagersData?.data ?? [];
   const designConsultation = useMemo(() => {
@@ -83,7 +80,6 @@ const AdminJobDetailsPage = () => {
       estimatedStartDate: formatDateInput(job.estimatedStartDate),
       price: job.price ?? 0,
       downPayment: job.downPayment ?? 0,
-      downPaymentStatus: job.downPaymentStatus ?? "",
       budgetSpent: job.budgetSpent ?? 0,
       totalHours: job.totalHours ?? 0,
       setupCleanup: job.setupCleanup ?? 0,
@@ -114,7 +110,6 @@ const AdminJobDetailsPage = () => {
       estimatedStartDate: formatDateInput(job.estimatedStartDate),
       price: job.price ?? 0,
       downPayment: job.downPayment ?? 0,
-      downPaymentStatus: job.downPaymentStatus ?? "",
       budgetSpent: job.budgetSpent ?? 0,
       totalHours: job.totalHours ?? 0,
       setupCleanup: job.setupCleanup ?? 0,
@@ -194,12 +189,12 @@ const AdminJobDetailsPage = () => {
       {/* Edit/Save Buttons */}
       <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
         <div className="flex flex-col sm:flex-row gap-2">
-          {downPaymentStatus === "Pending" && (
+          {job?.status === "Downpayment Pending" && (
             <button
               onClick={() =>
                 updateJob({
                   id: jobId,
-                  data: { downPaymentStatus: "Approved" },
+                  data: { status: "DC Pending" },
                 })
               }
               className="bg-green-600 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
@@ -208,12 +203,12 @@ const AdminJobDetailsPage = () => {
               Approve Down Payment
             </button>
           )}
-          {dcStatus === "Pending" && (
+          {job?.status === "DC Awaiting Approval" && (
             <button
               onClick={() =>
                 updateJob({
                   id: jobId,
-                  data: { dcStatus: "Approved" },
+                  data: { status: "Ready to Schedule" },
                 })
               }
               className="bg-green-600 text-white px-4 py-2 rounded-md text-sm sm:text-base disabled:opacity-60"
@@ -264,6 +259,8 @@ const AdminJobDetailsPage = () => {
         }
         showEstimatedStartDate
         showProductionManager
+        jobIdPosition="afterStatus"
+        estimatedStartDatePosition="afterPrice"
         readOnlyFields={[
           { label: "Estimated Gallons", value: job.estimatedGallons },
         ]}

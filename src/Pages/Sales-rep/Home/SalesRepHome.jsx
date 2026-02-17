@@ -158,7 +158,7 @@ const SalesRepHome = () => {
     <div className="page-container space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
-          Top 5 Sales Rep
+          Home
         </h1>
       </div>
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -180,7 +180,7 @@ const SalesRepHome = () => {
       <SalesRepHomeCards cards={cards} />
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-          Top 5 Sales Rep
+          Top 5 Sales Reps
         </h2>
         <PeriodFilter
           label="Leaderboard"
