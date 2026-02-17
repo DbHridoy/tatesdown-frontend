@@ -5,8 +5,11 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAddNoteMutation } from "../../../redux/api/clientApi";
 import RequiredMark from "../../../Components/Common/RequiredMark";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/slice/authSlice";
 
 const AddNewJob = () => {
+  const currentUser = useSelector(selectCurrentUser);
   // Read quoteId from URL
   const [searchParams] = useSearchParams();
   const quoteIdFromUrl = searchParams.get("quoteId");
@@ -17,10 +20,17 @@ const AddNewJob = () => {
   });
   const quoteFromUrl = quoteByIdData?.data;
   const quotesFromList = quoteData?.data ?? [];
-  const quotes = quoteFromUrl
+  const allQuotes = quoteFromUrl
     ? [quoteFromUrl, ...quotesFromList.filter((q) => q._id !== quoteFromUrl._id)]
     : quotesFromList;
-  console.log("Line:10-quotes", quotes);
+  const quotes = allQuotes.filter((quote) => {
+    const quoteSalesRepId =
+      typeof quote?.salesRepId === "string"
+        ? quote.salesRepId
+        : quote?.salesRepId?._id;
+    return quoteSalesRepId === currentUser?._id;
+  });
+  const hasQuoteIdInUserQuotes = !!quoteIdFromUrl && quotes.some((q) => q._id === quoteIdFromUrl);
   const navigate = useNavigate();
 
   const [createNewJob, { isLoading: isCreating }] = useCreateNewJobMutation();
@@ -47,11 +57,18 @@ const AddNewJob = () => {
   // Set selected quote when quotes load or URL param exists
   useEffect(() => {
     if (quotes.length && quoteIdFromUrl) {
-      setSelectedQuoteId(quoteIdFromUrl);
-    } else if (quotes.length && !selectedQuoteId) {
+      const hasQuoteInList = quotes.some((q) => q._id === quoteIdFromUrl);
+      if (hasQuoteInList) {
+        setSelectedQuoteId(quoteIdFromUrl);
+        return;
+      }
+    }
+    if (!quotes.length) {
+      setSelectedQuoteId("");
+    } else if (!selectedQuoteId) {
       setSelectedQuoteId(quotes[0]._id);
     }
-  }, [quotes, quoteIdFromUrl]);
+  }, [quotes, quoteIdFromUrl, selectedQuoteId]);
 
   // Auto-fill fields when selectedQuoteId changes
   useEffect(() => {
@@ -151,7 +168,7 @@ const AddNewJob = () => {
             value={selectedQuoteId}
             onChange={(e) => setSelectedQuoteId(e.target.value)}
             className="w-full border px-3 py-2 rounded text-sm sm:text-base"
-            disabled={!!quoteIdFromUrl}
+            disabled={hasQuoteIdInUserQuotes}
             required
           >
             {quotes.map((quote) => (

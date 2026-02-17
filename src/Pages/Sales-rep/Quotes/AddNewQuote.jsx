@@ -17,11 +17,16 @@ const AddNewQuote = () => {
 
   const currentUser = useSelector(selectCurrentUser);
   const { data, isLoading } = useGetAllClientsQuery();
-  console.log(data);
-  const clients = (data?.data || []).filter(
-    (client) => client?.leadStatus === "Not quoted"
-  );
-  console.log(clients);
+  const clients = (data?.data || []).filter((client) => {
+    const assignedSalesRepId =
+      typeof client?.salesRepId === "string"
+        ? client.salesRepId
+        : client?.salesRepId?._id;
+    return (
+      client?.leadStatus === "Not quoted" &&
+      assignedSalesRepId === currentUser?._id
+    );
+  });
   const navigate = useNavigate();
 
   const [createQuote, { isLoading: isSubmitting, error }] =
