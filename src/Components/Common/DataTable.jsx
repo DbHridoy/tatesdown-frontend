@@ -37,6 +37,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
     filters = [],
     showSearch,
     showPagination = true,
+    showMobileSort = true,
 
     // server controlled
     currentPage,
@@ -128,7 +129,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
         <>
           {/* Mobile cards */}
           <div className="sm:hidden space-y-3 p-4">
-            {sortableColumns.length > 0 && (
+            {showMobileSort && sortableColumns.length > 0 && (
               <div className="flex items-center gap-3">
                 <select
                   value={sortKey || ""}

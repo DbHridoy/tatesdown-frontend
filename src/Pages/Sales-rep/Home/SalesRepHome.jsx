@@ -125,6 +125,7 @@ const SalesRepHome = () => {
   ];
   const leaderboardConfig = {
     columns: leaderboardColumns,
+    showMobileSort: false,
     filters: [
       {
         label: "Sort By",

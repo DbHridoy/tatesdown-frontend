@@ -104,7 +104,7 @@ function JobsList({ showFilters = true, salesRepId } = {}) {
             options: {
               "Downpayment Pending": "Downpayment Pending",
               "DC Pending": "DC Pending",
-              "DC Awaiting Approval": "DC Awaiting Approval",
+              // "DC Awaiting Approval": "DC Awaiting Approval",
               "Ready to Schedule": "Ready to Schedule",
               "Scheduled and Open": "Scheduled and Open",
               "Pending Close": "Pending Close",
