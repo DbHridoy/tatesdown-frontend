@@ -8,6 +8,7 @@ import {
 } from "../../../redux/api/jobApi";
 import { useParams } from "react-router-dom";
 import DesignConsultationCreate from "./DesignConsultation";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -71,7 +72,7 @@ const JobDetailsPage = () => {
     });
   }, [job]);
 
-  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (isLoading) return <SimpleLoader text="Loading job details..." />;
   if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
 
   const handleCancel = () => {

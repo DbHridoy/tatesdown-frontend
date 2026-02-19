@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
 import toast from "react-hot-toast";
 import { useAddNoteMutation } from "../../../redux/api/clientApi";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 const isImageFile = (url = "") => /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 
 const getFileName = (url = "") => decodeURIComponent(url.split("/").pop());
@@ -73,7 +74,7 @@ export default function JobOverview() {
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <SimpleLoader />;
 
   return (
     <div className="bg-white">

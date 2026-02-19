@@ -5,6 +5,7 @@ import {
   useUpdateQuoteMutation,
 } from "../../../redux/api/quoteApi";
 import toast from "react-hot-toast";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 const AdminQuoteDetails = () => {
   const { quoteId } = useParams();
@@ -96,7 +97,7 @@ const AdminQuoteDetails = () => {
   };
 
   if (isLoading || !quote) {
-    return <div className="p-6">Loading...</div>;
+    return <SimpleLoader />;
   }
 
   const {

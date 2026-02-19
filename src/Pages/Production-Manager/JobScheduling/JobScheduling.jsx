@@ -125,8 +125,12 @@ console.log("line:52-me", me)
         </p>
       </div>
 
-      <DataTable title="Jobs" data={formattedJobs} config={tableConfig} />
-
+      <DataTable
+        title="Jobs"
+        data={formattedJobs}
+        config={tableConfig}
+        loading={isLoading}
+      />
       {isScheduleModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-[92vw] sm:w-full sm:max-w-md md:max-w-lg lg:max-w-xl">

@@ -5,6 +5,7 @@ import DC from "../../../Components/Sales-rep/Jobs/DC";
 import { useState } from "react";
 import { useGetJobByIdQuery } from "../../../redux/api/jobApi";
 import { useParams, useNavigate } from "react-router-dom";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 const PmJobDetails = () => {
   const { jobId } = useParams();
@@ -17,7 +18,7 @@ const PmJobDetails = () => {
 
   const job = data?.data;
 
-  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (isLoading) return <SimpleLoader text="Loading job details..." />;
   if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
 
   const client = job.clientId;

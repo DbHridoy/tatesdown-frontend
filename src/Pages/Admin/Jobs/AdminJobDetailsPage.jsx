@@ -9,6 +9,7 @@ import {
 import { useGetAllUsersQuery } from "../../../redux/api/userApi";
 import { useParams } from "react-router-dom";
 import DesignConsultationCreate from "../../Sales-rep/Jobs/DesignConsultation";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -99,7 +100,7 @@ const AdminJobDetailsPage = () => {
     setIsEditingAssignment(false);
   }, [job]);
 
-  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (isLoading) return <SimpleLoader text="Loading job details..." />;
   if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
 
   const handleCancel = () => {

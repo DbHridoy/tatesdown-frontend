@@ -13,6 +13,7 @@ import { useGetMeQuery } from "../../../redux/api/userApi";
 import { useGetLeaderBoardQuery, useGetMyStatsQuery } from "../../../redux/api/common";
 import { getDefaultPeriodInput, normalizePeriodDate } from "../../../utils/period";
 import { useMemo, useState } from "react";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 const SalesRepHome = () => {
   const { data: userData, isLoading } = useGetMeQuery();
   const [statsPeriodType, setStatsPeriodType] = useState("year");
@@ -23,12 +24,12 @@ const SalesRepHome = () => {
   const [leaderboardDateInput, setLeaderboardDateInput] = useState(
     getDefaultPeriodInput("year")
   );
-  const { data: myStats } = useGetMyStatsQuery({
+  const { data: myStats, isLoading: isStatsLoading } = useGetMyStatsQuery({
     periodType: statsPeriodType,
     date: normalizePeriodDate(statsPeriodType, statsDateInput),
   });
   console.log(myStats);
-  const { data: leaderBoardData } = useGetLeaderBoardQuery({
+  const { data: leaderBoardData, isLoading: isLeaderboardLoading } = useGetLeaderBoardQuery({
     periodType: leaderboardPeriodType,
     date: normalizePeriodDate(leaderboardPeriodType, leaderboardDateInput),
   });
@@ -178,7 +179,11 @@ const SalesRepHome = () => {
       </div>
 
       {/* Cards overview */}
-      <SalesRepHomeCards cards={cards} />
+      {isLoading || isStatsLoading ? (
+        <SimpleLoader text="Loading dashboard..." />
+      ) : (
+        <SalesRepHomeCards cards={cards} />
+      )}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
           Top 5 Sales Reps
@@ -198,6 +203,7 @@ const SalesRepHome = () => {
         title=""
         data={sortedLeaderboardRows}
         config={{ ...leaderboardConfig, showSearch: false, showPagination: false }}
+        loading={isLeaderboardLoading}
       />
 
       <div className="pt-2">

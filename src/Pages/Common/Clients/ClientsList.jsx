@@ -49,7 +49,7 @@ function ClientsList({ salesRepId } = {}) {
   const sortValue = params.sortKey
     ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
     : "";
-  const { data: clientsData } = useGetAllClientsQuery({
+  const { data: clientsData, isLoading } = useGetAllClientsQuery({
     ...params,
     sort: sortValue,
     filters: {
@@ -185,7 +185,12 @@ function ClientsList({ salesRepId } = {}) {
           Overview of your leads
         </p>
       </div>
-      <DataTable title="Leads" data={clients || []} config={tableConfig} />
+      <DataTable
+        title="Leads"
+        data={clients || []}
+        config={tableConfig}
+        loading={isLoading}
+      />
     </div>
   );
 }

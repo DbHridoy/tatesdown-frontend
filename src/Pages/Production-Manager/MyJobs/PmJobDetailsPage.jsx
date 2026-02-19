@@ -10,6 +10,7 @@ import { useLocation, useParams } from "react-router-dom";
 import DesignConsultationCreate from "./DesignConsultation";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/slice/authSlice";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 const formatDateInput = (value) => {
   if (!value) return "";
@@ -88,7 +89,7 @@ const PmJobDetailsPage = () => {
     });
   }, [job]);
 
-  if (isLoading) return <p className="p-6">Loading job details...</p>;
+  if (isLoading) return <SimpleLoader text="Loading job details..." />;
   if (isError || !job) return <p className="p-6 text-red-500">Job not found</p>;
 
   const handleCancel = () => {

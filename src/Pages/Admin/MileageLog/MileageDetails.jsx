@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useGetMileageLogByIdQuery } from "../../../redux/api/expenseApi";
 import formatCurrency from "../../../utils/formatCurrency";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 const MileageDetails = () => {
   const { mileageId } = useParams();
@@ -11,7 +12,7 @@ const MileageDetails = () => {
   const mileage =
     data?.data?.data || data?.data || null;
 
-  if (isLoading) return <div className="p-6">Loading...</div>;
+  if (isLoading) return <SimpleLoader />;
   if (isError || !mileage) {
     return <div className="p-6 text-red-500">Mileage not found</div>;
   }

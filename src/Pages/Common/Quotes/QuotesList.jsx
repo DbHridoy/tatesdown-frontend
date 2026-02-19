@@ -41,7 +41,7 @@ function QuotesList({ salesRepId } = {}) {
   const sortValue = params.sortKey
     ? `${params.sortOrder === "desc" ? "-" : ""}${params.sortKey}`
     : "";
-  const { data } = useGetAllQuotesQuery({
+  const { data, isLoading } = useGetAllQuotesQuery({
     ...params,
     sort: sortValue,
     filters: {
@@ -174,7 +174,12 @@ function QuotesList({ salesRepId } = {}) {
           Manage your quotes here
         </p>
       </div>
-      <DataTable title="Quotes" data={formattedQuote} config={tableConfig} />
+      <DataTable
+        title="Quotes"
+        data={formattedQuote}
+        config={tableConfig}
+        loading={isLoading}
+      />
     </div>
   );
 }

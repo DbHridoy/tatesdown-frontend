@@ -9,6 +9,7 @@ import {
   useAddNoteMutation,
 } from "../../../redux/api/clientApi";
 import AddCallLog from "../../Sales-rep/Clients/AddCallLog";
+import SimpleLoader from "../../../Components/Common/SimpleLoader";
 
 /* -------------------- Utils -------------------- */
 const isImageFile = (url) => {
@@ -137,7 +138,7 @@ const AdminClientDetails = () => {
   };
 
   /* -------------------- UI States -------------------- */
-  if (isLoading) return <div className="p-6">Loading...</div>;
+  if (isLoading) return <SimpleLoader />;
   if (isError || !client)
     return <div className="p-6">Failed to load client</div>;
 

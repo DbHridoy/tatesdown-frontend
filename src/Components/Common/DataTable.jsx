@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SimpleLoader from "./SimpleLoader";
 
 const Modal = ({ show, title, message, onCancel, onConfirm }) => {
   if (!show) return null;
@@ -29,7 +30,7 @@ const Modal = ({ show, title, message, onCancel, onConfirm }) => {
   );
 };
 
-const DataTable = ({ title, data = [], config = {} }) => {
+const DataTable = ({ title, data = [], config = {}, loading = false }) => {
   //console.log(data);
   const {
     columns = [],
@@ -57,7 +58,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
     action: null,
   });
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = Math.ceil((totalItems || 0) / (itemsPerPage || 1));
   const emptyMessage = config.emptyMessage || "No data found";
   const sortableColumns = columns.filter((col) => col.sortable);
   const handleSort = (col) => {
@@ -121,7 +122,9 @@ const DataTable = ({ title, data = [], config = {} }) => {
       )}
 
       {/* Table */}
-      {data.length === 0 ? (
+      {loading ? (
+        <SimpleLoader text="Loading data..." className="min-h-[280px] border-0" />
+      ) : data.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <p className="text-gray-500">{emptyMessage}</p>
         </div>
@@ -322,7 +325,7 @@ const DataTable = ({ title, data = [], config = {} }) => {
       )}
 
       {/* Pagination */}
-      {showPagination && (
+      {showPagination && !loading && (
         <div className="px-4 sm:px-6 py-4 border-t flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
           <span className="text-sm sm:text-base text-gray-600">
             Page {currentPage} of {totalPages || 0}

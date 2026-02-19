@@ -17,7 +17,7 @@ function UserExpenses() {
     sortOrder: "asc",
     filters: { salesRepId: user?._id },
   });
-  const { data: mileageLogs } = useGetAllMileageLogsQuery(params);
+  const { data: mileageLogs, isLoading } = useGetAllMileageLogsQuery(params);
 
   const mileageLogsData = mileageLogs?.data ?? [];
   const totalMiles = mileageLogsData.reduce(
@@ -66,6 +66,7 @@ function UserExpenses() {
         title="Mileage Logs"
         data={mileageLogsData}
         config={tableConfig}
+        loading={isLoading}
       />
     </div>
   );

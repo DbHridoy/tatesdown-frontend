@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SalesRepresentativeModal from "./SalesRepresentativeModal";
 import { useGetAllClientsQuery } from "../../../redux/api/clientApi";
+import SimpleLoader from "../../Common/SimpleLoader";
 
 function SalesAssignement() {
   const navigate = useNavigate();
@@ -18,11 +19,7 @@ function SalesAssignement() {
   const isLoading = clientsLoading;
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-6">
-        <p className="text-gray-500">Loading...</p>
-      </div>
-    );
+    return <SimpleLoader />;
   }
 
   return (
