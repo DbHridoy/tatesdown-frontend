@@ -31,7 +31,7 @@ const CardData = ({ stats, isLoading, isError }) => {
       value: formatCurrency(stats?.totalRevenue),
       icon: FiDollarSign,
     },
-    { title: "Total Clients", value: stats?.totalClients ?? 0, icon: FiUsers },
+    { title: "Total Leads", value: stats?.totalClients ?? 0, icon: FiUsers },
     { title: "Total Quotes", value: stats?.totalQuotes ?? 0, icon: FiFileText },
     { title: "Total Jobs", value: stats?.totalJobs ?? 0, icon: FiBriefcase },
     {
